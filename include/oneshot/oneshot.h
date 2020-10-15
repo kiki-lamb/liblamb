@@ -69,6 +69,7 @@ namespace lamb {
       amplitude(255),
       phacc(0),
       phincr(0),
+      next_phincr(0),
       accum(0) {
     }
 
@@ -84,14 +85,18 @@ namespace lamb {
         trigger = false;
         state   = true;
         phacc   = 0;
+        
+        if (next_phincr != 0) {
+          phincr      = next_phincr;
+          next_phincr = 0;
+        }
+        
+        phacc   = 0;
       }
       
-      if (state && get_index() > length) {
-        state = false;
-      }
-      else if (! state) {
-        return 0;
-      }
+      state = state && (get_index() < length);
+
+      if (! state) return 0;
       
       output_value_type audio = oneshot<int16_t>::data[get_index()];
 
@@ -106,6 +111,7 @@ namespace lamb {
 
     uint32_t phacc;
     uint32_t phincr;
+    uint32_t next_phincr;
     
   private:
     uint32_t accum;

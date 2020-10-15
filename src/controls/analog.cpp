@@ -25,10 +25,11 @@ void lamb::controls::analog::setup() {
 bool lamb::controls::analog::read() {
   if (! light_buffer_writable(analog_events)) {
     Serial.println("Buffer full.");
+    
     return false;
   }
 
-  uint16_t tmp = _accum;
+  uint32_t tmp = _accum;
   
   _accum     <<= _averaging;
   _accum      -= tmp;

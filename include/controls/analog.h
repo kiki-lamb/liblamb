@@ -13,11 +13,10 @@ namespace lamb {
     private:
 #ifdef __AVR__
       uint8_t  _pin;
-      uint16_t _accum;
 #else
       uint32_t _pin;
-      uint32_t _accum;
 #endif
+      uint32_t _accum;
       uint8_t  _averaging;
       
     public:
