@@ -1,7 +1,7 @@
 #ifndef LAMBOS_H
   #define LAMBOS_H
   #include <Arduino.h>
-
+  #include "uint12_t.h"
   #include "light_buffer/light_buffer.h"
 
   #include "abstract_bag/abstract_bag.h"
