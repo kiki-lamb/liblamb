@@ -6,7 +6,7 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
   
   template <typename input_type, typename output_type = input_type>
-  class identity : public lamb::SampleProcessor<input_type, output_type> {
+  class identity : public lamb::sample_processor<input_type, output_type> {
   public:
     inline virtual ~identity() {};
 
@@ -32,16 +32,34 @@ namespace lamb {
 
     inline virtual input_type read() {
       typename sample_type_traits<input_type>::mix_type mix = 0;
-      mix += input0.read();
-      mix += input1.read();
-      mix += input2.read();
-      mix += input3.read();
-      mix += input4.read();
-      mix += input5.read();
 
-      mix >>= ((sizeof(mix) - sizeof(input_type)) << 3);
+      input_type tmp;
+
+      tmp = input0.read();
+      mix += tmp;
+
+      tmp = input1.read();
+      mix += tmp;
+
+      tmp = input2.read();
+      mix += tmp;
+
+      tmp = input3.read();
+      mix += tmp;
+
+      tmp = input4.read();
+      mix += tmp;
       
-      return mix;
+      tmp = input5.read();
+      mix += tmp;
+
+      const uint8_t shift = sizeof(mix) - sizeof(input_type) - 1;
+      
+      Serial.print("Mixed ");
+      Serial.print(mix);
+      Serial.println();
+
+      return mix >> shift;
     }
   };
 
@@ -72,7 +90,7 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   template <typename input_type>
-  class ConvertToUnsigned : public lamb::SampleProcessor<input_type, typename lamb::sample_type_traits<input_type>::unsigned_type> {
+  class ConvertToUnsigned : public lamb::sample_processor<input_type, typename lamb::sample_type_traits<input_type>::unsigned_type> {
   public:
     inline virtual ~ConvertToUnsigned() {};
 
@@ -88,7 +106,7 @@ namespace lamb {
 /////////////////////////////////////////////////////////////////////////////////
 
   template <typename input_type>
-  class convert_to_signed : public lamb::SampleProcessor<input_type, typename lamb::sample_type_traits<input_type>::signed_type> {
+  class convert_to_signed : public lamb::sample_processor<input_type, typename lamb::sample_type_traits<input_type>::signed_type> {
   public:
     inline virtual ~convert_to_signed() {};
 

@@ -70,4 +70,5 @@
   #include "events/sources/buttons.h"
   #include "events/sources/encoders.h"
   #include "events/sources/analog.h"
+  #include "dsp/dsp.h"
 #endif
