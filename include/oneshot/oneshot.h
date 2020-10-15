@@ -6,8 +6,10 @@
 namespace lamb {
   template <
     typename value_t_,
-    typename phase_t_ = uint32_t,
-    typename amplitude_t_ = uint8_t>
+    typename length_t_    = uint16_t,
+    typename phase_t_     = typename unsigned_int<(sizeof(length_t_) + 2)>::type,
+    typename amplitude_t_ = typename unsigned_int<(sizeof(value_t_) >> 1)>::type
+      >
   class oneshot :
     public sample_source<value_t_>,
     triggerable,
@@ -18,6 +20,7 @@ namespace lamb {
 
   public:
     typedef value_t_             value_type;
+    typedef length_t_            length_type;
     typedef phase_t_             phase_type;
     typedef amplitude_t_         amplitude_type;
     typedef typename sample_type_traits<value_type>::mix_type
@@ -25,7 +28,7 @@ namespace lamb {
     typedef value_type           output_value_type;
 
     bool                         state;
-    uint32_t                     length;
+    length_type                  length;
     const  output_value_type *   data;
     amplitude_type               amplitude;
     phase_type                   phacc;
@@ -35,7 +38,7 @@ namespace lamb {
     
     explicit oneshot(
       const value_type* data_,
-      uint32_t length_
+      length_type       length_
     ) :
       _trigger(false),
       state(false),
@@ -48,8 +51,8 @@ namespace lamb {
       accum(0) {}
 
     virtual phase_type index() {
-      const uint8_t shift     = 16; 
-//        ((sizeof(phase_type) - sizeof(value_type)) << 3);
+      const uint8_t shift     = 
+        ((sizeof(phase_type) - sizeof(length_type)) << 3);
       
       phase_type    phacc_msb = phacc >> shift;
       
