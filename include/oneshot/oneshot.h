@@ -4,8 +4,9 @@
 #include "../sample_type_interfaces/sample_type_interfaces.h"
 
 namespace lamb {
+  template <typename value_t_>
   class oneshot :
-    public sample_source<int16_t>,
+    public sample_source<value_t_>,
     triggerable,
     stoppable
   {
@@ -13,7 +14,10 @@ namespace lamb {
     volatile bool                _trigger;
 
   public:
-    typedef int16_t              output_value_type;
+    typedef value_t_             value_type;
+    typedef typename sample_type_traits<value_type>::mix_type
+                                 accum_type; 
+    typedef value_type           output_value_type;
     typedef uint32_t             phase_type;
 
     bool                         state;
@@ -23,10 +27,10 @@ namespace lamb {
     uint32_t                     phacc;
     uint32_t                     phincr;
     uint32_t                     next_phincr;
-    uint32_t                     accum;      
+    accum_type                   accum;      
     
     explicit oneshot(
-      const int16_t* data_,
+      const value_type* data_,
       uint32_t length_
     ) :
       _trigger(false),
@@ -52,7 +56,7 @@ namespace lamb {
       accum = 0;
     }
 
-    virtual int16_t play() {
+    virtual value_type play() {
       if (_trigger) {
         _trigger = false;
         state    = true;
