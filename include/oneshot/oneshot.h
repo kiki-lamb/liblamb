@@ -4,7 +4,7 @@
 #include "../sample_type_interfaces/sample_type_interfaces.h"
 
 namespace lamb {
-  template <typename value_t_>
+  template <typename value_t_, typename phase_t_ = uint32_t>
   class oneshot :
     public sample_source<value_t_>,
     triggerable,
@@ -15,18 +15,18 @@ namespace lamb {
 
   public:
     typedef value_t_             value_type;
+    typedef phase_t_             phase_type;
     typedef typename sample_type_traits<value_type>::mix_type
                                  accum_type; 
     typedef value_type           output_value_type;
-    typedef uint32_t             phase_type;
 
     bool                         state;
-    phase_type                   length;
+    uint32_t                     length;
     const  output_value_type *   data;
     uint16_t                     amplitude;
-    uint32_t                     phacc;
-    uint32_t                     phincr;
-    uint32_t                     next_phincr;
+    phase_type                   phacc;
+    phase_type                   phincr;
+    phase_type                   next_phincr;
     accum_type                   accum;      
     
     explicit oneshot(
@@ -43,17 +43,21 @@ namespace lamb {
       next_phincr(0),
       accum(0) {}
 
-    virtual uint32_t get_index() {
-      uint32_t phacc_msb = phacc >> 16;
+    virtual phase_type index() {
+      const uint8_t shift     =
+        ((sizeof(phase_type) - sizeof(value_type)) << 3);
+      
+      phase_type    phacc_msb = phacc >> shift;
+      
       return  phacc_msb;
     }
 
   protected:
     virtual void stop() {
       _trigger = false;
-      state = false;
-      phacc = 0;
-      accum = 0;
+      state    = false;
+      phacc    = 0;
+      accum    = 0;
     }
 
     virtual value_type play() {
@@ -68,7 +72,7 @@ namespace lamb {
         }
       }
       
-      if (get_index() >= length) {
+      if (index() >= length) {
         stop();
       }
 
@@ -76,7 +80,7 @@ namespace lamb {
         return 0;
       }
 
-      accum = amplitude * data[get_index()];
+      accum = amplitude * data[index()];
       accum >>= 8;
       
       phacc += phincr;
