@@ -20,17 +20,19 @@ namespace lamb {
   };
 
 ////////////////////////////////////////////////////////////////////////////////
-// sample_sink
+// sample_receiver
 ////////////////////////////////////////////////////////////////////////////////
   
   template <typename input_type_>
-  class sample_sink {
+  class sample_receiver {
   public:
     typedef input_type_ input_type;
-  
+
+  private:
     sample_source<input_type> * _source;
       
-    virtual ~sample_sink() = default;
+  public:
+    virtual ~sample_receiver() = default;
 
     virtual inline sample_source<input_type> * source() {
       return _source;
@@ -41,13 +43,32 @@ namespace lamb {
   };
 
 ////////////////////////////////////////////////////////////////////////////////
+// sample_sink
+////////////////////////////////////////////////////////////////////////////////
+  
+  template <typename input_type_>
+  class sample_sink : sample_receiver<input_type_> {
+  public:
+    typedef input_type_ input_type;
+  
+    virtual ~sample_sink() = default;
+
+    virtual void sink() {
+      impl_sink(sample_receiver<input_type_>::source()->read());
+    }
+    
+  protected:
+    virtual void impl_sink(input_type const & val) = 0;
+  };
+
+////////////////////////////////////////////////////////////////////////////////
 // sample_processor : public sample_source<output_type_>
 ////////////////////////////////////////////////////////////////////////////////
   
   template <typename input_type_, typename output_type_ = input_type_ > 
   class sample_processor :
     public sample_source<output_type_>,
-    public sample_sink<input_type_> { 
+    public sample_receiver<input_type_> { 
   public:
     typedef input_type_ input_type;
     typedef output_type_ output_type;
@@ -55,7 +76,7 @@ namespace lamb {
     virtual ~sample_processor() = default;
   
     virtual inline output_type read() {
-      return process(sample_sink<input_type_>::_source->read());
+      return process(sample_receiver<input_type_>::_source->read());
     }
 
   protected:
@@ -81,20 +102,20 @@ namespace lamb {
   };
  
   // ////////////////////////////////////////////////////////////////////////////////
-  // function_sample_sink : public sample_sink<input_type_>
+  // function_sample_receiver : public sample_receiver<input_type_>
   ////////////////////////////////////////////////////////////////////////////////
    
   template <typename input_type_>
-  class function_sample_sink : public sample_sink<input_type_> {
+  class function_sample_receiver : public sample_receiver<input_type_> {
   public:
-    ~function_sample_sink() = default;
+    ~function_sample_receiver() = default;
     typedef bool (*func_type)(input_type_);  
     func_type func;
-    inline function_sample_sink(func_type f, sample_source<input_type_> * source = NULL) : func(f) {
+    inline function_sample_receiver(func_type f, sample_source<input_type_> * source = NULL) : func(f) {
       connect(source);
     }
-    virtual inline bool sink() {
-      return (*func)(sample_sink<input_type_>::read());
+    virtual inline bool receiver() {
+      return (*func)(sample_receiver<input_type_>::read());
     }
   };
  
