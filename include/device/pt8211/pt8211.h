@@ -2,12 +2,12 @@
 #define LAMBOS_DEV_PT8211_H
 
 #include "SPI.h"
-
 #include <Arduino.h>
+#include "../../sample_type_interfaces/sample_type_interfaces.h"
 
 namespace lamb {
   namespace device {
-    class pt8211 {
+    class pt8211 : public sample_sink<int16_t> {
     public:
       inline pt8211(unsigned int ws_pin_, SPIClass * spi_ = nullptr) :
         _spi(spi_),
@@ -35,13 +35,17 @@ namespace lamb {
         
         digitalWrite(_ws_pin, HIGH);
       }
+
+    protected:
+      inline virtual void impl_sink(int16_t const & val) {
+        write_mono(val);
+      }
       
     private:
       SPIClass *   _spi;
       uint16_t     _hData;
       uint16_t     _lData;
-      unsigned int _ws_pin;
-      
+      unsigned int _ws_pin;      
     };
   }
 }
