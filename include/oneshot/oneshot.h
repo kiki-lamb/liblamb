@@ -4,7 +4,10 @@
 #include "../sample_type_interfaces/sample_type_interfaces.h"
 
 namespace lamb {
-  template <typename value_t_, typename phase_t_ = uint32_t>
+  template <
+    typename value_t_,
+    typename phase_t_ = uint32_t,
+    typename amplitude_t_ = uint8_t>
   class oneshot :
     public sample_source<value_t_>,
     triggerable,
@@ -16,6 +19,7 @@ namespace lamb {
   public:
     typedef value_t_             value_type;
     typedef phase_t_             phase_type;
+    typedef amplitude_t_         amplitude_type;
     typedef typename sample_type_traits<value_type>::mix_type
                                  accum_type; 
     typedef value_type           output_value_type;
@@ -23,7 +27,7 @@ namespace lamb {
     bool                         state;
     uint32_t                     length;
     const  output_value_type *   data;
-    uint16_t                     amplitude;
+    amplitude_type               amplitude;
     phase_type                   phacc;
     phase_type                   phincr;
     phase_type                   next_phincr;
@@ -37,15 +41,15 @@ namespace lamb {
       state(false),
       length(length_),
       data(data_),
-      amplitude(255),
+      amplitude(sample_type_traits<amplitude_type>::maximum),
       phacc(0),
       phincr(0),
       next_phincr(0),
       accum(0) {}
 
     virtual phase_type index() {
-      const uint8_t shift     =
-        ((sizeof(phase_type) - sizeof(value_type)) << 3);
+      const uint8_t shift     = 16; 
+//        ((sizeof(phase_type) - sizeof(value_type)) << 3);
       
       phase_type    phacc_msb = phacc >> shift;
       
@@ -80,10 +84,10 @@ namespace lamb {
         return 0;
       }
 
-      accum = amplitude * data[index()];
-      accum >>= 8;
+      accum   = amplitude * data[index()];
+      accum >>= sizeof(amplitude_type) << 3;
       
-      phacc += phincr;
+      phacc  += phincr;
       
       return accum;
     }
