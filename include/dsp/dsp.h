@@ -8,10 +8,37 @@ namespace lamb {
   template <typename input_type, typename output_type = input_type>
   class identity : public lamb::sample_processor<input_type, output_type> {
   public:
-    inline virtual ~identity() {};
+    virtual ~identity() = default;
 
     inline identity(lamb::sample_source<input_type> * in = NULL) {
       this->connect(in);
+    }
+  };
+
+////////////////////////////////////////////////////////////////////////////////
+  
+  template <
+    typename input_type,
+    uint8_t  downshift,
+    typename output_type = input_type
+    >
+  class amplify : public lamb::sample_processor<input_type, output_type> {
+  public:
+    uint16_t amplitude;
+    
+    virtual ~amplify() = default;
+
+    inline amplify(lamb::sample_source<input_type> * in = NULL) {
+      this->connect(in);
+    }
+
+    inline output_type process(input_type const & input) {
+      typename sample_type_traits<input_type>::mix_type tmp = input;
+
+      tmp *= amplitude;
+      tmp >>= downshift;
+
+      return tmp;
     }
   };
 

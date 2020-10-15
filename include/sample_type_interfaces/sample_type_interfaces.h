@@ -84,7 +84,7 @@ namespace lamb {
     }
 
   protected:
-    virtual inline output_type process(input_type in) {
+    virtual inline output_type process(input_type const & in) {
       return in;
     }
   };
