@@ -5,7 +5,7 @@
 
 namespace lamb {
   template <typename value_t_, typename phase_t_>
-  class oneshot : sample_source<value_t_>, triggerable {
+  class oneshot : sample_source<value_t_>, triggerable, stoppable {
   public:
     typedef value_t_ output_value_type;
     typedef phase_t_ phase_type;
@@ -39,10 +39,11 @@ namespace lamb {
         index   = 0;
       }
       
-      if (state && index_ > length)
-        state = false;
-      else if (! state)
-        return 0;
+      if (index_ >= length) {
+        stop();
+      }
+
+      if (! state) return 0;
       
       output_value_type audio = data[index_];
       
@@ -65,6 +66,12 @@ namespace lamb {
     }
     
   public:    
+    virtual void stop() {
+      _trigger = false;
+      state    = false;
+      index    = 0;
+    }
+
     virtual output_value_type read() {
       return play();
     }
@@ -96,6 +103,12 @@ namespace lamb {
     }
 
   protected:
+    virtual void stop() {
+      oneshot<int16_t, uint32_t>::stop();
+      phacc = 0;
+      accum = 0;
+    }
+
     virtual int16_t play() {
       if (_trigger) {
         _trigger = false;
@@ -110,9 +123,13 @@ namespace lamb {
         phacc   = 0;
       }
       
-      state = state && (get_index() < length);
+      if (get_index() >= length) {
+        stop();
+      }
 
-      if (! state) return 0;
+      if (! state) {
+        return 0;
+      }
       
       output_value_type audio = oneshot<int16_t, uint32_t>::data[get_index()];
 

@@ -15,7 +15,7 @@ namespace lamb {
     typedef output_type_ output_type;
     typedef lamb::sample_type_traits<output_type> traits;
 
-    virtual ~sample_source() {};
+    virtual ~sample_source() = default;
     virtual output_type read() = 0;
   };
 
@@ -30,7 +30,7 @@ namespace lamb {
   
     sample_source<input_type> * _source;
       
-    virtual ~sample_sink() {};
+    virtual ~sample_sink() = default;
 
     virtual inline sample_source<input_type> * source() {
       return _source;
@@ -52,7 +52,7 @@ namespace lamb {
     typedef input_type_ input_type;
     typedef output_type_ output_type;
   
-    virtual inline ~sample_processor() {};
+    virtual ~sample_processor() = default;
   
     virtual inline output_type read() {
       return process(sample_sink<input_type_>::_source->read());
@@ -74,7 +74,7 @@ namespace lamb {
     typedef output_type_ (*func_type)();
     func_type func;
     function_sample_source(func_type f) : func(f) {};
-    virtual inline ~function_sample_source() {};  
+    virtual ~function_sample_source() = default;
     virtual inline output_type_ read() {
       return (*func)();
     }
@@ -87,7 +87,7 @@ namespace lamb {
   template <typename input_type_>
   class function_sample_sink : public sample_sink<input_type_> {
   public:
-    inline ~function_sample_sink() {};
+    ~function_sample_sink() = default;
     typedef bool (*func_type)(input_type_);  
     func_type func;
     inline function_sample_sink(func_type f, sample_source<input_type_> * source = NULL) : func(f) {
@@ -113,7 +113,7 @@ namespace lamb {
       connect(source);
     };
    
-    virtual inline ~function_sample_processor() {};
+    virtual ~function_sample_processor() = default;
    
     virtual inline output_type_ process(input_type_ v) {
       return (*func)(v);
@@ -127,9 +127,21 @@ namespace lamb {
   class triggerable {
   public:
     virtual void trigger() = 0;
-    virtual ~triggerable() {};
+    virtual ~triggerable() = default;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
+// 
+////////////////////////////////////////////////////////////////////////////////
+  
+  class stoppable {
+  public:
+    virtual void stop() = 0;
+    virtual ~stoppable() = default;
+  };
+
+////////////////////////////////////////////////////////////////////////////////
+
 };
+
 #endif
