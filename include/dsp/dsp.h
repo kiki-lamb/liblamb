@@ -17,6 +17,36 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
   
+  // This should be replaced.
+  template <typename input_type>
+  class mix_6 : public lamb::sample_source<input_type> {
+  public:
+    identity<input_type> input0;
+    identity<input_type> input1;
+    identity<input_type> input2;
+    identity<input_type> input3;
+    identity<input_type> input4;
+    identity<input_type> input5;
+
+    inline virtual ~mix_6() = default;
+
+    inline virtual input_type read() {
+      typename sample_type_traits<input_type>::mix_type mix = 0;
+      mix += input0.read();
+      mix += input1.read();
+      mix += input2.read();
+      mix += input3.read();
+      mix += input4.read();
+      mix += input5.read();
+
+      mix >>= ((sizeof(mix) - sizeof(input_type)) << 3);
+      
+      return mix;
+    }
+  };
+
+////////////////////////////////////////////////////////////////////////////////
+  
   // This should be a template...
   template <typename input_type>
   class unity_mix : public lamb::sample_source<input_type> {
