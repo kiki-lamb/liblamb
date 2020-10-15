@@ -10,11 +10,11 @@ namespace lamb {
     const    output_value_type * data;
     volatile bool                trigger;
     bool                         state;
-    uint16_t                     length;
-    uint16_t                     index;
-    uint16_t                     r_point;
+    uint32_t                     length;
+    uint32_t                     index;
+    uint32_t                     r_point;
     
-    explicit oneshot(const output_value_type * data_, uint16_t length_) :
+    explicit oneshot(const output_value_type * data_, uint32_t length_) :
       data(data_),
       trigger(false),
       state(false),
@@ -24,8 +24,8 @@ namespace lamb {
     
 
     virtual output_value_type play(
-      uint16_t const & index_,
-      uint16_t const & incr_
+      uint32_t const & index_,
+      uint32_t const & incr_
     ) {
       if (trigger) {
         trigger = false;
@@ -63,7 +63,7 @@ namespace lamb {
   public:    
     explicit oneshot_plus(
       const typename oneshot<int16_t>::output_value_type * data_,
-      uint16_t length_
+      uint32_t length_
     ) :
       oneshot<int16_t>(data_, length_),
       amplitude(255),
@@ -75,8 +75,8 @@ namespace lamb {
 
     uint16_t amplitude;
 
-    virtual int16_t get_index() {
-      uint16_t phacc_msb = phacc >> 16;
+    virtual uint32_t get_index() {
+      uint32_t phacc_msb = phacc >> 16;
       return  phacc_msb;
     }
     
