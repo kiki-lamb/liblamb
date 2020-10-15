@@ -53,13 +53,13 @@ namespace lamb {
       tmp = input5.read();
       mix += tmp;
 
-      const uint8_t shift = sizeof(mix) - sizeof(input_type) - 1;
-      
-      Serial.print("Mixed ");
-      Serial.print(mix);
-      Serial.println();
+      const int8_t shift = sizeof(mix) - sizeof(input_type) - 1;
 
-      return mix >> shift;
+      if (shift > 0) {
+        mix >>= shift;
+      }
+      
+      return mix;
     }
   };
 
