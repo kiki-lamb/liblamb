@@ -1,34 +1,40 @@
 #ifndef KL_ONESHOT_H
 #define KL_ONESHOT_H
 
+#include "../sample_type_interfaces/sample_type_interfaces.h"
+
 namespace lamb {
-  template <typename T>
-  class oneshot {
+  template <typename value_t_, typename phase_t_>
+  class oneshot : sample_source<value_t_>, triggerable {
   public:
-    typedef T output_value_type;
+    typedef value_t_ output_value_type;
+    typedef phase_t_ phase_type;
     
     const    output_value_type * data;
-    volatile bool                trigger;
-    bool                         state;
-    uint32_t                     length;
-    uint32_t                     index;
-    uint32_t                     r_point;
+  protected:
+    volatile bool                _trigger;
     
-    explicit oneshot(const output_value_type * data_, uint32_t length_) :
+  public:
+    bool                         state;
+    phase_type                   length;
+    phase_type                   index;
+    phase_type                   r_point;
+    
+    explicit oneshot(const output_value_type * data_, phase_type length_) :
       data(data_),
-      trigger(false),
+      _trigger(false),
       state(false),
       length(length_),
       index(0),
       r_point(length_-256) {}
     
-
+  protected:
     virtual output_value_type play(
-      uint32_t const & index_,
-      uint32_t const & incr_
+      phase_type const & index_,
+      phase_type const & incr_
     ) {
-      if (trigger) {
-        trigger = false;
+      if (_trigger) {
+        _trigger = false;
         state   = true;
         index   = 0;
       }
@@ -49,7 +55,7 @@ namespace lamb {
       output_value_type audio = play(index, 1);
       
       if (index > r_point) {
-        uint32_t         past_r = index - r_point;
+        phase_type       past_r = index - r_point;
         past_r                  = ~past_r;
         uint16_t const & mul    = audio * past_r;
         audio                   = mul >> 8;
@@ -57,15 +63,24 @@ namespace lamb {
       
       return audio;
     }
+    
+  public:    
+    virtual output_value_type read() {
+      return play();
+    }
+
+    virtual void trigger() {
+      _trigger = true;
+    }
   };
 
-  class oneshot_plus : public oneshot<int16_t> {
+  class oneshot_plus : public oneshot<int16_t, uint32_t> {
   public:    
     explicit oneshot_plus(
-      const typename oneshot<int16_t>::output_value_type * data_,
+      const typename oneshot<int16_t, uint32_t>::output_value_type * data_,
       uint32_t length_
     ) :
-      oneshot<int16_t>(data_, length_),
+      oneshot<int16_t, uint32_t>(data_, length_),
       amplitude(255),
       phacc(0),
       phincr(0),
@@ -79,10 +94,11 @@ namespace lamb {
       uint32_t phacc_msb = phacc >> 16;
       return  phacc_msb;
     }
-    
+
+  protected:
     virtual int16_t play() {
-      if (trigger) {
-        trigger = false;
+      if (_trigger) {
+        _trigger = false;
         state   = true;
         phacc   = 0;
         
@@ -98,7 +114,7 @@ namespace lamb {
 
       if (! state) return 0;
       
-      output_value_type audio = oneshot<int16_t>::data[get_index()];
+      output_value_type audio = oneshot<int16_t, uint32_t>::data[get_index()];
 
       phacc += phincr;
       
@@ -108,12 +124,10 @@ namespace lamb {
       return accum;
     }
     
-
+  public:
     uint32_t phacc;
     uint32_t phincr;
     uint32_t next_phincr;
-    
-  private:
     uint32_t accum;
   };
   

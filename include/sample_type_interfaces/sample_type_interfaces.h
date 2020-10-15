@@ -1,133 +1,133 @@
 #ifndef LAMB_SAMPLE_TYPE_INTERFACES
 #define LAMB_SAMPLE_TYPE_INTERFACES
 
+#include "../sample_type_traits/sample_type_traits.h"
+
 namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
-// SampleSource
+// sample_source
 ////////////////////////////////////////////////////////////////////////////////
   
   template <typename output_type_> 
-    class SampleSource { 
+  class sample_source { 
   public:
     typedef output_type_ output_type;
     typedef lamb::sample_type_traits<output_type> traits;
 
-    virtual ~SampleSource() {};
+    virtual ~sample_source() {};
     virtual output_type read() = 0;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
-// SampleReceiver
+// sample_sink
 ////////////////////////////////////////////////////////////////////////////////
   
   template <typename input_type_>
-    class SampleReceiver {
+  class sample_sink {
   public:
     typedef input_type_ input_type;
   
-    SampleSource<input_type> * _source;
+    sample_source<input_type> * _source;
       
-    virtual ~SampleReceiver() {};
+    virtual ~sample_sink() {};
 
-    virtual inline SampleSource<input_type> * source() {
+    virtual inline sample_source<input_type> * source() {
       return _source;
     }
-    virtual inline void connect(SampleSource<input_type> * source_ = NULL) {
+    virtual inline void connect(sample_source<input_type> * source_ = NULL) {
       _source = source_;
     } 
   };
 
 ////////////////////////////////////////////////////////////////////////////////
-// SampleProcessor : public SampleSource<output_type_>
+// sample_processor : public sample_source<output_type_>
 ////////////////////////////////////////////////////////////////////////////////
   
   template <typename input_type_, typename output_type_ = input_type_ > 
-    class SampleProcessor :
-    public SampleSource<output_type_>,
-    public SampleReceiver<input_type_> { 
+  class sample_processor :
+    public sample_source<output_type_>,
+    public sample_sink<input_type_> { 
   public:
-  typedef input_type_ input_type;
-  typedef output_type_ output_type;
+    typedef input_type_ input_type;
+    typedef output_type_ output_type;
   
-  virtual inline ~SampleProcessor() {};
+    virtual inline ~sample_processor() {};
   
-  virtual inline output_type read() {
-    return process(SampleReceiver<input_type_>::_source->read());
-  }
+    virtual inline output_type read() {
+      return process(sample_sink<input_type_>::_source->read());
+    }
 
   protected:
-  virtual inline output_type process(input_type in) {
-    return in;
-  }
+    virtual inline output_type process(input_type in) {
+      return in;
+    }
   };
 
-// ////////////////////////////////////////////////////////////////////////////////
-// // FunctionSampleSource : public SampleSource<output_type_>
-// ////////////////////////////////////////////////////////////////////////////////
-//   
-//   template <typename output_type_>
-//     class FunctionSampleSource : public SampleSource<output_type_> {
-//   public:
-//     typedef output_type_ (*func_type)();
-//     func_type func;
-//   FunctionSampleSource(func_type f) : func(f) {};
-//     virtual inline ~FunctionSampleSource() {};  
-//       virtual inline output_type_ read() {
-//       return (*func)();
-//     }
-//   };
-// 
-// // ////////////////////////////////////////////////////////////////////////////////
-// // FunctionSampleReceiver : public SampleReceiver<input_type_>
-// ////////////////////////////////////////////////////////////////////////////////
-//   
-//   template <typename input_type_>
-//     class FunctionSampleReceiver : public SampleReceiver<input_type_> {
-//   public:
-//     inline ~FunctionSampleReceiver() {};
-//     typedef bool (*func_type)(input_type_);  
-//     func_type func;
-//     inline FunctionSampleReceiver(func_type f, SampleSource<input_type_> * source = NULL) : func(f) {
-//       connect(source);
-//     }
-//     virtual inline bool sink() {
-//       return (*func)(SampleReceiver<input_type_>::read());
-//     }
-//   };
-// 
-// ////////////////////////////////////////////////////////////////////////////////
-// // FunctionSampleProcessor : public SampleProcessor<input_type_, output_type_>
-// ////////////////////////////////////////////////////////////////////////////////
-//   
-//   template <typename input_type_, typename output_type_ = input_type_ > 
-//     class FunctionSampleProcessor : public SampleProcessor<input_type_, output_type_> {
-//   public:
-//   typedef output_type_ (*func_type)(input_type_);
-//   
-//   func_type func;
-//   
-//   inline FunctionSampleProcessor(func_type f, SampleSource<input_type_> * source = NULL) : func(f) {
-//     connect(source);
-//   };
-//   
-//   virtual inline ~FunctionSampleProcessor() {};
-//   
-//   virtual inline output_type_ process(input_type_ v) {
-//     return (*func)(v);
-//   }
-//   };
-// 
-//
-  
+  ////////////////////////////////////////////////////////////////////////////////
+  // function_sample_source : public sample_source<output_type_>
+  ////////////////////////////////////////////////////////////////////////////////
+   
+  template <typename output_type_>
+  class function_sample_source : public sample_source<output_type_> {
+  public:
+    typedef output_type_ (*func_type)();
+    func_type func;
+    function_sample_source(func_type f) : func(f) {};
+    virtual inline ~function_sample_source() {};  
+    virtual inline output_type_ read() {
+      return (*func)();
+    }
+  };
+ 
+  // ////////////////////////////////////////////////////////////////////////////////
+  // function_sample_sink : public sample_sink<input_type_>
+  ////////////////////////////////////////////////////////////////////////////////
+   
+  template <typename input_type_>
+  class function_sample_sink : public sample_sink<input_type_> {
+  public:
+    inline ~function_sample_sink() {};
+    typedef bool (*func_type)(input_type_);  
+    func_type func;
+    inline function_sample_sink(func_type f, sample_source<input_type_> * source = NULL) : func(f) {
+      connect(source);
+    }
+    virtual inline bool sink() {
+      return (*func)(sample_sink<input_type_>::read());
+    }
+  };
+ 
+  ////////////////////////////////////////////////////////////////////////////////
+  // function_sample_processor : public sample_processor<input_type_, output_type_>
+  ////////////////////////////////////////////////////////////////////////////////
+   
+  template <typename input_type_, typename output_type_ = input_type_ > 
+  class function_sample_processor : public sample_processor<input_type_, output_type_> {
+  public:
+    typedef output_type_ (*func_type)(input_type_);
+   
+    func_type func;
+   
+    inline function_sample_processor(func_type f, sample_source<input_type_> * source = NULL) : func(f) {
+      connect(source);
+    };
+   
+    virtual inline ~function_sample_processor() {};
+   
+    virtual inline output_type_ process(input_type_ v) {
+      return (*func)(v);
+    }
+  };
+
 ////////////////////////////////////////////////////////////////////////////////
 // Triggerable
 ////////////////////////////////////////////////////////////////////////////////
   
-  class Triggerable {
+  class triggerable {
   public:
     virtual void trigger() = 0;
-    virtual ~Triggerable() {};
+    virtual ~triggerable() {};
   };
 
 ////////////////////////////////////////////////////////////////////////////////
