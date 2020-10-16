@@ -161,6 +161,27 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+  template <> class sample_type_traits<int32_t> {
+  public:
+    typedef int32_t  value_type;
+    typedef int64_t  mix_type;
+    typedef uint32_t unsigned_type;
+    typedef int32_t  signed_type;
+
+    static const bool    is_signed        = true;
+    static const int32_t maximum          = 0xffff;
+    static const int32_t silence          = 0;
+    static const int32_t minimum          = -0xffff-1;
+    static const int32_t bias_to_signed   = 0;
+    static const int32_t bias_to_unsigned = -0xffff-1;
+
+    static inline value_type id(value_type x) { return x; };
+  };
+
+  // const int8_t * sample_type_traits<int8_t>::sine_table = lamb::Tables::sin256_int8_t::data;
+
+////////////////////////////////////////////////////////////////////////////////
+
   template <> class sample_type_traits<uint8_t> {
   public:
     typedef uint8_t value_type;

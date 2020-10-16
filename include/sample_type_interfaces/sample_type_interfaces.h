@@ -37,11 +37,8 @@ namespace lamb {
     virtual inline sample_source<input_type> * source() {
       return _source;
     }
+
     virtual inline void connect(sample_source<input_type> * source_ = NULL) {
-      Serial.print("Connected to ");
-      Serial.print((uint32_t) source_);
-      Serial.println();
-      
       _source = source_;
     } 
   };

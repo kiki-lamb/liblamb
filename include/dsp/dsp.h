@@ -17,30 +17,49 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
   
-  template <
-    typename input_type,
-    uint8_t  downshift,
-    typename output_type = input_type
-    >
-  class amplify : public lamb::sample_processor<input_type, output_type> {
-  public:
-    uint16_t amplitude;
+  // template <
+  //   typename input_type,
+  //   uint8_t  downshift,
+  //   typename output_type = input_type
+  //   >
+  // class amplify : public lamb::sample_processor<input_type, output_type> {
+  // public:
+  //   uint16_t amplitude;
     
-    virtual ~amplify() = default;
+  //   virtual ~amplify() = default;
 
-    inline amplify(lamb::sample_source<input_type> * in = NULL) {
-      this->connect(in);
-    }
+  //   inline amplify(lamb::sample_source<input_type> * in = NULL) {
+  //     this->connect(in);
+  //   }
 
-    inline output_type process(input_type const & input) {
-      typename sample_type_traits<input_type>::mix_type tmp = input;
+  //   inline output_type process(input_type const & input) {
+  //     typename sample_type_traits<input_type>::mix_type tmp = input;
 
-      tmp *= amplitude;
-      tmp >>= downshift;
+  //     tmp *= amplitude;
+  //     tmp >>= downshift;
 
-      return tmp;
-    }
-  };
+  //     return tmp;
+  //   }
+  // };
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+  template <
+    uint8_t shift,
+    typename input_type,
+    typename amplitude_type,
+    typename mix_type = typename sample_type_traits<input_type>::mix_type
+    >
+  void amplify(
+    input_type const & input,
+    amplitude_type const & ampl,
+    mix_type & out
+  ) {
+    out  = input;
+    out *=  ampl;
+    out >>= shift;
+  }
 
 ////////////////////////////////////////////////////////////////////////////////
   
