@@ -46,19 +46,40 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   template <
-    uint8_t shift,
     typename input_type,
-    typename amplitude_type,
-    typename mix_type = typename sample_type_traits<input_type>::mix_type
+    typename amplitude_type = input_type
     >
-  void amplify(
+  input_type amplify(
     input_type const & input,
     amplitude_type const & ampl,
-    mix_type & out
+    uint8_t const & shift = sizeof(amplitude_type) << 3
   ) {
-    out  = input;
-    out *=  ampl;
-    out >>= shift;
+    typename sample_type_traits<input_type>::mix_type tmp = input;
+
+    tmp         *=  ampl;
+    tmp        >>= shift;
+
+    return tmp;
+  }
+
+////////////////////////////////////////////////////////////////////////////////
+
+  template <typename t>
+  int32_t mix(
+    t ** sources_,
+    size_t const & count) {
+
+    typename sample_type_traits<typename t::value_type>::mix_type tmp_mix = 0;
+
+    tmp_mix = sample_type_traits<decltype(tmp_mix)>::silence;
+    
+    for (size_t ix = 0; ix < count; ix++) {
+      sample_source<int16_t> * s = sources_[ix];
+      
+      tmp_mix += s->read();
+    }
+    
+    return tmp_mix;
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -167,3 +188,8 @@ namespace lamb {
 };
 
 #endif
+
+
+/* Local Variables:  */
+/* fill-column: 100  */
+/* End:              */
