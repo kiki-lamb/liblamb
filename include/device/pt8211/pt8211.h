@@ -7,7 +7,7 @@
 
 namespace lamb {
   namespace device {
-    class pt8211 /* : public sample_sink<int16_t> */ {
+    class pt8211 : public sample_sink<int16_t> {
     public:
       inline pt8211(unsigned int ws_pin_, SPIClass * spi_ = nullptr) :
         _spi(spi_),

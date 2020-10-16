@@ -50,20 +50,20 @@ namespace lamb {
 // sample_sink
 ////////////////////////////////////////////////////////////////////////////////
   
-//  template <typename input_type_>
-//  class sample_sink : sample_receiver<input_type_> {
-//  public:
-//    typedef input_type_ input_type;
-//  
-//    virtual ~sample_sink() = default;
-//
-//    virtual void sink() {
-//      impl_sink(read());
-//    }
-//    
-//  protected:
-//    virtual void impl_sink(input_type const & val) = 0;
-//  };
+template <typename input_type_>
+class sample_sink : public sample_receiver<input_type_> {
+public:
+  typedef input_type_ input_type;
+
+  virtual ~sample_sink() = default;
+
+  virtual void sink() {
+    impl_sink(sample_receiver<input_type>::source()->read());
+  }
+  
+protected:
+  virtual void impl_sink(input_type const & val) = 0;
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 // sample_processor : public sample_source<output_type_>
