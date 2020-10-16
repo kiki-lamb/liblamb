@@ -194,8 +194,8 @@ namespace lamb {
 
     static const uint8_t unmix_shift      = 8;
     static const bool    is_signed        = true;
-    static const int16_t maximum          = 255;
-    static const int16_t silence          = 128;
+    static const int16_t maximum          = 0xff;
+    static const int16_t silence          = 0x80;
     static const int16_t minimum          = 0;
     static const int16_t bias_to_signed   = -128;
     static const int16_t bias_to_unsigned = 0;

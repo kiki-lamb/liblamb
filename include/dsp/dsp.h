@@ -4,46 +4,6 @@
 namespace lamb {
   
 ////////////////////////////////////////////////////////////////////////////////
-  
-  template <typename input_type, typename output_type = input_type>
-  class identity : public lamb::sample_processor<input_type, output_type> {
-  public:
-    virtual ~identity() = default;
-
-    inline identity(lamb::sample_source<input_type> * in = NULL) {
-      this->connect(in);
-    }
-  };
-
-////////////////////////////////////////////////////////////////////////////////
-  
-  // template <
-  //   typename input_type,
-  //   uint8_t  downshift,
-  //   typename output_type = input_type
-  //   >
-  // class amplify : public lamb::sample_processor<input_type, output_type> {
-  // public:
-  //   uint16_t amplitude;
-    
-  //   virtual ~amplify() = default;
-
-  //   inline amplify(lamb::sample_source<input_type> * in = NULL) {
-  //     this->connect(in);
-  //   }
-
-  //   inline output_type process(input_type const & input) {
-  //     typename sample_type_traits<input_type>::mix_type tmp = input;
-
-  //     tmp *= amplitude;
-  //     tmp >>= downshift;
-
-  //     return tmp;
-  //   }
-  // };
-
-
-////////////////////////////////////////////////////////////////////////////////
 
   template <
     typename input_type,
@@ -54,6 +14,7 @@ namespace lamb {
     amplitude_type const & ampl,
     uint8_t const & shift = sizeof(amplitude_type) << 3
   ) {
+
     typename sample_type_traits<input_type>::mix_type tmp = input;
 
     tmp         *=  ampl;
@@ -61,6 +22,64 @@ namespace lamb {
 
     return tmp;
   }
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+  template <
+    typename t,
+    typename amplitude_type = typename t::output_type
+    >
+  class amplifier :
+    public sample_source<typename t::output_type> {
+  private:
+    t * _source;
+
+  public:
+    amplitude_type amplitude;
+    uint8_t shift;
+    
+  public:
+    explicit amplifier(
+      t * source_,
+      amplitude_type const & amplitude_,
+      uint8_t const & shift_
+    ) :
+    _source(source_),
+    amplitude(amplitude_),
+    shift(shift_) {}
+
+    virtual ~amplifier() = default;
+    
+    virtual
+    typename t::output_type
+    read() {
+      return amplify(_source->read(), amplitude, shift);
+    }
+  };
+  
+////////////////////////////////////////////////////////////////////////////////
+
+  template <typename t>
+  class mixer :
+    public sample_source<typename t::output_type> {
+  private:
+    t **  _sources;
+    size_t  _count;
+    
+  public:
+    mixer(t ** sources_, size_t count_) :
+    _sources(sources_),
+    _count(count_) {}
+
+    virtual ~mixer() = default;
+    
+    virtual
+    typename t::output_type
+    read() {
+      return mix(_sources, _count);
+    }
+  };
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -85,49 +104,13 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
   
-  // This should be replaced.
-  template <typename input_type>
-  class mix_6 : public lamb::sample_source<input_type> {
+  template <typename input_type, typename output_type = input_type>
+  class identity : public lamb::sample_processor<input_type, output_type> {
   public:
-    identity<input_type> input0;
-    identity<input_type> input1;
-    identity<input_type> input2;
-    identity<input_type> input3;
-    identity<input_type> input4;
-    identity<input_type> input5;
+    virtual ~identity() = default;
 
-    inline virtual ~mix_6() = default;
-
-    inline virtual input_type read() {
-      typename sample_type_traits<input_type>::mix_type mix = 0;
-
-      input_type tmp;
-
-      tmp = input0.read();
-      mix += tmp;
-
-      tmp = input1.read();
-      mix += tmp;
-
-      tmp = input2.read();
-      mix += tmp;
-
-      tmp = input3.read();
-      mix += tmp;
-
-      tmp = input4.read();
-      mix += tmp;
-      
-      tmp = input5.read();
-      mix += tmp;
-
-      const int8_t shift = sizeof(mix) - sizeof(input_type) - 1;
-
-      if (shift > 0) {
-        mix >>= shift;
-      }
-      
-      return mix;
+    inline identity(lamb::sample_source<input_type> * in = NULL) {
+      this->connect(in);
     }
   };
 
@@ -158,15 +141,18 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   template <typename input_type>
-  class ConvertToUnsigned : public lamb::sample_processor<input_type, typename lamb::sample_type_traits<input_type>::unsigned_type> {
+  class convert_to_unsigned :
+    public lamb::sample_processor<input_type, typename lamb::sample_type_traits<input_type>::unsigned_type> {
   public:
-    inline virtual ~ConvertToUnsigned() {};
+    inline virtual ~convert_to_unsigned() {};
 
-    inline ConvertToUnsigned(lamb::sample_source<input_type> * in) {
+    inline convert_to_unsigned(lamb::sample_source<input_type> * in) {
       this->connect(in);
     }
 
-    inline virtual typename lamb::sample_type_traits<input_type>::unsigned_type process(input_type v) {
+    inline
+    virtual typename lamb::sample_type_traits<input_type>::unsigned_type
+    process(input_type v) {
       return lamb::sample_type_traits<input_type>::to_uint8_t(v);
     }
   };
@@ -182,7 +168,8 @@ namespace lamb {
       connect(in);
     }
 
-    inline virtual typename lamb::sample_type_traits<input_type>::unsigned_type process(input_type v) {
+    inline
+    virtual typename lamb::sample_type_traits<input_type>::unsigned_type process(input_type v) {
       return lamb::sample_type_traits<input_type>::to_int8_t(v);
     }
   };
