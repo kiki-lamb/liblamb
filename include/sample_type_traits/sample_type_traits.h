@@ -109,6 +109,7 @@ namespace lamb {
     typedef uint8_t unsigned_type;
     typedef int8_t signed_type;
 
+    static const uint8_t unmix_shift      = 8;
     static const bool    is_signed        = true;    
     static const int16_t maximum          = 127;
     static const int16_t silence          = 0;
@@ -139,6 +140,7 @@ namespace lamb {
     typedef uint16_t unsigned_type;
     typedef int16_t signed_type;
 
+    static const uint8_t unmix_shift      = 16;
     static const bool    is_signed        = true;
     static const int16_t maximum          = 32767;
     static const int16_t silence          = 0;
@@ -168,6 +170,7 @@ namespace lamb {
     typedef uint32_t unsigned_type;
     typedef int32_t  signed_type;
 
+    static const uint8_t unmix_shift      = 32;
     static const bool    is_signed        = true;
     static const int32_t maximum          = 0xffff;
     static const int32_t silence          = 0;
@@ -189,6 +192,7 @@ namespace lamb {
     typedef uint8_t unsigned_type;
     typedef int8_t signed_type;
 
+    static const uint8_t unmix_shift      = 8;
     static const bool    is_signed        = true;
     static const int16_t maximum          = 255;
     static const int16_t silence          = 128;

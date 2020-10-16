@@ -65,7 +65,8 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   template <typename t>
-  int32_t mix(
+  typename sample_type_traits<typename t::value_type>::mix_type
+  mix(
     t ** sources_,
     size_t const & count) {
 
