@@ -51,23 +51,20 @@ namespace lamb {
       accum(0) {}
 
     virtual phase_type index() {
-      const uint8_t shift     = 
+      static const uint8_t shift     = 
         ((sizeof(phase_type) - sizeof(length_type)) << 3);
       
-      phase_type    phacc_msb = phacc >> shift;
-      
-      return  phacc_msb;
+      return  phacc >> shift;
     }
 
-  protected:
-    virtual void stop() {
+    inline virtual void stop() {
       _trigger = false;
       state    = false;
       phacc    = 0;
       accum    = 0;
     }
 
-    virtual value_type play() {
+    inline virtual value_type play() {
       if (_trigger) {
         _trigger = false;
         state    = true;
@@ -83,11 +80,10 @@ namespace lamb {
         stop();
       }
 
-      if (! state) 
-        return 0;
-      }
+      if (! state) return 0;
 
-      const uint8_t shift = sizeof(amplitude_type) << 3;
+      static const uint8_t shift =
+        sizeof(amplitude_type) << 3;
 
       accum   = amplitude * data[index()];
       accum >>= shift;
@@ -97,12 +93,11 @@ namespace lamb {
       return accum;
     }
     
-  public:
-    virtual output_value_type read() {
+    inline virtual output_value_type read() {
       return play();
     }
     
-    virtual void trigger() {
+    inline virtual void trigger() {
       _trigger = true;
     }
   };
