@@ -83,12 +83,14 @@ namespace lamb {
         stop();
       }
 
-      if (! state) {
+      if (! state) 
         return 0;
       }
 
+      const uint8_t shift = sizeof(amplitude_type) << 3;
+
       accum   = amplitude * data[index()];
-      accum >>= sizeof(amplitude_type) << 3;
+      accum >>= shift;
       
       phacc  += phincr;
       
