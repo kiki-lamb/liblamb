@@ -91,6 +91,7 @@ namespace lamb {
     typename sample_type_traits<typename t::value_type>::mix_type & out
   ) {
     for (size_t ix = 0; ix < count; ix++) {
+      
 // #define USE_CAST
       
 #ifdef USE_CAST
