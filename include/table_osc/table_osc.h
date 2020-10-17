@@ -153,14 +153,14 @@ namespace lamb {
 
     __attribute__((always_inline))
     output_value_type read() {
-      register uint8_t           index      = this->_phacc       >> this->_index_rshift;
-      register output_value_type value      = this->get(index++) << LSHIFT;
-      register output_value_type delta      = this->get(index)   << LSHIFT;
-      delta                                -= value;
-      phase_type        const &  sub_index  = this->_phacc        & mask_bottom;
-      int32_t           const &  deltasi    = delta               * sub_index;
-      this->_phacc                         += this->_phincr; 
-      value                                += deltasi            >> this->_index_rshift;
+      uint8_t           index       = this->_phacc       >> this->_index_rshift;
+      output_value_type value       = this->get(index++) << LSHIFT;
+      output_value_type delta       = this->get(index)   << LSHIFT;
+      delta                        -= value;
+      phase_type const & sub_index  = this->_phacc        & mask_bottom;
+      int32_t    const & deltasi    = delta               * sub_index;
+      this->_phacc                 += this->_phincr; 
+      value                        += deltasi            >> this->_index_rshift;
       return value;
       
     }
