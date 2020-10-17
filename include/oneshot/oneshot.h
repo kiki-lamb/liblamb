@@ -19,17 +19,16 @@ namespace lamb {
     volatile bool                _trigger;
 
   public:
-    typedef value_t_             value_type;
+    typedef value_t_             output_value_type;
     typedef length_t_            length_type;
     typedef phase_t_             phase_type;
     typedef amplitude_t_         amplitude_type;
-    typedef typename sample_type_traits<value_type>::mix_type
+    typedef typename sample_type_traits<output_value_type>::mix_type
                                  accum_type; 
-    typedef value_type           output_value_type;
 
     bool                         state;
     length_type                  length;
-    const  output_value_type *   data;
+    const output_value_type *    data;
     amplitude_type               amplitude;
     phase_type                   phacc;
     phase_type                   phincr;
@@ -37,7 +36,7 @@ namespace lamb {
     accum_type                   accum;      
     
     explicit oneshot(
-      const value_type* data_,
+      const output_value_type* data_,
       length_type       length_
     ) :
       _trigger(false),
@@ -64,7 +63,7 @@ namespace lamb {
       accum    = 0;
     }
 
-    inline virtual value_type play() {
+    inline virtual output_value_type play() {
       if (_trigger) {
         _trigger = false;
         state    = true;
