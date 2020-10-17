@@ -59,6 +59,7 @@ name = (t *) malloc((name ## _length) * sizeof(t));
 
 #define light_buffer_write(b, v) b[b ## _write_ix %= b ## _length,  b ## _count++, b ## _write_ix++] = v
 
+#define light_buffer_clear(b) b ## _write_ix = 0; b ## _read_ix = 0; b ##_count = 0
 #define light_buffer_writable(b) ((b ## _count) < (b ## _length))
 
 #define light_buffer_readable(b) (b ## _count)

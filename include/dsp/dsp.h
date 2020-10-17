@@ -3,26 +3,27 @@
 
 namespace lamb {
   
+#define MIX(out_, sources_, count_) \
+  { for (size_t ix = 0; ix < count_; ix ++) { out_ += sources_[ix]->play(); } }
+
+#define AMPLIFY(out_, amplitude_, shift_) \
+  { out_ *= amplitude_; out_ >>= shift_; }
+
 ////////////////////////////////////////////////////////////////////////////////
 
   template <
-    typename input_type,
-    typename amplitude_type = input_type
+    uint8_t shift,
+    typename in_out_type,
+    typename amplitude_type = uint12_t
     >
-  input_type amplify(
-    input_type const & input,
+  inline __attribute__((always_inline))
+  void amplify(
     amplitude_type const & ampl,
-    uint8_t const & shift = sizeof(amplitude_type) << 3
+    in_out_type & in_out
   ) {
-
-    typename sample_type_traits<input_type>::mix_type tmp = input;
-
-    tmp         *=  ampl;
-    tmp        >>= shift;
-
-    return tmp;
+    in_out  *=  ampl;
+    in_out >>= shift;
   }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -60,6 +61,20 @@ namespace lamb {
   
 ////////////////////////////////////////////////////////////////////////////////
 
+  template <typename t>
+  inline __attribute__((always_inline))
+  void mix(
+    t ** sources_,
+    size_t const & count,
+    typename sample_type_traits<typename t::output_value_type>::mix_type & out
+  ) {
+    for (size_t ix = 0; ix < count; ix++) {
+      out += sources_[ix]->read();
+    }
+  }
+
+////////////////////////////////////////////////////////////////////////////////
+
 //  template <typename t>
 //  class mixer :
 //    public sample_source<typename t::output_type> {
@@ -80,20 +95,6 @@ namespace lamb {
 //      return mix(_sources, _count);
 //    }
 //  };
-
-////////////////////////////////////////////////////////////////////////////////
-
-  template <typename t>
-  inline __attribute__((always_inline))
-  void mix(
-    t ** sources_,
-    size_t const & count,
-    typename sample_type_traits<typename t::output_value_type>::mix_type & out
-  ) {
-    for (size_t ix = 0; ix < count; ix++) {
-      out += sources_[ix]->read();
-    }
-  }
 
 ////////////////////////////////////////////////////////////////////////////////
   

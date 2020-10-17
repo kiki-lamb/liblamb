@@ -9,14 +9,14 @@ namespace lamb {
 // sample_source
 ////////////////////////////////////////////////////////////////////////////////
   
-  template <typename output_type_> 
+  template <typename output_value_type_> 
   class sample_source { 
   public:
-    typedef output_type_ output_type;
-    typedef lamb::sample_type_traits<output_type> traits;
+    typedef output_value_type_ output_value_type;
+    typedef lamb::sample_type_traits<output_value_type> traits;
 
     virtual ~sample_source() = default;
-    virtual output_type read() = 0;
+    virtual output_value_type read() = 0;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -63,41 +63,41 @@ protected:
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-// sample_processor : public sample_source<output_type_>
+// sample_processor : public sample_source<output_value_type_>
 //////////////////r//////////////////////////////////////////////////////////////
   
-  template <typename input_type_, typename output_type_ = input_type_ > 
+  template <typename input_type_, typename output_value_type_ = input_type_ > 
   class sample_processor :
-    public sample_source<output_type_>,
+    public sample_source<output_value_type_>,
     public sample_receiver<input_type_> { 
   public:
     typedef input_type_ input_type;
-    typedef output_type_ output_type;
+    typedef output_value_type_ output_value_type;
   
     virtual ~sample_processor() = default;
   
-    virtual inline output_type read() {
+    virtual inline output_value_type read() {
       return process(sample_receiver<input_type>::source()->read());
     }
 
   protected:
-    virtual inline output_type process(input_type const & in) {
+    virtual inline output_value_type process(input_type const & in) {
       return in;
     }
   };
 
   ////////////////////////////////////////////////////////////////////////////////
-  // function_sample_source : public sample_source<output_type_>
+  // function_sample_source : public sample_source<output_value_type_>
   ////////////////////////////////////////////////////////////////////////////////
    
-  template <typename output_type_>
-  class function_sample_source : public sample_source<output_type_> {
+  template <typename output_value_type_>
+  class function_sample_source : public sample_source<output_value_type_> {
   public:
-    typedef output_type_ (*func_type)();
+    typedef output_value_type_ (*func_type)();
     func_type func;
     function_sample_source(func_type f) : func(f) {};
     virtual ~function_sample_source() = default;
-    virtual inline output_type_ read() {
+    virtual inline output_value_type_ read() {
       return (*func)();
     }
   };
@@ -121,13 +121,13 @@ protected:
   };
  
   ////////////////////////////////////////////////////////////////////////////////
-  // function_sample_processor : public sample_processor<input_type_, output_type_>
+  // function_sample_processor : public sample_processor<input_type_, output_value_type_>
   ////////////////////////////////////////////////////////////////////////////////
    
-  template <typename input_type_, typename output_type_ = input_type_ > 
-  class function_sample_processor : public sample_processor<input_type_, output_type_> {
+  template <typename input_type_, typename output_value_type_ = input_type_ > 
+  class function_sample_processor : public sample_processor<input_type_, output_value_type_> {
   public:
-    typedef output_type_ (*func_type)(input_type_);
+    typedef output_value_type_ (*func_type)(input_type_);
    
     func_type func;
    
@@ -137,7 +137,7 @@ protected:
    
     virtual ~function_sample_processor() = default;
    
-    virtual inline output_type_ process(input_type_ v) {
+    virtual inline output_value_type_ process(input_type_ v) {
       return (*func)(v);
     }
   };
