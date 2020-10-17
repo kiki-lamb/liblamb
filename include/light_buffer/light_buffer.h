@@ -16,7 +16,8 @@ uint8_t name ## _count = 0
 
 #define light_buffer_256_readable(b) (b ## _count)
 
-#define declare_light_buffer(t, len, name) t name[len]; \
+#define declare_light_buffer(t, len, name) \
+t name[len]; \
 typedef t (name ## _type); \
 uint8_t name ## _write_ix = 0; \
 uint8_t name ## _read_ix = 0; \
@@ -24,17 +25,18 @@ uint8_t name ## _count = 0; \
 static const uint8_t name ## _length = len
 
 #define declare_static_light_buffer(t, len, name) \
-static t name[len]; \
-typedef t (name ## _type); \
-static uint8_t name ## _write_ix; \
-static uint8_t name ## _read_ix; \
-static uint8_t name ## _count; \
-static const uint8_t name ## _length = len
+  static t name[len];                             \
+  typedef t (name ## _type);                      \
+  static uint8_t name ## _write_ix;               \
+  static uint8_t name ## _read_ix;                \
+  static uint8_t name ## _count;                  \
+  static const uint8_t name ## _length = len
 
-#define define_static_light_buffer(owner_t, name) \
-static uint8_t name ## _write_ix = 0; \
-static uint8_t name ## _read_ix = 0; \
-static uint8_t name ## _count = 0
+#define define_static_light_buffer(owner_t, name, len)   \
+  owner_t::(name ## _type) owner_t::name[len] = { 0 }    \
+  uint8_t owner_t::name ## _write_ix = 0;                \
+  uint8_t owner_t::name ## _read_ix = 0;                 \
+  uint8_t owner_t::name ## _count = 0
 
 #define declare_dynamic_light_buffer(t, name) t * name; \
 typedef t (name ## _type); \
@@ -60,6 +62,7 @@ name = (t *) malloc((name ## _length) * sizeof(t));
 #define light_buffer_write(b, v) b[b ## _write_ix %= b ## _length,  b ## _count++, b ## _write_ix++] = v
 
 #define light_buffer_clear(b) b ## _write_ix = 0; b ## _read_ix = 0; b ##_count = 0
+
 #define light_buffer_writable(b) ((b ## _count) < (b ## _length))
 
 #define light_buffer_readable(b) (b ## _count)
