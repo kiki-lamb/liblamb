@@ -60,46 +60,47 @@ namespace lamb {
   
 ////////////////////////////////////////////////////////////////////////////////
 
-  template <typename t>
-  class mixer :
-    public sample_source<typename t::output_type> {
-  private:
-    t **  _sources;
-    size_t  _count;
-    
-  public:
-    mixer(t ** sources_, size_t count_) :
-    _sources(sources_),
-    _count(count_) {}
-
-    virtual ~mixer() = default;
-    
-    virtual
-    typename t::output_type
-    read() {
-      return mix(_sources, _count);
-    }
-  };
+//  template <typename t>
+//  class mixer :
+//    public sample_source<typename t::output_type> {
+//  private:
+//    t **  _sources;
+//    size_t  _count;
+//    
+//  public:
+//    mixer(t ** sources_, size_t count_) :
+//    _sources(sources_),
+//    _count(count_) {}
+//
+//    virtual ~mixer() = default;
+//    
+//    virtual
+//    typename t::output_type
+//    read() {
+//      return mix(_sources, _count);
+//    }
+//  };
 
 ////////////////////////////////////////////////////////////////////////////////
 
   template <typename t>
-  typename sample_type_traits<typename t::value_type>::mix_type
-  mix(
+  inline __attribute__((always_inline))
+  void mix(
     t ** sources_,
-    size_t const & count) {
-
-    typename sample_type_traits<typename t::value_type>::mix_type tmp_mix = 0;
-
-    tmp_mix = sample_type_traits<decltype(tmp_mix)>::silence;
-    
+    size_t const & count,
+    typename sample_type_traits<typename t::value_type>::mix_type & out
+  ) {
     for (size_t ix = 0; ix < count; ix++) {
-      sample_source<int16_t> * s = sources_[ix];
+// #define USE_CAST
       
-      tmp_mix += s->read();
+#ifdef USE_CAST
+      sample_source<int16_t> * s = sources_[ix];
+
+      out += s->read();
+#else
+      out += sources_[ix]->read();
+#endif
     }
-    
-    return tmp_mix;
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -179,5 +180,5 @@ namespace lamb {
 
 
 /* Local Variables:  */
-/* fill-column: 100  */
+/* fill-column: 120  */
 /* End:              */
