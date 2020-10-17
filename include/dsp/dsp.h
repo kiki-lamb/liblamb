@@ -88,19 +88,10 @@ namespace lamb {
   void mix(
     t ** sources_,
     size_t const & count,
-    typename sample_type_traits<typename t::value_type>::mix_type & out
+    typename sample_type_traits<typename t::output_value_type>::mix_type & out
   ) {
     for (size_t ix = 0; ix < count; ix++) {
-      
-// #define USE_CAST
-      
-#ifdef USE_CAST
-      sample_source<int16_t> * s = sources_[ix];
-
-      out += s->read();
-#else
       out += sources_[ix]->read();
-#endif
     }
   }
 
