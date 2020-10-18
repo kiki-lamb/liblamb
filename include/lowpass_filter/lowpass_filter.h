@@ -45,16 +45,16 @@ namespace lamb {
     }
 
   private:
-    static uint32_t ucfxmul(uint8_t const & a, uint8_t const & b) {
+    static uint16_t ucfxmul(uint8_t const & a, uint8_t const & b) {
       return ((uint32_t)a * b) >> FX_SHIFT;
     }
     
-    static int32_t ifxmul(int32_t const & a, uint8_t const & b) {
+    static int16_t ifxmul(int16_t const & a, uint8_t const & b) {
       return (a * b) >> FX_SHIFT;
     }
     
-    static int64_t fxmul(int64_t const & a, int32_t const & b) {
-      return (a * b) >> (FX_SHIFT << 1);
+    static int32_t fxmul(int32_t const & a, int16_t const & b) {
+      return (a * b) >> FX_SHIFT;
     }
   };
 }
