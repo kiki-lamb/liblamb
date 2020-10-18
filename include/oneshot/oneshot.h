@@ -57,7 +57,7 @@ namespace lamb {
     }
 
     inline virtual void stop() {
-      _trigger = false;
+      // _trigger = false;
       state    = false;
       phacc    = 0;
       accum    = 0;

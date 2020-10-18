@@ -5,53 +5,58 @@
 
 namespace lamb {
   template <typename T, size_t SIZE>
-  class ring_buffer : abstract_queue<T> {
+  class ring_buffer /* : abstract_queue<T> */ {
   public:
     typedef T         value_type;
 
+    size_t     write_ix;
+    size_t     read_ix;
+    
   private:
-    size_t  write_ix;
-     size_t  read_ix;
-    size_t  count_;
+    size_t     count_;
     value_type buff[SIZE];
 
   public:
-    explicit ring_buffer() : write_ix(0), read_ix(0), count_(0) {}
+    explicit inline ring_buffer() :
+      write_ix(0),
+      read_ix(0),
+      count_(0) {}
 
-    bool writable() {
+    inline bool writable() volatile {
       return count_ < SIZE;
     }
 
-    bool readable() {
+    inline bool readable() volatile {
       return count_;
     }
 
-    virtual void clear() {
+    inline void clear() volatile {
       write_ix = 0;
-      read_ix = 0;
-      count_ = 0;
+      read_ix  = 0;
+      count_   = 0;
     }
 
-    virtual bool empty() {
+    inline bool empty() volatile {
       return (0 == count_);
     }
 
-    virtual void enqueue(value_type const & t) {
+    inline void enqueue(value_type const & t) volatile {
       buff[write_ix] = t;
       count_++;
       write_ix++;
       write_ix %= SIZE;
     }
 
-    virtual value_type dequeue() {
-      value_type const & tmp = buff[read_ix];
+    inline value_type dequeue() volatile {
+      value_type tmp = buff[read_ix];
       count_--;
       read_ix++;
       read_ix %= SIZE;
+      
       return tmp;
     }
 
-    size_t count() const {
+    inline size_t count() volatile {
       return count_;
     }
   };

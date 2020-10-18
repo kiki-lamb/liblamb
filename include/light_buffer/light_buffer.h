@@ -32,10 +32,10 @@ static const uint8_t name ## _length = len
   static uint8_t name ## _count;                  \
   static const uint8_t name ## _length = len
 
-#define define_static_light_buffer(owner_t, name, len)   \
-  owner_t::(name ## _type) owner_t::name[len] = { 0 }    \
-  uint8_t owner_t::name ## _write_ix = 0;                \
-  uint8_t owner_t::name ## _read_ix = 0;                 \
+#define define_static_light_buffer(owner_t, t, len, name)  \
+  t owner_t::name[len] = { 0 };                           \
+  uint8_t owner_t::name ## _write_ix = 0;                 \
+  uint8_t owner_t::name ## _read_ix = 0;                  \
   uint8_t owner_t::name ## _count = 0
 
 #define declare_dynamic_light_buffer(t, name) t * name; \

@@ -131,7 +131,8 @@ static inline void spi_end(void) {
 // Companion code to the above tables.  Reads and issues
 // a series of LCD commands stored in PROGMEM byte array.
 void lamb::device::Adafruit_ILI9341_STM_SPI2::commandList(uint8_t *addr) {
-
+  return;
+  
   uint8_t  numCommands, numArgs;
   uint16_t ms;
 

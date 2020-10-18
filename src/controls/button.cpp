@@ -38,7 +38,7 @@ lamb::controls::button::button(
   _button_number(button_number_),
   _pin_mode(pin_mode_) {
   if (button_number_ == 0xff) {
-    _button_number == (uint8_t)_pin;
+    _button_number = (uint8_t)_pin;
   }
 }
   
