@@ -13,7 +13,6 @@ namespace lamb {
       typename sample_type_traits<input_t>::unmixed_type
     )>::type                                                    control_t;
 
-        
   private:
     static const uint8_t FX_SHIFT = 8 * (sizeof(input_t) - sizeof(control_t));
     
