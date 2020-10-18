@@ -8,9 +8,9 @@ namespace lamb {
   private:
     uint8_t  _q;
     uint8_t  _freq;
-    uint32_t _feedback;
-    int32_t  _buf0;
-    int32_t  _buf1;
+    uint16_t _feedback;
+    int16_t  _buf0;
+    int16_t  _buf1;
 
   public:
     uint8_t freq() const {
