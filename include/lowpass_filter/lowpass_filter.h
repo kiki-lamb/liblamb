@@ -33,7 +33,7 @@ namespace lamb {
     
     void freq(control_t const & freq_) {
       _freq     = freq_;
-      _feedback = q() + ucfxmul(q(), 255 - _freq);
+      _feedback = q() + cc_fxmul(q(), 255 - _freq);
     }
 
     void q(control_t const & q_) {
@@ -41,12 +41,12 @@ namespace lamb {
     }
 
     input_t process(input_t const & in_) {
-      _buf0 += fxmul(
-        (in_ - _buf0) + fxmul(_feedback, _buf0 - _buf1),
+      _buf0 += mi_fxmul(
+        (in_ - _buf0) + mi_fxmul(_feedback, _buf0 - _buf1),
         freq()
       );
       
-      _buf1 += ifxmul(
+      _buf1 += ic_fxmul(
         _buf0 - _buf1,
         freq()
       ); 
@@ -55,15 +55,15 @@ namespace lamb {
     }
 
   private:
-    static feedback_t ucfxmul(control_t const & a, control_t const & b) {
+    static feedback_t cc_fxmul(control_t const & a, control_t const & b) {
       return ((umix_t)a * b) >> FX_SHIFT;
     }
     
-    static input_t ifxmul(input_t const & a, control_t const & b) {
+    static input_t ic_fxmul(input_t const & a, control_t const & b) {
       return (a * b) >> FX_SHIFT;
     }
     
-    static mix_t fxmul(mix_t const & a, input_t const & b) {
+    static mix_t mi_fxmul(mix_t const & a, input_t const & b) {
       return (a * b) >> FX_SHIFT;
     }
   };
