@@ -87,8 +87,8 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  template <typename sample_type> c
-  lass sample_type_traits {
+  template <typename sample_type>
+  class sample_type_traits {
   public:
   typedef sample_type value_type;
 //  public:

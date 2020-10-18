@@ -1,36 +1,47 @@
 #ifndef LOWPASS_LAMB_H_
 #define LOWPASS_LAMB_H_
 
-#define FX_SHIFT 8
-
 namespace lamb {
+  template <typename input_t_>
   class lowpass_filter {
+  public:
+    typedef input_t_                                            input_t;
+    typedef typename sample_type_traits<input_t>::mix_type      mix_t;
+    typedef typename sample_type_traits<mix_t>::unsigned_type   umix_t;
+    typedef typename sample_type_traits<input_t>::unsigned_type feedback_t;
+    typedef typename unsigned_int<sizeof(
+      typename sample_type_traits<input_t>::unmixed_type
+    )>::type                                                    control_t;
+
+        
   private:
-    uint8_t  _q;
-    uint8_t  _freq;
-    uint16_t _feedback;
-    int16_t  _buf0;
-    int16_t  _buf1;
+    static const uint8_t FX_SHIFT = 8 * (sizeof(input_t) - sizeof(control_t));
+    
+    control_t  _q;
+    control_t  _freq;
+    feedback_t _feedback;
+    input_t    _buf0;
+    input_t    _buf1;
 
   public:
-    uint8_t freq() const {
+    control_t freq() const {
       return _freq;
     }
     
-    uint8_t q() const {
+    control_t q() const {
       return _q;
     }
     
-    void freq(uint8_t const & freq_) {
+    void freq(control_t const & freq_) {
       _freq     = freq_;
       _feedback = q() + ucfxmul(q(), 255 - _freq);
     }
 
-    void q(uint8_t const & q_) {
+    void q(control_t const & q_) {
       _q = q_;
     }
 
-    int16_t process(int16_t const & in_) {
+    input_t process(input_t const & in_) {
       _buf0 += fxmul(
         (in_ - _buf0) + fxmul(_feedback, _buf0 - _buf1),
         freq()
@@ -45,15 +56,15 @@ namespace lamb {
     }
 
   private:
-    static uint16_t ucfxmul(uint8_t const & a, uint8_t const & b) {
-      return ((uint32_t)a * b) >> FX_SHIFT;
+    static feedback_t ucfxmul(control_t const & a, control_t const & b) {
+      return ((umix_t)a * b) >> FX_SHIFT;
     }
     
-    static int16_t ifxmul(int16_t const & a, uint8_t const & b) {
+    static input_t ifxmul(input_t const & a, control_t const & b) {
       return (a * b) >> FX_SHIFT;
     }
     
-    static int32_t fxmul(int32_t const & a, int16_t const & b) {
+    static mix_t fxmul(mix_t const & a, input_t const & b) {
       return (a * b) >> FX_SHIFT;
     }
   };
