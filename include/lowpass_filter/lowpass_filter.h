@@ -6,47 +6,47 @@ namespace lamb {
   class lowpass_filter {
   public:
     typedef input_t_                                            input_t;
+    typedef typename sample_type_traits<input_t>::unsigned_type uinput_t;
     typedef typename sample_type_traits<input_t>::mix_type      mix_t;
     typedef typename sample_type_traits<mix_t>::unsigned_type   umix_t;
-    typedef typename sample_type_traits<input_t>::unsigned_type feedback_t;
     typedef typename unsigned_int<sizeof(
       typename sample_type_traits<input_t>::unmixed_type
-    )>::type                                                    control_t;
+    )>::type                                                    ucontrol_t;
 
   private:
-    static const uint8_t FX_SHIFT = 8 * (sizeof(input_t) - sizeof(control_t));
+    static const uint8_t FX_SHIFT = 8 * (sizeof(input_t) - sizeof(ucontrol_t));
     
-    control_t  _q;
-    control_t  _freq;
-    feedback_t _feedback;
+    ucontrol_t  _q;
+    ucontrol_t  _freq;
+    uinput_t  _feedback;
     input_t    _buf0;
     input_t    _buf1;
 
   public:
-    control_t freq() const {
+    ucontrol_t freq() const {
       return _freq;
     }
     
-    control_t q() const {
+    ucontrol_t q() const {
       return _q;
     }
     
-    void freq(control_t const & freq_) {
+    void freq(ucontrol_t const & freq_) {
       _freq     = freq_;
-      _feedback = q() + cc_fxmul(q(), 255 - _freq);
+      _feedback = q() + ui_fxmul_ucXuc(q(), 255 - _freq);
     }
 
-    void q(control_t const & q_) {
+    void q(ucontrol_t const & q_) {
       _q = q_;
     }
 
     input_t process(input_t const & in_) {
-      _buf0 += mi_fxmul(
-        (in_ - _buf0) + mi_fxmul(_feedback, _buf0 - _buf1),
+      _buf0 += m_fxmul_mXi(
+        (in_ - _buf0) + m_fxmul_mXi(_feedback, _buf0 - _buf1),
         freq()
       );
       
-      _buf1 += ic_fxmul(
+      _buf1 += i_fxmul_iXuc(
         _buf0 - _buf1,
         freq()
       ); 
@@ -55,15 +55,15 @@ namespace lamb {
     }
 
   private:
-    static feedback_t cc_fxmul(control_t const & a, control_t const & b) {
+    static uinput_t ui_fxmul_ucXuc(ucontrol_t const & a, ucontrol_t const & b) {
       return ((umix_t)a * b) >> FX_SHIFT;
     }
     
-    static input_t ic_fxmul(input_t const & a, control_t const & b) {
+    static input_t i_fxmul_iXuc(input_t const & a, ucontrol_t const & b) {
       return (a * b) >> FX_SHIFT;
     }
     
-    static mix_t mi_fxmul(mix_t const & a, input_t const & b) {
+    static mix_t m_fxmul_mXi(mix_t const & a, input_t const & b) {
       return (a * b) >> FX_SHIFT;
     }
   };
