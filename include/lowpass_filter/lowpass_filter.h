@@ -53,8 +53,8 @@ namespace lamb {
       return (a * b) >> FX_SHIFT;
     }
     
-    static int32_t fxmul(int32_t const & a, int32_t const & b) {
-      return (a * b) >> FX_SHIFT;
+    static int64_t fxmul(int64_t const & a, int32_t const & b) {
+      return (a * b) >> (FX_SHIFT << 1);
     }
   };
 }
