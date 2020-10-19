@@ -9,7 +9,7 @@ namespace lamb {
     typedef typename sample_type_traits<input_t>::unsigned_type uinput_t;
     typedef typename sample_type_traits<input_t>::mix_type      mix_t;
     typedef typename sample_type_traits<mix_t>::unsigned_type   umix_t;
-#define LARGE_CONTROLS
+// #define LARGE_CONTROLS
 
 #ifndef LARGE_CONTROLS
     typedef typename unsigned_int<sizeof(
