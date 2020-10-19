@@ -4,8 +4,10 @@
 namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
-
-  template <uint8_t>
+// Basic integer types
+////////////////////////////////////////////////////////////////////////////////
+  
+  template <uint8_t size_>
   class unsigned_int {
   };
 
@@ -32,13 +34,6 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
   
-  template <> class unsigned_int<6> {
-  public:
-    typedef uint64_t type;
-  };
-
-////////////////////////////////////////////////////////////////////////////////
-  
   template <> class unsigned_int<8> {
   public:
     typedef uint64_t type;
@@ -46,7 +41,7 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  template <uint8_t>
+  template <uint8_t size_>
   class signed_int {
   };
 
@@ -73,111 +68,262 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
   
-  template <> class signed_int<6> {
-  public:
-    typedef int64_t type;
-  };
-
-////////////////////////////////////////////////////////////////////////////////
-  
   template <> class signed_int<8> {
   public:
     typedef int64_t type;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
-
+// Sample type traits
+////////////////////////////////////////////////////////////////////////////////
+  
   template <typename sample_type>
   class sample_type_traits {
-  public:
-  typedef sample_type value_type;
-//  public:
-//    typedef sample_type value_type;
-//    static const limits_t maximum;
-//    static const limits_t silence;
-//    static const limits_t minimum;
-//    static const limits_t bias_to_signed;
-//    static const limits_t bias_to_unsigned;
-//    static const value_type * sine_table;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
 
   template <> class sample_type_traits<int8_t> {
   public:
-    typedef int8_t  value_type;
-    typedef int16_t mix_type;
-    typedef int8_t  unmixed_type;
-    typedef uint8_t unsigned_type;
-    typedef int8_t  signed_type;
+    typedef      int8_t                                              value_type;     
+    typedef      typename signed_int<sizeof(value_type) << 1>::type  mix_type;
+    typedef      value_type                                          unmixed_type;         
+    typedef      typename unsigned_int<sizeof(value_type)>::type     unsigned_type;
+    typedef      typename signed_int<sizeof(value_type)>::type       signed_type;
 
-    static const uint8_t unmix_shift      = 8;
-    static const bool    is_signed        = true;    
-    static const int16_t maximum          = 127;
-    static const int16_t silence          = 0;
-    static const int16_t minimum          = -128;
-    static const int16_t bias_to_signed   = 0;
-    static const int16_t bias_to_unsigned = 128;
+    static const uint8_t    unmix_shift      = (sizeof(mix_type) - sizeof(value_type)) * 8;
+    static const bool       is_signed        = true;    
+    static const value_type maximum          = 127;
+    static const value_type silence          = 0;
+    static const value_type minimum          = -128;
+    static const value_type bias_to_signed   = 0;
+    static const mix_type   bias_to_unsigned = 128;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
 
   template <> class sample_type_traits<int16_t> {
   public:
-    typedef int16_t  value_type;
-    typedef int32_t  mix_type;
-    typedef int8_t   unmixed_type;
-    typedef uint16_t unsigned_type;
-    typedef int16_t  signed_type;
+    typedef      int16_t                                             value_type;     
+    typedef      typename signed_int<sizeof(value_type) << 1>::type  mix_type;
+    typedef      typename signed_int<sizeof(value_type) >> 1>::type  unmixed_type;
+    typedef      typename unsigned_int<sizeof(value_type)>::type     unsigned_type;
+    typedef      typename signed_int<sizeof(value_type)>::type       signed_type;
 
-    static const uint8_t unmix_shift      = 16;
-    static const bool    is_signed        = true;
-    static const int16_t maximum          = 32767;
-    static const int16_t silence          = 0;
-    static const int16_t minimum          = -32768;
-    static const int16_t bias_to_signed   = 0;
-    static const int16_t bias_to_unsigned = -32768;
+    static const uint8_t    unmix_shift      = (sizeof(mix_type) - sizeof(value_type)) * 8;
+    static const bool       is_signed        = true;    
+    static const value_type maximum          = 0x7fff;
+    static const value_type silence          = 0;
+    static const value_type minimum          = 0xffff;
+    static const value_type bias_to_signed   = 0;
+    static const mix_type   bias_to_unsigned = 0x10000
   };
 
 ////////////////////////////////////////////////////////////////////////////////
 
   template <> class sample_type_traits<int32_t> {
   public:
-    typedef int32_t  value_type;
-    typedef int64_t  mix_type;
-    typedef int16_t  unmixed_type;
-    typedef uint32_t unsigned_type;
-    typedef int32_t  signed_type;
+    typedef      int32_t                                             value_type;     
+    typedef      typename signed_int<sizeof(value_type) << 1>::type  mix_type;
+    typedef      typename signed_int<sizeof(value_type) >> 1>::type  unmixed_type;
+    typedef      typename unsigned_int<sizeof(value_type)>::type     unsigned_type;
+    typedef      typename signed_int<sizeof(value_type)>::type       signed_type;
 
-    static const uint8_t unmix_shift      = 32;
-    static const bool    is_signed        = true;
-    static const int32_t maximum          = 0xffff;
-    static const int32_t silence          = 0;
-    static const int32_t minimum          = -0xffff-1;
-    static const int32_t bias_to_signed   = 0;
-    static const int32_t bias_to_unsigned = -0xffff-1;
+    static const uint8_t    unmix_shift      = (sizeof(mix_type) - sizeof(value_type)) * 8;
+    static const bool       is_signed        = true;    
+    static const value_type maximum          = 0x7fffffff;
+    static const value_type silence          = 0;
+    static const value_type minimum          = 0xffffffff;
+    static const value_type bias_to_signed   = 0;
+    static const mix_type   bias_to_unsigned = 0x100000000;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
 
   template <> class sample_type_traits<uint8_t> {
   public:
-    typedef uint8_t  value_type;
-    typedef uint16_t mix_type;
-    typedef uint8_t  unmixed_type;
-    typedef uint8_t  unsigned_type;
-    typedef int8_t   signed_type;
+    typedef      unt8_t                                              value_type;     
+    typedef      typename signed_int<sizeof(value_type) << 1>::type  mix_type;
+    typedef      value_type                                          unmixed_type;
+    typedef      typename unsigned_int<sizeof(value_type)>::type     unsigned_type;
+    typedef      typename signed_int<sizeof(value_type)>::type       signed_type;
 
-    static const uint8_t unmix_shift      = 8;
-    static const bool    is_signed        = true;
-    static const int16_t maximum          = 0xff;
-    static const int16_t silence          = 0x80;
-    static const int16_t minimum          = 0;
-    static const int16_t bias_to_signed   = -128;
-    static const int16_t bias_to_unsigned = 0;
+    static const uint8_t    unmix_shift      = (sizeof(mix_type) - sizeof(value_type)) * 8;
+    static const bool       is_signed        = true;    
+    static const value_type maximum          = 0xff
+    static const value_type silence          = 0;
+    static const value_type minimum          = 0;
+    static const value_type bias_to_signed   = 0;
+    static const mix_type   bias_to_unsigned = 0;
   };
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 
+  template <> class sample_type_traits<uint16_t> {
+  public:
+    typedef      uint16_t                                            value_type;     
+    typedef      typename signed_int<sizeof(value_type) << 1>::type  mix_type;
+    typedef      typename signed_int<sizeof(value_type) >> 1>::type  unmixed_type;
+    typedef      typename unsigned_int<sizeof(value_type)>::type     unsigned_type;
+    typedef      typename signed_int<sizeof(value_type)>::type       signed_type;
+
+    static const uint8_t    unmix_shift      = (sizeof(mix_type) - sizeof(value_type)) * 8;
+    static const bool       is_signed        = true;    
+    static const value_type maximum          = 0xffff;
+    static const value_type silence          = 0;
+    static const value_type minimum          = 0;
+    static const value_type bias_to_signed   = 0;
+    static const mix_type   bias_to_unsigned = 0;
+  };
+
+////////////////////////////////////////////////////////////////////////////////
+
+  template <> class sample_type_traits<uint32_t> {
+  public:
+    typedef      uint32_t                                            value_type;
+    typedef      typename signed_int<sizeof(value_type) << 1>::type  mix_type;
+    typedef      typename signed_int<sizeof(value_type) >> 1>::type  unmixed_type;
+    typedef      typename unsigned_int<sizeof(value_type)>::type     unsigned_type;
+    typedef      typename signed_int<sizeof(value_type)>::type       signed_type;
+
+    static const uint8_t    unmix_shift      = (sizeof(mix_type) - sizeof(value_type)) * 8;
+    static const bool       is_signed        = true;    
+    static const value_type maximum          = 0xffffffff;
+    static const value_type silence          = 0;
+    static const value_type minimum          = 0;
+    static const value_type bias_to_signed   = 0;
+    static const mix_type   bias_to_unsigned = 0;
+  };
+
+////////////////////////////////////////////////////////////////////////////////
+// Fixed point types 
+////////////////////////////////////////////////////////////////////////////////
+
+// 8 bits //////////////////////////////////////////////////////////////////////
+
+typedef uint8_t  q0n8_t;                        
+const   q0n8_t   q0n8_one     = 0xff;
+  
+typedef int8_t   q0n7_t;                        
+const   q0n7_t   q0n7_one     = 0x7f; 
+
+// 16 bits /////////////////////////////////////////////////////////////////////
+
+typedef uint16_t  q0n16_t;                      
+const   q0n16_t   q0n16_one  = 0xffff;
+  
+typedef int16_t   q0n15_t;                      
+const   q0n15_t   q0n15_one  = 0x7fff;
+  
+typedef uint16_t  q8n8_t;                       
+const   q8n8_t    q8n8_one   = 0x0100;
+  
+typedef int16_t   q7n8_t;                        
+const   q7n8_t    q7n8_one   = 0x0100;
+
+// 32 bits /////////////////////////////////////////////////////////////////////
+
+typedef uint32_t  q0n32_t;                    
+const   q0n32     q0n32_one  = 0xffffffff;    
+  
+typedef int32_t   q0n31_t;                      
+const   q0n31_t   q0n31_one  = 0x7fffffff;
+
+typedef uint32_t  q16n16_t;                     
+const   q16n16_t  q16n16_one = 0x00010000;
+
+typedef int32_t   q15n16_t;                     
+const   q15n16_t  q15n16_one = 0x00010000;
+
+////////////////////////////////////////////////////////////////////////////////
+// Fixed type helpers
+////////////////////////////////////////////////////////////////////////////////
+
+// Unsigned
+  
+template <uint8_t charac_, uint8_ mantissa>
+class unsigned_frac {
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
+  template <> class unsigned_frac<0, 8> {
+public:
+    typedef q0n8_t type;
+  };
+
+////////////////////////////////////////////////////////////////////////////////
+
+  template <> class unsigned_frac<0, 16> {
+  public:
+    typedef q0n16_t type;
+  };
+
+////////////////////////////////////////////////////////////////////////////////
+  
+  template <> class unsigned_frac<8, 8> {
+  public:
+    typedef q8n8_t type;
+  };
+
+////////////////////////////////////////////////////////////////////////////////
+  
+  template <> class unsigned_frac<0, 32> {
+  public:
+    typedef q0n32_t type;
+  };
+
+////////////////////////////////////////////////////////////////////////////////
+  
+  template <> class unsigned_frac<16, 16> {
+  public:
+    typedef q16n16_t type;
+  };
+
+////////////////////////////////////////////////////////////////////////////////
+  
+// Signed
+  
+template <uint8_t charac_, uint8_ mantissa>
+class signed_frac {
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
+  template <> class signed_frac<0, 7> {
+public:
+    typedef q0n7_t type;
+  };
+
+////////////////////////////////////////////////////////////////////////////////
+
+  template <> class signed_frac<0, 15> {
+  public:
+    typedef q0n15_t type;
+  };
+
+////////////////////////////////////////////////////////////////////////////////
+  
+  template <> class signed_frac<7, 8> {
+  public:
+    typedef q7n8_t type;
+  };
+
+////////////////////////////////////////////////////////////////////////////////
+  
+  template <> class signed_frac<0, 31> {
+  public:
+    typedef q0n31_t type;
+  };
+
+////////////////////////////////////////////////////////////////////////////////
+  
+  template <> class signed_frac<15, 16> {
+  public:
+    typedef q15n16_t type;
+  };
+
+////////////////////////////////////////////////////////////////////////////////
+  
+}
 #endif
