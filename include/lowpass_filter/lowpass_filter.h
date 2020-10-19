@@ -10,16 +10,15 @@ namespace lamb {
     typedef typename sample_type_traits<sample_t>::mix_type      mix_t;
     typedef typename sample_type_traits<mix_t>::unsigned_type    unsigned_mix_t;
 
-    typedef typename unsigned_frac<0, (
+    typedef unsigned_frac<0, (
       sizeof(
         typename sample_type_traits<sample_t>::unmixed_type
-      ) << 3)>::type                                            control_t;
+      ) << 3)>                                                   control_frac_t;
 
-//    static const control_t control_t_one = (typename unsigned_frac<0, (
-//      sizeof(
-//        typename sample_type_traits<sample_t>::unmixed_type
-//      ) << 3)>::one);
-    
+    typedef typename control_frac_t::type                        control_t;
+
+    static const control_t control_t_one = control_frac_t::one;
+
   private:
     static const uint8_t FX_SHIFT = sizeof(control_t) << 3;
     
@@ -40,7 +39,7 @@ namespace lamb {
     
     void freq(control_t const & freq_) {
       _freq     = freq_;
-      _feedback = q() + us_fxmul_cXc(q(), (((control_t)0) - 1) - _freq);
+      _feedback = q() + us_fxmul_cXc(q(), control_t_one - _freq);
     }
 
     void q(control_t const & q_) {
