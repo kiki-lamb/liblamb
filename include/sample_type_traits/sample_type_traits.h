@@ -98,6 +98,8 @@ namespace lamb {
     static const value_type maximum          = 127;
     static const value_type silence          = 0;
     static const value_type minimum          = -128;
+    static const value_type bias_to_signed   = 0;
+    static const mix_type   bias_to_unsigned = 128;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -115,6 +117,8 @@ namespace lamb {
     static const value_type maximum          = 0x7fff;
     static const value_type silence          = 0;
     static const value_type minimum          = 0xffff;
+    static const value_type bias_to_signed   = 0;
+    static const mix_type   bias_to_unsigned = 0x10000;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -132,23 +136,8 @@ namespace lamb {
     static const value_type maximum          = 0x7fffffff;
     static const value_type silence          = 0;
     static const value_type minimum          = 0xffffffff;
-  };
-
-////////////////////////////////////////////////////////////////////////////////
-
-  template <> class sample_type_traits<int64_t> {
-  public:
-    typedef      int64_t                                               value_type;     
-    typedef      value_type                                            mix_type; // don't use int128_t!
-    typedef      typename signed_int<(sizeof(value_type) >> 1)>::type  unmixed_type;
-    typedef      typename unsigned_int<sizeof(value_type)>::type       unsigned_type;
-    typedef      typename signed_int<sizeof(value_type)>::type         signed_type;
-
-    static const uint8_t    unmix_shift      = (sizeof(mix_type) - sizeof(value_type)) * 8;
-    static const bool       is_signed        = true;    
-    static const value_type maximum          = 0x7fff'ffff'ffff'ffff;
-    static const value_type silence          = 0;
-    static const value_type minimum          = 0xffff'ffff'fffff'fff;
+    static const value_type bias_to_signed   = 0;
+    static const mix_type   bias_to_unsigned = 0x100000000;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -166,6 +155,8 @@ namespace lamb {
     static const value_type maximum          = 0xff;
     static const value_type silence          = 0;
     static const value_type minimum          = 0;
+    static const value_type bias_to_signed   = 0;
+    static const mix_type   bias_to_unsigned = 0;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -183,6 +174,8 @@ namespace lamb {
     static const value_type maximum          = 0xffff;
     static const value_type silence          = 0;
     static const value_type minimum          = 0;
+    static const value_type bias_to_signed   = 0;
+    static const mix_type   bias_to_unsigned = 0;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -200,23 +193,8 @@ namespace lamb {
     static const value_type maximum          = 0xffffffff;
     static const value_type silence          = 0;
     static const value_type minimum          = 0;
-  };
-
-////////////////////////////////////////////////////////////////////////////////
-
-  template <> class sample_type_traits<uint64_t> {
-  public:
-    typedef      uint64_t                                              value_type;     
-    typedef      value_type                                            mix_type; // don't use uint128_t!
-    typedef      typename signed_int<(sizeof(value_type) >> 1)>::type  unmixed_type;
-    typedef      typename unsigned_int<sizeof(value_type)>::type       unsigned_type;
-    typedef      typename signed_int<sizeof(value_type)>::type         signed_type;
-
-    static const uint8_t    unmix_shift      = (sizeof(mix_type) - sizeof(value_type)) * 8;
-    static const bool       is_signed        = true;    
-    static const value_type maximum          = 0xffff'ffff'ffff'ffff;
-    static const value_type silence          = 0;
-    static const value_type minimum          = 0;
+    static const value_type bias_to_signed   = 0;
+    static const mix_type   bias_to_unsigned = 0;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -231,7 +209,7 @@ namespace lamb {
   typedef int8_t   q0n7_t;                        
   const   q0n7_t   q0n7_one     = 0x7f; 
 
-// '12' bits (not really) //////////////////////////////////////////////////////
+// '12' bits /////////////////////////////////////////////////////////////////////
 
   typedef uint12_t  q0n12_t;                      
   const   q0n12_t   q0n12_one  = 0x0fff;
@@ -362,7 +340,6 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
   
 }
-
 #endif
 
 /* Local Variables:  */
