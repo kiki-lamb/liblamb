@@ -2,54 +2,54 @@
 #define LOWPASS_LAMB_H_
 
 namespace lamb {
-  template <typename input_t_>
+  template <typename sample_t_>
   class lowpass_filter {
   public:
-    typedef input_t_                                            input_t;
-    typedef typename sample_type_traits<input_t>::unsigned_type uinput_t;
-    typedef typename sample_type_traits<input_t>::mix_type      mix_t;
-    typedef typename sample_type_traits<mix_t>::unsigned_type   umix_t;
+    typedef sample_t_                                            sample_t;
+    typedef typename sample_type_traits<sample_t>::unsigned_type unsigned_sample_t;
+    typedef typename sample_type_traits<sample_t>::mix_type      mix_t;
+    typedef typename sample_type_traits<mix_t>::unsigned_type    unsigned_mix_t;
 
 
     typedef typename unsigned_frac<0, (
       sizeof(
-        typename sample_type_traits<input_t>::unmixed_type
-      ) << 3)>::type                                            ucontrol_t;
+        typename sample_type_traits<sample_t>::unmixed_type
+      ) << 3)>::type                                            control_t;
 
   private:
-    static const uint8_t FX_SHIFT = sizeof(ucontrol_t) << 3;
+    static const uint8_t FX_SHIFT = sizeof(control_t) << 3;
     
-    ucontrol_t  _q;
-    ucontrol_t  _freq;
-    uinput_t  _feedback;
-    input_t    _buf0;
-    input_t    _buf1;
+    control_t  _q;
+    control_t  _freq;
+    unsigned_sample_t  _feedback;
+    sample_t    _buf0;
+    sample_t    _buf1;
 
   public:
-    ucontrol_t freq() const {
+    control_t freq() const {
       return _freq;
     }
     
-    ucontrol_t q() const {
+    control_t q() const {
       return _q;
     }
     
-    void freq(ucontrol_t const & freq_) {
+    void freq(control_t const & freq_) {
       _freq     = freq_;
-      _feedback = q() + ui_fxmul_ucXuc(q(), 255 - _freq);
+      _feedback = q() + us_fxmul_cXc(q(), 255 - _freq);
     }
 
-    void q(ucontrol_t const & q_) {
+    void q(control_t const & q_) {
       _q = q_;
     }
 
-    input_t process(input_t const & in_) {
-      _buf0 += m_fxmul_mXi(
-        (in_ - _buf0) + m_fxmul_mXi(_feedback, _buf0 - _buf1),
+    sample_t process(sample_t const & in_) {
+      _buf0 += m_fxmul_mXs(
+        (in_ - _buf0) + m_fxmul_mXs(_feedback, _buf0 - _buf1),
         freq()
       );
       
-      _buf1 += i_fxmul_iXuc(
+      _buf1 += s_fxmul_sXc(
         _buf0 - _buf1,
         freq()
       ); 
@@ -58,16 +58,16 @@ namespace lamb {
     }
 
   private:
-    static uinput_t ui_fxmul_ucXuc(ucontrol_t const & a, ucontrol_t const & b) {
-      return ((umix_t)a * b) >> FX_SHIFT;
+    static unsigned_sample_t us_fxmul_cXc(control_t const & a, control_t const & b) {
+      return ((unsigned_mix_t)a * b) >> FX_SHIFT;
     }
     
-    static input_t i_fxmul_iXuc(input_t const & a, ucontrol_t const & b) {
+    static sample_t s_fxmul_sXc(sample_t const & a, control_t const & b) {
       return (a * b) >> FX_SHIFT;
     }
     
-    static mix_t m_fxmul_mXi(mix_t const & a, input_t const & b) {
-      return (a * b) >> FX_SHIFT;
+    static mix_t m_fxmul_mXs(mix_t const & a, sample_t const & b) {
+      return (a * b) >> FX_SHIFT; // FX_SHIFT less than size of input!
     }
   };
 }
