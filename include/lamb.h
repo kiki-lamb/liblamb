@@ -19,7 +19,6 @@
   #include "fonts/fonts.h"
   #include "task/task.h"
 
-  #include "circular_buffer/circular_buffer.h" // DEPRECATED
   #include "ring_buffer/ring_buffer.h"
 
   #include "positional_fixed_array/positional_fixed_array.h"
