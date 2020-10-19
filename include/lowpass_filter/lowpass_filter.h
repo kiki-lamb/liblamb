@@ -9,18 +9,24 @@ namespace lamb {
     typedef typename sample_type_traits<input_t>::unsigned_type uinput_t;
     typedef typename sample_type_traits<input_t>::mix_type      mix_t;
     typedef typename sample_type_traits<mix_t>::unsigned_type   umix_t;
+#define LARGE_CONTROLS
+
+#ifndef LARGE_CONTROLS
     typedef typename unsigned_int<sizeof(
       typename sample_type_traits<input_t>::unmixed_type
     )>::type                                                    ucontrol_t;
-
+#else
+    typedef uinput_t                                            ucontrol_t;
+#endif
+    
   private:
-    static const uint8_t FX_SHIFT = 8 * (sizeof(input_t) - sizeof(ucontrol_t));
+    static const uint8_t FX_SHIFT = (uint8_t)(8 * (sizeof(input_t) - sizeof(ucontrol_t)));
     
     ucontrol_t  _q;
     ucontrol_t  _freq;
-    uinput_t  _feedback;
-    input_t    _buf0;
-    input_t    _buf1;
+    uinput_t    _feedback;
+    input_t     _buf0;
+    input_t     _buf1;
 
   public:
     ucontrol_t freq() const {
