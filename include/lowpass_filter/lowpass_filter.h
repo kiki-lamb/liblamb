@@ -9,9 +9,11 @@ namespace lamb {
     typedef typename sample_type_traits<input_t>::unsigned_type uinput_t;
     typedef typename sample_type_traits<input_t>::mix_type      mix_t;
     typedef typename sample_type_traits<mix_t>::unsigned_type   umix_t;
-    typedef typename unsigned_int<sizeof(
+
+
+    typedef typename unsigned_frac<0, sizeof(
       typename sample_type_traits<input_t>::unmixed_type
-    )>::type                                                    ucontrol_t;
+    ) * 8>::type                                                    ucontrol_t;
 
   private:
     static const uint8_t FX_SHIFT = 8 * (sizeof(input_t) - sizeof(ucontrol_t));
