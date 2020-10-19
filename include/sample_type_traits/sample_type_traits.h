@@ -1,6 +1,8 @@
 #ifndef LAMB_SAMPLE_TYPE_TRAITS
 #define LAMB_SAMPLE_TYPE_TRAITS
 
+#include "../uint12_t.h"
+
 namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -201,39 +203,44 @@ namespace lamb {
 
 // 8 bits //////////////////////////////////////////////////////////////////////
 
-typedef uint8_t  q0n8_t;                        
-const   q0n8_t   q0n8_one     = 0xff;
+  typedef uint8_t  q0n8_t;                        
+  const   q0n8_t   q0n8_one     = 0xff;
   
-typedef int8_t   q0n7_t;                        
-const   q0n7_t   q0n7_one     = 0x7f; 
+  typedef int8_t   q0n7_t;                        
+  const   q0n7_t   q0n7_one     = 0x7f; 
 
+// '12' bits /////////////////////////////////////////////////////////////////////
+
+  typedef uint12_t  q0n12_t;                      
+  const   q0n12_t   q0n12_one  = 0x0fff;
+  
 // 16 bits /////////////////////////////////////////////////////////////////////
 
-typedef uint16_t  q0n16_t;                      
-const   q0n16_t   q0n16_one  = 0xffff;
+  typedef uint16_t  q0n16_t;                      
+  const   q0n16_t   q0n16_one  = 0xffff;
   
-typedef int16_t   q0n15_t;                      
-const   q0n15_t   q0n15_one  = 0x7fff;
+  typedef int16_t   q0n15_t;                      
+  const   q0n15_t   q0n15_one  = 0x7fff;
   
-typedef uint16_t  q8n8_t;                       
-const   q8n8_t    q8n8_one   = 0x0100;
+  typedef uint16_t  q8n8_t;                       
+  const   q8n8_t    q8n8_one   = 0x0100;
   
-typedef int16_t   q7n8_t;                        
-const   q7n8_t    q7n8_one   = 0x0100;
+  typedef int16_t   q7n8_t;                        
+  const   q7n8_t    q7n8_one   = 0x0100;
 
 // 32 bits /////////////////////////////////////////////////////////////////////
 
-typedef uint32_t  q0n32_t;                    
-const   q0n32_t   q0n32_one  = 0xffffffff;    
+  typedef uint32_t  q0n32_t;                    
+  const   q0n32_t   q0n32_one  = 0xffffffff;    
   
-typedef int32_t   q0n31_t;                      
-const   q0n31_t   q0n31_one  = 0x7fffffff;
+  typedef int32_t   q0n31_t;                      
+  const   q0n31_t   q0n31_one  = 0x7fffffff;
 
-typedef uint32_t  q16n16_t;                     
-const   q16n16_t  q16n16_one = 0x00010000;
+  typedef uint32_t  q16n16_t;                     
+  const   q16n16_t  q16n16_one = 0x00010000;
 
-typedef int32_t   q15n16_t;                     
-const   q15n16_t  q15n16_one = 0x00010000;
+  typedef int32_t   q15n16_t;                     
+  const   q15n16_t  q15n16_one = 0x00010000;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Fixed type helpers
@@ -241,15 +248,22 @@ const   q15n16_t  q15n16_one = 0x00010000;
 
 // Unsigned
   
-template <uint8_t characteristic_, uint8_t mantissa>
-class unsigned_frac {
-};
+  template <uint8_t characteristic_, uint8_t mantissa>
+  class unsigned_frac {
+  };
 
 ////////////////////////////////////////////////////////////////////////////////
 
   template <> class unsigned_frac<0, 8> {
-public:
+  public:
     typedef q0n8_t type;
+  };
+
+////////////////////////////////////////////////////////////////////////////////
+
+  template <> class unsigned_frac<0, 12> {
+  public:
+    typedef q0n12_t type;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -284,14 +298,14 @@ public:
   
 // Signed
   
-template <uint8_t characteristic_, uint8_t mantissa>
-class signed_frac {
-};
+  template <uint8_t characteristic_, uint8_t mantissa>
+  class signed_frac {
+  };
 
 ////////////////////////////////////////////////////////////////////////////////
 
   template <> class signed_frac<0, 7> {
-public:
+  public:
     typedef q0n7_t type;
   };
 
