@@ -10,20 +10,24 @@ namespace lamb {
     typedef typename sample_type_traits<sample_t>::mix_type      mix_t;
     typedef typename sample_type_traits<mix_t>::unsigned_type    unsigned_mix_t;
 
-
     typedef typename unsigned_frac<0, (
       sizeof(
         typename sample_type_traits<sample_t>::unmixed_type
       ) << 3)>::type                                            control_t;
 
+//    static const control_t control_t_one = (typename unsigned_frac<0, (
+//      sizeof(
+//        typename sample_type_traits<sample_t>::unmixed_type
+//      ) << 3)>::one);
+    
   private:
     static const uint8_t FX_SHIFT = sizeof(control_t) << 3;
     
-    control_t  _q;
-    control_t  _freq;
-    unsigned_sample_t  _feedback;
-    sample_t    _buf0;
-    sample_t    _buf1;
+    control_t         _q;
+    control_t         _freq;
+    unsigned_sample_t _feedback;
+    sample_t          _d0;
+    sample_t          _d1;
 
   public:
     control_t freq() const {
@@ -36,7 +40,7 @@ namespace lamb {
     
     void freq(control_t const & freq_) {
       _freq     = freq_;
-      _feedback = q() + us_fxmul_cXc(q(), 255 - _freq);
+      _feedback = q() + us_fxmul_cXc(q(), (((control_t)0) - 1) - _freq);
     }
 
     void q(control_t const & q_) {
@@ -44,17 +48,17 @@ namespace lamb {
     }
 
     sample_t process(sample_t const & in_) {
-      _buf0 += m_fxmul_mXs(
-        (in_ - _buf0) + m_fxmul_mXs(_feedback, _buf0 - _buf1),
+      _d0 += m_fxmul_mXs(
+        (in_ - _d0) + m_fxmul_mXs(_feedback, _d0 - _d1),
         freq()
       );
       
-      _buf1 += s_fxmul_sXc(
-        _buf0 - _buf1,
+      _d1 += s_fxmul_sXc(
+        _d0 - _d1,
         freq()
       ); 
       
-      return _buf1;
+      return _d1;
     }
 
   private:
