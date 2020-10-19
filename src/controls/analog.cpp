@@ -29,7 +29,7 @@ bool lamb::controls::analog::read() {
     return false;
   }
 
-  uint32_t tmp = _accum;
+  sample_type_traits<uint12_t>::mix_type tmp = _accum;
   
   _accum     <<= _averaging;
   _accum      -= tmp;

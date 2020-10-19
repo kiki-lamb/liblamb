@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include "../light_buffer/light_buffer.h"
+#include "../sample_type_traits/sample_type_traits.h"
 
 // Right now, this generally assumes pins are pulled up and brought to ground
 // by the analog.
@@ -16,7 +17,7 @@ namespace lamb {
 #else
       uint32_t _pin;
 #endif
-      uint32_t _accum;
+      sample_type_traits<uint12_t>::mix_type _accum;
       uint8_t  _averaging;
       
     public:
