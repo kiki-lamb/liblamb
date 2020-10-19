@@ -341,3 +341,7 @@ namespace lamb {
   
 }
 #endif
+
+/* Local Variables:  */
+/* fill-column: 100  */
+/* End:              */

@@ -11,12 +11,13 @@ namespace lamb {
     typedef typename sample_type_traits<mix_t>::unsigned_type   umix_t;
 
 
-    typedef typename unsigned_frac<0, sizeof(
-      typename sample_type_traits<input_t>::unmixed_type
-    ) * 8>::type                                                    ucontrol_t;
+    typedef typename unsigned_frac<0, (
+      sizeof(
+        typename sample_type_traits<input_t>::unmixed_type
+      ) << 3)>::type                                            ucontrol_t;
 
   private:
-    static const uint8_t FX_SHIFT = 8 * (sizeof(input_t) - sizeof(ucontrol_t));
+    static const uint8_t FX_SHIFT = sizeof(ucontrol_t) << 3;
     
     ucontrol_t  _q;
     ucontrol_t  _freq;

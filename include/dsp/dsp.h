@@ -110,7 +110,7 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
   
-  // This should be a template...
+  // Deprecated, get rid of this crappy class.
   template <typename input_type>
   class unity_mix : public lamb::sample_source<input_type> {
   public:
@@ -133,42 +133,7 @@ namespace lamb {
   };
 
 ////////////////////////////////////////////////////////////////////////////////
-
-  template <typename input_type>
-  class convert_to_unsigned :
-    public lamb::sample_processor<input_type, typename lamb::sample_type_traits<input_type>::unsigned_type> {
-  public:
-    inline virtual ~convert_to_unsigned() {};
-
-    inline convert_to_unsigned(lamb::sample_source<input_type> * in) {
-      this->connect(in);
-    }
-
-    inline
-    virtual typename lamb::sample_type_traits<input_type>::unsigned_type
-    process(input_type v) {
-      return lamb::sample_type_traits<input_type>::to_uint8_t(v);
-    }
-  };
-
-/////////////////////////////////////////////////////////////////////////////////
-
-  template <typename input_type>
-  class convert_to_signed : public lamb::sample_processor<input_type, typename lamb::sample_type_traits<input_type>::signed_type> {
-  public:
-    inline virtual ~convert_to_signed() {};
-
-    inline convert_to_signed(lamb::sample_source<input_type> * in) {
-      connect(in);
-    }
-
-    inline
-    virtual typename lamb::sample_type_traits<input_type>::unsigned_type process(input_type v) {
-      return lamb::sample_type_traits<input_type>::to_int8_t(v);
-    }
-  };
-};
-
+  
 #endif
 
 
