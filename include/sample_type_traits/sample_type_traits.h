@@ -104,11 +104,11 @@ namespace lamb {
 
   template <> class sample_type_traits<int16_t> {
   public:
-    typedef      int16_t                                             value_type;     
-    typedef      typename signed_int<sizeof(value_type) << 1>::type  mix_type;
-    typedef      typename signed_int<sizeof(value_type) >> 1>::type  unmixed_type;
-    typedef      typename unsigned_int<sizeof(value_type)>::type     unsigned_type;
-    typedef      typename signed_int<sizeof(value_type)>::type       signed_type;
+    typedef      int16_t                                               value_type;     
+    typedef      typename signed_int<(sizeof(value_type) << 1)>::type  mix_type;
+    typedef      typename signed_int<(sizeof(value_type) >> 1)>::type  unmixed_type;
+    typedef      typename unsigned_int<sizeof(value_type)>::type       unsigned_type;
+    typedef      typename signed_int<sizeof(value_type)>::type         signed_type;
 
     static const uint8_t    unmix_shift      = (sizeof(mix_type) - sizeof(value_type)) * 8;
     static const bool       is_signed        = true;    
@@ -116,18 +116,18 @@ namespace lamb {
     static const value_type silence          = 0;
     static const value_type minimum          = 0xffff;
     static const value_type bias_to_signed   = 0;
-    static const mix_type   bias_to_unsigned = 0x10000
+    static const mix_type   bias_to_unsigned = 0x10000;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
 
   template <> class sample_type_traits<int32_t> {
   public:
-    typedef      int32_t                                             value_type;     
-    typedef      typename signed_int<sizeof(value_type) << 1>::type  mix_type;
-    typedef      typename signed_int<sizeof(value_type) >> 1>::type  unmixed_type;
-    typedef      typename unsigned_int<sizeof(value_type)>::type     unsigned_type;
-    typedef      typename signed_int<sizeof(value_type)>::type       signed_type;
+    typedef      int32_t                                               value_type;     
+    typedef      typename signed_int<(sizeof(value_type) << 1)>::type  mix_type;
+    typedef      typename signed_int<(sizeof(value_type) >> 1)>::type  unmixed_type;
+    typedef      typename unsigned_int<sizeof(value_type)>::type       unsigned_type;
+    typedef      typename signed_int<sizeof(value_type)>::type         signed_type;
 
     static const uint8_t    unmix_shift      = (sizeof(mix_type) - sizeof(value_type)) * 8;
     static const bool       is_signed        = true;    
@@ -142,15 +142,15 @@ namespace lamb {
 
   template <> class sample_type_traits<uint8_t> {
   public:
-    typedef      unt8_t                                              value_type;     
-    typedef      typename signed_int<sizeof(value_type) << 1>::type  mix_type;
-    typedef      value_type                                          unmixed_type;
-    typedef      typename unsigned_int<sizeof(value_type)>::type     unsigned_type;
-    typedef      typename signed_int<sizeof(value_type)>::type       signed_type;
+    typedef      uint8_t                                               value_type;
+    typedef      typename signed_int<(sizeof(value_type) << 1)>::type  mix_type;
+    typedef      value_type                                            unmixed_type;
+    typedef      typename unsigned_int<sizeof(value_type)>::type       unsigned_type;
+    typedef      typename signed_int<sizeof(value_type)>::type         signed_type;
 
     static const uint8_t    unmix_shift      = (sizeof(mix_type) - sizeof(value_type)) * 8;
     static const bool       is_signed        = true;    
-    static const value_type maximum          = 0xff
+    static const value_type maximum          = 0xff;
     static const value_type silence          = 0;
     static const value_type minimum          = 0;
     static const value_type bias_to_signed   = 0;
@@ -161,11 +161,11 @@ namespace lamb {
 
   template <> class sample_type_traits<uint16_t> {
   public:
-    typedef      uint16_t                                            value_type;     
-    typedef      typename signed_int<sizeof(value_type) << 1>::type  mix_type;
-    typedef      typename signed_int<sizeof(value_type) >> 1>::type  unmixed_type;
-    typedef      typename unsigned_int<sizeof(value_type)>::type     unsigned_type;
-    typedef      typename signed_int<sizeof(value_type)>::type       signed_type;
+    typedef      uint16_t                                              value_type;     
+    typedef      typename signed_int<(sizeof(value_type) << 1)>::type  mix_type;
+    typedef      typename signed_int<(sizeof(value_type) >> 1)>::type  unmixed_type;
+    typedef      typename unsigned_int<sizeof(value_type)>::type       unsigned_type;
+    typedef      typename signed_int<sizeof(value_type)>::type         signed_type;
 
     static const uint8_t    unmix_shift      = (sizeof(mix_type) - sizeof(value_type)) * 8;
     static const bool       is_signed        = true;    
@@ -180,11 +180,11 @@ namespace lamb {
 
   template <> class sample_type_traits<uint32_t> {
   public:
-    typedef      uint32_t                                            value_type;
-    typedef      typename signed_int<sizeof(value_type) << 1>::type  mix_type;
-    typedef      typename signed_int<sizeof(value_type) >> 1>::type  unmixed_type;
-    typedef      typename unsigned_int<sizeof(value_type)>::type     unsigned_type;
-    typedef      typename signed_int<sizeof(value_type)>::type       signed_type;
+    typedef      uint32_t                                              value_type;
+    typedef      typename signed_int<(sizeof(value_type) << 1)>::type  mix_type;
+    typedef      typename signed_int<(sizeof(value_type) >> 1)>::type  unmixed_type;
+    typedef      typename unsigned_int<sizeof(value_type)>::type       unsigned_type;
+    typedef      typename signed_int<sizeof(value_type)>::type         signed_type;
 
     static const uint8_t    unmix_shift      = (sizeof(mix_type) - sizeof(value_type)) * 8;
     static const bool       is_signed        = true;    
@@ -224,7 +224,7 @@ const   q7n8_t    q7n8_one   = 0x0100;
 // 32 bits /////////////////////////////////////////////////////////////////////
 
 typedef uint32_t  q0n32_t;                    
-const   q0n32     q0n32_one  = 0xffffffff;    
+const   q0n32_t   q0n32_one  = 0xffffffff;    
   
 typedef int32_t   q0n31_t;                      
 const   q0n31_t   q0n31_one  = 0x7fffffff;
@@ -241,7 +241,7 @@ const   q15n16_t  q15n16_one = 0x00010000;
 
 // Unsigned
   
-template <uint8_t charac_, uint8_ mantissa>
+template <uint8_t characteristic_, uint8_t mantissa>
 class unsigned_frac {
 };
 
@@ -284,7 +284,7 @@ public:
   
 // Signed
   
-template <uint8_t charac_, uint8_ mantissa>
+template <uint8_t characteristic_, uint8_t mantissa>
 class signed_frac {
 };
 
