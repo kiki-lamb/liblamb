@@ -221,6 +221,8 @@ namespace lamb {
 
   typedef int16_t   q7n8_t;                        
 
+// 32 bits /////////////////////////////////////////////////////////////////////
+
   typedef uint32_t  q0n32_t;                    
 
   typedef int32_t   q0n31_t;                      
@@ -229,6 +231,8 @@ namespace lamb {
 
   typedef int32_t   q15n16_t;                     
 
+  typedef uint32_t  q24n8_t;
+  
 ////////////////////////////////////////////////////////////////////////////////
 // Fixed type helpers
 ////////////////////////////////////////////////////////////////////////////////
@@ -277,6 +281,14 @@ namespace lamb {
   public:
     typedef q0n32_t type;
     static const q0n32_t one = 0xffffffff;
+  };
+
+////////////////////////////////////////////////////////////////////////////////
+  
+  template <> class unsigned_frac<24, 8> {
+  public:
+    typedef q24n8_t type;
+    static const q16n16_t one = 0x00000100;
   };
 
 ////////////////////////////////////////////////////////////////////////////////

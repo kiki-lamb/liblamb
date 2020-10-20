@@ -32,6 +32,7 @@
   #include "table_osc/table_osc.h"
   #include "oneshot/oneshot.h"
 
+  #include "lowpass_filter/moog_filter.h"
   #include "lowpass_filter/lowpass_filter.h"
   #include "lowpass_filter/lowpass_filter_8.h"
 
