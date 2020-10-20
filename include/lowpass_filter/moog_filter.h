@@ -4,13 +4,17 @@
 namespace lamb {
   class moog_filter {
   public:
-    typedef q0n15                                                sample_t;
+    typedef q0n15_t                                              sample_t;              // q0n15_t
     typedef sample_type_traits<sample_t>                         sample_traits_t;
-    typedef sample_traits_t::unsigned_type                       unsigned_sample_t;     // q0n16_t
-    typedef sample_traits_t::mix_type                            mix_t;                 // q0n31_t
+
+    typedef typename sample_traits_t::unsigned_type              unsigned_sample_t;     // q0n16_t
+    typedef sample_type_traits<unsigned_sample_t>                unsigned_sample_traits_t;
+    
+    typedef typename sample_traits_t::mix_type                   mix_t;                 // q0n31_t
     typedef sample_type_traits<mix_t>                            mix_traits_t;
-    typedef sample_type_traits<mix_t>::unsigned_type             unsigned_mix_traits_t;
-    typedef unsigned_mix_traits_t::type                          unsigned_mix_t;        // q0n32_t
+
+    typedef typename sample_type_traits<mix_t>::unsigned_type    unsigned_mix_t;        // q0n32_t
+    typedef sample_type_traits<unsigned_mix_t>                   unsigned_mix_traits_t;
 
     typedef unsigned_frac<0, (
       sizeof(
@@ -32,8 +36,6 @@ namespace lamb {
     sample_t           _in1,  _in2,  _in3,  _in4;
     
   public:
-//    moog_filter() {}
-
     unsigned_sample_t q() const {
       return _q_q04n8;
     }
@@ -48,8 +50,16 @@ namespace lamb {
 
     void freq(unsigned_sample_t const & freq_) {
       _freq = freq_;
-    }f
+    }
 
+    moog_filter() :
+      _freq(255),
+      _q_q04n8(256),
+      _out1(0), _out2(0), _out3(0), _out4(0),
+      _in1(0), _in2(0), _in3(0), _in4(0) {}
+      
+
+    
 // in[x] and out[x] are member variables, init to 0.0 the controls:
 // 
 // freq = cutoff, nearly linear [0,1] -> [0, fs/2]
@@ -73,35 +83,96 @@ namespace lamb {
 //   return out4;
 // }
 
-    static const q16n16 one_q16n16 = unsigned_frac<16, 16>::one;
+    static const q15n16_t one_q15n16 = signed_frac<15, 16>::one;
+    
+    static const q16n16_t one_q16n16 = unsigned_frac<16, 16>::one;
         
-    sample_t process(sample_t /* q0n15 */ const & in) { 
-      q16n16 f                = 0x0001'28f6;                                   // approx 1.16
-      f                      *= _freq;
-      f                     >>= 8;                                             // 75725 for _freq = 255 (1). (_q = 2)
-
-      q16n16 f_2             = ((uint64_t)f      * f       ) >> 16;            // 87498 
-
-      q16n16 sub             = ((uint64_t)0x2666 * f_2     ) >> 16;            // 13124
-
-      q16n16 fb              = one_q16n16 - sub;                               // 52412
-
-      fb                     = ((uint64_t)fb     * q       ) >> 8;             // 104824
-
-      in                    -= ((uint64_t)out4   * fb      ) >> 16;            // q0n15 * q16n16 = q31n16. 
-
-      q16n16 f_2_f_2         = ((uint64_t)f_2    * f_2     ) >> 16;            // 167664
-
+    sample_t process(sample_t /* q0n15 */ in) {
+      // Serial.print("i=");
+      // Serial.print(in);
+      // Serial.print(" ");
+      
       static const
-        q16n16 m             = 0x59a2;                                         // 0.35013;
+      q16n16_t m             = 0x59a2;                                           // 0.35013;
       
-      in                     = ((uint64_t)in     * m       ) >> 16;
-      in                     = ((uint64_t)in     * f_2_f_2 ) >> 16;
-      
-      out1                   = input + (((uint64_t)0x4ccd * in1) >> 8);
-      out1                  += (((uint64_t)(one_q16n16 - f)) * out1) >> 8;
+      q16n16_t f             = 0x0001'28f6;                                      // approx 1.16
+      f                     *= _freq;
+      f                    >>= 8;                                                // 75725 for _freq = 255 (1). 
 
-      return out1;
+      // Serial.print(" f=");
+      // Serial.print(f);
+      // Serial.print(" ");
+
+      q16n16_t f_2           = ((uint64_t)f        * f               ) >> 16;    // 87498 
+
+      // Serial.print(" f_2=");
+      // Serial.print(f_2);
+      // Serial.print(" ");
+
+      q16n16_t sub           = ((uint64_t)0x2666   * f_2             ) >> 16;    // 13124
+
+      // Serial.print(" s=");
+      // Serial.print(sub);
+      // Serial.print(" ");
+
+      q15n16_t fb            = one_q15n16 - sub;                                 // 52412
+
+//      // Serial.print(" q=");
+//      // Serial.print(_q_q04n8);
+//      // Serial.print(" ");
+
+      // Serial.print(" fb=");
+      // Serial.print(fb);
+      // Serial.print(" ");
+
+      fb                     = ((int64_t)fb       * _q_q04n8        ) >> 16;
+
+      // Serial.print(" fb 2=");
+      // Serial.print(fb);
+      // Serial.print(" ");
+
+      in                    -= ((int64_t)_out1     * fb              ) >> 15;    // q0n15 * q16n16 = q16n31. 
+
+      // Serial.print(" in 2=");
+      // Serial.print(in);
+      // Serial.print(" ");
+
+      q16n16_t f_2_f_2       = ((uint64_t)f_2      * f_2             ) >> 16;
+
+      // Serial.print(" f_2_f_2=");
+      // Serial.print(f_2_f_2);
+      // Serial.print(" ");
+
+      in                     = ((int64_t)in        * m               ) >> 16;
+
+      // Serial.print(" in 3=");
+      // Serial.print(in);
+      // Serial.print(" ");
+
+      in                     = ((int64_t)in       * f_2_f_2         ) >> 16;
+
+      // Serial.print(" in 4=");
+      // Serial.print(in);
+      // Serial.print(" ");
+
+      // Serial.flush();
+      
+      _out1                  = in;
+      _out1                 += (((uint64_t)0x4cd5  * _in1            ) >> 16);
+
+      // Serial.print(" out1=");
+      // Serial.print(_out1);
+      // Serial.print(" ");
+
+      _out1                 += (((uint64_t)(one_q16n16 - f)) * _out1 ) >> 16;
+
+      // Serial.print(" ");
+      // Serial.print(_out1);
+      // Serial.print(" ");
+
+      // Serial.println();
+      
+      return _out1;
     }
 
   private:
