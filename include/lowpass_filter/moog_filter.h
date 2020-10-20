@@ -6,7 +6,9 @@ namespace lamb {
   public:
     typedef int16_t  out_t;   // int16_t
     typedef q15n16_t int_t;   // int32_t
-    typedef uint64_t big_t;
+    typedef q0n31_t  uint_t;   // uint32_t
+    typedef uint64_t ubig_t;
+    typedef int64_t big_t;
     
   private:
     int_t        _freq;     
@@ -24,11 +26,13 @@ namespace lamb {
     }
     
     void q(int_t const & q_) {
-      _q = q_;
+       _q = q_ << 4;
+       //_q = 0b00010000'00000000;
     }
 
     void freq(int_t const & freq_) {
-      _freq = freq_;
+       _freq = freq_ << 4;
+      //_freq = 0xffff;
     }
 
     moog_filter() :
@@ -65,35 +69,95 @@ namespace lamb {
 // }
 
     static const int_t _1_pt_16    = 0x1'28f5;
-    static const int_t _1_pt_0     = 0x0'1000;
+    static const int_t _1_pt_0     = 0x1'0000;
     static const int_t _0_pt_15    = 0x0'2666;
     static const int_t _0_pt_35013 = 0x0'59a2;
     static const int_t _0_pt_3     = 0x0'4ccc;
 
-    static const int_t fxmul(int_t const & x, int_t const & y) {
-      return ((((big_t)x) * y) >> 16);
+    static const int_t ssfxmul(int_t const & x, int_t const & y, uint8_t const & shift = 16) {
+      return (((big_t)x) * y) >> shift;
     }
-      
+
+    static const uint_t uufxmul(uint_t const & x, uint_t const & y, uint8_t const & shift = 16) {
+      return (((ubig_t)x) * y) >> shift;
+    }
+
     out_t process(out_t input) {
-      int_t f      = fxmul(_freq, _1_pt_16);
-      int_t f_2    = fxmul(f, f);
-      int_t f_2_2  = fxmul(f_2, f_2);  
-      int_t fb     = fxmul(_q, _1_pt_0 - fxmul(_0_pt_15, f_2));
+      Serial.print("f=");
+      Serial.print(_freq);
 
-      input -= fxmul(out4, fb);
-      input =  fxmul(input, fxmul(_0_pt_35013, f_2_2));      
-        
-      out1      = input + fxmul(_0_pt_3, in1) + fxmul((_1_pt_0 - f), out1);
-      in1       = input;
+      Serial.print(" q=");
+      Serial.print(_q);
+
+      Serial.print(" i=");
+      Serial.print(input);
+
+      int_t f      = ssfxmul(_freq, _1_pt_16, 16);
+      Serial.print(" f=");
+      Serial.print(f);
       
-      out2      = input + fxmul(_0_pt_3, in2) + fxmul((_1_pt_0 - f), out2);
+      int_t f_2    = ssfxmul(f, f, 16);
+      Serial.print(" f_2=");
+      Serial.print(f_2);
+      
+      int_t f_2_2  = ssfxmul(f_2, f_2, 16);
+      Serial.print(" f_2_2=");
+      Serial.print(f_2_2);
+
+      int_t s     = ssfxmul(_0_pt_15, f_2, 16);
+      Serial.print(" s=");
+      Serial.print(s);
+
+      int_t p     = _1_pt_0 - s;
+      Serial.print(" p=");
+      Serial.print(p);
+      
+      int_t fb     = ssfxmul(_q, p, 14); // downshift 14 for max q = almost 4.
+      Serial.print(" fb=");
+      Serial.print(fb);
+
+      input -= ssfxmul(out1, fb);
+      
+      Serial.print(" i=");
+      Serial.print(input);
+      
+      input =  ssfxmul(input, ssfxmul(_0_pt_35013, f_2_2));
+      Serial.print(" i=");
+      Serial.print(input);
+              
+      out1      = input + ssfxmul(_0_pt_3, in1) + ssfxmul((_1_pt_0 - f), out1);
+      Serial.print(" o1=");
+      Serial.print(out1     );
+      
+      in1       = input;
+      Serial.print(" i=");
+      Serial.print(in1      );
+      
+      out2      = input + ssfxmul(_0_pt_3, in2) + ssfxmul((_1_pt_0 - f), out2);
+      Serial.print(" o2=");
+      Serial.print(out2     );
+      
       in2       = out1;
-
-      out3      = input + fxmul(_0_pt_3, in3) + fxmul((_1_pt_0 - f), out3);
+      Serial.print(" i2=");
+      Serial.print(in2      );
+      
+      out3      = input + ssfxmul(_0_pt_3, in3) + ssfxmul((_1_pt_0 - f), out3);
+      Serial.print(" o3=");
+      Serial.print(out3     );
+      
       in3       = out2;
-
-      out4      = input + fxmul(_0_pt_3, in4) + fxmul((_1_pt_0 - f), out4);
+      Serial.print(" i3=");
+      Serial.print(in3      );
+      
+      out4      = input + ssfxmul(_0_pt_3, in4) + ssfxmul((_1_pt_0 - f), out4);
+      Serial.print(" o4=");
+      Serial.print(out4     );
+      
       in4       = out3;
+      Serial.print(" i4=");
+      Serial.print(in4      );
+
+      Serial.println();
       
       return out4 / 2;
       
