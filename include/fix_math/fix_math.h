@@ -1,6 +1,11 @@
 #ifndef LAMB_FIX_MATH_H
 #define LAMB_FIX_MATH_H
 
+#ifdef NO_ARDUINO
+  #include <stdio.h>
+  #include <stdlib.h>
+#endif
+
 namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -47,14 +52,82 @@ namespace lamb {
 
   template <> class unsigned_frac<0, 8> {
   public:
-    typedef q0n8_t type;
-    static const q0n8_t one = 0xff;
-
-    type value;
-
-    unsigned_frac(uint8_t const & frac_part) :
-      value(frac_part) {}
+    typedef      q0n8_t  type;
+    typedef      q0n16_t big_type;
+    static const q0n8_t  ONE      = 0xff;
+    static const uint8_t FX_SHIFT = sizeof(type) << 3;
     
+    type val;
+
+    explicit unsigned_frac(uint8_t const & frac_part) :
+      val(frac_part) {}
+
+    unsigned_frac operator + (unsigned_frac const & other ) {
+      auto r = unsigned_frac(val + other.val);
+      if (r.val < val) {
+#ifndef LAMB_FP_SATURATE
+        printf("OVERFLOW: %u + %u = %u\n", val, other.val, r.val);
+#else
+        r.val = ONE;
+        printf("SATURATE HI:  %u + %u = %u\n", val, other.val, r.val);
+#endif
+        fflush(stdout);
+      }
+      return r;
+    }    
+    unsigned_frac operator += (unsigned_frac const & other) {
+      val = ((*this) + other).val;
+      return *this;
+    }
+
+    unsigned_frac operator - (unsigned_frac const & other ) {
+      auto r = unsigned_frac(val - other.val);
+      if (r.val > val) {
+#ifndef LAMB_FP_SATURATE
+        printf("UNDERFLOW: %u - %u = %u\n", val, other.val, r.val);
+#else
+        r.val = 0;
+        printf("SATURATE LOW: %u - %u = %u\n", val, other.val, r.val);
+#endif
+        fflush(stdout);
+      }
+      return r;
+    }    
+    unsigned_frac operator -= (unsigned_frac const & other) {
+      val = ((*this) - other).val;
+      return *this;
+    }
+
+    unsigned_frac operator * (unsigned_frac const & other ) {      
+      big_type tmp = (((big_type)val) * other.val) >> FX_SHIFT;
+      auto     r   = unsigned_frac((type)tmp);
+      
+      if (tmp > ONE) {
+#ifndef LAMB_FP_SATURATE
+        printf("OVERFLOW: %u * %u = %u\n", val, other.val, tmp);
+        fflush(stdout);
+#else
+        r.val = ONE;
+        printf("SATURATE HI:  %u * %u = %u\n", val, other.val, r.val);
+#endif
+      }        
+
+      return r;
+    }    
+    unsigned_frac operator *= (unsigned_frac const & other) {
+      val = ((*this) * other).val;
+      return *this;
+    }
+    
+    unsigned_frac operator / (unsigned_frac const & other ) {
+      auto r = unsigned_frac(val / other.val);
+      return r;
+    }        
+    unsigned_frac operator /= (unsigned_frac const & other) {
+      val = ((*this) / other).val;
+      return *this;
+    }
+
   };
 
 ////////////////////////////////////////////////////////////////////////////////
