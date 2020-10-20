@@ -342,6 +342,9 @@ namespace lamb {
     explicit unsigned_frac(type const & val_) :
       val(val_) {}
 
+    explicit unsigned_frac(uint8_t const & charac_, q0n8_t const & frac_) :
+      val((((uint16_t)charac_) << FX_SHIFT) | frac_){}
+
     uint8_t chararac() const {
       return val >> FX_SHIFT;
     }
@@ -433,11 +436,14 @@ namespace lamb {
     explicit unsigned_frac(type const & val_) :
       val(val_) {}
 
+    explicit unsigned_frac(uint16_t const & charac_, q0n16_t const & frac_) :
+      val((((uint32_t)charac_) << FX_SHIFT) | frac_){}
+
     uint16_t chararac() const {
       return val >> FX_SHIFT;
     }
 
-    q0n8_t frac() const {
+    q0n16_t frac() const {
       return val & 0xffff;
     }
 
