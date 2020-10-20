@@ -1,8 +1,28 @@
 #ifndef LAMBOS_H
   #define LAMBOS_H
-  #include <Arduino.h>
+
+  #ifdef NO_ARDUINO
+    #include <inttypes.h>
+    #include <stddef.h>
+  #else
+    #include <Arduino.h>
+  #endif
+
   #include "uint12_t.h"
+
+  #include "sample_type_traits/sample_type_traits.h"
+
+#include "fix_math/fix_math.h"
+
+  #include "sample_type_interfaces/sample_type_interfaces.h"
+
+  #include "dsp/dsp.h"
+
+  #include "global/global.h"
+ 
   #include "light_buffer/light_buffer.h"
+
+  #include "functions/functions.h"
 
   #include "abstract_bag/abstract_bag.h"
   #include "abstract_list/abstract_list.h"
@@ -16,15 +36,17 @@
   #include "linked_queue/linked_queue.h"
   #include "linked_stack/linked_stack.h"
 
-  #include "fonts/fonts.h"
-  #include "task/task.h"
-
   #include "ring_buffer/ring_buffer.h"
 
   #include "positional_fixed_array/positional_fixed_array.h"
-  #include "functions/functions.h"
 
+  #include "fonts/fonts.h"
+
+  #include "task/task.h"
+
+#ifndef NO_ARDUINO
   #include "encoder/encoder.h"
+#endif
 
   #include "flag/flag.h"
   #include "midi_notes/midi_notes.h"
@@ -45,7 +67,7 @@
     #include "fast_math/avr_fast_math.h"
   #endif
 
-  #if !defined(__AVR_ATtiny85__)
+  #if !defined(__AVR_ATtiny85__) && !defined(NO_ARDUINO)
     #include "device/mcp4921/mcp4921.h"
   #endif
 
@@ -54,21 +76,20 @@
     #include "device/pt8211/pt8211.h"
     #include "device/Adafruit_ILI9341_STM_SPI2/Adafruit_ILI9341_STM_SPI2.h"
   #endif
- 
-  #include "controls/analog.h"
-  #include "controls/button.h"
-  #include "controls/mcp23017.h"
-  #include "controls/mcp23017_buttons.h"
-  #include "controls/mcp23017_encoders.h"
 
-  #include "global/global.h"
- 
   #include "events/event.h"
   #include "events/sources/buffer.h"
   #include "events/sources/source.h"
   #include "events/sources/combine.h"
-  #include "events/sources/buttons.h"
-  #include "events/sources/encoders.h"
-  #include "events/sources/analog.h"
-  #include "dsp/dsp.h"
+
+  #ifndef NO_ARDUINO
+    #include "controls/analog.h"
+    #include "controls/button.h"
+    #include "controls/mcp23017.h"
+    #include "controls/mcp23017_buttons.h"
+    #include "controls/mcp23017_encoders.h"
+    #include "events/sources/buttons.h"
+    #include "events/sources/encoders.h"
+    #include "events/sources/analog.h"
+  #endif
 #endif

@@ -1,7 +1,7 @@
 #ifndef LAMBOS_ABSTRACT_LIST
 #define LAMBOS_ABSTRACT_LIST
 
-#include "../include/abstract_bag/abstract_bag.h"
+#include "../abstract_bag/abstract_bag.h"
 
 namespace lamb {
   template <typename T0>

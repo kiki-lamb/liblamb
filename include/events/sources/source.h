@@ -1,8 +1,6 @@
 #ifndef LAMB_DRUMMER_EVENT_SOURCE_H
 #define LAMB_DRUMMER_EVENT_SOURCE_H
 
-#include <Arduino.h>
-
 // event_t must have default constructor, operator bool() returning false
 // when no more events are availale. default must be false.
 

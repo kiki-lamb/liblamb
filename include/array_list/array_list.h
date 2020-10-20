@@ -42,8 +42,10 @@ namespace lamb {
       _capacity = new_capacity;
       _array = (T0 *)realloc(_array, _capacity * sizeof(T0));
 
+#ifndef NO_ARDUINO
       Serial.print("PTR: ");
       Serial.println((size_t)_array, HEX);
+#endif
     }
 
     T0 & operator[](size_t index) {			
