@@ -527,8 +527,92 @@ namespace lamb {
 
   template <> class signed_frac<0, 7> {
   public:
-    typedef q0n7_t type;
-    static const q0n7_t one = 0x7f;
+    typedef      q0n7_t  type;
+    typedef      q0n15_t big_type;
+
+    static const q0n7_t  ONE      = 0x7f;
+    static const type    MAX      = 0x7f;
+    static const uint8_t FX_SHIFT = sizeof(type) << 3;
+    
+    type val;
+
+    explicit signed_frac(type const & val_) :
+      val(val_) {}
+
+    int8_t chararac() const {
+      return 0;
+    }
+
+    type frac() const {
+      return val;
+    }
+
+    signed_frac operator + (signed_frac const & other ) {
+      signed_frac<0,7> r = signed_frac<0,7>(val + other.val);
+      if (r.val < val) {
+#ifndef LAMB_FP_SATURATE
+        printf("OVERFLOW: %d + %d = %d\n", val, other.val, r.val);
+#else
+        r.val = ONE;
+        printf("SAT HI:  %d + %d = %d\n", val, other.val, r.val);
+#endif
+        fflush(stdout);
+      }
+      return r;
+    }    
+    signed_frac operator += (signed_frac const & other) {
+      val = ((*this) + other).val;
+      return *this;
+    }
+
+    signed_frac operator - (signed_frac const & other ) {
+      signed_frac<0,7> r = signed_frac<0,7>(val - other.val);
+      if (r.val > val) {
+#ifndef LAMB_FP_SATURATE
+        printf("UNDERFLOW: %d - %d = %d\n", val, other.val, r.val);
+#else
+        r.val = 0;
+        printf("SAT LO: %d - %d = %d\n", val, other.val, r.val);
+#endif
+        fflush(stdout);
+      }
+      return r;
+    }    
+    signed_frac operator -= (signed_frac const & other) {
+      val = ((*this) - other).val;
+      return *this;
+    }
+
+    signed_frac operator * (signed_frac const & other ) {      
+      big_type tmp = (((big_type)val) * other.val) >> (FX_SHIFT - 1);
+      signed_frac<0,7>     r   = signed_frac<0,7>((type)tmp);
+      
+      if (tmp > ONE) {
+#ifndef LAMB_FP_SATURATE
+        printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
+        fflush(stdout);
+#else
+        r.val = ONE;
+        printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
+#endif
+      }        
+
+      return r;
+    }    
+    signed_frac operator *= (signed_frac const & other) {
+      val = ((*this) * other).val;
+      return *this;
+    }
+    
+    signed_frac operator / (signed_frac const & other ) {
+      signed_frac<0,7> r = signed_frac<0,7>(val / other.val);
+      return r;
+    }        
+    signed_frac operator /= (signed_frac const & other) {
+      val = ((*this) / other).val;
+      return *this;
+    }
+
   };
 
 ////////////////////////////////////////////////////////////////////////////////

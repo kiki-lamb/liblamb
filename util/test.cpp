@@ -4,42 +4,44 @@
 
 using namespace lamb;
 
-typedef unsigned_frac<16,16> test_t;
+typedef signed_frac<0,7> test_t;
 
 int main() {
-  for (  size_t x = (((size_t)test_t::ONE)); x < (((size_t)test_t::MAX)); x++) {
-    printf("[%zu]\n", x);
+//  for (  size_t x = (((size_t)test_t::ONE)); x < (((size_t)test_t::MAX)); x++) {
+  for (  int16_t x = -128; x < (((int16_t)test_t::MAX)); x++) {
+    printf("[%d]\n", x);
     
-    for (size_t y = 2; y < (((size_t)test_t::MAX)); y++) {
+//    for (size_t y = 2; y < (((size_t)test_t::MAX)); y++) {
+    for (int16_t y = -128; y < (((int16_t)test_t::MAX)); y++) {
       test_t fx(x);
       test_t fy(y);
      
-      {
-        test_t fz = fx + fy;
-        printf("Try %zu + %zu: = %u \n", x, y, fz.val);
-        fflush(stdout);
-      }
+      // {
+      //   test_t fz = fx + fy;
+      //   printf("Try %d + %d: = %d \n", x, y, fz.val);
+      //   fflush(stdout);
+      // }
 
-      {
-        test_t fz = fx - fy;
-        printf("Try %zu - %zu: = %u \n", x, y, fz.val);
-        fflush(stdout);
-      }
+      // {
+      //   test_t fz = fx - fy;
+      //   printf("Try %d - %d: = %d \n", x, y, fz.val);
+      //   fflush(stdout);
+      // }
       
       {
         test_t fz = fx * fy;
-        printf("Try %zu * %zu: = %u \n", x, y, fz.val);
+        printf("Try %d * %d: = %d \n", x, y, fz.val);
         fflush(stdout);
       }
 
-      if (y == 0) {
-        continue;
-      }
-      else {
-        test_t fz = fx / fy;
-        printf("Try %zu / %zu: = %u \n", x, y, fz.val);
-        fflush(stdout);
-      }
+      // if (y == 0) {
+      //   continue;
+      // }
+      // else {
+      //   test_t fz = fx / fy;
+      //   printf("Try %d / %d: = %d \n", x, y, fz.val);
+      //   fflush(stdout);
+      // }
     }
   }
 
