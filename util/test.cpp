@@ -4,29 +4,31 @@
 
 using namespace lamb;
 
-typedef unsigned_frac<0,32> test_t;
+typedef unsigned_frac<0,16> test_t;
 
 int main() {
-  for (  size_t x = 0; x < (((size_t)test_t::ONE) + 1); x++) {
-    for (size_t y = 0; y < (((size_t)test_t::ONE) + 1); y++) {
+  for (  size_t x = 0; x < (((size_t)test_t::ONE)); x++) {
+    printf("[%u]\n", x);
+    
+    for (size_t y = 0; y < (((size_t)test_t::ONE)); y++) {
       test_t fx(x);
       test_t fy(y);
      
       {
         test_t fz = fx + fy;
-//        printf("Try %zu + %zu: = %u \n", x, y, fz.val);
+        // printf("Try %zu + %zu: = %u \n", x, y, fz.val);
         fflush(stdout);
       }
 
       {
         test_t fz = fx - fy;
-//        printf("Try %zu - %zu: = %u \n", x, y, fz.val);
+        // printf("Try %zu - %zu: = %u \n", x, y, fz.val);
         fflush(stdout);
       }
       
       {
         test_t fz = fx * fy;
-//        printf("Try %zu * %zu: = %u \n", x, y, fz.val);
+        // printf("Try %zu * %zu: = %u \n", x, y, fz.val);
         fflush(stdout);
       }
 
@@ -35,11 +37,13 @@ int main() {
       }
       else {
         test_t fz = fx / fy;
-//        printf("Try %zu / %zu: = %u \n", x, y, fz.val);
+        // printf("Try %zu / %zu: = %u \n", x, y, fz.val);
         fflush(stdout);
       }
     }
   }
+
+  printf("Done.\n");
 }
 
 
