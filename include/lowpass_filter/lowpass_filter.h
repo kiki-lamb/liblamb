@@ -26,7 +26,7 @@ namespace lamb {
     control_t         _freq;
     unsigned_sample_t _feedback;
     sample_t          _d0;
-    sample_t          _d1;
+    sample_t          _o;
 
   public:
     control_t freq() const {
@@ -47,17 +47,20 @@ namespace lamb {
     }
 
     sample_t process(sample_t const & in_) {
+      // D0 = D0 + FREQ * (IN - D0 + FB * (D0 - O));
+      // O  = O  + FREQ * (D0 - O);
+
       _d0 += m_fxmul_mXs(
-        (in_ - _d0) + m_fxmul_mXs(_feedback, _d0 - _d1),
+        (in_ - _d0) + m_fxmul_mXs(_feedback, _d0 - _o),
         freq()
       );
       
-      _d1 += s_fxmul_sXc(
-        _d0 - _d1,
+      _o += s_fxmul_sXc(
+        _d0 - _o,
         freq()
       ); 
       
-      return _d1;
+      return _o;
     }
 
   private:
@@ -70,7 +73,7 @@ namespace lamb {
     }
     
     static mix_t m_fxmul_mXs(mix_t const & a, sample_t const & b) {
-      return (a * b) >> FX_SHIFT; // FX_SHIFT less than size of input!
+      return (a * b) >> FX_SHIFT; // Note that FX_SHIFT is less than size of input!
     }
   };
 }
