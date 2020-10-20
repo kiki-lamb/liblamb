@@ -50,7 +50,7 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  template <> class unsigned_frac<0, 8> {
+  template <> class unsigned_frac<0,8> {
   public:
     typedef      q0n8_t  type;
     typedef      q0n16_t big_type;
@@ -63,7 +63,7 @@ namespace lamb {
       val(frac_part) {}
 
     unsigned_frac operator + (unsigned_frac const & other ) {
-      auto r = unsigned_frac(val + other.val);
+      auto r = unsigned_frac<0,8>(val + other.val);
       if (r.val < val) {
 #ifndef LAMB_FP_SATURATE
         printf("OVERFLOW: %u + %u = %u\n", val, other.val, r.val);
@@ -81,7 +81,7 @@ namespace lamb {
     }
 
     unsigned_frac operator - (unsigned_frac const & other ) {
-      auto r = unsigned_frac(val - other.val);
+      auto r = unsigned_frac<0,8>(val - other.val);
       if (r.val > val) {
 #ifndef LAMB_FP_SATURATE
         printf("UNDERFLOW: %u - %u = %u\n", val, other.val, r.val);
@@ -100,7 +100,7 @@ namespace lamb {
 
     unsigned_frac operator * (unsigned_frac const & other ) {      
       big_type tmp = (((big_type)val) * other.val) >> FX_SHIFT;
-      auto     r   = unsigned_frac((type)tmp);
+      auto     r   = unsigned_frac<0,8>((type)tmp);
       
       if (tmp > ONE) {
 #ifndef LAMB_FP_SATURATE
@@ -120,7 +120,7 @@ namespace lamb {
     }
     
     unsigned_frac operator / (unsigned_frac const & other ) {
-      auto r = unsigned_frac(val / other.val);
+      auto r = unsigned_frac<0,8>(val / other.val);
       return r;
     }        
     unsigned_frac operator /= (unsigned_frac const & other) {
@@ -132,10 +132,166 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  template <> class unsigned_frac<0, 16> {
+  template <> class unsigned_frac<0,16> {
   public:
-    typedef q0n16_t type;
-    static const q0n16_t one = 0xffff;
+    typedef      q0n16_t  type;
+    typedef      q0n32_t  big_type;
+    static const q0n16_t  ONE      = 0xffff;
+    static const uint8_t FX_SHIFT = sizeof(type) << 3;
+    
+    type val;
+
+    explicit unsigned_frac(uint16_t const & frac_part) :
+      val(frac_part) {}
+
+    unsigned_frac operator + (unsigned_frac const & other ) {
+      auto r = unsigned_frac<0,16>(val + other.val);
+      if (r.val < val) {
+#ifndef LAMB_FP_SATURATE
+        printf("OVERFLOW: %u + %u = %u\n", val, other.val, r.val);
+#else
+        r.val = ONE;
+        printf("SATURATE HI:  %u + %u = %u\n", val, other.val, r.val);
+#endif
+        fflush(stdout);
+      }
+      return r;
+    }    
+    unsigned_frac operator += (unsigned_frac const & other) {
+      val = ((*this) + other).val;
+      return *this;
+    }
+
+    unsigned_frac operator - (unsigned_frac const & other ) {
+      auto r = unsigned_frac<0,16>(val - other.val);
+      if (r.val > val) {
+#ifndef LAMB_FP_SATURATE
+        printf("UNDERFLOW: %u - %u = %u\n", val, other.val, r.val);
+#else
+        r.val = 0;
+        printf("SATURATE LOW: %u - %u = %u\n", val, other.val, r.val);
+#endif
+        fflush(stdout);
+      }
+      return r;
+    }    
+    unsigned_frac operator -= (unsigned_frac const & other) {
+      val = ((*this) - other).val;
+      return *this;
+    }
+
+    unsigned_frac operator * (unsigned_frac const & other ) {      
+      big_type tmp = (((big_type)val) * other.val) >> FX_SHIFT;
+      auto     r   = unsigned_frac<0,16>((type)tmp);
+      
+      if (tmp > ONE) {
+#ifndef LAMB_FP_SATURATE
+        printf("OVERFLOW: %u * %u = %u\n", val, other.val, tmp);
+        fflush(stdout);
+#else
+        r.val = ONE;
+        printf("SATURATE HI:  %u * %u = %u\n", val, other.val, r.val);
+#endif
+      }        
+
+      return r;
+    }    
+    unsigned_frac operator *= (unsigned_frac const & other) {
+      val = ((*this) * other).val;
+      return *this;
+    }
+    
+    unsigned_frac operator / (unsigned_frac const & other ) {
+      auto r = unsigned_frac<0,16>(val / other.val);
+      return r;
+    }        
+    unsigned_frac operator /= (unsigned_frac const & other) {
+      val = ((*this) / other).val;
+      return *this;
+    }
+
+  };
+
+////////////////////////////////////////////////////////////////////////////////
+
+  template <> class unsigned_frac<0,32> {
+  public:
+    typedef      q0n32_t  type;
+    typedef      q0n64_t  big_type;
+    static const q0n32_t  ONE      = 0xffffffff;
+    static const uint8_t FX_SHIFT = sizeof(type) << 3;
+    
+    type val;
+
+    explicit unsigned_frac(uint16_t const & frac_part) :
+      val(frac_part) {}
+
+    unsigned_frac operator + (unsigned_frac const & other ) {
+      auto r = unsigned_frac<0,32>(val + other.val);
+      if (r.val < val) {
+#ifndef LAMB_FP_SATURATE
+        printf("OVERFLOW: %u + %u = %u\n", val, other.val, r.val);
+#else
+        r.val = ONE;
+        printf("SATURATE HI:  %u + %u = %u\n", val, other.val, r.val);
+#endif
+        fflush(stdout);
+      }
+      return r;
+    }    
+    unsigned_frac operator += (unsigned_frac const & other) {
+      val = ((*this) + other).val;
+      return *this;
+    }
+
+    unsigned_frac operator - (unsigned_frac const & other ) {
+      auto r = unsigned_frac<0,32>(val - other.val);
+      if (r.val > val) {
+#ifndef LAMB_FP_SATURATE
+        printf("UNDERFLOW: %u - %u = %u\n", val, other.val, r.val);
+#else
+        r.val = 0;
+        printf("SATURATE LOW: %u - %u = %u\n", val, other.val, r.val);
+#endif
+        fflush(stdout);
+      }
+      return r;
+    }    
+    unsigned_frac operator -= (unsigned_frac const & other) {
+      val = ((*this) - other).val;
+      return *this;
+    }
+
+    unsigned_frac operator * (unsigned_frac const & other ) {      
+      big_type tmp = (((big_type)val) * other.val) >> FX_SHIFT;
+      auto     r   = unsigned_frac<0,32>((type)tmp);
+      
+      if (tmp > ONE) {
+#ifndef LAMB_FP_SATURATE
+        printf("OVERFLOW: %u * %u = %u\n", val, other.val, tmp);
+        fflush(stdout);
+#else
+        r.val = ONE;
+        printf("SATURATE HI:  %u * %u = %u\n", val, other.val, r.val);
+#endif
+      }        
+
+      return r;
+    }    
+    unsigned_frac operator *= (unsigned_frac const & other) {
+      val = ((*this) * other).val;
+      return *this;
+    }
+    
+    unsigned_frac operator / (unsigned_frac const & other ) {
+      auto r = unsigned_frac<0,32>(val / other.val);
+      return r;
+    }        
+    unsigned_frac operator /= (unsigned_frac const & other) {
+      val = ((*this) / other).val;
+      return *this;
+    }
+
   };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -144,14 +300,6 @@ namespace lamb {
   public:
     typedef q8n8_t type;
     static const q8n8_t one = 0x0100;
-  };
-
-////////////////////////////////////////////////////////////////////////////////
-  
-  template <> class unsigned_frac<0, 32> {
-  public:
-    typedef q0n32_t type;
-    static const q0n32_t one = 0xffffffff;
   };
 
 ////////////////////////////////////////////////////////////////////////////////

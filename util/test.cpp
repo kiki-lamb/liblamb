@@ -1,30 +1,32 @@
 #include "../include/lamb.h"
 
-// g++ -std=gnu++14 -DNO_ARDUINO test.cpp && ./a.out
+// g++ -std=gnu++14 -DNO_ARDUINO -DLAMB_FP_SATURATE test.cpp && ./a.out
 
 using namespace lamb;
 
+typedef unsigned_frac<0,32> test_t;
+
 int main() {
-  for (size_t x = 0; x < 256; x++) {
-    for (size_t y = 0; y < 256; y++) {
-      unsigned_frac<0,8> fx(x);
-      unsigned_frac<0,8> fy(y);
+  for (  size_t x = 0; x < (((size_t)test_t::ONE) + 1); x++) {
+    for (size_t y = 0; y < (((size_t)test_t::ONE) + 1); y++) {
+      test_t fx(x);
+      test_t fy(y);
      
       {
-        unsigned_frac<0,8> fz = fx + fy;
-        printf("Try %zu + %zu: = %u \n", x, y, fz.val);
+        test_t fz = fx + fy;
+//        printf("Try %zu + %zu: = %u \n", x, y, fz.val);
         fflush(stdout);
       }
 
       {
-        unsigned_frac<0,8> fz = fx - fy;
-        printf("Try %zu - %zu: = %u \n", x, y, fz.val);
+        test_t fz = fx - fy;
+//        printf("Try %zu - %zu: = %u \n", x, y, fz.val);
         fflush(stdout);
       }
       
       {
-        unsigned_frac<0,8> fz = fx * fy;
-        printf("Try %zu * %zu: = %u \n", x, y, fz.val);
+        test_t fz = fx * fy;
+//        printf("Try %zu * %zu: = %u \n", x, y, fz.val);
         fflush(stdout);
       }
 
@@ -32,12 +34,10 @@ int main() {
         continue; // don't div by 0
       }
       else {
-        unsigned_frac<0,8> fz = fx / fy;
-        printf("Try %zu / %zu: = %u \n", x, y, fz.val);
+        test_t fz = fx / fy;
+//        printf("Try %zu / %zu: = %u \n", x, y, fz.val);
         fflush(stdout);
       }
-       
-
     }
   }
 }
