@@ -74,12 +74,16 @@ namespace lamb {
 //   
 //   out1 = input + 0.3 * in1 + (1 - f) * out1; // Pole 1
 //   in1  = input;
+//
 //   out2 = out1 + 0.3 * in2 + (1 - f) * out2;  // Pole 2
 //   in2  = out1;
+//
 //   out3 = out2 + 0.3 * in3 + (1 - f) * out3;  // Pole 3
 //   in3  = out2;
+//
 //   out4 = out3 + 0.3 * in4 + (1 - f) * out4;  // Pole 4
 //   in4  = out3;
+//
 //   return out4;
 // }
 
@@ -117,21 +121,21 @@ namespace lamb {
 
       q15n16_t fb            = one_q15n16 - sub;                                 // 52412
 
-//      // Serial.print(" q=");
-//      // Serial.print(_q_q04n8);
-//      // Serial.print(" ");
+      // Serial.print(" q=");
+      // Serial.print(_q_q04n8);
+      // Serial.print(" ");
 
       // Serial.print(" fb=");
       // Serial.print(fb);
       // Serial.print(" ");
 
-      fb                     = ((int64_t)fb       * _q_q04n8        ) >> 16;
+      fb                     = ((int64_t)fb       * _q_q04n8        ) >> 10;
 
       // Serial.print(" fb 2=");
       // Serial.print(fb);
       // Serial.print(" ");
 
-      in                    -= ((int64_t)_out1     * fb              ) >> 15;    // q0n15 * q16n16 = q16n31. 
+      in                    -= ((int64_t)_out4     * fb              ) >> 16;    // q0n15 * q16n16 = q16n31. 
 
       // Serial.print(" in 2=");
       // Serial.print(in);
@@ -156,6 +160,8 @@ namespace lamb {
       // Serial.print(" ");
 
       // Serial.flush();
+
+      ////////////////////////////////////////////////////////////////////////////////
       
       _out1                  = in;
       _out1                 += (((uint64_t)0x4cd5  * _in1            ) >> 16);
@@ -166,13 +172,56 @@ namespace lamb {
 
       _out1                 += (((uint64_t)(one_q16n16 - f)) * _out1 ) >> 16;
 
+      _in1 = in;
+      
+      ////////////////////////////////////////////////////////////////////////////////
+      
+      _out2                  = _out1;
+      _out2                 += (((uint64_t)0x4cd5  * _in2            ) >> 16);
+
+      // Serial.print(" out2=");
+      // Serial.print(_out2);
+      // Serial.print(" ");
+
+      _out2                 += (((uint64_t)(one_q16n16 - f)) * _out2 ) >> 16;
+
+      _in2 = _out1;
+      
+      ////////////////////////////////////////////////////////////////////////////////
+      
+      _out3                  = _out2;
+      _out3                 += (((uint64_t)0x4cd5  * _in3            ) >> 16);
+
+      // Serial.print(" out3=");
+      // Serial.print(_out3);
+      // Serial.print(" ");
+
+      _out3                 += (((uint64_t)(one_q16n16 - f)) * _out3 ) >> 16;
+
+      _in3 = _out2;
+      
+      ////////////////////////////////////////////////////////////////////////////////
+      
+      _out4                  = _out3;
+      _out4                 += (((uint64_t)0x4cd5  * _in4            ) >> 16);
+
+      // Serial.print(" out4=");
+      // Serial.print(_out4);
+      // Serial.print(" ");
+
+      _out4                 += (((uint64_t)(one_q16n16 - f)) * _out4 ) >> 16;
+
+      _in4 = _out3;
+      
+      ////////////////////////////////////////////////////////////////////////////////
+
       // Serial.print(" ");
       // Serial.print(_out1);
       // Serial.print(" ");
 
       // Serial.println();
       
-      return _out1;
+      return _out4;
     }
 
   private:
