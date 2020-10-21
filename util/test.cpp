@@ -66,6 +66,8 @@ int main() {
   printf("r ONE  is %u.\n", r_test_t::ONE);
   printf("r MAX  is %u\n", r_test_t::MAX);
   printf("r MIN  is %u\n", r_test_t::MIN);
+
+  return 0;
   
   for (    l_test_t::big_type x = l_test_t::MIN; x <= l_test_t::MAX; x += L_BASE) {
     for (  r_test_t::big_type y = r_test_t::MIN; y <= r_test_t::MAX; y += R_BASE) {    

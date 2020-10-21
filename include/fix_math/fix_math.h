@@ -75,7 +75,7 @@ namespace lamb {
     typedef typename unsigned_int<SIZE>::type  type;
     typedef typename unsigned_int<(SIZE << 1)>::type big_type;
 
-    static const type    ONE            = (((big_type)1) << MANTISSA) - 1; 
+    static const type    ONE            = (((big_type)1) << MANTISSA) - 1;    
     static const type    MAX            = unsigned_int<SIZE>::MAX;
     static const type    MIN            = unsigned_int<SIZE>::MIN;
     
@@ -267,7 +267,7 @@ namespace lamb {
     typedef typename signed_int<SIZE>::type  type;
     typedef typename signed_int<(SIZE << 1)>::type big_type;
     
-    static const big_type ONE      = signed_int<(SIZE)>::MAX;
+    static const type     ONE      = (((big_type)1) << MANTISSA) - 1;    
     static const type     MAX      = signed_int<(SIZE)>::MAX;
     static const type     MIN      = signed_int<(SIZE)>::MIN;
     
