@@ -14,7 +14,7 @@
 // u16,16  Yes    Yes    Yes    ?     ?       OMIT  OMIT   OMIT   EXCL  EXCL
 // s0,7    Yes    Yes    Yes    ?     ?       Yes   Yes    Yes    EXCL  EXCL - copy back
 // s0,15   Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL - copy back
-// s0,31   Yes    Yes    Yes
+// s0,31   Yes    Yes    Yes    EXCL  EXCL                        EXCL  EXCL
 // s7,8    
 // s15,16  
 
