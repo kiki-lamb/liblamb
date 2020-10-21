@@ -62,7 +62,7 @@
 // s0,15   Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL
 // s0,31   Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL
 // s7,8    Yes    Yes    Yes    ?     ?       Redo  Redo   Redo   EXCL  EXCL
-// s15,16  Redo   Redo   Redo   ?     ?       Redo  Redo   Redo   EXCL  EXCL
+// s15,16  Yes    Yes    Yes    ?     ?       Redo  Redo   Redo   EXCL  EXCL
 
 using namespace std;
 
@@ -178,8 +178,8 @@ namespace lamb {
       static_assert(0 == other_charac, "Reverse operand order!");
 
       typedef unsigned_frac<other_charac,other_mantissa, other_saturate> other_type;
-      typedef typename other_type::big_type right_big_type;
-      typedef typename unsigned_int<(sizeof(right_big_type))>::type pseudo_right_big_type;
+      typedef typename other_type::big_type                              right_big_type;
+      typedef typename unsigned_int<(sizeof(right_big_type))>::type      pseudo_right_big_type;
 
       unsigned_frac r(0);
       type          old(val);
@@ -330,8 +330,8 @@ namespace lamb {
       static_assert(0 == other_charac, "Reverse operand order!");
 
       typedef unsigned_frac<other_charac,other_mantissa, other_saturate> other_type;
-      typedef typename other_type::big_type   right_big_type;
-      typedef typename unsigned_int<(sizeof(right_big_type))>::type pseudo_right_big_type;
+      typedef typename other_type::big_type                              right_big_type;
+      typedef typename unsigned_int<(sizeof(right_big_type))>::type      pseudo_right_big_type;
 
       signed_frac r(0);
       type        old(val);
@@ -374,9 +374,9 @@ namespace lamb {
     signed_frac operator * (signed_frac<other_charac,other_mantissa,other_saturate> const & other ) {
       static_assert(0 == other_charac, "Reverse operand order!");
 
-      typedef signed_frac<other_charac,other_mantissa,other_saturate>     other_type;
-      typedef typename other_type::big_type right_big_type;
-      typedef typename signed_int<(sizeof(right_big_type))>::type         pseudo_right_big_type;
+      typedef signed_frac<other_charac,other_mantissa,other_saturate> other_type;
+      typedef typename other_type::big_type                           right_big_type;
+      typedef typename signed_int<(sizeof(right_big_type))>::type     pseudo_right_big_type;
 
       signed_frac r(0);
       type        old(val);
