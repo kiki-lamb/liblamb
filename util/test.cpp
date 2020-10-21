@@ -6,8 +6,8 @@
 
 using namespace lamb;
 
-typedef signed_frac<0,7>   l_test_t;
-typedef unsigned_frac<0,8> r_test_t;
+typedef signed_frac<0,15>   l_test_t;
+typedef unsigned_frac<0,16> r_test_t;
 
 #define BASE 1
 
