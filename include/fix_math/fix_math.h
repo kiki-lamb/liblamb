@@ -61,7 +61,25 @@ namespace lamb {
     type val;
 
 ////////////////////////////////////////////////////////////////////////////////
-    
+
+  private:
+    template <typename val_t, typename other_t>
+    void check_overflow(val_t & t_, other_t const & other) {
+      if (t_ > MAX) {
+        if (SATURATE) {
+          t_ = MAX;
+          printf("SAT HI:  %d * %d = %d\n", val, other.val, t_);
+        }
+        else {
+          printf("OVERFLOW: %d * ", val);   
+          cout << other.val << " = " << t_ << "\n";
+        }
+      }
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+
+  public:
     template <bool saturate__>
     operator unsigned_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), saturate__> () const {
       unsigned_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), saturate__> tmp(val << 1);
@@ -93,16 +111,7 @@ namespace lamb {
     template <bool saturate__> 
     unsigned_frac operator + (unsigned_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other ) {
       unsigned_frac r = unsigned_frac(val + other.val);
-      if (r.val < val) {
-        if (SATURATE) {
-          r.val = ONE;
-          printf("SAT HI:  %u + %u = %u\n", val, other.val, r.val);
-        }
-        else {
-          printf("OVERFLOW: %u + %u = %u\n", val, other.val, r.val);
-        }        
-        fflush(stdout);
-      }      
+      check_overflow(r.val, other);
       return r;
     }    
 
@@ -117,16 +126,7 @@ namespace lamb {
     template <bool saturate__>
     unsigned_frac operator - (unsigned_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other ) {
       unsigned_frac r = unsigned_frac(val - other.val);
-      if (r.val > val) {
-        if (SATURATE) {
-          r.val = 0;
-          printf("SAT LO: %u - %u = %u\n", val, other.val, r.val);
-        }
-        else {
-          printf("UNDERFLOW: %u - %u = %u\n", val, other.val, r.val);
-        }
-        fflush(stdout);
-      }
+      check_overflow(r.val, other);
       return r;
     }    
 
@@ -157,16 +157,7 @@ namespace lamb {
 
         r.val = (type)tmp;
 
-        if (tmp > MAX) {
-          if (SATURATE) {
-            r.val = MAX;
-            printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
-          }
-          else {
-            printf("OVERFLOW: %d * %d = %hu\n", val, other.val, tmp);
-            fflush(stdout);
-          }
-        }
+        check_overflow(tmp, other);
       }
       else {
         printf("\n");
@@ -190,16 +181,8 @@ namespace lamb {
         printf("shift = %d\n", shift);
 
         printf("r.val = %d\n", r.val);
-      
-        if (tmp > MAX) {
-          if (SATURATE) {
-            r.val = MAX;
-            printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
-          }
-          else {
-            printf("OVERFLOW: %d * %d = %u\n", val, other.val, tmp);
-          }
-        }
+
+        check_overflor(tmp, other);
         
         return r;
       }
@@ -256,8 +239,27 @@ namespace lamb {
         
     type val;
 
+
 ////////////////////////////////////////////////////////////////////////////////
 
+  private:
+    template <typename val_t, typename other_t>
+    void check_overflow(val_t & t_, other_t const & other) {
+      if (t_ > MAX) {
+        if (SATURATE) {
+          t_ = MAX;
+          printf("SAT HI:  %d * %d = %d\n", val, other.val, t_);
+        }
+        else {
+          printf("OVERFLOW: %d * ", val);   
+          cout << other.val << " = " << t_ << "\n";
+        }
+      }
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+
+  public:
     template <bool saturate__>
     operator signed_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), saturate__> () const {
       signed_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), saturate__> tmp(val << 1);
@@ -282,16 +284,7 @@ namespace lamb {
     template <bool saturate__>
     signed_frac operator + (signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other ) {
       signed_frac r = signed_frac(val + other.val);
-      if (r.val < val) {
-        if (SATURATE) {
-          r.val = MAX;
-          printf("SAT HI:  %d + %d = %d\n", val, other.val, r.val);
-        }
-        else {
-          printf("OVERFLOW: %d + %d = %d\n", val, other.val, r.val);
-        }
-        fflush(stdout);
-      }
+      check_overflow(r.val, other);      
       return r;
     }
 
@@ -306,16 +299,7 @@ namespace lamb {
     template <bool saturate__>
     signed_frac operator - (signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other ) {
       signed_frac r = signed_frac(val - other.val);
-      if (r.val > val) {
-        if (SATURATE) {
-          r.val = 0;
-          printf("SAT LO: %d - %d = %d\n", val, other.val, r.val);
-        }
-        else {
-          printf("UNDERFLOW: %d - %d = %d\n", val, other.val, r.val);
-        }
-        fflush(stdout);
-      }
+      check_overflow(r.val, other);      
       return r;
     }
 
@@ -327,6 +311,7 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+  public:      
     template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
     signed_frac operator * (unsigned_frac<other_charac,other_mantissa,other_saturate> const & other ) {
       static_assert(0 == other_charac, "Reverse operand order!");
@@ -354,17 +339,8 @@ namespace lamb {
 
         printf("SHIFT is %d.\n", shift);
         printf("r.val is %d.\n", r.val);
-            
-        if (r.val > MAX) {
-          if (SATURATE) {
-            r.val = MAX;
-            printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
-          }
-          else {
-            printf("OVERFLOW: %d * ", val);   
-            cout << other.val << " = " << r.val << "\n";
-          }
-        }        
+
+        check_overflow(r.val, other);        
       }
       else {
         big_type tmp = ((big_type)val) * other.val;
@@ -384,15 +360,7 @@ namespace lamb {
         printf("\nSHIFT is %d.\n", shift);
         printf("r.val is %d.\n", r.val);
             
-        if (r.val > MAX) {
-          if (SATURATE) {
-            r.val = MAX;
-            printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
-          }
-          else {
-            printf("OVERFLOW: %d * %d = %hhd\n", val, other.val, r.val);
-          }
-        }        
+        check_overflow(r.val, other);
       }
      
       return r;
@@ -427,16 +395,8 @@ namespace lamb {
 
         printf("SHIFT is %d.\n", other_type::FX_SHIFT - 1);         
         printf("r.val is %d.\n", r.val);
-        
-        if (tmp > MAX) {
-          if (SATURATE) {
-            r.val = MAX;
-            printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
-          }
-          else {
-            printf("OVERFLOW: %d * %d = %lld\n", val, other.val, tmp);
-          }
-        }
+
+        check_overflow(r.val, other);
       }
       else {
         big_type tmp = ((big_type)val) * other.val;
@@ -450,15 +410,7 @@ namespace lamb {
         printf("SHIFT is %d.\n", other_type::FX_SHIFT - 1);
         printf("r.val is %d.\n", r.val);
         
-        if (tmp > MAX) {
-          if (SATURATE) {
-            r.val = MAX;
-            printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
-          }
-          else {
-            printf("OVERFLOW: %d * %d = %hd\n", val, other.val, tmp);
-          }
-        }
+        check_overflo(r.val, other);
       }
 
       return r;
