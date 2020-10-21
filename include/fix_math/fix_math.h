@@ -961,11 +961,11 @@ namespace lamb {
       
       if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
-        printf("OVERFLOW: %u * %u = %u\n", val, other.val, tmp);
+        printf("OVERFLOW: %u * %u = %lld\n", val, other.val, tmp);
         fflush(stdout);
 #else
         r.val = ONE;
-        printf("SATURATE HI:  %u * %u = %u\n", val, other.val, r.val);
+        printf("SATURATE HI:  %u * %u = %lld\n", val, other.val, r.val);
 #endif
       }        
 
