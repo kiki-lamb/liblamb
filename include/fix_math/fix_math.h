@@ -7,6 +7,36 @@
   #include <iostream>
 #endif
 
+#define CHECK_OVERFLOW \
+  template <typename delta_t, typename new_t>           \
+  static void check_overflow(                           \
+    char    const & symbol,                             \
+    type    const & old_val,                            \
+    delta_t const & delta,                              \
+    new_t   const & new_val,                            \
+    type          & set                                 \
+  ) {                                                   \
+    if (new_val > MAX) {                                \
+      if (SATURATE) {                                   \
+        set = MAX;                                      \
+        printf("SAT HI:  ");                            \
+        cout << old_val;                                \
+        printf(" %c ", symbol);                         \
+        cout << delta;                                  \
+        printf(" = ");                                  \
+        cout << new_val << "\n";                        \
+      }                                                 \
+      else {                                            \
+        printf("OVERFLOW: ");                           \
+        cout << old_val;                                \
+        printf(" %c ", symbol);                         \
+        cout << delta << " = " << new_val << "\n";      \
+      }                                                 \
+    }                                                   \
+  }                                                     
+
+
+
 // Multiply tests:
 //
 // L/R     u0,8   u0,16  u0,32  u8,8  u16,16  s0,7  s0,15  s0,31  s7,8  s15,16
@@ -63,32 +93,7 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   private:
-    template <typename delta_t, typename new_t>
-    static void check_overflow(
-      char    const & symbol,
-      type    const & old_val,
-      delta_t const & delta,
-      new_t   const & new_val,
-      type          & set
-    ) {
-      if (new_val > MAX) {
-        if (SATURATE) {
-          set = MAX;
-          printf("SAT HI:  ");
-          cout << old_val;
-          printf(" %c ", symbol);
-          cout << delta;
-          printf(" = ");
-          cout << new_val << "\n";
-        }
-        else {
-          printf("OVERFLOW: ");
-          cout << old_val;
-          printf(" %c ", symbol);
-          cout << delta << " = " << new_val << "\n";
-        }
-      }
-    }
+    CHECK_OVERFLOW;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -262,32 +267,7 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   private:
-    template <typename delta_t, typename new_t>
-    static void check_overflow(
-      char    const & symbol,
-      type    const & old_val,
-      delta_t const & delta,
-      new_t   const & new_val,
-      type          & set
-    ) {
-      if (new_val > MAX) {
-        if (SATURATE) {
-          set = MAX;
-          printf("SAT HI:  ");
-          cout << old_val;
-          printf(" %c ", symbol);
-          cout << delta;
-          printf(" = ");
-          cout << new_val << "\n";
-        }
-        else {
-          printf("OVERFLOW: ");
-          cout << old_val;
-          printf(" %c ", symbol);
-          cout << delta << " = " << new_val << "\n";
-        }
-      }
-    }
+    CHECK_OVERFLOW;
 
 ////////////////////////////////////////////////////////////////////////////////
 
