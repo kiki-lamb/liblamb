@@ -76,7 +76,8 @@ namespace lamb {
     explicit unsigned_frac(type const & val_) :
       val(val_) {}
 
-    unsigned_frac operator + (unsigned_frac const & other ) {
+    template <bool saturate__> 
+    unsigned_frac operator + (unsigned_frac<characteristic,mantissa,saturate__> const & other ) {
       unsigned_frac r = unsigned_frac(val + other.val);
       if (r.val < val) {
         if (saturate) {
@@ -90,13 +91,16 @@ namespace lamb {
       }      
       return r;
     }    
-    unsigned_frac operator += (unsigned_frac const & other) {
+
+    template <bool saturate__>
+    unsigned_frac operator += (unsigned_frac<characteristic,mantissa,saturate__> const & other) {
       val = ((*this) + other).val;
       return *this;
     }
 
-    unsigned_frac operator - (unsigned_frac const & other ) {
-      unsigned_frac<0,8> r = unsigned_frac<0,8>(val - other.val);
+    template <bool saturate__>
+    unsigned_frac operator - (unsigned_frac<characteristic,mantissa,saturate__> const & other ) {
+      unsigned_frac r = unsigned_frac(val - other.val);
       if (r.val > val) {
         if (saturate) {
           r.val = 0;
@@ -109,26 +113,29 @@ namespace lamb {
       }
       return r;
     }    
-    unsigned_frac operator -= (unsigned_frac const & other) {
+
+    template <bool saturate__>
+    unsigned_frac operator -= (unsigned_frac<characteristic,mantissa,saturate__> const & other) {
       val = ((*this) - other).val;
       return *this;
     }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-    template <uint8_t other_charac, uint8_t other_mantissa>
-    unsigned_frac operator * (unsigned_frac<other_charac,other_mantissa> const & other ) {
+    template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
+    unsigned_frac operator * (unsigned_frac<other_charac,other_mantissa,other_saturate> const & other ) {
       static_assert(0 == other_charac, "Reverse operand order!");
 
-      typedef typename unsigned_frac<other_charac,other_mantissa>::big_type right_big_type;
+      typedef unsigned_frac<other_charac,other_mantissa, other_saturate> other_type;
+      typedef typename other_type::big_type right_big_type;
       typedef typename unsigned_int<(sizeof(right_big_type))>::type pseudo_right_big_type;
 
       unsigned_frac r(0);
 
-      if ( sizeof(unsigned_frac<other_charac,other_mantissa>) > sizeof(unsigned_frac) ) {
+      if ( sizeof(other_type) > sizeof(unsigned_frac) ) {
         pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;
 
-        static const uint8_t shift = unsigned_frac<other_charac,other_mantissa>::FX_SHIFT;
+        static const uint8_t shift = other_type::FX_SHIFT;
 
         tmp >>= shift;
 
@@ -181,8 +188,8 @@ namespace lamb {
       }
     }
 
-    template <uint8_t other_charac, uint8_t other_mantissa>
-    unsigned_frac operator *= (unsigned_frac<other_charac,other_mantissa> const & other) {
+    template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
+    unsigned_frac operator *= (unsigned_frac<other_charac,other_mantissa, saturate__> const & other) {
       val = ((*this) * other).val;
       return *this;
     }
@@ -226,7 +233,8 @@ namespace lamb {
     explicit signed_frac(type const & val_) :
       val(val_) {}
 
-    signed_frac operator + (signed_frac const & other ) {
+    template <bool saturate__>
+    signed_frac operator + (signed_frac<characteristic,mantissa,saturate__> const & other ) {
       signed_frac r = signed_frac(val + other.val);
       if (r.val < val) {
         if (saturate) {
@@ -239,13 +247,16 @@ namespace lamb {
         fflush(stdout);
       }
       return r;
-    }    
-    signed_frac operator += (signed_frac const & other) {
+    }
+
+    template <bool saturate__>
+    signed_frac operator += (signed_frac<characteristic,mantissa,saturate__> const & other) {
       val = ((*this) + other).val;
       return *this;
     }
 
-    signed_frac operator - (signed_frac const & other ) {
+    template <bool saturate__>
+    signed_frac operator - (signed_frac<characteristic,mantissa,saturate__> const & other ) {
       signed_frac r = signed_frac(val - other.val);
       if (r.val > val) {
         if (saturate) {
@@ -258,29 +269,32 @@ namespace lamb {
         fflush(stdout);
       }
       return r;
-    }    
-    signed_frac operator -= (signed_frac const & other) {
+    }
+
+    template <bool saturate__>
+    signed_frac operator -= (signed_frac<characteristic,mantissa,saturate__> const & other) {
       val = ((*this) - other).val;
       return *this;
     }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-    template <uint8_t other_charac, uint8_t other_mantissa>
-    signed_frac operator * (unsigned_frac<other_charac,other_mantissa> const & other ) {
+    template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
+    signed_frac operator * (unsigned_frac<other_charac,other_mantissa,other_saturate> const & other ) {
       static_assert(0 == other_charac, "Reverse operand order!");
 
-      typedef typename unsigned_frac<other_charac,other_mantissa>::big_type   right_big_type;
+      typedef unsigned_frac<other_charac,other_mantissa, other_saturate> other_type;
+      typedef typename other_type::big_type   right_big_type;
       typedef typename unsigned_int<(sizeof(right_big_type))>::type pseudo_right_big_type;
 
       signed_frac r(0);
       
-      if ( sizeof(unsigned_frac<other_charac,other_mantissa>) > sizeof(signed_frac) ) {
+      if ( sizeof(other_type) > sizeof(signed_frac) ) {
         pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;
         
         printf("preTMP0 is  %u.\n", tmp);
         
-        uint8_t shift = unsigned_frac<other_charac,other_mantissa>::FX_SHIFT;
+        uint8_t shift = other_type::FX_SHIFT;
 
         printf("shift: %d\n", shift);
 
@@ -309,7 +323,7 @@ namespace lamb {
       
         printf("preTMP1   is %d.\n", tmp);
 
-        uint8_t shift = unsigned_frac<other_charac,other_mantissa>::FX_SHIFT;
+        uint8_t shift = other_type::FX_SHIFT;
 
         if (val < 0) {
           shift --;
@@ -336,33 +350,34 @@ namespace lamb {
       return r;
     }    
 
-    template <uint8_t other_charac, uint8_t other_mantissa>
-    signed_frac operator *= (unsigned_frac<other_charac,other_mantissa> const & other) {
+    template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
+    signed_frac operator *= (unsigned_frac<other_charac,other_mantissa,other_saturate> const & other) {
       val = ((*this) * other).val;
       return *this;
     }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-    template <uint8_t other_charac, uint8_t other_mantissa>
-    signed_frac operator * (signed_frac<other_charac,other_mantissa> const & other ) {
+    template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
+    signed_frac operator * (signed_frac<other_charac,other_mantissa,other_saturate> const & other ) {
       static_assert(0 == other_charac, "Reverse operand order!");
 
-      typedef typename signed_frac<other_charac,other_mantissa>::big_type right_big_type;
-      typedef typename signed_int<(sizeof(right_big_type))>::type pseudo_right_big_type;
+      typedef signed_frac<other_charac,other_mantissa,other_saturate>     other_type;
+      typedef typename other_type::big_type right_big_type;
+      typedef typename signed_int<(sizeof(right_big_type))>::type         pseudo_right_big_type;
 
       signed_frac r(0);
       
-      if ( sizeof(signed_frac<other_charac,other_mantissa>) > sizeof(signed_frac) ) {
+      if ( sizeof(other_type) > sizeof(signed_frac) ) {
         pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;
         
         printf("preTMP0    is %lld\n", tmp);
 
-        tmp >>= signed_frac<other_charac,other_mantissa>::FX_SHIFT - 1;
+        tmp >>= other_type::FX_SHIFT - 1;
 
         r.val = (type)tmp;
 
-        printf("SHIFT is %d.\n", signed_frac<other_charac,other_mantissa>::FX_SHIFT - 1);         
+        printf("SHIFT is %d.\n", other_type::FX_SHIFT - 1);         
         printf("r.val is %d.\n", r.val);
         
         if (tmp > MAX) {
@@ -380,11 +395,11 @@ namespace lamb {
 
         printf("preTMP1   is %hd.\n", tmp);
 
-        tmp >>= signed_frac<other_charac,other_mantissa>::FX_SHIFT - 1;
+        tmp >>= other_type::FX_SHIFT - 1;
       
         r.val = (type)tmp;
         
-        printf("SHIFT is %d.\n", signed_frac<other_charac,other_mantissa>::FX_SHIFT - 1);
+        printf("SHIFT is %d.\n", other_type::FX_SHIFT - 1);
         printf("r.val is %d.\n", r.val);
         
         if (tmp > MAX) {
@@ -401,8 +416,8 @@ namespace lamb {
       return r;
     }    
 
-    template <uint8_t other_charac, uint8_t other_mantissa>
-    signed_frac operator *= (signed_frac<other_charac,other_mantissa> const & other) {
+    template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
+    signed_frac operator *= (signed_frac<other_charac,other_mantissa,other_saturate> const & other) {
       val = ((*this) * other).val;
       return *this;
     }
