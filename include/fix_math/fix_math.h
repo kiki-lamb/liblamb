@@ -65,36 +65,38 @@ namespace lamb {
     static_assert(((mantissa_ % 8) == 0), "bad bit count in mantissa");
 
   public:
-    static const bool    saturate       = saturate_;
-    static const uint8_t characteristic = characteristic_;
-    static const uint8_t mantissa       = mantissa_;
-    
-    typedef typename unsigned_int<(mantissa / 8)>::type  type;
-    typedef typename unsigned_int<((mantissa / 8) << 1)>::type big_type;
-    static const type    ONE      = unsigned_int<((mantissa / 8))>::MAX;
-    static const type    MAX      = unsigned_int<((mantissa / 8))>::MAX;
-    static const type    MIN      = unsigned_int<((mantissa / 8))>::MIN;
-    static const uint8_t FX_SHIFT = mantissa;
+    static const bool    SATURATE       = saturate_;
+    static const uint8_t CHARACTERISTIC = characteristic_;
+    static const uint8_t MANTISSA       = mantissa_;
+    static const uint8_t FX_SHIFT       = CHARACTERISTIC + MANTISSA;
+    static const size_t  SIZE           = FX_SHIFT / 8;
 
+    typedef typename unsigned_int<SIZE>::type  type;
+    typedef typename unsigned_int<(SIZE << 1)>::type big_type;
+
+    static const type    ONE            = unsigned_int<SIZE>::MAX;
+    static const type    MAX            = unsigned_int<SIZE>::MAX;
+    static const type    MIN            = unsigned_int<SIZE>::MIN;
+    
     type val;
 
     template <bool saturate__>
-    operator unsigned_frac<(characteristic << 1), (mantissa << 1), saturate__> () const {
-      unsigned_frac<(characteristic << 1), (mantissa << 1), saturate__> tmp(val << 1);
+    operator unsigned_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), saturate__> () const {
+      unsigned_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), saturate__> tmp(val << 1);
 
       return tmp;
     }
 
     template <bool saturate__>
-    operator unsigned_frac<(characteristic >> 1), (mantissa >> 1), saturate__> () const {
-      unsigned_frac<(characteristic >> 1), (mantissa >> 1), saturate__> tmp(val >> 1);
+    operator unsigned_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), saturate__> () const {
+      unsigned_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), saturate__> tmp(val >> 1);
 
       return tmp;
     }
 
     template <bool saturate__>
-    operator signed_frac<characteristic,mantissa,saturate__> () const {
-      unsigned_frac<characteristic,mantissa,saturate__> tmp(val >> 1);
+    operator signed_frac<CHARACTERISTIC,MANTISSA,saturate__> () const {
+      unsigned_frac<CHARACTERISTIC,MANTISSA,saturate__> tmp(val >> 1);
 
       return tmp;
     }
@@ -103,10 +105,10 @@ namespace lamb {
       val(val_) {}
 
     template <bool saturate__> 
-    unsigned_frac operator + (unsigned_frac<characteristic,mantissa,saturate__> const & other ) {
+    unsigned_frac operator + (unsigned_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other ) {
       unsigned_frac r = unsigned_frac(val + other.val);
       if (r.val < val) {
-        if (saturate) {
+        if (SATURATE) {
           r.val = ONE;
           printf("SAT HI:  %u + %u = %u\n", val, other.val, r.val);
         }
@@ -119,16 +121,16 @@ namespace lamb {
     }    
 
     template <bool saturate__>
-    unsigned_frac operator += (unsigned_frac<characteristic,mantissa,saturate__> const & other) {
+    unsigned_frac operator += (unsigned_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other) {
       val = ((*this) + other).val;
       return *this;
     }
 
     template <bool saturate__>
-    unsigned_frac operator - (unsigned_frac<characteristic,mantissa,saturate__> const & other ) {
+    unsigned_frac operator - (unsigned_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other ) {
       unsigned_frac r = unsigned_frac(val - other.val);
       if (r.val > val) {
-        if (saturate) {
+        if (SATURATE) {
           r.val = 0;
           printf("SAT LO: %u - %u = %u\n", val, other.val, r.val);
         }
@@ -141,7 +143,7 @@ namespace lamb {
     }    
 
     template <bool saturate__>
-    unsigned_frac operator -= (unsigned_frac<characteristic,mantissa,saturate__> const & other) {
+    unsigned_frac operator -= (unsigned_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other) {
       val = ((*this) - other).val;
       return *this;
     }
@@ -168,13 +170,14 @@ namespace lamb {
         r.val = (type)tmp;
 
         if (tmp > MAX) {
-#ifndef LAMB_FP_SATURATE
-          printf("OVERFLOW: %d * %d = %hu\n", val, other.val, tmp);
-          fflush(stdout);
-#else
-          r.val = MAX;
-          printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
-#endif
+          if (SATURATE) {
+            r.val = MAX;
+            printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
+          }
+          else {
+            printf("OVERFLOW: %d * %d = %hu\n", val, other.val, tmp);
+            fflush(stdout);
+          }
         }
       }
       else {
@@ -201,7 +204,7 @@ namespace lamb {
         printf("r.val = %d\n", r.val);
       
         if (tmp > MAX) {
-          if (saturate) {
+          if (SATURATE) {
             r.val = MAX;
             printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
           }
@@ -223,13 +226,13 @@ namespace lamb {
  ////////////////////////////////////////////////////////////////////////////////
 
     template <bool saturate__>
-    unsigned_frac operator / (unsigned_frac<characteristic,mantissa,saturate__> const & other ) {
+    unsigned_frac operator / (unsigned_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other ) {
       unsigned_frac<0,8> r = unsigned_frac<0,8>(val / other.val);
       return r;
     }        
 
     template <bool saturate__>
-    unsigned_frac operator /= (unsigned_frac<characteristic,mantissa,saturate__> const & other) {
+    unsigned_frac operator /= (unsigned_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other) {
       val = ((*this) / other).val;
       return *this;
     }
@@ -253,11 +256,11 @@ namespace lamb {
     static_assert((((mantissa_ + 1) % 8) == 0), "bad bit count in mantissa");
 
   public:
-    static const uint8_t characteristic = characteristic_;
-    static const uint8_t mantissa       = mantissa_;
+    static const uint8_t CHARACTERISTIC = characteristic_;
+    static const uint8_t MANTISSA       = mantissa_;
     static const bool    saturate       = saturate_;
     
-    typedef typename signed_int<((characteristic+mantissa+1) >> 3)>::type  type;
+    typedef typename signed_int<((CHARACTERISTIC+MANTISSA+1) >> 3)>::type  type;
     typedef typename signed_int<(sizeof(type) << 1)>::type big_type;
     
     static const type    ONE      = signed_int<(sizeof(type))>::MAX;
@@ -268,15 +271,15 @@ namespace lamb {
     type val;
 
     template <bool saturate__>
-    operator signed_frac<(characteristic << 1), (mantissa << 1), saturate__> () const {
-      signed_frac<(characteristic << 1), (mantissa << 1), saturate__> tmp(val << 1);
+    operator signed_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), saturate__> () const {
+      signed_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), saturate__> tmp(val << 1);
 
       return tmp;
     }
 
     template <bool saturate__>
-    operator signed_frac<(characteristic >> 1), (mantissa >> 1), saturate__> () const {
-      signed_frac<(characteristic >> 1), (mantissa >> 1), saturate__> tmp(val >> 1);
+    operator signed_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), saturate__> () const {
+      signed_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), saturate__> tmp(val >> 1);
 
       return tmp;
     }
@@ -285,7 +288,7 @@ namespace lamb {
       val(val_) {}
 
     template <bool saturate__>
-    signed_frac operator + (signed_frac<characteristic,mantissa,saturate__> const & other ) {
+    signed_frac operator + (signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other ) {
       signed_frac r = signed_frac(val + other.val);
       if (r.val < val) {
         if (saturate) {
@@ -301,13 +304,13 @@ namespace lamb {
     }
 
     template <bool saturate__>
-    signed_frac operator += (signed_frac<characteristic,mantissa,saturate__> const & other) {
+    signed_frac operator += (signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other) {
       val = ((*this) + other).val;
       return *this;
     }
 
     template <bool saturate__>
-    signed_frac operator - (signed_frac<characteristic,mantissa,saturate__> const & other ) {
+    signed_frac operator - (signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other ) {
       signed_frac r = signed_frac(val - other.val);
       if (r.val > val) {
         if (saturate) {
@@ -323,7 +326,7 @@ namespace lamb {
     }
 
     template <bool saturate__>
-    signed_frac operator -= (signed_frac<characteristic,mantissa,saturate__> const & other) {
+    signed_frac operator -= (signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other) {
       val = ((*this) - other).val;
       return *this;
     }
@@ -476,13 +479,13 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
     template <bool saturate__>
-    signed_frac operator / (signed_frac<characteristic,mantissa,saturate__> const & other ) {
+    signed_frac operator / (signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other ) {
       signed_frac<0,7> r = signed_frac<0,7>(val / other.val);
       return r;
     }        
 
     template <bool saturate__>
-    signed_frac operator /= (signed_frac<characteristic,mantissa,saturate__> const & other) {
+    signed_frac operator /= (signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other) {
       val = ((*this) / other).val;
       return *this;
     }
