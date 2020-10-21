@@ -195,16 +195,18 @@ namespace lamb {
     }
 
  ////////////////////////////////////////////////////////////////////////////////
-    
-    unsigned_frac operator / (unsigned_frac const & other ) {
+
+    template <bool saturate__>
+    unsigned_frac operator / (unsigned_frac<characteristic,mantissa,saturate__> const & other ) {
       unsigned_frac<0,8> r = unsigned_frac<0,8>(val / other.val);
       return r;
     }        
-    unsigned_frac operator /= (unsigned_frac const & other) {
+
+    template <bool saturate__>
+    unsigned_frac operator /= (unsigned_frac<characteristic,mantissa,saturate__> const & other) {
       val = ((*this) / other).val;
       return *this;
     }
-
   };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -423,12 +425,15 @@ namespace lamb {
     }
 
 ////////////////////////////////////////////////////////////////////////////////
-    
-    signed_frac operator / (signed_frac const & other ) {
+
+    template <bool saturate__>
+    signed_frac operator / (signed_frac<characteristic,mantissa,saturate__> const & other ) {
       signed_frac<0,7> r = signed_frac<0,7>(val / other.val);
       return r;
     }        
-    signed_frac operator /= (signed_frac const & other) {
+
+    template <bool saturate__>
+    signed_frac operator /= (signed_frac<characteristic,mantissa,saturate__> const & other) {
       val = ((*this) / other).val;
       return *this;
     }
