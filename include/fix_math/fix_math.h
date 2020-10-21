@@ -16,10 +16,13 @@
     new_t   const & new_val,                            \
     type          & set                                 \
   ) {                                                   \
-    if (new_val > MAX) {                                \
+    bool over  = new_val > MAX;                         \
+    bool under = new_val < MIN;                         \
+                                                        \
+    if (over || under) {                                \
       if (SATURATE) {                                   \
         set = MAX;                                      \
-        printf("SAT HI:  ");                            \
+        printf("SAT %s:  ", over ? "HI" : "LO");        \
         cout << old_val;                                \
         printf(" %c ", symbol);                         \
         cout << delta;                                  \
@@ -27,7 +30,7 @@
         cout << new_val << "\n";                        \
       }                                                 \
       else {                                            \
-        printf("OVERFLOW: ");                           \
+        printf("%sFLOW: ", over ? "OVER" : "UNDER");    \
         cout << old_val;                                \
         printf(" %c ", symbol);                         \
         cout << delta << " = " << new_val << "\n";      \
@@ -508,6 +511,8 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+#undef CHECK_OVERFLOW
+  
 #endif
 
 /* Local Variables:  */
