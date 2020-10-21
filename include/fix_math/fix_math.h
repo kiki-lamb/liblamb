@@ -7,7 +7,8 @@
   #include <iostream>
 #endif
 
-#define CHECK_OVERFLOW \
+#ifndef LAMB_FP_NO_OVERFLOW_CHECKING
+#define CHECK_OVERFLOW                                  \
   template <typename delta_t, typename new_t>           \
   static void check_overflow(                           \
     char    const & symbol,                             \
@@ -37,8 +38,17 @@
       }                                                 \
     }                                                   \
   }                                                     
-
-
+#else
+#define CHECK_OVERFLOW                                    \
+  template <typename delta_t, typename new_t>             \
+  static void check_overflow(                             \
+    char    const & symbol,                               \
+      type    const & old_val,                            \
+      delta_t const & delta,                              \
+      new_t   const & new_val,                            \
+      type          & set                                 \
+  ) {}                                                    
+#endif
 
 // Multiply tests:
 //
