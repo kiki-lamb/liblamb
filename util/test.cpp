@@ -21,7 +21,7 @@
 using namespace lamb;
 
 typedef signed_frac<0,7>    l_test_t;
-typedef signed_frac<0,15>   r_test_t;
+typedef unsigned_frac<0,8>   r_test_t;
 
 #define L_BASE ((l_test_t::MAX >> (sizeof(l_test_t::type) >> 1) >> 4) + 1)
 #define R_BASE ((r_test_t::MAX >> (sizeof(r_test_t::type) >> 1) >> 4) + 1)

@@ -656,28 +656,26 @@ namespace lamb {
     signed_frac operator * (unsigned_frac<charac,mantissa> const & other ) {
       static_assert(0 == charac, "Reverse operand order!");
 
-      typedef typename unsigned_frac<charac,mantissa>::big_type right_big_type;
-      typedef typename signed_int<(sizeof(right_big_type))>::type pseudo_right_big_type;
-      
+      typedef typename unsigned_frac<charac,mantissa>::big_type   right_big_type;
+      typedef typename unsigned_int<(sizeof(right_big_type))>::type pseudo_right_big_type;
+
       signed_frac r(0);
       
       if ( sizeof(unsigned_frac<charac,mantissa>) > sizeof(signed_frac) ) {
         pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;
         
-        printf("\npreTMP0   is %lld.\n", tmp);      
-
-        uint8_t shift = unsigned_frac<charac,mantissa>::FX_SHIFT;
-
-        tmp >>= shift;
+        printf("preTMP0   is %d.\n", tmp);      
+        
+        tmp >>= unsigned_frac<charac,mantissa>::FX_SHIFT;
         
         r.val = (type)tmp;
 
-        printf("SHIFT is %d.\n", shift);
+        printf("\nSHIFT is %d.\n", unsigned_frac<charac,mantissa>::FX_SHIFT);
         printf("r.val is %d.\n", r.val);
             
         if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
-          printf("OVERFLOW: %d * %u = %lld\n", val, other.val, tmp);
+          printf("OVERFLOW: %d * %hhu = %d\n", val, other.val, tmp);
           fflush(stdout);
 #else
           r.val = MAX;
@@ -688,19 +686,19 @@ namespace lamb {
       else {
         big_type tmp = ((big_type)val) * other.val;
       
-        printf("\npreTMP1   is %hd.\n", tmp);
+        printf("preTMP1   is %hd.\n", tmp);
 
         uint8_t shift = unsigned_frac<charac,mantissa>::FX_SHIFT;
-        
+
         if (val < 0) {
           shift --;
         }
-
+        
         tmp >>= shift;
         
         r.val = (type)tmp;
 
-        printf("SHIFT is %d.\n", shift);
+        printf("\nSHIFT is %d.\n", shift);
         printf("r.val is %d.\n", r.val);
             
         if (tmp > MAX) {
@@ -732,28 +730,53 @@ namespace lamb {
       typedef typename signed_frac<charac,mantissa>::big_type right_big_type;
       typedef typename signed_int<(sizeof(right_big_type))>::type pseudo_right_big_type;
 
-      uint8_t shift =
-        ((mantissa % 8) == 0) ?
-        signed_frac<charac,mantissa>::FX_SHIFT :
-        ((signed_frac<charac,mantissa>::FX_SHIFT) - 1);
-    
-      pseudo_right_big_type tmp = (((pseudo_right_big_type)val) * other.val) >> shift;
+      signed_frac r(0);
       
-      signed_frac r   = signed_frac((type)tmp);
-                              
-      // printf("SHIFT is %d.\n", shift);
-      // printf("TMP   is %lld.\n", tmp);
-      // printf("r.val is %d.\n", r.val);
-            
-      if (tmp > MAX) {
+      if ( sizeof(signed_frac<charac,mantissa>) > sizeof(signed_frac) ) {
+        pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;
+        
+        printf("preTMP0    is %lld\n", tmp);
+
+        tmp >>= signed_frac<charac,mantissa>::FX_SHIFT - 1;
+
+        r.val = (type)tmp;
+
+        printf("SHIFT is %d.\n", signed_frac<charac,mantissa>::FX_SHIFT - 1);         
+        printf("r.val is %d.\n", r.val);
+        
+        if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
-        printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
-        fflush(stdout);
+          printf("OVERFLOW: %d * %d = %lld\n", val, other.val, tmp);
+          fflush(stdout);
 #else
-        r.val = MAX;
-        printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
+          r.val = MAX;
+          printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
 #endif
-      }        
+        }
+      }
+      else {
+        big_type tmp = ((big_type)val) * other.val;
+
+        printf("preTMP1   is %lld.\n", tmp);
+
+        tmp >>= signed_frac<charac,mantissa>::FX_SHIFT - 1;
+      
+        r.val = (type)tmp;
+        
+        printf("SHIFT is %d.\n", signed_frac<charac,mantissa>::FX_SHIFT - 1);
+        printf("r.val is %d.\n", r.val);
+        
+        if (tmp > MAX) {
+#ifndef LAMB_FP_SATURATE
+          printf("OVERFLOW: %d * %d = %lld\n", val, other.val, tmp);
+          fflush(stdout);
+#else
+          r.val = MAX;
+          printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
+#endif
+        }
+      }
+
       return r;
     }    
 
