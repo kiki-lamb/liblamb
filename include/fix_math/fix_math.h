@@ -626,9 +626,9 @@ namespace lamb {
 //    
 ////////////////////////////////////////////////////////////////////////////////
 
-    template <typename unsigned_frac_t>
-    signed_frac operator * (unsigned_frac_t const & other ) {
-      big_type tmp = (((big_type)val) * other.val) >> unsigned_frac_t::FX_SHIFT;
+    template <uint8_t charac, uint8_t mantissa>
+    signed_frac operator * (unsigned_frac<charac,mantissa> const & other ) {
+      big_type tmp = (((big_type)val) * other.val) >> unsigned_frac<charac,mantissa>::FX_SHIFT;
       signed_frac<0,7>     r   = signed_frac<0,7>((type)tmp);
       
       if (tmp > ONE) {
@@ -643,8 +643,8 @@ namespace lamb {
       return r;
     }    
 
-    template <typename unsigned_frac_t>
-    signed_frac operator *= (unsigned_frac_t const & other) {
+    template <uint8_t charac, uint8_t mantissa>
+    signed_frac operator *= (unsigned_frac<charac,mantissa> const & other) {
       val = ((*this) * other).val;
       return *this;
     }
