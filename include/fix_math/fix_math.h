@@ -86,13 +86,13 @@ namespace lamb {
 
     static_assert(((FX_SHIFT % 8) == 0), "bad bit count for this type");
     
-    typedef typename unsigned_int<SIZE>::type  type;
-    typedef typename unsigned_int<(SIZE << 1)>::type big_type;
+    typedef typename unsigned_int<SIZE>::type         type;
+    typedef typename unsigned_int<(SIZE << 1)>::type  big_type;
 
     static const type     ONE      = (
       (CHARACTERISTIC == 0) ? 
       ((((big_type)1) << MANTISSA) - 1) :
-      (((big_type)1) << MANTISSA)
+      (1 << MANTISSA)
     );
     
     static const type    MAX            = unsigned_int<SIZE>::MAX;
@@ -283,13 +283,13 @@ namespace lamb {
 
     static_assert((((FX_SHIFT + 1) % 8) == 0), "bad bit count for this type");
 
-    typedef typename signed_int<SIZE>::type  type;
-    typedef typename signed_int<(SIZE << 1)>::type big_type;
+    typedef typename signed_int<SIZE>::type         type;
+    typedef typename signed_int<(SIZE << 1)>::type  big_type;
     
     static const type     ONE      = (
       (CHARACTERISTIC == 0) ? 
       ((((big_type)1) << MANTISSA) - 1) :
-      (((big_type)1) << MANTISSA)
+      (1 << MANTISSA)
     );
     
     static const type     MAX      = signed_int<(SIZE)>::MAX;
