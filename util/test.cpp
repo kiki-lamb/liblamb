@@ -12,7 +12,7 @@
 // u0,32   Yes    Yes    Yes    EXCL  EXCL    OMIT  OMIT   OMIT   EXCL  EXCL
 // u8,8    Yes    Yes    Yes    ?     ?       OMIT  OMIT   OMIT   EXCL  EXCL
 // u16,16  Yes    Yes    Yes    ?     ?       OMIT  OMIT   OMIT   EXCL  EXCL
-// s0,7    Yes    Yes    Yes    ?     ?   
+// s0,7    Yes    Yes    Yes    ?     ?       Yes 
 // s0,15   
 // s0,31   
 // s7,8    
