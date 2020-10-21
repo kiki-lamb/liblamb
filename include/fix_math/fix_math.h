@@ -52,7 +52,12 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 // Fixed type helpers
 ////////////////////////////////////////////////////////////////////////////////
-  
+
+// Advance declaration:
+
+  template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_ = false>
+  class signed_frac;
+    
 // Unsigned
   
   template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_ = false>
@@ -87,6 +92,13 @@ namespace lamb {
       return tmp;
     }
 
+    template <bool saturate__>
+    operator signed_frac<characteristic,mantissa,saturate__> () const {
+      unsigned_frac<characteristic,mantissa,saturate__> tmp(val >> 1);
+
+      return tmp;
+    }
+    
     explicit unsigned_frac(type const & val_) :
       val(val_) {}
 
@@ -236,7 +248,7 @@ namespace lamb {
 
 // Signed
   
-  template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_ = false>
+  template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_>
   class signed_frac {
     static_assert((((mantissa_ + 1) % 8) == 0), "bad bit count in mantissa");
 
