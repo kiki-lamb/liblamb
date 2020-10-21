@@ -12,16 +12,16 @@
 // u0,32   Yes    Yes    Yes    EXCL  EXCL    OMIT  OMIT   OMIT   EXCL  EXCL
 // u8,8    Yes    Yes    Yes    ?     ?       OMIT  OMIT   OMIT   EXCL  EXCL
 // u16,16  Yes    Yes    Yes    ?     ?       OMIT  OMIT   OMIT   EXCL  EXCL
-// s0,7    Yes    Yes    Yes    ?     ?       Yes   Yes    Yes    EXCL  EXCL - copy back
-// s0,15   Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL - copy back
-// s0,31   Yes    Yes    Yes    EXCL  EXCL                        EXCL  EXCL
+// s0,7    Yes    Yes    Yes    ?     ?       Yes   Yes    Yes    EXCL  EXCL - copy back, retest
+// s0,15   Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL - copy back, retest
+// s0,31   Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL
 // s7,8    
 // s15,16  
 
 using namespace lamb;
 
 typedef signed_frac<0,31>    l_test_t;
-typedef unsigned_frac<0,32>    r_test_t;
+typedef unsigned_frac<0,8>    r_test_t;
 
 #define L_BASE ((l_test_t::MAX >> (sizeof(l_test_t::type) >> 1) >> 4) + 1)
 #define R_BASE ((r_test_t::MAX >> (sizeof(r_test_t::type) >> 1) >> 4) + 1)
@@ -32,7 +32,7 @@ int main() {
   printf("l ONE  is %d.\n", l_test_t::ONE);
   printf("l MAX  is %d.\n", l_test_t::MAX);
   printf("l MIN  is %d.\n", l_test_t::MIN);
-  printf("r BASE is %u.\n", R_BASE);
+  printf("r BASE is %d.\n", R_BASE);
   printf("r ONE  is %d.\n", r_test_t::ONE);
   printf("r MAX  is %d.\n", r_test_t::MAX);
   printf("r MIN  is %d.\n", r_test_t::MIN);
@@ -44,7 +44,7 @@ int main() {
       
       {
         l_test_t fz = fx * fy;
-        printf("Try %lld * %llu: = %d \n", x, y, fz.val);
+        printf("Try %lld * %u: = %d \n", x, y, fz.val);
         fflush(stdout);
       }
 

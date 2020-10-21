@@ -965,18 +965,18 @@ namespace lamb {
       if ( sizeof(unsigned_frac<charac,mantissa>) > sizeof(signed_frac) ) {
         pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;
         
-//        printf("preTMP0   is %d.\n", tmp);      
+        printf("preTMP0   is %d.\n", tmp);      
         
         tmp >>= unsigned_frac<charac,mantissa>::FX_SHIFT;
         
         r.val = (type)tmp;
 
-//        printf("\nSHIFT is %d.\n", unsigned_frac<charac,mantissa>::FX_SHIFT);
-//        printf("r.val is %d.\n", r.val);
+        printf("\nSHIFT is %d.\n", unsigned_frac<charac,mantissa>::FX_SHIFT);
+        printf("r.val is %d.\n", r.val);
             
         if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
-          printf("OVERFLOW: %d * %lld = %d\n", val, other.val, tmp);
+          printf("OVERFLOW: %d * %hhu = %d\n", val, other.val, tmp);
           fflush(stdout);
 #else
           r.val = MAX;
@@ -987,18 +987,18 @@ namespace lamb {
       else {
         big_type tmp = ((big_type)val) * other.val;
       
-//        printf("preTMP1   is %d.\n", tmp);
+        printf("preTMP1   is %lld.\n", tmp);
       
         tmp >>= unsigned_frac<charac,mantissa>::FX_SHIFT;
         
         r.val = (type)tmp;
 
-//        printf("\nSHIFT is %d.\n", unsigned_frac<charac,mantissa>::FX_SHIFT);
-//        printf("r.val is %d.\n", r.val);
+        printf("\nSHIFT is %d.\n", unsigned_frac<charac,mantissa>::FX_SHIFT);
+        printf("r.val is %d.\n", r.val);
             
         if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
-          printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
+          printf("OVERFLOW: %d * %d = %lld\n", val, other.val, tmp);
           fflush(stdout);
 #else
           r.val = MAX;
@@ -1025,28 +1025,53 @@ namespace lamb {
       typedef typename signed_frac<charac,mantissa>::big_type right_big_type;
       typedef typename signed_int<(sizeof(right_big_type))>::type pseudo_right_big_type;
 
-      uint8_t shift =
-        ((mantissa % 8) == 0) ?
-        signed_frac<charac,mantissa>::FX_SHIFT :
-        ((signed_frac<charac,mantissa>::FX_SHIFT) - 1);
-    
-      pseudo_right_big_type tmp = (((pseudo_right_big_type)val) * other.val) >> shift;
+      signed_frac r(0);
       
-      signed_frac r   = signed_frac((type)tmp);
-                              
-      // printf("SHIFT is %d.\n", shift);
-      // printf("TMP   is %lld.\n", tmp);
-      // printf("r.val is %d.\n", r.val);
-            
-      if (tmp > MAX) {
+      if ( sizeof(signed_frac<charac,mantissa>) > sizeof(signed_frac) ) {
+        pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;
+        
+        printf("preTMP0    is %lld\n", tmp);
+
+        tmp >>= signed_frac<charac,mantissa>::FX_SHIFT - 1;
+
+        r.val = (type)tmp;
+
+        printf("SHIFT is %d.\n", signed_frac<charac,mantissa>::FX_SHIFT - 1);         
+        printf("r.val is %d.\n", r.val);
+        
+        if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
-        printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
-        fflush(stdout);
+          printf("OVERFLOW: %d * %d = %lld\n", val, other.val, tmp);
+          fflush(stdout);
 #else
-        r.val = MAX;
-        printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
+          r.val = MAX;
+          printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
 #endif
-      }        
+        }
+      }
+      else {
+        big_type tmp = ((big_type)val) * other.val;
+
+        printf("preTMP1   is %lld.\n", tmp);
+
+        tmp >>= signed_frac<charac,mantissa>::FX_SHIFT - 1;
+      
+        r.val = (type)tmp;
+        
+        printf("SHIFT is %d.\n", signed_frac<charac,mantissa>::FX_SHIFT - 1);
+        printf("r.val is %d.\n", r.val);
+        
+        if (tmp > MAX) {
+#ifndef LAMB_FP_SATURATE
+          printf("OVERFLOW: %d * %d = %lld\n", val, other.val, tmp);
+          fflush(stdout);
+#else
+          r.val = MAX;
+          printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
+#endif
+        }
+      }
+
       return r;
     }    
 
