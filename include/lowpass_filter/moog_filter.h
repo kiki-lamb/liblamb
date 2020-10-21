@@ -4,11 +4,11 @@
 namespace lamb {
   class moog_filter {
   public:
-    typedef int16_t  out_t;   // int16_t
-    typedef q15n16_value_t int_t;   // int32_t
-    typedef q0n31_value_t  uint_t;   // uint32_t
-    typedef uint64_t ubig_t;
-    typedef int64_t big_t;
+    typedef int16_t           out_t;
+    typedef q15n16_value_type int_t;
+    typedef q0n31_value_type  uint_t;
+    typedef uint64_t          ubig_t;
+    typedef int64_t           big_t;
     
   private:
     int_t        _freq;     

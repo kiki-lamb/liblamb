@@ -1,7 +1,5 @@
 #include "../include/lamb.h"
 
-#include <iostream>
-
 using namespace std;
 
 // g++ -std=gnu++14 -DNO_ARDUINO -DLAMB_FP_SATURATE test.cpp && ./a.out
