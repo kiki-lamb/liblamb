@@ -396,16 +396,8 @@ namespace lamb {
     explicit signed_frac(type const & val_) :
       val(val_) {}
 
-    int8_t chararac() const {
-      return 0;
-    }
-
-    type frac() const {
-      return val;
-    }
-
     signed_frac operator + (signed_frac const & other ) {
-      signed_frac<0,7> r = signed_frac<0,7>(val + other.val);
+      signed_frac r = signed_frac(val + other.val);
       if (r.val < val) {
 #ifndef LAMB_FP_SATURATE
         printf("OVERFLOW: %d + %d = %d\n", val, other.val, r.val);
@@ -423,7 +415,7 @@ namespace lamb {
     }
 
     signed_frac operator - (signed_frac const & other ) {
-      signed_frac<0,7> r = signed_frac<0,7>(val - other.val);
+      signed_frac r = signed_frac(val - other.val);
       if (r.val > val) {
 #ifndef LAMB_FP_SATURATE
         printf("UNDERFLOW: %d - %d = %d\n", val, other.val, r.val);
@@ -462,7 +454,7 @@ namespace lamb {
           shift --;
         }
         
-        tmp >>= unsigned_frac<charac,mantissa>::FX_SHIFT;
+        tmp >>= shift;
         
         r.val = (type)tmp;
 
@@ -471,7 +463,7 @@ namespace lamb {
             
         if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
-          printf("OVERFLOW: %d * ", val);   // %hu = %lld\n", val, other.val, tmp);
+          printf("OVERFLOW: %d * ", val);   
           cout << other.val << " = " << tmp << "\n";
           fflush(stdout);
 #else
@@ -602,7 +594,6 @@ namespace lamb {
   public:
     typedef      q0n15_t  type;
     typedef typename signed_int<(sizeof(type) << 1)>::type big_type;
-
     static const type    ONE      = signed_int<(sizeof(type))>::MAX;
     static const type    MAX      = signed_int<(sizeof(type))>::MAX;
     static const type    MIN      = signed_int<(sizeof(type))>::MIN;
@@ -613,16 +604,8 @@ namespace lamb {
     explicit signed_frac(type const & val_) :
       val(val_) {}
 
-    int16_t chararac() const {
-      return 0;
-    }
-
-    type frac() const {
-      return val;
-    }
-
     signed_frac operator + (signed_frac const & other ) {
-      signed_frac<0,15> r = signed_frac<0,15>(val + other.val);
+      signed_frac r = signed_frac(val + other.val);
       if (r.val < val) {
 #ifndef LAMB_FP_SATURATE
         printf("OVERFLOW: %d + %d = %d\n", val, other.val, r.val);
@@ -640,7 +623,7 @@ namespace lamb {
     }
 
     signed_frac operator - (signed_frac const & other ) {
-      signed_frac<0,15> r = signed_frac<0,15>(val - other.val);
+      signed_frac r = signed_frac(val - other.val);
       if (r.val > val) {
 #ifndef LAMB_FP_SATURATE
         printf("UNDERFLOW: %d - %d = %d\n", val, other.val, r.val);
@@ -673,16 +656,23 @@ namespace lamb {
         
         printf("preTMP0   is %llu.\n", tmp);      
         
-        tmp >>= unsigned_frac<charac,mantissa>::FX_SHIFT;
+        uint8_t shift = unsigned_frac<charac,mantissa>::FX_SHIFT;
+
+        if (val < 0) {
+          shift --;
+        }
+        
+        tmp >>= shift;
         
         r.val = (type)tmp;
 
-        printf("\nSHIFT is %d.\n", unsigned_frac<charac,mantissa>::FX_SHIFT);
+        printf("\nSHIFT is %d.\n", shift);
         printf("r.val is %d.\n", r.val);
             
         if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
-          printf("OVERFLOW: %d * %u = %llu\n", val, other.val, tmp);
+          printf("OVERFLOW: %d * ", val);   
+          cout << other.val << " = " << tmp << "\n";
           fflush(stdout);
 #else
           r.val = MAX;
@@ -697,7 +687,7 @@ namespace lamb {
 
         uint8_t shift = unsigned_frac<charac,mantissa>::FX_SHIFT;
 
-        if ( (val < 0) && ((mantissa % 8) != 0) ) {
+        if (val < 0) {
            shift --;
         }
         
@@ -811,7 +801,6 @@ namespace lamb {
   public:
     typedef      q0n31_t  type;
     typedef typename signed_int<(sizeof(type) << 1)>::type big_type;
-
     static const type    ONE      = signed_int<(sizeof(type))>::MAX;
     static const type    MAX      = signed_int<(sizeof(type))>::MAX;
     static const type    MIN      = signed_int<(sizeof(type))>::MIN;
@@ -821,14 +810,6 @@ namespace lamb {
 
     explicit signed_frac(type const & val_) :
       val(val_) {}
-
-    int32_t chararac() const {
-      return 0;
-    }
-
-    type frac() const {
-      return val;
-    }
 
     signed_frac operator + (signed_frac const & other ) {
       signed_frac<0,31> r = signed_frac<0,31>(val + other.val);
@@ -882,7 +863,13 @@ namespace lamb {
         
         printf("preTMP0   is %llu.\n", tmp);      
         
-        tmp >>= unsigned_frac<charac,mantissa>::FX_SHIFT;
+        uint8_t shift = unsigned_frac<charac,mantissa>::FX_SHIFT;
+
+        if (val < 0) {
+          shift --;
+        }
+        
+        tmp >>= shift;
         
         r.val = (type)tmp;
 
@@ -906,7 +893,7 @@ namespace lamb {
 
         uint8_t shift = unsigned_frac<charac,mantissa>::FX_SHIFT;
 
-        if ( (val < 0) && ((mantissa % 8) != 0) ) {
+        if (val < 0) {
            shift --;
         }
         
