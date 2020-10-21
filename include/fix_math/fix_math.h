@@ -1,7 +1,7 @@
 #ifndef LAMB_FIX_MATH_H
 #define LAMB_FIX_MATH_H
 
-#ifdef NO_ARDUINO
+#ifdef LAMB_NO_ARDUINO
   #include <stdio.h>
   #include <stdlib.h>
   #include <iostream>

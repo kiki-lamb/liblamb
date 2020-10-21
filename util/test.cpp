@@ -2,8 +2,7 @@
 
 using namespace std;
 
-// g++ -std=gnu++14 -DNO_ARDUINO -DLAMB_FP_SATURATE test.cpp && ./a.out
-// g++ -std=gnu++14 -DNO_ARDUINO test.cpp && ./a.out
+// g++ -std=gnu++14 -DLAMB_NO_ARDUINO test.cpp && ./a.out
 
 using namespace lamb;
 

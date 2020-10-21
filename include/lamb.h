@@ -1,7 +1,7 @@
 #ifndef LAMBOS_H
   #define LAMBOS_H
 
-  #ifdef NO_ARDUINO
+  #ifdef LAMB_NO_ARDUINO
     #include <inttypes.h>
     #include <stddef.h>
   #else
@@ -44,7 +44,7 @@
 
   #include "task/task.h"
 
-#ifndef NO_ARDUINO
+#ifndef LAMB_NO_ARDUINO
   #include "encoder/encoder.h"
 #endif
 
@@ -67,7 +67,7 @@
     #include "fast_math/avr_fast_math.h"
   #endif
 
-  #if !defined(__AVR_ATtiny85__) && !defined(NO_ARDUINO)
+  #if !defined(__AVR_ATtiny85__) && !defined(LAMB_NO_ARDUINO) 
     #include "device/mcp4921/mcp4921.h"
   #endif
 
@@ -82,7 +82,7 @@
   #include "events/sources/source.h"
   #include "events/sources/combine.h"
 
-  #ifndef NO_ARDUINO
+  #ifndef LAMB_NO_ARDUINO
     #include "controls/analog.h"
     #include "controls/button.h"
     #include "controls/mcp23017.h"
