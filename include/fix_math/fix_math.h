@@ -677,7 +677,7 @@ namespace lamb {
             
         if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
-          printf("OVERFLOW: %d * %hu = %lld\n", val, other.val, tmp);
+          printf("OVERFLOW: %d * %u = %lld\n", val, other.val, tmp);
           fflush(stdout);
 #else
           r.val = MAX;
@@ -747,7 +747,7 @@ namespace lamb {
             
       if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
-        printf("OVERFLOW: %d * %d = %hd\n", val, other.val, tmp);
+        printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
         fflush(stdout);
 #else
         r.val = MAX;
