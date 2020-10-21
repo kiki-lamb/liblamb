@@ -12,7 +12,7 @@
 // u0,32   Yes    Yes    Yes    EXCL  EXCL    OMIT  OMIT   OMIT   OMIT  OMIT
 // u8,8    Yes    Yes    Yes    ?     ?       OMIT  OMIT   OMIT   OMIT  OMIT
 // u16,16  Yes    Yes    Yes    ?     ?       OMIT  OMIT   OMIT   OMIT  OMIT
-// s0,7    Yes    Yes    Yes    ?     ?
+// s0,7    Yes    Yes    Yes    ?     ?       
 // s0,15   
 // s0,31   
 // s7,8    
@@ -44,7 +44,7 @@ int main() {
       
       {
         l_test_t fz = fx * fy;
-        printf("Try %d * %d: = %d \n", x, y, fz.val);
+        printf("Try %d * %hd: = %hhd \n", x, y, fz.val);
         fflush(stdout);
       }
 
