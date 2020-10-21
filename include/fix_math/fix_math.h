@@ -62,7 +62,7 @@ namespace lamb {
   public:
     typedef      q0n8_t  type;
     typedef typename unsigned_int<(sizeof(type) << 2)>::type big_type;
-    static const type    ONE      = 0xff;
+    static const type    ONE      = unsigned_int<(sizeof(type))>::MAX;
     static const type    MAX      = unsigned_int<(sizeof(type))>::MAX;
     static const type    MIN      = unsigned_int<(sizeof(type))>::MIN;
     static const uint8_t FX_SHIFT = sizeof(type) << 3;
@@ -356,7 +356,7 @@ namespace lamb {
   public:
     typedef      q8n8_t  type;
     typedef typename unsigned_int<(sizeof(type) << 1)>::type big_type;
-    static const type    ONE      = 0x0100;
+    static const type    ONE      = 1 << ((sizeof(type) >> 1) << 3)  ;
     static const type    MAX      = unsigned_int<(sizeof(type))>::MAX;
     static const type    MIN      = unsigned_int<(sizeof(type))>::MIN;
     static const uint8_t FX_SHIFT = (sizeof(type) >> 1) << 3;
@@ -457,7 +457,7 @@ namespace lamb {
   public:
     typedef      q16n16_t  type;
     typedef typename unsigned_int<(sizeof(type) << 1)>::type big_type;
-    static const type      ONE      = 0x0001'0000;
+    static const type      ONE      = 1 << ((sizeof(type) >> 1) << 3);
     static const type      MAX      = unsigned_int<(sizeof(type))>::MAX;
     static const type      MIN      = unsigned_int<(sizeof(type))>::MIN;
     static const uint8_t   FX_SHIFT = (sizeof(type) >> 1) << 3;
@@ -566,8 +566,7 @@ namespace lamb {
   public:
     typedef      q0n7_t  type;
     typedef typename signed_int<(sizeof(type) << 1)>::type big_type;
-
-    static const type    ONE      = 0x7f;
+    static const type    ONE      = signed_int<(sizeof(type))>::MAX;
     static const type    MAX      = signed_int<(sizeof(type))>::MAX;
     static const type    MIN      = signed_int<(sizeof(type))>::MIN;
     static const uint8_t FX_SHIFT = sizeof(type) << 3;
@@ -691,7 +690,7 @@ namespace lamb {
     typedef      q0n15_t  type;
     typedef typename signed_int<(sizeof(type) << 1)>::type big_type;
 
-    static const type    ONE      = 0x7fff;
+    static const type    ONE      = signed_int<(sizeof(type))>::MAX;
     static const type    MAX      = signed_int<(sizeof(type))>::MAX;
     static const type    MIN      = signed_int<(sizeof(type))>::MIN;
     static const uint8_t FX_SHIFT = sizeof(type) << 3;
@@ -814,7 +813,7 @@ namespace lamb {
     typedef      q0n31_t  type;
     typedef typename signed_int<(sizeof(type) << 1)>::type big_type;
 
-    static const type    ONE      = 0x7fff'ffff;
+    static const type    ONE      = signed_int<(sizeof(type))>::MAX;
     static const type    MAX      = signed_int<(sizeof(type))>::MAX;
     static const type    MIN      = signed_int<(sizeof(type))>::MIN;
     static const uint8_t FX_SHIFT = sizeof(type) << 3;
@@ -936,7 +935,7 @@ namespace lamb {
   public:
     typedef      q7n8_t  type;
     typedef typename signed_int<(sizeof(type) << 1)>::type big_type;
-    static const type    ONE      = 0x0100;
+    static const type    ONE      = 1 << ((sizeof(type) >> 1) << 3);
     static const type    MAX      = signed_int<(sizeof(type))>::MAX;
     static const type    MIN      = signed_int<(sizeof(type))>::MIN;
     static const uint8_t FX_SHIFT = (sizeof(type) >> 1) << 3;
@@ -1062,7 +1061,7 @@ namespace lamb {
   public:
     typedef      q15n16_t type;
     typedef typename signed_int<(sizeof(type) << 1)>::type big_type;
-    static const type     ONE      = 0x0001'0000;
+    static const type     ONE      = 1 << ((sizeof(type) >> 1) << 3);
     static const type     MAX      = signed_int<(sizeof(type))>::MAX;
     static const type     MIN      = signed_int<(sizeof(type))>::MIN;
     static const uint8_t  FX_SHIFT = (sizeof(type) >> 1) << 3;
