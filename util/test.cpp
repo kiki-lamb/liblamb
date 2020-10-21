@@ -1,5 +1,8 @@
-
 #include "../include/lamb.h"
+
+#include <iostream>
+
+using namespace std;
 
 // g++ -std=gnu++14 -DNO_ARDUINO -DLAMB_FP_SATURATE test.cpp && ./a.out
 // g++ -std=gnu++14 -DNO_ARDUINO test.cpp && ./a.out
@@ -12,7 +15,7 @@
 // u0,32   Yes    Yes    Yes    EXCL  EXCL    OMIT  OMIT   OMIT   EXCL  EXCL
 // u8,8    Yes    Yes    Yes    ?     ?       OMIT  OMIT   OMIT   EXCL  EXCL
 // u16,16  Yes    Yes    Yes    ?     ?       OMIT  OMIT   OMIT   EXCL  EXCL
-// s0,7    Yes    Yes    Yes    ?     ?       Yes   Yes    Yes    EXCL  EXLC
+// s0,7    
 // s0,15   
 // s0,31   
 // s7,8    
@@ -20,8 +23,8 @@
 
 using namespace lamb;
 
-typedef signed_frac<0,7>    l_test_t;
-typedef signed_frac<0,31>    r_test_t;
+typedef signed_frac<0,7>     l_test_t;
+typedef unsigned_frac<0,8>   r_test_t;
 
 #define L_BASE ((l_test_t::MAX >> (sizeof(l_test_t::type) >> 1) >> 4) + 1)
 #define R_BASE ((r_test_t::MAX >> (sizeof(r_test_t::type) >> 1) >> 4) + 1)
@@ -44,7 +47,11 @@ int main() {
       
       {
         l_test_t fz = fx * fy;
-        printf("Try %hdd * %lld: = %hhd \n", x, y, fz.val);
+//        printf("Try %d * %llu: = %d \n", x, y, fz.val);
+
+        cout << "Try " << x << " * " << y << ": ";
+        printf("%d\n", fz.val);
+        
         fflush(stdout);
       }
 
