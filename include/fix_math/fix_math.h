@@ -25,16 +25,14 @@ using namespace std;
 
 namespace lamb {
 
-////////////////////////////////////////////////////////////////////////////////
-// Fixed type helpers
-////////////////////////////////////////////////////////////////////////////////
-
 // Advance declaration:
 
   template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_ = false>
   class signed_frac;
     
-// Unsigned
+////////////////////////////////////////////////////////////////////////////////
+// Unsigned fixed point numbers
+////////////////////////////////////////////////////////////////////////////////
   
   template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_ = false>
   class unsigned_frac {
@@ -62,6 +60,8 @@ namespace lamb {
     
     type val;
 
+////////////////////////////////////////////////////////////////////////////////
+    
     template <bool saturate__>
     operator unsigned_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), saturate__> () const {
       unsigned_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), saturate__> tmp(val << 1);
@@ -82,10 +82,14 @@ namespace lamb {
 
       return tmp;
     }
-    
+
+////////////////////////////////////////////////////////////////////////////////
+
     explicit unsigned_frac(type const & val_) :
       val(val_) {}
 
+////////////////////////////////////////////////////////////////////////////////
+    
     template <bool saturate__> 
     unsigned_frac operator + (unsigned_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other ) {
       unsigned_frac r = unsigned_frac(val + other.val);
@@ -108,6 +112,8 @@ namespace lamb {
       return *this;
     }
 
+////////////////////////////////////////////////////////////////////////////////
+    
     template <bool saturate__>
     unsigned_frac operator - (unsigned_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other ) {
       unsigned_frac r = unsigned_frac(val - other.val);
@@ -221,8 +227,8 @@ namespace lamb {
   };
 
 ////////////////////////////////////////////////////////////////////////////////
-
-// Signed
+// Signed fixed point numbers
+////////////////////////////////////////////////////////////////////////////////
   
   template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_>
   class signed_frac {
@@ -247,9 +253,10 @@ namespace lamb {
     
     static const type     MAX      = signed_int<(SIZE)>::MAX;
     static const type     MIN      = signed_int<(SIZE)>::MIN;
-    
-    
+        
     type val;
+
+////////////////////////////////////////////////////////////////////////////////
 
     template <bool saturate__>
     operator signed_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), saturate__> () const {
@@ -265,9 +272,13 @@ namespace lamb {
       return tmp;
     }
 
+////////////////////////////////////////////////////////////////////////////////
+    
     explicit signed_frac(type const & val_) :
       val(val_) {}
 
+////////////////////////////////////////////////////////////////////////////////
+    
     template <bool saturate__>
     signed_frac operator + (signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other ) {
       signed_frac r = signed_frac(val + other.val);
@@ -290,6 +301,8 @@ namespace lamb {
       return *this;
     }
 
+////////////////////////////////////////////////////////////////////////////////
+    
     template <bool saturate__>
     signed_frac operator - (signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other ) {
       signed_frac r = signed_frac(val - other.val);
@@ -473,7 +486,9 @@ namespace lamb {
   };
 
 ///////////////////////////////////////////////////////////////////////////////
- 
+// Typedefs
+///////////////////////////////////////////////////////////////////////////////
+  
   typedef uint8_t                        q0n8_value_type;                        
   typedef uint16_t                       q8n8_value_type;                       
   typedef uint16_t                       q0n16_value_type;                      
