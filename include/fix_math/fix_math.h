@@ -223,11 +223,11 @@ namespace lamb {
       
       if (tmp > ONE) {
 #ifndef LAMB_FP_SATURATE
-        printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
+        printf("OVERFLOW: %d * %d = %lld\n", val, other.val, tmp);
         fflush(stdout);
 #else
         r.val = ONE;
-        printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
+        printf("SAT HI:  %d * %d = %lld\n", val, other.val, r.val);
 #endif
       }        
       return r;
@@ -624,8 +624,11 @@ namespace lamb {
 
     template <uint8_t charac, uint8_t mantissa>
     signed_frac operator * (unsigned_frac<charac,mantissa> const & other ) {
-      big_type    tmp = (((big_type)val) * other.val) >> (unsigned_frac<charac,mantissa>::FX_SHIFT - 1);
+      big_type    tmp = (((big_type)val) * other.val) >> unsigned_frac<charac,mantissa>::FX_SHIFT;
       signed_frac r   = signed_frac((type)tmp);
+
+//      printf("TMP   is %d.\n", tmp);
+//      printf("r.val is %d.\n", r.val);
       
       if (tmp > ONE) {
 #ifndef LAMB_FP_SATURATE
