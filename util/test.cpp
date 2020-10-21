@@ -62,10 +62,10 @@ int main() {
   printf("l ONE  is %d.\n", l_test_t::ONE);
   printf("l MAX  is %d.\n", l_test_t::MAX);
   printf("l MIN  is %d.\n", l_test_t::MIN);
-  printf("r BASE is %u\n", R_BASE);
+  printf("r BASE is %u.\n", R_BASE);
   printf("r ONE  is %u.\n", r_test_t::ONE);
-  printf("r MAX  is %u\n", r_test_t::MAX);
-  printf("r MIN  is %u\n", r_test_t::MIN);
+  printf("r MAX  is %u.\n", r_test_t::MAX);
+  printf("r MIN  is %u.\n", r_test_t::MIN);
 
   return 0;
   
