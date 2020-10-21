@@ -6,10 +6,11 @@
 
 using namespace lamb;
 
-typedef signed_frac<0,7>   l_test_t;
-typedef signed_frac<0,7>   r_test_t;
+typedef signed_frac<0,15>    l_test_t;
+typedef unsigned_frac<0,8>   r_test_t;
 
-#define BASE 1
+#define L_BASE 64
+#define R_BASE 4
 
 int main() {
   printf("l ONE is %d.\n", l_test_t::ONE);
@@ -19,10 +20,10 @@ int main() {
   printf("r MAX is %d.\n", r_test_t::MAX);
   printf("r MIN is %d.\n", r_test_t::MIN);
   
-  for (  l_test_t::big_type x = l_test_t::MIN; x <= l_test_t::MAX; x += BASE) {
-    printf("[%ld]\n", x);
+  for (  l_test_t::big_type x = l_test_t::MIN; x <= l_test_t::MAX; x += L_BASE) {
+    printf("[%d]\n", x);
     
-    for (  r_test_t::big_type y = r_test_t::MIN; y <= r_test_t::MAX; y += BASE) {    
+    for (  r_test_t::big_type y = r_test_t::MIN; y <= r_test_t::MAX; y += R_BASE) {    
       l_test_t fx(x);
       r_test_t fy(y);
       

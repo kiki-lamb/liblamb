@@ -751,7 +751,7 @@ namespace lamb {
 
     template <uint8_t charac, uint8_t mantissa>
     signed_frac operator * (unsigned_frac<charac,mantissa> const & other ) {
-      big_type    tmp = (((big_type)val) * other.val) >> (unsigned_frac<charac,mantissa>::FX_SHIFT - 1);
+      big_type    tmp = (((big_type)val) * other.val) >> unsigned_frac<charac,mantissa>::FX_SHIFT;
       signed_frac r   = signed_frac((type)tmp);
       
       if (tmp > ONE) {
