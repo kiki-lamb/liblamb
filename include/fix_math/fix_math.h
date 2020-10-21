@@ -61,7 +61,7 @@ namespace lamb {
   template <> class unsigned_frac<0,8> {
   public:
     typedef      q0n8_t  type;
-    typedef      q0n16_t big_type;
+    typedef typename unsigned_int<(sizeof(type) << 2)>::type big_type;
     static const type    ONE      = 0xff;
     static const type    MAX      = 0xff;
     static const type    MIN      = 0x0;
@@ -159,7 +159,7 @@ namespace lamb {
   template <> class unsigned_frac<0,16> {
   public:
     typedef      q0n16_t type;
-    typedef      q0n32_t big_type;
+    typedef typename unsigned_int<(sizeof(type) << 2)>::type big_type;
     static const type    ONE      = 0xffff;
     static const type    MAX      = 0xffff;
     static const type    MIN      = 0x0;
@@ -257,7 +257,7 @@ namespace lamb {
   template <> class unsigned_frac<0,32> {
   public:
     typedef      q0n32_t  type;
-    typedef      q0n64_t  big_type;
+    typedef typename unsigned_int<(sizeof(type) << 1)>::type big_type;
     static const type     ONE      = 0xffff'ffff;
     static const type     MAX      = 0xffff'ffff;
     static const type     MIN      = 0x0;
@@ -355,7 +355,7 @@ namespace lamb {
   template <> class unsigned_frac<8,8> {
   public:
     typedef      q8n8_t  type;
-    typedef      q0n32_t big_type;
+    typedef typename unsigned_int<(sizeof(type) << 1)>::type big_type;
     static const type    ONE      = 0x0100;
     static const type    MAX      = 0xffff;
     static const type    MIN      = 0x0;
@@ -456,7 +456,7 @@ namespace lamb {
   template <> class unsigned_frac<16,16> {
   public:
     typedef      q16n16_t  type;
-    typedef      q0n64_t   big_type;
+    typedef typename unsigned_int<(sizeof(type) << 1)>::type big_type;
     static const type      ONE      = 0x0001'0000;
     static const type      MAX      = 0xffff'ffff;
     static const type      MIN      = 0x0;
@@ -565,7 +565,7 @@ namespace lamb {
   template <> class signed_frac<0,7> {
   public:
     typedef      q0n7_t  type;
-    typedef      q0n15_t big_type;
+    typedef typename signed_int<(sizeof(type) << 1)>::type big_type;
 
     static const type    ONE      = 0x7f;
     static const type    MAX      = 0x7f;
@@ -689,7 +689,7 @@ namespace lamb {
   template <> class signed_frac<0,15> {
   public:
     typedef      q0n15_t  type;
-    typedef      q0n31_t big_type;
+    typedef typename signed_int<(sizeof(type) << 1)>::type big_type;
 
     static const type    ONE      = 0x7fff;
     static const type    MAX      = 0x7fff;
@@ -812,7 +812,7 @@ namespace lamb {
   template <> class signed_frac<0,31> {
   public:
     typedef      q0n31_t  type;
-    typedef      q0n63_t  big_type;
+    typedef typename signed_int<(sizeof(type) << 1)>::type big_type;
 
     static const type    ONE      = 0x7fff'ffff;
     static const type    MAX      = 0x7fff'ffff;
@@ -935,7 +935,7 @@ namespace lamb {
   template <> class signed_frac<7,8> {
   public:
     typedef      q7n8_t  type;
-    typedef      q0n31_t big_type;
+    typedef typename signed_int<(sizeof(type) << 1)>::type big_type;
     static const type    ONE      = 0x0100;
     static const type    MAX      = 0x7fff;
     static const type    MIN      = (type)MAX+1;
@@ -1061,7 +1061,7 @@ namespace lamb {
   template <> class signed_frac<15,16> {
   public:
     typedef      q15n16_t type;
-    typedef      q0n63_t  big_type;
+    typedef typename signed_int<(sizeof(type) << 1)>::type big_type;
     static const type     ONE      = 0x0001'0000;
     static const type     MAX      = 0x7fff'ffff;
     static const type     MIN      = -2147483648;

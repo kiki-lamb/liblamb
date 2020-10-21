@@ -19,10 +19,10 @@ int main() {
   printf("r MAX is %d.\n", r_test_t::MAX);
   printf("l MIN is %d.\n", l_test_t::MIN);
   
-  for (  l_test_t::type x = l_test_t::MIN; x <= l_test_t::MAX; x += BASE) {
+  for (  l_test_t::big_type x = l_test_t::MIN; x <= l_test_t::MAX; x += BASE) {
     printf("[%d]\n", x);
     
-    for (  r_test_t::type y = r_test_t::MIN; y <= r_test_t::MAX; y += BASE) {    
+    for (  r_test_t::big_type y = r_test_t::MIN; y <= r_test_t::MAX; y += BASE) {    
       l_test_t fx(x);
       r_test_t fy(y);
       
