@@ -57,6 +57,7 @@ namespace lamb {
   
   template <uint8_t characteristic_, uint8_t mantissa>
   class unsigned_frac {
+    static_assert(((mantissa % 8) == 0), "bad bit count in mantissa");
   };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -65,6 +66,7 @@ namespace lamb {
   
   template <uint8_t characteristic_, uint8_t mantissa>
   class signed_frac {
+    static_assert((((mantissa + 1) % 8) == 0), "bad bit count in mantissa");
   };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -667,7 +669,7 @@ namespace lamb {
       if ( sizeof(unsigned_frac<charac,mantissa>) > sizeof(signed_frac) ) {
         pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;
         
-        printf("preTMP0   %llu.\n", tmp);
+        printf("preTMP0 is  %llu.\n", tmp);
         
         uint8_t shift = unsigned_frac<charac,mantissa>::FX_SHIFT;
 
