@@ -258,7 +258,7 @@ namespace lamb {
   public:
     static const uint8_t CHARACTERISTIC = characteristic_;
     static const uint8_t MANTISSA       = mantissa_;
-    static const bool    saturate       = saturate_;
+    static const bool    SATURATE       = saturate_;
     
     typedef typename signed_int<((CHARACTERISTIC+MANTISSA+1) >> 3)>::type  type;
     typedef typename signed_int<(sizeof(type) << 1)>::type big_type;
@@ -291,7 +291,7 @@ namespace lamb {
     signed_frac operator + (signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other ) {
       signed_frac r = signed_frac(val + other.val);
       if (r.val < val) {
-        if (saturate) {
+        if (SATURATE) {
           r.val = MAX;
           printf("SAT HI:  %d + %d = %d\n", val, other.val, r.val);
         }
@@ -313,7 +313,7 @@ namespace lamb {
     signed_frac operator - (signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other ) {
       signed_frac r = signed_frac(val - other.val);
       if (r.val > val) {
-        if (saturate) {
+        if (SATURATE) {
           r.val = 0;
           printf("SAT LO: %d - %d = %d\n", val, other.val, r.val);
         }
@@ -362,7 +362,7 @@ namespace lamb {
         printf("r.val is %d.\n", r.val);
             
         if (r.val > MAX) {
-          if (saturate) {
+          if (SATURATE) {
             r.val = MAX;
             printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
           }
@@ -391,7 +391,7 @@ namespace lamb {
         printf("r.val is %d.\n", r.val);
             
         if (r.val > MAX) {
-          if (saturate) {
+          if (SATURATE) {
             r.val = MAX;
             printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
           }
@@ -435,7 +435,7 @@ namespace lamb {
         printf("r.val is %d.\n", r.val);
         
         if (tmp > MAX) {
-          if (saturate) {
+          if (SATURATE) {
             r.val = MAX;
             printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
           }
@@ -457,7 +457,7 @@ namespace lamb {
         printf("r.val is %d.\n", r.val);
         
         if (tmp > MAX) {
-          if (saturate) {
+          if (SATURATE) {
             r.val = MAX;
             printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
           }
