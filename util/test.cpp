@@ -16,14 +16,14 @@ using namespace std;
 // u8,8    Yes    Yes    Yes    ?     ?       OMIT  OMIT   OMIT   EXCL  EXCL
 // u16,16  Yes    Yes    Yes    ?     ?       OMIT  OMIT   OMIT   EXCL  EXCL
 // s0,7    Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL
-// s0,15   
+// s0,15   Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL
 // s0,31   
 // s7,8    
 // s15,16  
 
 using namespace lamb;
 
-typedef signed_frac<0,7>    l_test_t;
+typedef signed_frac<0,15>    l_test_t;
 typedef signed_frac<0,31>    r_test_t;
 
 #define L_BASE ((l_test_t::MAX >> (sizeof(l_test_t::type) >> 1) >> 4) + 1)

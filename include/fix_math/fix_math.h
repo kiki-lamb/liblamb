@@ -897,7 +897,7 @@ namespace lamb {
             
         if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
-          printf("OVERFLOW: %d * %hu = %llu\n", val, other.val, tmp);
+          printf("OVERFLOW: %d * %u = %llu\n", val, other.val, tmp);
           fflush(stdout);
 #else
           r.val = MAX;
@@ -979,7 +979,7 @@ namespace lamb {
       else {
         big_type tmp = ((big_type)val) * other.val;
 
-        printf("preTMP1   is %hd.\n", tmp);
+        printf("preTMP1   is %d.\n", tmp);
 
         tmp >>= signed_frac<charac,mantissa>::FX_SHIFT - 1;
       
@@ -990,7 +990,7 @@ namespace lamb {
         
         if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
-          printf("OVERFLOW: %d * %d = %hd\n", val, other.val, tmp);
+          printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
           fflush(stdout);
 #else
           r.val = MAX;
