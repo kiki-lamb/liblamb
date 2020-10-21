@@ -15,13 +15,13 @@
 // s0,7    Yes
 // s0,15   Yes
 // s0,31   Yes
-// s7,8
-// s15,16
+// s7,8    Yes
+// s15,16  Yes
 
 using namespace lamb;
 
-typedef signed_frac<7,8>    l_test_t;
-typedef unsigned_frac<0,8>   r_test_t;
+typedef unsigned_frac<0,8>    l_test_t;
+typedef unsigned_frac<0,16>   r_test_t;
 
 #define L_BASE ((l_test_t::MAX >> (sizeof(l_test_t::type) >> 1) >> 5) + 1)
 #define R_BASE ((r_test_t::MAX >> (sizeof(r_test_t::type) >> 1) >> 5) + 1)
@@ -29,16 +29,16 @@ typedef unsigned_frac<0,8>   r_test_t;
 int main() {
   printf("THIS   is %u.\n", UINT32_MAX);
   printf("l BASE is %u.\n", L_BASE);
-  printf("l ONE  is %u.\n", l_test_t::ONE);
-  printf("l MAX  is %u.\n", l_test_t::MAX);
-  printf("l MIN  is %u.\n", l_test_t::MIN);
+  printf("l ONE  is %d.\n", l_test_t::ONE);
+  printf("l MAX  is %d.\n", l_test_t::MAX);
+  printf("l MIN  is %d.\n", l_test_t::MIN);
   printf("r BASE is %u.\n", R_BASE);
   printf("r ONE  is %u.\n", r_test_t::ONE);
   printf("r MAX  is %u.\n", r_test_t::MAX);
   printf("r MIN  is %u.\n", r_test_t::MIN);
   
   for (  l_test_t::big_type x = l_test_t::MIN; x <= l_test_t::MAX; x += L_BASE) {
-    printf("[%d]\n", x);
+    printf("[%ld]\n", x);
     
     for (  r_test_t::big_type y = r_test_t::MIN; y <= r_test_t::MAX; y += R_BASE) {    
       l_test_t fx(x);
@@ -46,7 +46,7 @@ int main() {
       
       {
         l_test_t fz = fx * fy;
-        printf("Try %d * %d: = %d \n", x, y, fz.val);
+        printf("Try %u * %llu: = %d \n", x, y, fz.val);
         fflush(stdout);
       }
 
