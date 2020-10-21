@@ -10,17 +10,17 @@
 // u0,8    Yes
 // u0,16   Yes
 // u0,32   Yes
-// u8,8
-// u16,16
-// s0,7
-// s0,15
-// s0,31
+// u8,8    Yes
+// u16,16  Yes
+// s0,7    Yes
+// s0,15   Yes
+// s0,31   Yes
 // s7,8
 // s15,16
 
 using namespace lamb;
 
-typedef unsigned_frac<0,32>  l_test_t;
+typedef signed_frac<7,8>    l_test_t;
 typedef unsigned_frac<0,8>   r_test_t;
 
 #define L_BASE ((l_test_t::MAX >> (sizeof(l_test_t::type) >> 1) >> 5) + 1)
@@ -38,7 +38,7 @@ int main() {
   printf("r MIN  is %u.\n", r_test_t::MIN);
   
   for (  l_test_t::big_type x = l_test_t::MIN; x <= l_test_t::MAX; x += L_BASE) {
-    printf("[%lld]\n", x);
+    printf("[%d]\n", x);
     
     for (  r_test_t::big_type y = r_test_t::MIN; y <= r_test_t::MAX; y += R_BASE) {    
       l_test_t fx(x);
@@ -46,7 +46,7 @@ int main() {
       
       {
         l_test_t fz = fx * fy;
-        printf("Try %lld * %d: = %u \n", x, y, fz.val);
+        printf("Try %d * %d: = %d \n", x, y, fz.val);
         fflush(stdout);
       }
 

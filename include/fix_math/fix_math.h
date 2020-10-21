@@ -123,12 +123,12 @@ namespace lamb {
       big_type      tmp = (((big_type)val) * other.val) >> unsigned_frac<charac,mantissa>::FX_SHIFT;
       unsigned_frac r   = unsigned_frac((type)tmp);
       
-      if (tmp > ONE) {
+      if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
         printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
         fflush(stdout);
 #else
-        r.val = ONE;
+        r.val = MAX;
         printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
 #endif
       }        
@@ -221,12 +221,12 @@ namespace lamb {
       big_type      tmp = (((big_type)val) * other.val) >> unsigned_frac<charac,mantissa>::FX_SHIFT;
       unsigned_frac r   = unsigned_frac((type)tmp);
       
-      if (tmp > ONE) {
+      if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
         printf("OVERFLOW: %d * %d = %lld\n", val, other.val, tmp);
         fflush(stdout);
 #else
-        r.val = ONE;
+        r.val = MAX;
         printf("SAT HI:  %d * %d = %lld\n", val, other.val, r.val);
 #endif
       }        
@@ -322,12 +322,12 @@ namespace lamb {
       printf("TMP   is %lld.\n", tmp);
       printf("r.val is %u.\n", r.val);
 
-      if (tmp > ONE) {
+      if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
         printf("OVERFLOW: %d * %d = %lld\n", val, other.val, tmp);
         fflush(stdout);
 #else
-        r.val = ONE;
+        r.val = MAX;
         printf("SAT HI:  %d * %d = %lld\n", val, other.val, r.val);
 #endif
       }        
@@ -423,12 +423,15 @@ namespace lamb {
       big_type      tmp = (((big_type)val) * other.val) >> unsigned_frac<charac,mantissa>::FX_SHIFT;
       unsigned_frac r   = unsigned_frac((type)tmp);
       
-      if (tmp > ONE) {
+      printf("TMP   is %d.\n", tmp);
+      printf("r.val is %u.\n", r.val);
+
+      if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
         printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
         fflush(stdout);
 #else
-        r.val = ONE;
+        r.val = MAX;
         printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
 #endif
       }        
@@ -524,13 +527,13 @@ namespace lamb {
       big_type      tmp = (((big_type)val) * other.val) >> unsigned_frac<charac,mantissa>::FX_SHIFT;
       unsigned_frac r   = unsigned_frac((type)tmp);
       
-      if (tmp > ONE) {
+      if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
-        printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
+        printf("OVERFLOW: %u * %u = %llu\n", val, other.val, tmp);
         fflush(stdout);
 #else
-        r.val = ONE;
-        printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
+        r.val = MAX;
+        printf("SAT HI:  %u * %u = %llu\n", val, other.val, r.val);
 #endif
       }        
       return r;
@@ -593,7 +596,7 @@ namespace lamb {
 #ifndef LAMB_FP_SATURATE
         printf("OVERFLOW: %d + %d = %d\n", val, other.val, r.val);
 #else
-        r.val = ONE;
+        r.val = MAX;
         printf("SAT HI:  %d + %d = %d\n", val, other.val, r.val);
 #endif
         fflush(stdout);
@@ -633,12 +636,12 @@ namespace lamb {
 //      printf("TMP   is %d.\n", tmp);
 //      printf("r.val is %d.\n", r.val);
       
-      if (tmp > ONE) {
+      if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
         printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
         fflush(stdout);
 #else
-        r.val = ONE;
+        r.val = MAX;
         printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
 #endif
       }        
@@ -658,12 +661,12 @@ namespace lamb {
       big_type    tmp = (((big_type)val) * other.val) >> (signed_frac<charac,mantissa>::FX_SHIFT - 1);
       signed_frac r   = signed_frac((type)tmp);
       
-      if (tmp > ONE) {
+      if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
         printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
         fflush(stdout);
 #else
-        r.val = ONE;
+        r.val = MAX;
         printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
 #endif
       }        
@@ -757,12 +760,12 @@ namespace lamb {
       big_type    tmp = (((big_type)val) * other.val) >> unsigned_frac<charac,mantissa>::FX_SHIFT;
       signed_frac r   = signed_frac((type)tmp);
       
-      if (tmp > ONE) {
+      if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
         printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
         fflush(stdout);
 #else
-        r.val = ONE;
+        r.val = MAX;
         printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
 #endif
       }        
@@ -784,10 +787,10 @@ namespace lamb {
       
       if (tmp > ONE) {
 #ifndef LAMB_FP_SATURATE
-        printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
+        printf("MAX: %d * %d = %d\n", val, other.val, tmp);
         fflush(stdout);
 #else
-        r.val = ONE;
+        r.val = MAX;
         printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
 #endif
       }        
@@ -882,11 +885,11 @@ namespace lamb {
       
       if (tmp > ONE) {
 #ifndef LAMB_FP_SATURATE
-        printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
+        printf("OVERFLOW: %d * %d = %lld\n", val, other.val, tmp);
         fflush(stdout);
 #else
         r.val = ONE;
-        printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
+        printf("SAT HI:  %d * %d = %lld\n", val, other.val, r.val);
 #endif
       }        
       return r;
@@ -905,12 +908,12 @@ namespace lamb {
       big_type    tmp = (((big_type)val) * other.val) >> (signed_frac<charac,mantissa>::FX_SHIFT - 1);
       signed_frac r   = signed_frac((type)tmp);
       
-      if (tmp > ONE) {
+      if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
         printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
         fflush(stdout);
 #else
-        r.val = ONE;
+        r.val = MAX;
         printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
 #endif
       }        
@@ -1005,12 +1008,12 @@ namespace lamb {
       big_type    tmp = (((big_type)val) * other.val) >> unsigned_frac<charac,mantissa>::FX_SHIFT;
       signed_frac r   = signed_frac((type)tmp);
       
-      if (tmp > ONE) {
+      if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
         printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
         fflush(stdout);
 #else
-        r.val = ONE;
+        r.val = MAX;
         printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
 #endif
       }        
