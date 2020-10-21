@@ -44,7 +44,7 @@ int main() {
       
       {
         l_test_t fz = fx * fy;
-        printf("Try %u * %llu: = %u \n", x, y, fz.val);
+        printf("Try %d * %llu: = %d \n", x, y, fz.val);
         fflush(stdout);
       }
 

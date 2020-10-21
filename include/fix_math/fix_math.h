@@ -649,22 +649,25 @@ namespace lamb {
       val = ((*this) - other).val;
       return *this;
     }
-    
+
 ////////////////////////////////////////////////////////////////////////////////
 
     template <uint8_t charac, uint8_t mantissa>
     signed_frac operator * (unsigned_frac<charac,mantissa> const & other ) {
       static_assert(0 == charac, "Reverse operand order!");
+
+      typedef typename unsigned_frac<charac,mantissa>::big_type right_big_type;
+      typedef typename signed_int<(sizeof(right_big_type))>::type pseudo_right_big_type;
       
-      typename unsigned_frac<charac,mantissa>::big_type tmp =
-        (((typename unsigned_frac<charac,mantissa>::big_type)val) * other.val) >>
+      pseudo_right_big_type tmp =
+        (((pseudo_right_big_type)val) * other.val) >>
         unsigned_frac<charac,mantissa>::FX_SHIFT;
       
       signed_frac r   = signed_frac((type)tmp);
                               
-      printf("\nSHIFT is %d.\n", unsigned_frac<charac,mantissa>::FX_SHIFT);
-      printf("TMP   is %llu.\n", tmp);
-      printf("r.val is %d.\n", r.val);
+      // printf("\nSHIFT is %d.\n", unsigned_frac<charac,mantissa>::FX_SHIFT);
+      // printf("TMP   is %lld.\n", tmp);
+      // printf("r.val is %d.\n", r.val);
             
       if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
