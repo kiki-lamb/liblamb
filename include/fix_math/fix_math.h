@@ -182,18 +182,13 @@ namespace lamb {
       typedef typename unsigned_int<(sizeof(right_big_type))>::type pseudo_right_big_type;
 
       unsigned_frac r(0);
-
-      type old = val;
+      type          old(val);
       
       if ( sizeof(other_type) > sizeof(unsigned_frac) ) {
         pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;
-
         static const uint8_t shift = other_type::FX_SHIFT;
-
         tmp >>= shift;
-
         r.val = (type)tmp;
-
         check_overflow('*', old, other.val, tmp, r.val);
       }
       else {
@@ -203,24 +198,15 @@ namespace lamb {
         printf("me.val = %d\n", val);
         printf("other.val = %d\n", other.val);
         printf("other.charac = %d\n", other_charac);
-        printf("other.mantissa = %d\n", other_mantissa);
-        
-        big_type      tmp = ((big_type)val) * other.val;
-        
+        printf("other.mantissa = %d\n", other_mantissa);        
+        big_type      tmp = ((big_type)val) * other.val;        
         printf("tmp2 = %u\n", tmp);
-
-        static const uint8_t shift =  unsigned_frac<other_charac, other_mantissa>::FX_SHIFT;
-      
+        static const uint8_t shift =  unsigned_frac<other_charac, other_mantissa>::FX_SHIFT;      
         tmp >>= shift;
-
         r.val = (type)tmp;
-
         printf("shift = %d\n", shift);
-
         printf("r.val = %d\n", r.val);
-
-        check_overflow('*', old, other.val, tmp, r.val);
-        
+        check_overflow('*', old, other.val, tmp, r.val);        
         return r;
       }
     }
@@ -276,7 +262,6 @@ namespace lamb {
         
     type val;
 
-
 ////////////////////////////////////////////////////////////////////////////////
 
   private:
@@ -295,7 +280,6 @@ namespace lamb {
     template <bool saturate__>
     operator signed_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), saturate__> () const {
       signed_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), saturate__> tmp(val >> 1);
-
       return tmp;
     }
 
@@ -350,46 +334,31 @@ namespace lamb {
       typedef typename unsigned_int<(sizeof(right_big_type))>::type pseudo_right_big_type;
 
       signed_frac r(0);
+      type        old(val);
 
-      type old = val;
-      
       if ( sizeof(other_type) > sizeof(signed_frac) ) {
-        pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;
-        
+        pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;        
         uint8_t shift = other_type::FX_SHIFT;
-
         printf("shift: %d\n", shift);
-
         tmp >>= shift;
-
-        printf("tmp2: %d\n", tmp);
-        
+        printf("tmp2: %d\n", tmp);        
         r.val = (type)tmp;
-
         printf("SHIFT is %d.\n", shift);
         printf("r.val is %d.\n", r.val);
-
         check_overflow('*', old, other.val, tmp, r.val);
       }
       else {
-        big_type tmp = ((big_type)val) * other.val;
-      
-        uint8_t shift = other_type::FX_SHIFT;
-
+        big_type tmp = ((big_type)val) * other.val;      
+        uint8_t   shift = other_type::FX_SHIFT;
         if (val < 0) {
           shift --;
-        }
-        
-        tmp >>= shift;
-        
+        }        
+        tmp >>= shift;        
         r.val = (type)tmp;
-
         printf("\nSHIFT is %d.\n", shift);
-        printf("r.val is %d.\n", r.val);
-            
+        printf("r.val is %d.\n", r.val);            
         check_overflow('*', old, other.val, tmp, r.val);
-      }
-     
+      }     
       return r;
     }    
 
@@ -410,38 +379,24 @@ namespace lamb {
       typedef typename signed_int<(sizeof(right_big_type))>::type         pseudo_right_big_type;
 
       signed_frac r(0);
-
-      type old = val;
+      type        old(val);
 
       if ( sizeof(other_type) > sizeof(signed_frac) ) {
-        pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;
-        
-        printf("preTMP0    is %lld\n", tmp);
-
+        pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;        
         tmp >>= other_type::FX_SHIFT - 1;
-
         r.val = (type)tmp;
-
         printf("SHIFT is %d.\n", other_type::FX_SHIFT - 1);         
         printf("r.val is %d.\n", r.val);
-
         check_overflow('*', old, other.val, tmp, r.val);
       }
       else {
         big_type tmp = ((big_type)val) * other.val;
-
-        printf("preTMP1   is %hd.\n", tmp);
-
-        tmp >>= other_type::FX_SHIFT - 1;
-      
-        r.val = (type)tmp;
-        
+        tmp >>= other_type::FX_SHIFT - 1;     
+        r.val = (type)tmp;        
         printf("SHIFT is %d.\n", other_type::FX_SHIFT - 1);
-        printf("r.val is %d.\n", r.val);
-        
+        printf("r.val is %d.\n", r.val);        
         check_overflow('*', old, other.val, tmp, r.val);
       }
-
       return r;
     }    
 
