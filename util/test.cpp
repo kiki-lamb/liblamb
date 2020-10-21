@@ -7,21 +7,21 @@
 // Multiply tests:
 //
 // L/R     u0,8   u0,16  u0,32  u8,8  u16,16  s0,7  s0,15  s0,31  s7,8  s15,16
-// u0,8    Yes    Yes    Yes    EXCL  EXCL    OMIT  OMIT   OMIT   OMIT  OMIT  
-// u0,16   Yes    Yes    Yes    EXCL  EXCL    OMIT  OMIT   OMIT   OMIT  OMIT
-// u0,32   Yes    Yes    Yes    EXCL  EXCL    OMIT  OMIT   OMIT   OMIT  OMIT
-// u8,8    Yes    Yes    Yes    ?     ?       OMIT  OMIT   OMIT   OMIT  OMIT
-// u16,16  Yes    Yes    Yes    ?     ?       OMIT  OMIT   OMIT   OMIT  OMIT
-// s0,7    Yes    Yes    Yes    ?     ?       
-// s0,15   
-// s0,31   
+// u0,8    Yes    Yes    Yes    EXCL  EXCL    OMIT  OMIT   OMIT   EXCL  EXCL
+// u0,16   Yes    Yes    Yes    EXCL  EXCL    OMIT  OMIT   OMIT   EXCL  EXCL
+// u0,32   Yes    Yes    Yes    EXCL  EXCL    OMIT  OMIT   OMIT   EXCL  EXCL
+// u8,8    Yes    Yes    Yes    ?     ?       OMIT  OMIT   OMIT   EXCL  EXCL
+// u16,16  Yes    Yes    Yes    ?     ?       OMIT  OMIT   OMIT   EXCL  EXCL
+// s0,7    Yes    Yes    Yes    ?     ?       Yes   Yes    Yes    EXCL  EXCL - copy back
+// s0,15   Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL - copy back
+// s0,31   Yes    Yes    Yes
 // s7,8    
 // s15,16  
 
 using namespace lamb;
 
-typedef signed_frac<0,7>    l_test_t;
-typedef signed_frac<0,7>    r_test_t;
+typedef signed_frac<0,31>    l_test_t;
+typedef unsigned_frac<0,32>    r_test_t;
 
 #define L_BASE ((l_test_t::MAX >> (sizeof(l_test_t::type) >> 1) >> 4) + 1)
 #define R_BASE ((r_test_t::MAX >> (sizeof(r_test_t::type) >> 1) >> 4) + 1)
@@ -44,7 +44,7 @@ int main() {
       
       {
         l_test_t fz = fx * fy;
-        printf("Try %d * %hd: = %hhd \n", x, y, fz.val);
+        printf("Try %lld * %llu: = %d \n", x, y, fz.val);
         fflush(stdout);
       }
 
