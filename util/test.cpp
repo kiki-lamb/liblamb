@@ -7,24 +7,24 @@
 // Multiply tests:
 //
 // L/R     u0,8   u0,16  u0,32  u16,16  s0,7  s0,15  s0,31  s7,8  s15,16
-// u0,8    Yes    Yes    Yes    Yes
-// u0,16   Yes    Yes    Yes    Yes
-// u0,32   Yes    Yes    Yes    Yes
-// u8,8    Yes    Yes    -      
-// u16,16  Yes    Yes    -      
-// s0,7    Yes    -      -      -
-// s0,15   Yes    -      -      -
-// s0,31   Yes    -      -      -
-// s7,8    Yes    -      -      -
-// s15,16  Yes    -      -      -
+// u0,8    Yes    Yes    Yes    -       
+// u0,16   
+// u0,32   
+// u8,8       
+// u16,16  
+// s0,7    
+// s0,15   
+// s0,31   
+// s7,8    
+// s15,16  
 
 using namespace lamb;
 
-typedef unsigned_frac<16,16>  l_test_t;
-typedef unsigned_frac<8,8>    r_test_t;
+typedef unsigned_frac<0,8>   l_test_t;
+typedef unsigned_frac<0,32>  r_test_t;
 
-#define L_BASE ((l_test_t::MAX >> (sizeof(l_test_t::type) >> 1) >> 3) + 1)
-#define R_BASE ((r_test_t::MAX >> (sizeof(r_test_t::type) >> 1) >> 3) + 1)
+#define L_BASE ((l_test_t::MAX >> (sizeof(l_test_t::type) >> 1) >> 4) + 1)
+#define R_BASE ((r_test_t::MAX >> (sizeof(r_test_t::type) >> 1) >> 4) + 1)
 
 int main() {
   printf("THIS   is %u.\n", UINT32_MAX);
@@ -44,7 +44,7 @@ int main() {
       
       {
         l_test_t fz = fx * fy;
-        printf("Try %llu * %llu: = %u \n", x, y, fz.val);
+        printf("Try %u * %llu: = %u \n", x, y, fz.val);
         fflush(stdout);
       }
 
