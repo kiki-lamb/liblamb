@@ -4,11 +4,14 @@
 
 using namespace lamb;
 
-typedef signed_frac<0,31> test_t;
+typedef signed_frac<7,8> test_t;
 
-#define BASE 32768
+#define BASE 16
 
 int main() {
+  printf("ONE is %d.\n", test_t::ONE);
+  printf("MAX is %d.\n", test_t::MAX);
+  
   for (  int32_t x = -BASE; x <= (((int32_t)test_t::MAX)); x+= BASE) {
     printf("[%d]\n", x);
     
