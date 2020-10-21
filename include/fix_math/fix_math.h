@@ -13,12 +13,12 @@
 // u0,8    Yes    Yes    Yes    EXCL  EXCL    EXCL  EXCL   EXCL   EXCL  EXCL
 // u0,16   Yes    Yes    Yes    EXCL  EXCL    EXCL  EXCL   EXCL   EXCL  EXCL
 // u0,32   Yes    Yes    Yes    EXCL  EXCL    EXCL  EXCL   EXCL   EXCL  EXCL
-// u8,8    Redo   Redo   Redo   ?     ?       EXCL  EXCL   EXCL   EXCL  EXCL
-// u16,16  Redo   Redo   Redo   ?     ?       EXCL  EXCL   EXCL   EXCL  EXCL
+// u8,8    Yes    Yes    Yes    ?     ?       EXCL  EXCL   EXCL   EXCL  EXCL
+// u16,16  Yes    Yes    Yes    ?     ?       EXCL  EXCL   EXCL   EXCL  EXCL
 // s0,7    Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL
 // s0,15   Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL
 // s0,31   Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL
-// s7,8    Redo   Redo   Redo   ?     ?       Redo  Redo   Redo   EXCL  EXL
+// s7,8    Yes    Yes    Yes    ?     ?       Redo  Redo   Redo   EXCL  EXCL
 // s15,16  Redo   Redo   Redo   ?     ?       Redo  Redo   Redo   EXCL  EXCL
 
 using namespace std;
@@ -211,7 +211,7 @@ namespace lamb {
         
         big_type      tmp = ((big_type)val) * other.val;
         
-        printf("tmp2 = %llu\n", tmp);
+        printf("tmp2 = %u\n", tmp);
 
         static const uint8_t shift =  unsigned_frac<other_charac, other_mantissa>::FX_SHIFT;
       
@@ -229,7 +229,7 @@ namespace lamb {
             printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
           }
           else {
-            printf("OVERFLOW: %d * %d = %llu\n", val, other.val, tmp);
+            printf("OVERFLOW: %d * %d = %u\n", val, other.val, tmp);
           }
         }
         
@@ -258,15 +258,6 @@ namespace lamb {
     }
   };
 
-////////////////////////////////////////////////////////////////////////////////
-
-  typedef unsigned_frac<0,  8, false> q0n8;
-  typedef unsigned_frac<0, 16, false> q0n16;
-  typedef unsigned_frac<0, 32, false> q0n32;
-  typedef unsigned_frac<0,  8, true>  sat_q0n8;
-  typedef unsigned_frac<0, 16, true>  sat_q0n16;
-  typedef unsigned_frac<0, 32, true>  sat_q0n32;
-  
 ////////////////////////////////////////////////////////////////////////////////
 
 // Signed
@@ -521,14 +512,31 @@ namespace lamb {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-  typedef signed_frac<0,  7, false> q0n7;
-  typedef signed_frac<0, 15, false> q0n15;
-  typedef signed_frac<0, 31, false> q0n31;
+  typedef unsigned_frac<  0,  8, false > q0n8;
+  typedef unsigned_frac<  0, 16, false > q0n16;
+  typedef unsigned_frac<  8,  8, false > q8n8;
+  typedef unsigned_frac<  0, 32, false > q0n32;
+  typedef unsigned_frac< 16, 16, false > q16n16;
 
-  // typedef signed_frac<0,  7, true>  sat_q0n7;
-  // typedef signed_frac<0, 15, true>  sat_q0n15;
-  // typedef signed_frac<0, 31, true>  sat_q0n31;
+  typedef unsigned_frac<  0,  8, true  > sat_q0n8;
+  typedef unsigned_frac<  0, 16, true  > sat_q0n16;
+  typedef unsigned_frac<  8,  8, true  > sat_q8n8;
+  typedef unsigned_frac<  0, 32, true  > sat_q0n32;
+  typedef unsigned_frac< 16, 16, true  > sat_q16n16;  
 
+  typedef signed_frac<    0,  7, false > q0n7;
+  typedef signed_frac<    0, 15, false > q0n15;
+  typedef signed_frac<    7,  8, false > q7n8;
+  typedef signed_frac<    0, 31, false > q0n31;
+  typedef signed_frac<   15, 16, false > q15n16;
+
+  typedef signed_frac<    0,  7, true  > sat_q0n7;
+  typedef signed_frac<    0, 15, true  > sat_q0n15;
+  typedef signed_frac<    7,  8, true  > sat_q7n8;
+  typedef signed_frac<    0, 31, true  > sat_q0n31;
+  typedef signed_frac<   15, 16, true  > sat_q15n16;
+
+  
 ///////////////////////////////////////////////////////////////////////////////
 //
 //  template <> class unsigned_frac<8,8> {

@@ -9,8 +9,8 @@ using namespace std;
 
 using namespace lamb;
 
-typedef q0n7  l_test_t;
-typedef q0n8  r_test_t;
+typedef q15n16  l_test_t;
+typedef q0n8    r_test_t;
 
 #define L_BASE ((l_test_t::MAX >> (sizeof(l_test_t::type) >> 1) >> 4) + 1)
 #define R_BASE ((r_test_t::MAX >> (sizeof(r_test_t::type) >> 1) >> 4) + 1)
@@ -49,7 +49,7 @@ int main() {
 //        printf("Try %d * %lld: = %u \n", x, y, fz.val);
 
         cout << "Try " << x << " * " << y << ": ";
-        printf("%d\n", fz.val);
+        printf("%u\n", fz.val);
         
         fflush(stdout);
       }
