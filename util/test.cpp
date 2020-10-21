@@ -29,7 +29,7 @@ using namespace std;
 // u0,32   Yes    Yes    Yes    EXCL  EXCL    EXCL  EXCL   EXCL   EXCL  EXCL
 // u8,8    Redo   Redo   Redo   ?     ?       EXCL  EXCL   EXCL   EXCL  EXCL
 // u16,16  Redo   Redo   Redo   ?     ?       EXCL  EXCL   EXCL   EXCL  EXCL
-// s0,7    Yes                  EXCL  EXCL                        EXCL  EXCL
+// s0,7    Yes    Yes    Yes    EXCL  EXCL                        EXCL  EXCL
 // s0,15                        EXCL  EXCL                        EXCL  EXCL
 // s0,31                        EXCL  EXCL                        EXCL  EXCL
 // s7,8    Redo   Redo   Redo   ?     ?       Redo  Redo   Redo   EXCL  EXL
@@ -37,8 +37,8 @@ using namespace std;
 
 using namespace lamb;
 
-typedef signed_frac<   0, 7 >  l_test_t;
-typedef unsigned_frac< 0, 16>  r_test_t;
+typedef signed_frac< 0, 7 >  l_test_t;
+typedef signed_frac< 0, 7>   r_test_t;
 
 #define L_BASE ((l_test_t::MAX >> (sizeof(l_test_t::type) >> 1) >> 4) + 1)
 #define R_BASE ((r_test_t::MAX >> (sizeof(r_test_t::type) >> 1) >> 4) + 1)

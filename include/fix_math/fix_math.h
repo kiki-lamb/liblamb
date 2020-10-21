@@ -276,10 +276,6 @@ namespace lamb {
         
         uint8_t shift = unsigned_frac<other_charac,other_mantissa>::FX_SHIFT;
 
-        // if (val < 0) {
-        //   shift --;
-        // }
-        
         printf("shift: %d\n", shift);
 
         tmp >>= shift;
@@ -305,7 +301,7 @@ namespace lamb {
       else {
         big_type tmp = ((big_type)val) * other.val;
       
- //       printf("preTMP1   is %hd.\n", tmp);
+        printf("preTMP1   is %hd.\n", tmp);
 
         uint8_t shift = unsigned_frac<other_charac,other_mantissa>::FX_SHIFT;
 
@@ -317,12 +313,12 @@ namespace lamb {
         
         r.val = (type)tmp;
 
-//      printf("\nSHIFT is %d.\n", shift);
-//      printf("r.val is %d.\n", r.val);
+        printf("\nSHIFT is %d.\n", shift);
+        printf("r.val is %d.\n", r.val);
             
-        if (tmp > MAX) {
+        if (r.val > MAX) {
 #ifndef LAMB_FP_SATURATE
-          printf("OVERFLOW: %d * %d = %hd\n", val, other.val, tmp);
+          printf("OVERFLOW: %d * %d = %hd\n", val, other.val, r.val);
           fflush(stdout);
 #else
           r.val = MAX;
