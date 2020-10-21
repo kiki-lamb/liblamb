@@ -319,8 +319,8 @@ namespace lamb {
       big_type      tmp = (((big_type)val) * other.val) >> unsigned_frac<charac,mantissa>::FX_SHIFT;
       unsigned_frac r   = unsigned_frac((type)tmp);
 
-      printf("TMP   is %lld.\n", tmp);
-      printf("r.val is %u.\n", r.val);
+//      printf("TMP   is %lld.\n", tmp);
+//      printf("r.val is %u.\n", r.val);
 
       if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
