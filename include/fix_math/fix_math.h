@@ -446,7 +446,7 @@ namespace lamb {
       if ( sizeof(unsigned_frac<other_carac,other_mantissa>) > sizeof(signed_frac) ) {
         pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;
         
-        printf("preTMP0 is  %llu.\n", tmp);
+//        printf("preTMP0 is  %u.\n", tmp);
         
         uint8_t shift = unsigned_frac<other_carac,other_mantissa>::FX_SHIFT;
 
@@ -458,8 +458,8 @@ namespace lamb {
         
         r.val = (type)tmp;
 
-        printf("\nSHIFT is %d.\n", shift);
-        printf("r.val is %d.\n", r.val);
+//        printf("\nSHIFT is %d.\n", shift);
+//        printf("r.val is %d.\n", r.val);
             
         if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
@@ -475,7 +475,7 @@ namespace lamb {
       else {
         big_type tmp = ((big_type)val) * other.val;
       
-        printf("preTMP1   is %hd.\n", tmp);
+ //       printf("preTMP1   is %hd.\n", tmp);
 
         uint8_t shift = unsigned_frac<other_carac,other_mantissa>::FX_SHIFT;
 
@@ -487,8 +487,8 @@ namespace lamb {
         
         r.val = (type)tmp;
 
-        printf("\nSHIFT is %d.\n", shift);
-        printf("r.val is %d.\n", r.val);
+//      printf("\nSHIFT is %d.\n", shift);
+//      printf("r.val is %d.\n", r.val);
             
         if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE

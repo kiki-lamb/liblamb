@@ -21,16 +21,29 @@ using namespace std;
 // s7,8    
 // s15,16  
 
+// Multiply tests #2:
+//
+// L/R     u0,8   u0,16  u0,32  u8,8  u16,16  s0,7  s0,15  s0,31  s7,8  s15,16
+// u0,8    Yes    Yes           EXCL  EXCL    EXCL  EXCL   EXCL   EXCL  EXCL
+// u0,16   Yes    Yes           EXCL  EXCL    EXCL  EXCL   EXCL   EXCL  EXCL
+// u0,32                        EXCL  EXCL    EXCL  EXCL   EXCL   EXCL  EXCL
+// u8,8                         ?     ?       EXCL  EXCL   EXCL   EXCL  EXCL
+// u16,16                       ?     ?       EXCL  EXCL   EXCL   EXCL  EXCL
+// s0,7                         EXCL  EXCL                        EXCL  EXCL
+// s0,15                        EXCL  EXCL                        EXCL  EXCL
+// s0,31                        EXCL  EXCL                        EXCL  EXCL
+// s7,8    
+// s15,16  
+
 using namespace lamb;
 
-typedef signed_frac<0,7>      l_test_t;
+typedef unsigned_frac<0,8>   l_test_t;
 typedef unsigned_frac<0,16>   r_test_t;
 
-#define L_BASE ((l_test_t::MAX >> (sizeof(l_test_t::type) >> 1) >> 3) + 1)
+#define L_BASE ((l_test_t::MAX >> (sizeof(l_test_t::type) >> 1) >> 4) + 1)
 #define R_BASE ((r_test_t::MAX >> (sizeof(r_test_t::type) >> 1) >> 4) + 1)
 
 int main() {
-  printf("THIS   is %u.\n", UINT32_MAX);
   printf("l BASE is %u.\n", L_BASE);
   printf("l ONE  is %d.\n", l_test_t::ONE);
   printf("l MAX  is %d.\n", l_test_t::MAX);
