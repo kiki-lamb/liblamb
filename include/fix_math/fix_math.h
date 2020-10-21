@@ -345,6 +345,7 @@ namespace lamb {
    signed_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), saturate__> tmp(
     val << 1
    );
+   
    return tmp;
   }
    
@@ -354,6 +355,7 @@ namespace lamb {
     signed_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), saturate__> tmp(
      val >> 1
     );
+    
     return tmp;
    }
 
