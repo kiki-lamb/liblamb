@@ -62,8 +62,7 @@ namespace lamb {
   
   template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_ = false>
   class unsigned_frac {
-    static_assert(((mantissa_ % 8) == 0), "bad bit count in mantissa");
-
+    
   public:
     static const bool    SATURATE       = saturate_;
     static const uint8_t CHARACTERISTIC = characteristic_;
@@ -71,6 +70,8 @@ namespace lamb {
     static const uint8_t FX_SHIFT       = CHARACTERISTIC + MANTISSA;
     static const size_t  SIZE           = FX_SHIFT / 8;
 
+    static_assert(((FX_SHIFT % 8) == 0), "bad bit count for this type");
+    
     typedef typename unsigned_int<SIZE>::type  type;
     typedef typename unsigned_int<(SIZE << 1)>::type big_type;
 
@@ -253,20 +254,23 @@ namespace lamb {
   
   template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_>
   class signed_frac {
-    static_assert((((mantissa_ + 1) % 8) == 0), "bad bit count in mantissa");
 
   public:
     static const uint8_t CHARACTERISTIC = characteristic_;
     static const uint8_t MANTISSA       = mantissa_;
     static const bool    SATURATE       = saturate_;
+    static const uint8_t FX_SHIFT       = CHARACTERISTIC + MANTISSA;
+    static const size_t  SIZE           = FX_SHIFT / 8;
+
+    static_assert((((FX_SHIFT + 1) % 8) == 0), "bad bit count for this type");
+
+    typedef typename signed_int<SIZE>::type  type;
+    typedef typename signed_int<(SIZE << 1)>::type big_type;
     
-    typedef typename signed_int<((CHARACTERISTIC+MANTISSA+1) >> 3)>::type  type;
-    typedef typename signed_int<(sizeof(type) << 1)>::type big_type;
+    static const type    ONE      = signed_int<(SIZE)>::MAX;
+    static const type    MAX      = signed_int<(SIZE)>::MAX;
+    static const type    MIN      = signed_int<(SIZE)>::MIN;
     
-    static const type    ONE      = signed_int<(sizeof(type))>::MAX;
-    static const type    MAX      = signed_int<(sizeof(type))>::MAX;
-    static const type    MIN      = signed_int<(sizeof(type))>::MIN;
-    static const uint8_t FX_SHIFT = sizeof(type) << 3;
     
     type val;
 
@@ -396,7 +400,7 @@ namespace lamb {
             printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
           }
           else {
-            printf("OVERFLOW: %d * %d = %hd\n", val, other.val, r.val);
+            printf("OVERFLOW: %d * %d = %hhd\n", val, other.val, r.val);
           }
         }        
       }
@@ -480,7 +484,7 @@ namespace lamb {
 
     template <bool saturate__>
     signed_frac operator / (signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other ) {
-      signed_frac<0,7> r = signed_frac<0,7>(val / other.val);
+      signed_frac r = signed_frac(val / other.val);
       return r;
     }        
 
