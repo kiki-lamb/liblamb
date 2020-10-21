@@ -1230,256 +1230,256 @@ namespace lamb {
   };
 
 ////////////////////////////////////////////////////////////////////////////////
-  
-  template <> class signed_frac<7,8> {
-  public:
-    typedef      q7n8_t  type;
-    typedef typename signed_int<(sizeof(type) << 1)>::type big_type;
-    static const type    ONE      = 1 << ((sizeof(type) >> 1) << 3);
-    static const type    MAX      = signed_int<(sizeof(type))>::MAX;
-    static const type    MIN      = signed_int<(sizeof(type))>::MIN;
-    static const uint8_t FX_SHIFT = (sizeof(type) >> 1) << 3;
-    
-    type val;
-
-    explicit signed_frac(type const & val_) :
-      val(val_) {}
-
-    explicit signed_frac(int8_t const & charac_, q0n8_t const & frac_) :
-      val((((int8_t)charac_) << FX_SHIFT) | frac_){}
-
-    int8_t chararac() const {
-      return val >> FX_SHIFT;
-    }
-
-    q0n8_t frac() const {
-      return val & 0xff;
-    }
-
-    signed_frac operator + (signed_frac const & other ) {
-      signed_frac<7,8> r = signed_frac<7,8>(val + other.val);
-      if (r.val < val) {
-#ifndef LAMB_FP_SATURATE
-        printf("OVERFLOW: %u + %u = %u\n", val, other.val, r.val);
-#else
-        r.val = MAX;
-        printf("SATURATE HI:  %u + %u = %u\n", val, other.val, r.val);
-#endif
-        fflush(stdout);
-      }
-      return r;
-    }    
-    signed_frac operator += (signed_frac const & other) {
-      val = ((*this) + other).val;
-      return *this;
-    }
-
-    signed_frac operator - (signed_frac const & other ) {
-      signed_frac<7,8> r = signed_frac<7,8>(val - other.val);
-      if (r.val > val) {
-#ifndef LAMB_FP_SATURATE
-//        printf("UNDERFLOW: %u - %u = %u\n", val, other.val, r.val);
-#else
-        r.val = 0;
-        printf("SATURATE LO: %u - %u = %u\n", val, other.val, r.val);
-#endif
-        fflush(stdout);
-      }
-      return r;
-    }    
-    signed_frac operator -= (signed_frac const & other) {
-      val = ((*this) - other).val;
-      return *this;
-    }
-
+//   
+//   template <> class signed_frac<7,8> {
+//   public:
+//     typedef      q7n8_t  type;
+//     typedef typename signed_int<(sizeof(type) << 1)>::type big_type;
+//     static const type    ONE      = 1 << ((sizeof(type) >> 1) << 3);
+//     static const type    MAX      = signed_int<(sizeof(type))>::MAX;
+//     static const type    MIN      = signed_int<(sizeof(type))>::MIN;
+//     static const uint8_t FX_SHIFT = (sizeof(type) >> 1) << 3;
+//     
+//     type val;
+// 
+//     explicit signed_frac(type const & val_) :
+//       val(val_) {}
+// 
+//     explicit signed_frac(int8_t const & charac_, q0n8_t const & frac_) :
+//       val((((int8_t)charac_) << FX_SHIFT) | frac_){}
+// 
+//     int8_t chararac() const {
+//       return val >> FX_SHIFT;
+//     }
+// 
+//     q0n8_t frac() const {
+//       return val & 0xff;
+//     }
+// 
+//     signed_frac operator + (signed_frac const & other ) {
+//       signed_frac<7,8> r = signed_frac<7,8>(val + other.val);
+//       if (r.val < val) {
+// #ifndef LAMB_FP_SATURATE
+//         printf("OVERFLOW: %u + %u = %u\n", val, other.val, r.val);
+// #else
+//         r.val = MAX;
+//         printf("SATURATE HI:  %u + %u = %u\n", val, other.val, r.val);
+// #endif
+//         fflush(stdout);
+//       }
+//       return r;
+//     }    
+//     signed_frac operator += (signed_frac const & other) {
+//       val = ((*this) + other).val;
+//       return *this;
+//     }
+// 
+//     signed_frac operator - (signed_frac const & other ) {
+//       signed_frac<7,8> r = signed_frac<7,8>(val - other.val);
+//       if (r.val > val) {
+// #ifndef LAMB_FP_SATURATE
+// //        printf("UNDERFLOW: %u - %u = %u\n", val, other.val, r.val);
+// #else
+//         r.val = 0;
+//         printf("SATURATE LO: %u - %u = %u\n", val, other.val, r.val);
+// #endif
+//         fflush(stdout);
+//       }
+//       return r;
+//     }    
+//     signed_frac operator -= (signed_frac const & other) {
+//       val = ((*this) - other).val;
+//       return *this;
+//     }
+// 
 ////////////////////////////////////////////////////////////////////////////////
-
-    template <uint8_t charac, uint8_t mantissa>
-    signed_frac operator * (unsigned_frac<charac,mantissa> const & other ) {
-      big_type    tmp = (((big_type)val) * other.val) >> unsigned_frac<charac,mantissa>::FX_SHIFT;
-      signed_frac r   = signed_frac((type)tmp);
-      
-      if (tmp > MAX) {
-#ifndef LAMB_FP_SATURATE
-        printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
-        fflush(stdout);
-#else
-        r.val = MAX;
-        printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
-#endif
-      }        
-      return r;
-    }    
-
-    template <uint8_t charac, uint8_t mantissa>
-    signed_frac operator *= (unsigned_frac<charac,mantissa> const & other) {
-      val = ((*this) * other).val;
-      return *this;
-    }
-
+// 
+//     template <uint8_t charac, uint8_t mantissa>
+//     signed_frac operator * (unsigned_frac<charac,mantissa> const & other ) {
+//       big_type    tmp = (((big_type)val) * other.val) >> unsigned_frac<charac,mantissa>::FX_SHIFT;
+//       signed_frac r   = signed_frac((type)tmp);
+//       
+//       if (tmp > MAX) {
+// #ifndef LAMB_FP_SATURATE
+//         printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
+//         fflush(stdout);
+// #else
+//         r.val = MAX;
+//         printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
+// #endif
+//       }        
+//       return r;
+//     }    
+// 
+//     template <uint8_t charac, uint8_t mantissa>
+//     signed_frac operator *= (unsigned_frac<charac,mantissa> const & other) {
+//       val = ((*this) * other).val;
+//       return *this;
+//     }
+// 
 ////////////////////////////////////////////////////////////////////////////////
-
-    template <uint8_t charac, uint8_t mantissa>
-    signed_frac operator * (signed_frac<charac,mantissa> const & other ) {
-      big_type    tmp = (((big_type)val) * other.val) >> (signed_frac<charac,mantissa>::FX_SHIFT - 1);
-      signed_frac r   = signed_frac((type)tmp);
-      
-      if (tmp > ONE) {
-#ifndef LAMB_FP_SATURATE
-        printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
-        fflush(stdout);
-#else
-        r.val = ONE;
-        printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
-#endif
-      }        
-      return r;
-    }    
-
-    template <uint8_t charac, uint8_t mantissa>
-    signed_frac operator *= (signed_frac<charac,mantissa> const & other) {
-      val = ((*this) * other).val;
-      return *this;
-    }
-
- ////////////////////////////////////////////////////////////////////////////////
-    
-    signed_frac operator / (signed_frac const & other ) {
-      signed_frac<7,8> r = signed_frac<7,8>(val / other.val);
-      return r;
-    }        
-    signed_frac operator /= (signed_frac const & other) {
-      val = ((*this) / other).val;
-      return *this;
-    }
-
-  };
-
+// 
+//     template <uint8_t charac, uint8_t mantissa>
+//     signed_frac operator * (signed_frac<charac,mantissa> const & other ) {
+//       big_type    tmp = (((big_type)val) * other.val) >> (signed_frac<charac,mantissa>::FX_SHIFT - 1);
+//       signed_frac r   = signed_frac((type)tmp);
+//       
+//       if (tmp > ONE) {
+// #ifndef LAMB_FP_SATURATE
+//         printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
+//         fflush(stdout);
+// #else
+//         r.val = ONE;
+//         printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
+// #endif
+//       }        
+//       return r;
+//     }    
+// 
+//     template <uint8_t charac, uint8_t mantissa>
+//     signed_frac operator *= (signed_frac<charac,mantissa> const & other) {
+//       val = ((*this) * other).val;
+//       return *this;
+//     }
+// 
+//  ////////////////////////////////////////////////////////////////////////////////
+//     
+//     signed_frac operator / (signed_frac const & other ) {
+//       signed_frac<7,8> r = signed_frac<7,8>(val / other.val);
+//       return r;
+//     }        
+//     signed_frac operator /= (signed_frac const & other) {
+//       val = ((*this) / other).val;
+//       return *this;
+//     }
+// 
+//   };
+// 
+// ////////////////////////////////////////////////////////////////////////////////
+//   
+//   template <> class signed_frac<15,16> {
+//   public:
+//     typedef      q15n16_t type;
+//     typedef typename signed_int<(sizeof(type) << 1)>::type big_type;
+//     static const type     ONE      = 1 << ((sizeof(type) >> 1) << 3);
+//     static const type     MAX      = signed_int<(sizeof(type))>::MAX;
+//     static const type     MIN      = signed_int<(sizeof(type))>::MIN;
+//     static const uint8_t  FX_SHIFT = (sizeof(type) >> 1) << 3;
+//     
+//     type val;
+// 
+//     explicit signed_frac(type const & val_) :
+//       val(val_) {}
+// 
+//     explicit signed_frac(int16_t const & charac_, q0n16_t const & frac_) :
+//       val((((int16_t)charac_) << FX_SHIFT) | frac_){}
+// 
+//     int16_t chararac() const {
+//       return val >> FX_SHIFT;
+//     }
+// 
+//     q0n16_t frac() const {
+//       return val & 0xff;
+//     }
+// 
+//     signed_frac operator + (signed_frac const & other ) {
+//       signed_frac<15,16> r = signed_frac<15,16>(val + other.val);
+//       if (r.val < val) {
+// #ifndef LAMB_FP_SATURATE
+//         printf("OVERFLOW: %u + %u = %u\n", val, other.val, r.val);
+// #else
+//         r.val = MAX;
+//         printf("SATURATE HI:  %u + %u = %u\n", val, other.val, r.val);
+// #endif
+//         fflush(stdout);
+//       }
+//       return r;
+//     }    
+//     signed_frac operator += (signed_frac const & other) {
+//       val = ((*this) + other).val;
+//       return *this;
+//     }
+// 
+//     signed_frac operator - (signed_frac const & other ) {
+//       signed_frac<15,16> r = signed_frac<15,16>(val - other.val);
+//       if (r.val > val) {
+// #ifndef LAMB_FP_SATURATE
+// //        printf("UNDERFLOW: %u - %u = %u\n", val, other.val, r.val);
+// #else
+//         r.val = 0;
+//         printf("SATURATE LO: %u - %u = %u\n", val, other.val, r.val);
+// #endif
+//         fflush(stdout);
+//       }
+//       return r;
+//     }    
+//     signed_frac operator -= (signed_frac const & other) {
+//       val = ((*this) - other).val;
+//       return *this;
+//     }
+// 
+// ////////////////////////////////////////////////////////////////////////////////
+// 
+//     template <uint8_t charac, uint8_t mantissa>
+//     signed_frac operator * (unsigned_frac<charac,mantissa> const & other ) {
+//       big_type    tmp = (((big_type)val) * other.val) >> unsigned_frac<charac,mantissa>::FX_SHIFT;
+//       signed_frac r   = signed_frac((type)tmp);
+//       
+//       if (tmp > MAX) {
+// #ifndef LAMB_FP_SATURATE
+//         printf("OVERFLOW: %d * %d = %lld\n", val, other.val, tmp);
+//         fflush(stdout);
+// #else
+//         r.val = MAX;
+//         printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
+// #endif
+//       }        
+//       return r;
+//     }    
+// 
+//     template <uint8_t charac, uint8_t mantissa>
+//     signed_frac operator *= (unsigned_frac<charac,mantissa> const & other) {
+//       val = ((*this) * other).val;
+//       return *this;
+//     }
+// 
+// ////////////////////////////////////////////////////////////////////////////////
+// 
+//     template <uint8_t charac, uint8_t mantissa>
+//     signed_frac operator * (signed_frac<charac,mantissa> const & other ) {
+//       big_type    tmp = (((big_type)val) * other.val) >> (signed_frac<charac,mantissa>::FX_SHIFT - 1);
+//       signed_frac r   = signed_frac((type)tmp);
+//       
+//       if (tmp > ONE) {
+// #ifndef LAMB_FP_SATURATE
+//         printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
+//         fflush(stdout);
+// #else
+//         r.val = ONE;
+//         printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
+// #endif
+//       }        
+//       return r;
+//     }    
+// 
+//     template <uint8_t charac, uint8_t mantissa>
+//     signed_frac operator *= (signed_frac<charac,mantissa> const & other) {
+//       val = ((*this) * other).val;
+//       return *this;
+//     }
+// 
 ////////////////////////////////////////////////////////////////////////////////
-  
-  template <> class signed_frac<15,16> {
-  public:
-    typedef      q15n16_t type;
-    typedef typename signed_int<(sizeof(type) << 1)>::type big_type;
-    static const type     ONE      = 1 << ((sizeof(type) >> 1) << 3);
-    static const type     MAX      = signed_int<(sizeof(type))>::MAX;
-    static const type     MIN      = signed_int<(sizeof(type))>::MIN;
-    static const uint8_t  FX_SHIFT = (sizeof(type) >> 1) << 3;
-    
-    type val;
-
-    explicit signed_frac(type const & val_) :
-      val(val_) {}
-
-    explicit signed_frac(int16_t const & charac_, q0n16_t const & frac_) :
-      val((((int16_t)charac_) << FX_SHIFT) | frac_){}
-
-    int16_t chararac() const {
-      return val >> FX_SHIFT;
-    }
-
-    q0n16_t frac() const {
-      return val & 0xff;
-    }
-
-    signed_frac operator + (signed_frac const & other ) {
-      signed_frac<15,16> r = signed_frac<15,16>(val + other.val);
-      if (r.val < val) {
-#ifndef LAMB_FP_SATURATE
-        printf("OVERFLOW: %u + %u = %u\n", val, other.val, r.val);
-#else
-        r.val = MAX;
-        printf("SATURATE HI:  %u + %u = %u\n", val, other.val, r.val);
-#endif
-        fflush(stdout);
-      }
-      return r;
-    }    
-    signed_frac operator += (signed_frac const & other) {
-      val = ((*this) + other).val;
-      return *this;
-    }
-
-    signed_frac operator - (signed_frac const & other ) {
-      signed_frac<15,16> r = signed_frac<15,16>(val - other.val);
-      if (r.val > val) {
-#ifndef LAMB_FP_SATURATE
-//        printf("UNDERFLOW: %u - %u = %u\n", val, other.val, r.val);
-#else
-        r.val = 0;
-        printf("SATURATE LO: %u - %u = %u\n", val, other.val, r.val);
-#endif
-        fflush(stdout);
-      }
-      return r;
-    }    
-    signed_frac operator -= (signed_frac const & other) {
-      val = ((*this) - other).val;
-      return *this;
-    }
-
-////////////////////////////////////////////////////////////////////////////////
-
-    template <uint8_t charac, uint8_t mantissa>
-    signed_frac operator * (unsigned_frac<charac,mantissa> const & other ) {
-      big_type    tmp = (((big_type)val) * other.val) >> unsigned_frac<charac,mantissa>::FX_SHIFT;
-      signed_frac r   = signed_frac((type)tmp);
-      
-      if (tmp > MAX) {
-#ifndef LAMB_FP_SATURATE
-        printf("OVERFLOW: %d * %d = %lld\n", val, other.val, tmp);
-        fflush(stdout);
-#else
-        r.val = MAX;
-        printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
-#endif
-      }        
-      return r;
-    }    
-
-    template <uint8_t charac, uint8_t mantissa>
-    signed_frac operator *= (unsigned_frac<charac,mantissa> const & other) {
-      val = ((*this) * other).val;
-      return *this;
-    }
-
-////////////////////////////////////////////////////////////////////////////////
-
-    template <uint8_t charac, uint8_t mantissa>
-    signed_frac operator * (signed_frac<charac,mantissa> const & other ) {
-      big_type    tmp = (((big_type)val) * other.val) >> (signed_frac<charac,mantissa>::FX_SHIFT - 1);
-      signed_frac r   = signed_frac((type)tmp);
-      
-      if (tmp > ONE) {
-#ifndef LAMB_FP_SATURATE
-        printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
-        fflush(stdout);
-#else
-        r.val = ONE;
-        printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
-#endif
-      }        
-      return r;
-    }    
-
-    template <uint8_t charac, uint8_t mantissa>
-    signed_frac operator *= (signed_frac<charac,mantissa> const & other) {
-      val = ((*this) * other).val;
-      return *this;
-    }
-
-////////////////////////////////////////////////////////////////////////////////
-
-    signed_frac operator / (signed_frac const & other ) {
-      signed_frac<15,16> r = signed_frac<15,16>(val / other.val);
-      return r;
-    }        
-    signed_frac operator /= (signed_frac const & other) {
-      val = ((*this) / other).val;
-      return *this;
-    }
-  };
-
+// 
+//     signed_frac operator / (signed_frac const & other ) {
+//       signed_frac<15,16> r = signed_frac<15,16>(val / other.val);
+//       return r;
+//     }        
+//     signed_frac operator /= (signed_frac const & other) {
+//       val = ((*this) / other).val;
+//       return *this;
+//     }
+//   };
+// 
 ////////////////////////////////////////////////////////////////////////////////
   
 }
