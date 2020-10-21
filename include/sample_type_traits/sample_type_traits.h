@@ -18,6 +18,8 @@ namespace lamb {
   template <> class unsigned_int<1> {
   public:
     typedef uint8_t type;
+    static const type MIN = 0;
+    static const type MAX = UINT8_MAX;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -25,6 +27,8 @@ namespace lamb {
   template <> class unsigned_int<2> {
   public:
     typedef uint16_t type;
+    static const type MIN = 0;
+    static const type MAX = UINT16_MAX;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -32,6 +36,8 @@ namespace lamb {
   template <> class unsigned_int<4> {
   public:
     typedef uint32_t type;
+    static const type MIN = 0;
+    static const type MAX = UINT32_MAX;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -39,6 +45,8 @@ namespace lamb {
   template <> class unsigned_int<8> {
   public:
     typedef uint64_t type;
+    static const type MIN = 0;
+    static const type MAX = UINT64_MAX;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -52,6 +60,8 @@ namespace lamb {
   template <> class signed_int<1> {
   public:
     typedef int8_t type;
+    static const type MIN = INT8_MIN;
+    static const type MAX = INT8_MAX;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -59,6 +69,8 @@ namespace lamb {
   template <> class signed_int<2> {
   public:
     typedef int16_t type;
+    static const type MIN = INT16_MIN;
+    static const type MAX = INT16_MAX;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -66,13 +78,17 @@ namespace lamb {
   template <> class signed_int<4> {
   public:
     typedef int32_t type;
+    static const type MIN = INT32_MIN;
+    static const type MAX = INT32_MAX;
   };
 
 ////////////////////////////////////////////////////////////////////////////////
   
   template <> class signed_int<8> {
   public:
-    typedef int64_t type;
+    typedef int64_t type; 
+    static const type MIN = INT64_MIN;
+    static const type MAX = INT64_MAX;
   };
 
 ////////////////////////////////////////////////////////////////////////////////

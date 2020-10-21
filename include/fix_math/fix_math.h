@@ -570,7 +570,7 @@ namespace lamb {
     static const type    ONE      = 0x7f;
     static const type    MAX      = 0x7f;
     static const type    MIN      = -128;
-    static const uint8_t FX_SHIFT = (sizeof(type) << 3) -1;
+    static const uint8_t FX_SHIFT = sizeof(type) << 3;
     
     type val;
 
@@ -625,7 +625,7 @@ namespace lamb {
 
     template <uint8_t charac, uint8_t mantissa>
     signed_frac operator * (unsigned_frac<charac,mantissa> const & other ) {
-      big_type    tmp = (((big_type)val) * other.val) >> unsigned_frac<charac,mantissa>::FX_SHIFT;
+      big_type    tmp = (((big_type)val) * other.val) >> (unsigned_frac<charac,mantissa>::FX_SHIFT - 1);
       signed_frac r   = signed_frac((type)tmp);
       
       if (tmp > ONE) {
@@ -650,7 +650,7 @@ namespace lamb {
 
     template <uint8_t charac, uint8_t mantissa>
     signed_frac operator * (signed_frac<charac,mantissa> const & other ) {
-      big_type    tmp = (((big_type)val) * other.val) >> signed_frac<charac,mantissa>::FX_SHIFT;
+      big_type    tmp = (((big_type)val) * other.val) >> (signed_frac<charac,mantissa>::FX_SHIFT - 1);
       signed_frac r   = signed_frac((type)tmp);
       
       if (tmp > ONE) {
@@ -694,7 +694,7 @@ namespace lamb {
     static const type    ONE      = 0x7fff;
     static const type    MAX      = 0x7fff;
     static const type    MIN      = -32768;
-    static const uint8_t FX_SHIFT = (sizeof(type) << 3) -1;
+    static const uint8_t FX_SHIFT = sizeof(type) << 3;
     
     type val;
 
@@ -749,7 +749,7 @@ namespace lamb {
 
     template <uint8_t charac, uint8_t mantissa>
     signed_frac operator * (unsigned_frac<charac,mantissa> const & other ) {
-      big_type    tmp = (((big_type)val) * other.val) >> unsigned_frac<charac,mantissa>::FX_SHIFT;
+      big_type    tmp = (((big_type)val) * other.val) >> (unsigned_frac<charac,mantissa>::FX_SHIFT - 1);
       signed_frac r   = signed_frac((type)tmp);
       
       if (tmp > ONE) {
@@ -774,7 +774,7 @@ namespace lamb {
 
     template <uint8_t charac, uint8_t mantissa>
     signed_frac operator * (signed_frac<charac,mantissa> const & other ) {
-      big_type    tmp = (((big_type)val) * other.val) >> signed_frac<charac,mantissa>::FX_SHIFT;
+      big_type    tmp = (((big_type)val) * other.val) >> (signed_frac<charac,mantissa>::FX_SHIFT - 1);
       signed_frac r   = signed_frac((type)tmp);
       
       if (tmp > ONE) {
@@ -817,7 +817,7 @@ namespace lamb {
     static const type    ONE      = 0x7fff'ffff;
     static const type    MAX      = 0x7fff'ffff;
     static const type    MIN      = -2147483648;
-    static const uint8_t FX_SHIFT = (sizeof(type) << 3) - 1;
+    static const uint8_t FX_SHIFT = sizeof(type) << 3;
     
     type val;
 
@@ -872,7 +872,7 @@ namespace lamb {
 
     template <uint8_t charac, uint8_t mantissa>
     signed_frac operator * (unsigned_frac<charac,mantissa> const & other ) {
-      big_type    tmp = (((big_type)val) * other.val) >> unsigned_frac<charac,mantissa>::FX_SHIFT;
+      big_type    tmp = (((big_type)val) * other.val) >> (unsigned_frac<charac,mantissa>::FX_SHIFT - 1);
       signed_frac r   = signed_frac((type)tmp);
       
       if (tmp > ONE) {
@@ -897,7 +897,7 @@ namespace lamb {
 
     template <uint8_t charac, uint8_t mantissa>
     signed_frac operator * (signed_frac<charac,mantissa> const & other ) {
-      big_type    tmp = (((big_type)val) * other.val) >> signed_frac<charac,mantissa>::FX_SHIFT;
+      big_type    tmp = (((big_type)val) * other.val) >> (signed_frac<charac,mantissa>::FX_SHIFT - 1);
       signed_frac r   = signed_frac((type)tmp);
       
       if (tmp > ONE) {
@@ -939,7 +939,7 @@ namespace lamb {
     static const type    ONE      = 0x0100;
     static const type    MAX      = 0x7fff;
     static const type    MIN      = (type)MAX+1;
-    static const uint8_t FX_SHIFT = ((sizeof(type) >> 1) << 3) - 1;
+    static const uint8_t FX_SHIFT = (sizeof(type) >> 1) << 3;
     
     type val;
 
@@ -997,7 +997,7 @@ namespace lamb {
 
     template <uint8_t charac, uint8_t mantissa>
     signed_frac operator * (unsigned_frac<charac,mantissa> const & other ) {
-      big_type    tmp = (((big_type)val) * other.val) >> unsigned_frac<charac,mantissa>::FX_SHIFT;
+      big_type    tmp = (((big_type)val) * other.val) >> (unsigned_frac<charac,mantissa>::FX_SHIFT - 1);
       signed_frac r   = signed_frac((type)tmp);
       
       if (tmp > ONE) {
@@ -1022,7 +1022,7 @@ namespace lamb {
 
     template <uint8_t charac, uint8_t mantissa>
     signed_frac operator * (signed_frac<charac,mantissa> const & other ) {
-      big_type    tmp = (((big_type)val) * other.val) >> signed_frac<charac,mantissa>::FX_SHIFT;
+      big_type    tmp = (((big_type)val) * other.val) >> (signed_frac<charac,mantissa>::FX_SHIFT - 1);
       signed_frac r   = signed_frac((type)tmp);
       
       if (tmp > ONE) {
@@ -1123,7 +1123,7 @@ namespace lamb {
 
     template <uint8_t charac, uint8_t mantissa>
     signed_frac operator * (unsigned_frac<charac,mantissa> const & other ) {
-      big_type    tmp = (((big_type)val) * other.val) >> unsigned_frac<charac,mantissa>::FX_SHIFT;
+      big_type    tmp = (((big_type)val) * other.val) >> (unsigned_frac<charac,mantissa>::FX_SHIFT - 1);
       signed_frac r   = signed_frac((type)tmp);
       
       if (tmp > ONE) {
@@ -1148,7 +1148,7 @@ namespace lamb {
 
     template <uint8_t charac, uint8_t mantissa>
     signed_frac operator * (signed_frac<charac,mantissa> const & other ) {
-      big_type    tmp = (((big_type)val) * other.val) >> signed_frac<charac,mantissa>::FX_SHIFT;
+      big_type    tmp = (((big_type)val) * other.val) >> (signed_frac<charac,mantissa>::FX_SHIFT - 1);
       signed_frac r   = signed_frac((type)tmp);
       
       if (tmp > ONE) {

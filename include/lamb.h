@@ -12,7 +12,7 @@
 
   #include "sample_type_traits/sample_type_traits.h"
 
-#include "fix_math/fix_math.h"
+  #include "fix_math/fix_math.h"
 
   #include "sample_type_interfaces/sample_type_interfaces.h"
 
