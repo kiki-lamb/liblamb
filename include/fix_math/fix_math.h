@@ -70,8 +70,22 @@ namespace lamb {
     static const type    MAX      = unsigned_int<((mantissa / 8))>::MAX;
     static const type    MIN      = unsigned_int<((mantissa / 8))>::MIN;
     static const uint8_t FX_SHIFT = mantissa;
-    
+
     type val;
+
+    template <bool saturate__>
+    operator unsigned_frac<(characteristic << 1), (mantissa << 1), saturate__> () const {
+      unsigned_frac<(characteristic << 1), (mantissa << 1), saturate__> tmp(val << 1);
+
+      return tmp;
+    }
+
+    template <bool saturate__>
+    operator unsigned_frac<(characteristic >> 1), (mantissa >> 1), saturate__> () const {
+      unsigned_frac<(characteristic >> 1), (mantissa >> 1), saturate__> tmp(val >> 1);
+
+      return tmp;
+    }
 
     explicit unsigned_frac(type const & val_) :
       val(val_) {}
@@ -231,6 +245,20 @@ namespace lamb {
     static const uint8_t FX_SHIFT = sizeof(type) << 3;
     
     type val;
+
+    template <bool saturate__>
+    operator signed_frac<(characteristic << 1), (mantissa << 1), saturate__> () const {
+      signed_frac<(characteristic << 1), (mantissa << 1), saturate__> tmp(val << 1);
+
+      return tmp;
+    }
+
+    template <bool saturate__>
+    operator signed_frac<(characteristic >> 1), (mantissa >> 1), saturate__> () const {
+      signed_frac<(characteristic >> 1), (mantissa >> 1), saturate__> tmp(val >> 1);
+
+      return tmp;
+    }
 
     explicit signed_frac(type const & val_) :
       val(val_) {}

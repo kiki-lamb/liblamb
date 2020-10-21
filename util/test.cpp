@@ -45,6 +45,11 @@ typedef unsigned_frac< 0,  8>   r_test_t;
 
 int main() {
   unsigned_frac<0,8,true> x(0x40);
+
+  unsigned_frac<0,16,true> z(x);
+
+  printf("Conv: %d\n", z.val);
+  
   unsigned_frac<0,8,false> y(0x80);
   
   printf("Add: %d\n", (x + y).val);
