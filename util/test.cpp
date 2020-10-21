@@ -6,21 +6,23 @@
 
 using namespace lamb;
 
-typedef signed_frac<0,7>   l_test_t;
-typedef unsigned_frac<0,8> r_test_t;
+typedef signed_frac<0,7> l_test_t;
+typedef signed_frac<0,7> r_test_t;
 
 #define BASE 1
 
 int main() {
   printf("l ONE is %d.\n", l_test_t::ONE);
   printf("l MAX is %d.\n", l_test_t::MAX);
+  printf("l MIN is %d.\n", l_test_t::MIN);
   printf("r ONE is %d.\n", r_test_t::ONE);
   printf("r MAX is %d.\n", r_test_t::MAX);
+  printf("l MIN is %d.\n", l_test_t::MIN);
   
-  for (  int64_t x = -128; x <= (((int16_t)l_test_t::MAX)); x+= BASE) {
-    printf("[%lld]\n", x);
+  for (  l_test_t::type x = l_test_t::MIN; x <= l_test_t::MAX; x += BASE) {
+    printf("[%d]\n", x);
     
-    for (int64_t y = 0; y <= (((uint16_t)r_test_t::MAX)); y+= BASE) {
+    for (  r_test_t::type y = r_test_t::MIN; y <= r_test_t::MAX; y += BASE) {    
       l_test_t fx(x);
       r_test_t fy(y);
       
@@ -38,7 +40,7 @@ int main() {
       
       {
         l_test_t fz = fx * fy;
-        printf("Try %lld * %lld: = %d \n", x, y, fz.val);
+        printf("Try %d * %d: = %d \n", x, y, fz.val);
         fflush(stdout);
       }
 
