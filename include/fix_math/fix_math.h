@@ -8,45 +8,45 @@
 #endif
 
 #ifndef LAMB_FP_NO_OVERFLOW_CHECKING
-#define CHECK_OVERFLOW                                  \
-  template <typename delta_t, typename new_t>           \
-  static void check_overflow(                           \
-    char    const & symbol,                             \
-    type    const & old_val,                            \
-    delta_t const & delta,                              \
-    new_t   const & new_val,                            \
-    type          & set                                 \
-  ) {                                                   \
-    bool over  = new_val > MAX;                         \
-    bool under = new_val < MIN;                         \
-                                                        \
-    if (over || under) {                                \
-      if (SATURATE) {                                   \
-        set = MAX;                                      \
-        printf("SAT %s:  ", over ? "HI" : "LO");        \
-        cout << old_val;                                \
-        printf(" %c ", symbol);                         \
-        cout << delta;                                  \
-        printf(" = ");                                  \
-        cout << new_val << "\n";                        \
-      }                                                 \
-      else {                                            \
-        printf("%sFLOW: ", over ? "OVER" : "UNDER");    \
-        cout << old_val;                                \
-        printf(" %c ", symbol);                         \
-        cout << delta << " = " << new_val << "\n";      \
-      }                                                 \
-    }                                                   \
+#define CHECK_OVERFLOW                                 \
+  template <typename delta_t, typename new_t>          \
+  static void check_overflow(                          \
+    char    const & symbol,                            \
+    type    const & old_val,                           \
+    delta_t const & delta,                             \
+    new_t   const & new_val,                           \
+    type          & set                                \
+  ) {                                                  \
+    bool over  = new_val > MAX;                        \
+    bool under = new_val < MIN;                        \
+                                                       \
+    if (over || under) {                               \
+      if (SATURATE) {                                  \
+        set = MAX;                                     \
+        printf("SAT %s:  ", over ? "HI" : "LO");       \
+        cout << old_val;                               \
+        printf(" %c ", symbol);                        \
+        cout << delta;                                 \
+        printf(" = ");                                 \
+        cout << new_val << "\n";                       \
+      }                                                \
+      else {                                           \
+        printf("%sFLOW: ", over ? "OVER" : "UNDER");   \
+        cout << old_val;                               \
+        printf(" %c ", symbol);                        \
+        cout << delta << " = " << new_val << "\n";     \
+      }                                                \
+    }                                                  \
   }                                                     
 #else
-#define CHECK_OVERFLOW                                    \
-  template <typename delta_t, typename new_t>             \
-  static void check_overflow(                             \
-    char    const & symbol,                               \
-      type    const & old_val,                            \
-      delta_t const & delta,                              \
-      new_t   const & new_val,                            \
-      type          & set                                 \
+#define CHECK_OVERFLOW                                 \
+  template <typename delta_t, typename new_t>          \
+  static void check_overflow(                          \
+    char    const & symbol,                            \
+      type    const & old_val,                         \
+      delta_t const & delta,                           \
+      new_t   const & new_val,                         \
+      type          & set                              \
   ) {}                                                    
 #endif
 
