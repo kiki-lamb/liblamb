@@ -184,7 +184,7 @@ namespace lamb {
       unsigned_frac r(0);
       type          old(val);
       
-      if ( sizeof(other_type) > sizeof(unsigned_frac) ) {
+      if (sizeof(other_type) > sizeof(unsigned_frac)) {
         pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;
         static const uint8_t shift = other_type::FX_SHIFT;
         tmp >>= shift;
@@ -336,7 +336,7 @@ namespace lamb {
       signed_frac r(0);
       type        old(val);
 
-      if ( sizeof(other_type) > sizeof(signed_frac) ) {
+      if (sizeof(other_type) > sizeof(signed_frac)) {
         pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;        
         uint8_t shift = other_type::FX_SHIFT;
         printf("shift: %d\n", shift);
@@ -381,7 +381,7 @@ namespace lamb {
       signed_frac r(0);
       type        old(val);
 
-      if ( sizeof(other_type) > sizeof(signed_frac) ) {
+      if (sizeof(other_type) > sizeof(signed_frac)) {
         pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;        
         tmp >>= other_type::FX_SHIFT - 1;
         r.val = (type)tmp;
