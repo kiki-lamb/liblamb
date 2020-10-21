@@ -115,6 +115,8 @@ namespace lamb {
       return *this;
     }
 
+////////////////////////////////////////////////////////////////////////////////
+    
     unsigned_frac operator * (unsigned_frac const & other ) {      
       big_type tmp = (((big_type)val) * other.val) >> FX_SHIFT;
       unsigned_frac<0,8>     r   = unsigned_frac<0,8>((type)tmp);
@@ -128,13 +130,14 @@ namespace lamb {
         printf("SAT HI:  %u * %u = %u\n", val, other.val, r.val);
 #endif
       }        
-
       return r;
     }    
     unsigned_frac operator *= (unsigned_frac const & other) {
       val = ((*this) * other).val;
       return *this;
     }
+
+ ////////////////////////////////////////////////////////////////////////////////
     
     unsigned_frac operator / (unsigned_frac const & other ) {
       unsigned_frac<0,8> r = unsigned_frac<0,8>(val / other.val);
@@ -206,6 +209,8 @@ namespace lamb {
       return *this;
     }
 
+ ////////////////////////////////////////////////////////////////////////////////
+    
     unsigned_frac operator * (unsigned_frac const & other ) {      
       big_type tmp = (((big_type)val) * other.val) >> FX_SHIFT;
       unsigned_frac<0,16>     r   = unsigned_frac<0,16>((type)tmp);
@@ -219,13 +224,14 @@ namespace lamb {
         // printf("SATURATE HI:  %u * %u = %u\n", val, other.val, r.val);
 #endif
       }        
-
       return r;
     }    
     unsigned_frac operator *= (unsigned_frac const & other) {
       val = ((*this) * other).val;
       return *this;
     }
+
+////////////////////////////////////////////////////////////////////////////////    
     
     unsigned_frac operator / (unsigned_frac const & other ) {
       unsigned_frac<0,16> r = unsigned_frac<0,16>(val / other.val);
@@ -297,6 +303,8 @@ namespace lamb {
       return *this;
     }
 
+ ////////////////////////////////////////////////////////////////////////////////
+    
     unsigned_frac operator * (unsigned_frac const & other ) {      
       big_type tmp = (((big_type)val) * other.val) >> FX_SHIFT;
       unsigned_frac<0,32>     r   = unsigned_frac<0,32>((type)tmp);
@@ -310,13 +318,14 @@ namespace lamb {
         // printf("SATURATE HI:  %u * %u = %u\n", val, other.val, r.val);
 #endif
       }        
-
       return r;
     }    
     unsigned_frac operator *= (unsigned_frac const & other) {
       val = ((*this) * other).val;
       return *this;
     }
+
+////////////////////////////////////////////////////////////////////////////////    
     
     unsigned_frac operator / (unsigned_frac const & other ) {
       unsigned_frac<0,32> r = unsigned_frac<0,32>(val / other.val);
@@ -391,6 +400,8 @@ namespace lamb {
       return *this;
     }
 
+ ////////////////////////////////////////////////////////////////////////////////
+    
     unsigned_frac operator * (unsigned_frac const & other ) {      
       big_type tmp = (((big_type)val) * other.val) >> FX_SHIFT;
       unsigned_frac<8,8>     r   = unsigned_frac<8,8>((type)tmp);
@@ -411,6 +422,8 @@ namespace lamb {
       val = ((*this) * other).val;
       return *this;
     }
+
+////////////////////////////////////////////////////////////////////////////////
     
     unsigned_frac operator / (unsigned_frac const & other ) {
       unsigned_frac<8,8> r = unsigned_frac<8,8>(val / other.val);
@@ -485,6 +498,8 @@ namespace lamb {
       return *this;
     }
 
+////////////////////////////////////////////////////////////////////////////////
+
     unsigned_frac operator * (unsigned_frac const & other ) {      
       big_type tmp = (((big_type)val) * other.val) >> FX_SHIFT;
       unsigned_frac<16,16>     r   = unsigned_frac<16,16>((type)tmp);
@@ -505,6 +520,8 @@ namespace lamb {
       val = ((*this) * other).val;
       return *this;
     }
+
+////////////////////////////////////////////////////////////////////////////////
     
     unsigned_frac operator / (unsigned_frac const & other ) {
       unsigned_frac<16,16> r = unsigned_frac<16,16>(val / other.val);
