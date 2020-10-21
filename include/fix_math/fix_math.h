@@ -64,7 +64,7 @@ namespace lamb {
 
   private:
     template <typename new_t, typename other_t>
-    void check_overflow(
+    static void check_overflow(
       type old_val,
       new_t new_val,
       type & set,
@@ -255,7 +255,7 @@ namespace lamb {
 
   private:
     template <typename new_t, typename other_t>
-    void check_overflow(
+    static void check_overflow(
       type old_val,
       new_t new_val,
       type & set,
