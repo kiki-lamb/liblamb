@@ -10,9 +10,9 @@
 // u0,8    Yes    Yes    Yes    EXCL  EXCL    OMIT  OMIT   OMIT   OMIT  OMIT  
 // u0,16   Yes    Yes    Yes    EXCL  EXCL    OMIT  OMIT   OMIT   OMIT  OMIT
 // u0,32   Yes    Yes    Yes    EXCL  EXCL    OMIT  OMIT   OMIT   OMIT  OMIT
-// u8,8       
-// u16,16  
-// s0,7    
+// u8,8    Yes    Yes    Yes    Impl? Impl?   OMIT  OMIT   OMIT   OMIT  OMIT
+// u16,16  Yes    Yes    Yes    Impl? Impl?   OMIT  OMIT   OMIT   OMIT  OMIT
+// s0,7    Yes    Yes    Yes    
 // s0,15   
 // s0,31   
 // s7,8    
@@ -20,7 +20,7 @@
 
 using namespace lamb;
 
-typedef unsigned_frac<0,32>    l_test_t;
+typedef signed_frac<0,7>      l_test_t;
 typedef unsigned_frac<0,32>    r_test_t;
 
 #define L_BASE ((l_test_t::MAX >> (sizeof(l_test_t::type) >> 1) >> 4) + 1)
@@ -29,9 +29,9 @@ typedef unsigned_frac<0,32>    r_test_t;
 int main() {
   printf("THIS   is %u.\n", UINT32_MAX);
   printf("l BASE is %u.\n", L_BASE);
-  printf("l ONE  is %u.\n", l_test_t::ONE);
-  printf("l MAX  is %u.\n", l_test_t::MAX);
-  printf("l MIN  is %u.\n", l_test_t::MIN);
+  printf("l ONE  is %d.\n", l_test_t::ONE);
+  printf("l MAX  is %d.\n", l_test_t::MAX);
+  printf("l MIN  is %d.\n", l_test_t::MIN);
   printf("r BASE is %u.\n", R_BASE);
   printf("r ONE  is %u.\n", r_test_t::ONE);
   printf("r MAX  is %u.\n", r_test_t::MAX);

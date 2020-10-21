@@ -441,8 +441,13 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
     template <uint8_t charac, uint8_t mantissa>
-      unsigned_frac operator * (unsigned_frac<charac,mantissa> const & other ) {
-      big_type      tmp = (((big_type)val) * other.val) >> unsigned_frac<charac,mantissa>::FX_SHIFT;
+    unsigned_frac operator * (unsigned_frac<charac,mantissa> const & other ) {
+      static_assert(0 == charac, "Reverse operand order!");
+    
+      typename unsigned_frac<charac,mantissa>::big_type tmp =
+        (((typename unsigned_frac<charac,mantissa>::big_type)val) * other.val) >>
+        unsigned_frac<charac,mantissa>::FX_SHIFT;
+      
       unsigned_frac r   = unsigned_frac((type)tmp);
       
 //      printf("TMP   is %d.\n", tmp);
@@ -546,7 +551,12 @@ namespace lamb {
 
     template <uint8_t charac, uint8_t mantissa>
       unsigned_frac operator * (unsigned_frac<charac,mantissa> const & other ) {
-      big_type      tmp = (((big_type)val) * other.val) >> unsigned_frac<charac,mantissa>::FX_SHIFT;
+      static_assert(0 == charac, "Reverse operand order!");
+      
+      typename unsigned_frac<charac,mantissa>::big_type tmp =
+        (((typename unsigned_frac<charac,mantissa>::big_type)val) * other.val) >>
+        unsigned_frac<charac,mantissa>::FX_SHIFT;
+      
       unsigned_frac r   = unsigned_frac((type)tmp);
       
       if (tmp > MAX) {
@@ -644,17 +654,21 @@ namespace lamb {
 
     template <uint8_t charac, uint8_t mantissa>
     signed_frac operator * (unsigned_frac<charac,mantissa> const & other ) {
-      uint8_t     shift = unsigned_frac<charac,mantissa>::FX_SHIFT;
-      big_type    tmp = (((big_type)val) * other.val) >> shift;
-      signed_frac r     = signed_frac((type)tmp); 
+      static_assert(0 == charac, "Reverse operand order!");
+      
+      typename unsigned_frac<charac,mantissa>::big_type tmp =
+        (((typename unsigned_frac<charac,mantissa>::big_type)val) * other.val) >>
+        unsigned_frac<charac,mantissa>::FX_SHIFT;
+      
+      signed_frac r   = signed_frac((type)tmp);
                               
-      printf("\nSHIFT is %d.\n", shift);
-      printf("TMP   is %d.\n", tmp);
+      printf("\nSHIFT is %d.\n", unsigned_frac<charac,mantissa>::FX_SHIFT);
+      printf("TMP   is %llu.\n", tmp);
       printf("r.val is %d.\n", r.val);
             
       if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
-        printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
+        printf("OVERFLOW: %d * %d = %llu\n", val, other.val, tmp);
         fflush(stdout);
 #else
         r.val = MAX;
