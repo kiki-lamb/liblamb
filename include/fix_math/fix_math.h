@@ -667,8 +667,7 @@ namespace lamb {
       if ( sizeof(unsigned_frac<charac,mantissa>) > sizeof(signed_frac) ) {
         pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;
         
-        printf("preTMP0   is "); // %llu.\n", tmp);
-        cout << tmp << "\n";
+        printf("preTMP0   %llu.\n", tmp);
         
         uint8_t shift = unsigned_frac<charac,mantissa>::FX_SHIFT;
 
@@ -686,7 +685,7 @@ namespace lamb {
         if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
           printf("OVERFLOW: %d * ", val);   // %hu = %lld\n", val, other.val, tmp);
-          cout << val << " * " << other.val << " = " << tmp << "\n";
+          cout << other.val << " = " << tmp << "\n";
           fflush(stdout);
 #else
           r.val = MAX;
@@ -701,7 +700,7 @@ namespace lamb {
 
         uint8_t shift = unsigned_frac<charac,mantissa>::FX_SHIFT;
 
-        if ( (val < 0) && ((mantissa % 8) != 0) ) {
+        if (val < 0) {
           shift --;
         }
         
