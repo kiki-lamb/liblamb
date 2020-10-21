@@ -63,16 +63,21 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   private:
-    template <typename val_t, typename other_t>
-    void check_overflow(val_t & t_, other_t const & other) {
-      if (t_ > MAX) {
+    template <typename new_t, typename other_t>
+    void check_overflow(
+      type old_val,
+      new_t new_val,
+      type & set,
+      other_t const & other
+    ) {
+      if (new_val > MAX) {
         if (SATURATE) {
-          t_ = MAX;
-          printf("SAT HI:  %d * %d = %d\n", val, other.val, t_);
+          set = MAX;
+          printf("SAT HI:  %d * %d = %d\n", old_val, other.val, new_val);
         }
         else {
-          printf("OVERFLOW: %d * ", val);   
-          cout << other.val << " = " << t_ << "\n";
+          printf("OVERFLOW: %d * ", old_val);
+          cout << other.val << " = " << new_val << "\n";
         }
       }
     }
@@ -110,8 +115,10 @@ namespace lamb {
     
     template <bool saturate__> 
     unsigned_frac operator + (unsigned_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other ) {
-      unsigned_frac r = unsigned_frac(val + other.val);
-      check_overflow(r.val, other);
+      type     old  = val;
+      big_type new_ = old + other.val;
+      unsigned_frac r = unsigned_frac(new_);
+      check_overflow(old, new_, r.val, other);
       return r;
     }    
 
@@ -125,8 +132,10 @@ namespace lamb {
     
     template <bool saturate__>
     unsigned_frac operator - (unsigned_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other ) {
-      unsigned_frac r = unsigned_frac(val - other.val);
-      check_overflow(r.val, other);
+      type     old  = val;
+      big_type new_ = old - other.val;
+      unsigned_frac r = unsigned_frac(new_);
+      check_overflow(old, new_, r.val, other);
       return r;
     }    
 
@@ -148,6 +157,8 @@ namespace lamb {
 
       unsigned_frac r(0);
 
+      type old = val;
+      
       if ( sizeof(other_type) > sizeof(unsigned_frac) ) {
         pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;
 
@@ -157,7 +168,7 @@ namespace lamb {
 
         r.val = (type)tmp;
 
-        check_overflow(tmp, other);
+        check_overflow(old, tmp, r.val, other);
       }
       else {
         printf("\n");
@@ -182,7 +193,7 @@ namespace lamb {
 
         printf("r.val = %d\n", r.val);
 
-        check_overflor(tmp, other);
+        check_overflow(old, tmp, r.val, other);
         
         return r;
       }
@@ -243,16 +254,21 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   private:
-    template <typename val_t, typename other_t>
-    void check_overflow(val_t & t_, other_t const & other) {
-      if (t_ > MAX) {
+    template <typename new_t, typename other_t>
+    void check_overflow(
+      type old_val,
+      new_t new_val,
+      type & set,
+      other_t const & other
+    ) {
+      if (new_val > MAX) {
         if (SATURATE) {
-          t_ = MAX;
-          printf("SAT HI:  %d * %d = %d\n", val, other.val, t_);
+          set = MAX;
+          printf("SAT HI:  %d * %d = %d\n", old_val, other.val, new_val);
         }
         else {
-          printf("OVERFLOW: %d * ", val);   
-          cout << other.val << " = " << t_ << "\n";
+          printf("OVERFLOW: %d * ", old_val);
+          cout << other.val << " = " << new_val << "\n";
         }
       }
     }
@@ -283,8 +299,10 @@ namespace lamb {
     
     template <bool saturate__>
     signed_frac operator + (signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other ) {
-      signed_frac r = signed_frac(val + other.val);
-      check_overflow(r.val, other);      
+      type     old   = val;
+      big_type new_ = val + other.val;
+      signed_frac r = signed_frac(new_);
+      check_overflow(old, new_, r.val, other);
       return r;
     }
 
@@ -298,8 +316,10 @@ namespace lamb {
     
     template <bool saturate__>
     signed_frac operator - (signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other ) {
-      signed_frac r = signed_frac(val - other.val);
-      check_overflow(r.val, other);      
+      type     old   = val;
+      big_type new_  = val - other.val;
+      signed_frac r = signed_frac(new_);
+      check_overflow(old, new_, r.val, other);      
       return r;
     }
 
@@ -321,6 +341,8 @@ namespace lamb {
       typedef typename unsigned_int<(sizeof(right_big_type))>::type pseudo_right_big_type;
 
       signed_frac r(0);
+
+      type old = val;
       
       if ( sizeof(other_type) > sizeof(signed_frac) ) {
         pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;
@@ -340,7 +362,7 @@ namespace lamb {
         printf("SHIFT is %d.\n", shift);
         printf("r.val is %d.\n", r.val);
 
-        check_overflow(r.val, other);        
+        check_overflow(old, tmp, r.val, other);
       }
       else {
         big_type tmp = ((big_type)val) * other.val;
@@ -360,7 +382,7 @@ namespace lamb {
         printf("\nSHIFT is %d.\n", shift);
         printf("r.val is %d.\n", r.val);
             
-        check_overflow(r.val, other);
+        check_overflow(old, tmp, r.val, other);
       }
      
       return r;
@@ -383,7 +405,9 @@ namespace lamb {
       typedef typename signed_int<(sizeof(right_big_type))>::type         pseudo_right_big_type;
 
       signed_frac r(0);
-      
+
+      type old = val;
+
       if ( sizeof(other_type) > sizeof(signed_frac) ) {
         pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;
         
@@ -396,7 +420,7 @@ namespace lamb {
         printf("SHIFT is %d.\n", other_type::FX_SHIFT - 1);         
         printf("r.val is %d.\n", r.val);
 
-        check_overflow(r.val, other);
+        check_overflow(old, tmp, r.val, other);
       }
       else {
         big_type tmp = ((big_type)val) * other.val;
@@ -410,7 +434,7 @@ namespace lamb {
         printf("SHIFT is %d.\n", other_type::FX_SHIFT - 1);
         printf("r.val is %d.\n", r.val);
         
-        check_overflo(r.val, other);
+        check_overflow(old, tmp, r.val, other);
       }
 
       return r;
