@@ -489,6 +489,8 @@ namespace lamb {
 // Typedefs
 ///////////////////////////////////////////////////////////////////////////////
   
+// Value types ////////////////////////////////////////////////////////////////
+
   typedef uint8_t                        q0n8_value_type;                        
   typedef uint16_t                       q8n8_value_type;                       
   typedef uint16_t                       q0n16_value_type;                      
@@ -503,6 +505,8 @@ namespace lamb {
 
   typedef uint64_t                       q0n64_value_type; // used only as a 'big_type'.
   typedef int64_t                        q0n63_value_type; // used only as a 'big_type'.
+
+// Overflow-able types /////////////////////////////////////////////////////////
   
   typedef unsigned_frac<  0,  8, false > q0n8;
   typedef unsigned_frac<  8,  8, false > q8n8;
@@ -510,17 +514,19 @@ namespace lamb {
   typedef unsigned_frac< 16, 16, false > q16n16;
   typedef unsigned_frac<  0, 32, false > q0n32;
 
-  typedef unsigned_frac<  0,  8, true  > sat_q0n8;
-  typedef unsigned_frac<  8,  8, true  > sat_q8n8;
-  typedef unsigned_frac<  0, 16, true  > sat_q0n16;
-  typedef unsigned_frac< 16, 16, true  > sat_q16n16;  
-  typedef unsigned_frac<  0, 32, true  > sat_q0n32;
-
   typedef signed_frac<    0,  7, false > q0n7;
   typedef signed_frac<    7,  8, false > q7n8;
   typedef signed_frac<    0, 15, false > q0n15;
   typedef signed_frac<   15, 16, false > q15n16;
   typedef signed_frac<    0, 31, false > q0n31;
+
+// Saturating types ////////////////////////////////////////////////////////////
+  
+  typedef unsigned_frac<  0,  8, true  > sat_q0n8;
+  typedef unsigned_frac<  8,  8, true  > sat_q8n8;
+  typedef unsigned_frac<  0, 16, true  > sat_q0n16;
+  typedef unsigned_frac< 16, 16, true  > sat_q16n16;  
+  typedef unsigned_frac<  0, 32, true  > sat_q0n32;
 
   typedef signed_frac<    0,  7, true  > sat_q0n7;
   typedef signed_frac<    7,  8, true  > sat_q7n8;
