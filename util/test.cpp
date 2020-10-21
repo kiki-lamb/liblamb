@@ -44,6 +44,11 @@ typedef unsigned_frac< 0,  8>   r_test_t;
 #define R_BASE ((r_test_t::MAX >> (sizeof(r_test_t::type) >> 1) >> 4) + 1)
 
 int main() {
+  unsigned_frac<0,8,true> x(0x80);
+  unsigned_frac<0,8,false> y(0x80);
+  
+  printf("Add: %d\n", (x + y).val);
+  
   printf("l BASE is %u.\n", L_BASE);
   printf("l ONE  is %u.\n", l_test_t::ONE);
   printf("l MAX  is %u.\n", l_test_t::MAX);
