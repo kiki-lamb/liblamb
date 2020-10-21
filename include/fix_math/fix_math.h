@@ -1095,7 +1095,7 @@ namespace lamb {
       if ( sizeof(unsigned_frac<charac,mantissa>) > sizeof(signed_frac) ) {
         pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;
         
-        printf("preTMP0   is %d.\n", tmp);      
+        printf("preTMP0   is %llu.\n", tmp);      
         
         tmp >>= unsigned_frac<charac,mantissa>::FX_SHIFT;
         
@@ -1106,7 +1106,7 @@ namespace lamb {
             
         if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
-          printf("OVERFLOW: %d * %hhu = %d\n", val, other.val, tmp);
+          printf("OVERFLOW: %d * %u = %llu\n", val, other.val, tmp);
           fflush(stdout);
 #else
           r.val = MAX;
@@ -1118,17 +1118,23 @@ namespace lamb {
         big_type tmp = ((big_type)val) * other.val;
       
         printf("preTMP1   is %lld.\n", tmp);
-      
-        tmp >>= unsigned_frac<charac,mantissa>::FX_SHIFT;
+
+        uint8_t shift = unsigned_frac<charac,mantissa>::FX_SHIFT;
+
+        if ( (val < 0) && ((mantissa % 8) != 0) ) {
+           shift --;
+        }
+        
+        tmp >>= shift;
         
         r.val = (type)tmp;
 
-        printf("\nSHIFT is %d.\n", unsigned_frac<charac,mantissa>::FX_SHIFT);
+        printf("\nSHIFT is %d.\n", shift);
         printf("r.val is %d.\n", r.val);
             
         if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
-          printf("OVERFLOW: %d * %d = %lld\n", val, other.val, tmp);
+          printf("OVERFLOW: %d * %h = %lld\n", val, other.val, tmp);
           fflush(stdout);
 #else
           r.val = MAX;
@@ -1182,7 +1188,7 @@ namespace lamb {
       else {
         big_type tmp = ((big_type)val) * other.val;
 
-        printf("preTMP1   is %lld.\n", tmp);
+        printf("preTMP1   is %d.\n", tmp);
 
         tmp >>= signed_frac<charac,mantissa>::FX_SHIFT - 1;
       
@@ -1193,7 +1199,7 @@ namespace lamb {
         
         if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
-          printf("OVERFLOW: %d * %d = %lld\n", val, other.val, tmp);
+          printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
           fflush(stdout);
 #else
           r.val = MAX;
