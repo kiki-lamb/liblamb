@@ -4,15 +4,15 @@
 
 using namespace lamb;
 
-typedef signed_frac<0,7> test_t;
+typedef signed_frac<0,31> test_t;
+
+#define BASE 32768
 
 int main() {
-//  for (  size_t x = (((size_t)test_t::ONE)); x < (((size_t)test_t::MAX)); x++) {
-  for (  int16_t x = -128; x < (((int16_t)test_t::MAX)); x++) {
+  for (  int32_t x = -BASE; x <= (((int32_t)test_t::MAX)); x+= BASE) {
     printf("[%d]\n", x);
     
-//    for (size_t y = 2; y < (((size_t)test_t::MAX)); y++) {
-    for (int16_t y = -128; y < (((int16_t)test_t::MAX)); y++) {
+    for (int32_t y = -BASE; y <= (((int32_t)test_t::MAX)); y+= BASE) {
       test_t fx(x);
       test_t fy(y);
      
@@ -46,6 +46,8 @@ int main() {
   }
 
   printf("Done.\n");
+
+  return 0;
 }
 
 
