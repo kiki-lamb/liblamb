@@ -57,6 +57,14 @@ namespace lamb {
   };
 
 ////////////////////////////////////////////////////////////////////////////////
+  
+// Signed
+  
+  template <uint8_t characteristic_, uint8_t mantissa>
+  class signed_frac {
+  };
+
+////////////////////////////////////////////////////////////////////////////////
 
   template <> class unsigned_frac<0,8> {
   public:
@@ -120,6 +128,8 @@ namespace lamb {
 
     template <uint8_t charac, uint8_t mantissa>
     unsigned_frac operator * (unsigned_frac<charac,mantissa> const & other ) {
+      static_assert(0 == charac, "Reverse operand order!");
+      
       big_type      tmp =
         (((typename unsigned_frac<charac, mantissa>::big_type)val) * other.val) >>
         unsigned_frac<charac, mantissa>::FX_SHIFT;
@@ -222,17 +232,24 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
     template <uint8_t charac, uint8_t mantissa>
-      unsigned_frac operator * (unsigned_frac<charac,mantissa> const & other ) {
-      big_type      tmp = (((big_type)val) * other.val) >> unsigned_frac<charac,mantissa>::FX_SHIFT;
+    unsigned_frac operator * (unsigned_frac<charac,mantissa> const & other ) {
+      static_assert(0 == charac, "Reverse operand order!");
+      
+      big_type      tmp =
+        (((typename unsigned_frac<charac, mantissa>::big_type)val) * other.val) >>
+        unsigned_frac<charac, mantissa>::FX_SHIFT;
+      
       unsigned_frac r   = unsigned_frac((type)tmp);
+
+      printf("shift %d ", unsigned_frac<charac, mantissa>::FX_SHIFT);
       
       if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
-        printf("OVERFLOW: %d * %d = %lld\n", val, other.val, tmp);
+        printf("OVERFLOW: %d * %d = %d\n", val, other.val, tmp);
         fflush(stdout);
 #else
         r.val = MAX;
-        printf("SAT HI:  %d * %d = %lld\n", val, other.val, r.val);
+        printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
 #endif
       }        
       return r;
@@ -561,14 +578,6 @@ namespace lamb {
       return *this;
     }
 
-  };
-
-////////////////////////////////////////////////////////////////////////////////
-  
-// Signed
-  
-  template <uint8_t characteristic_, uint8_t mantissa>
-  class signed_frac {
   };
 
 ////////////////////////////////////////////////////////////////////////////////
