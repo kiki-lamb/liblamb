@@ -659,25 +659,61 @@ namespace lamb {
       typedef typename unsigned_frac<charac,mantissa>::big_type right_big_type;
       typedef typename signed_int<(sizeof(right_big_type))>::type pseudo_right_big_type;
       
-      pseudo_right_big_type tmp =
-        (((pseudo_right_big_type)val) * other.val) >>
-        unsigned_frac<charac,mantissa>::FX_SHIFT;
+      signed_frac r(0);
       
-      signed_frac r   = signed_frac((type)tmp);
-                              
-      // printf("\nSHIFT is %d.\n", unsigned_frac<charac,mantissa>::FX_SHIFT);
-      // printf("TMP   is %lld.\n", tmp);
-      // printf("r.val is %d.\n", r.val);
+      if ( sizeof(unsigned_frac<charac,mantissa>) > sizeof(signed_frac) ) {
+        pseudo_right_big_type tmp = ((pseudo_right_big_type)val) * other.val;
+        
+        printf("\npreTMP0   is %lld.\n", tmp);      
+
+        uint8_t shift = unsigned_frac<charac,mantissa>::FX_SHIFT;
+
+        tmp >>= shift;
+        
+        r.val = (type)tmp;
+
+        printf("SHIFT is %d.\n", shift);
+        printf("r.val is %d.\n", r.val);
             
-      if (tmp > MAX) {
+        if (tmp > MAX) {
 #ifndef LAMB_FP_SATURATE
-        printf("OVERFLOW: %d * %d = %llu\n", val, other.val, tmp);
-        fflush(stdout);
+          printf("OVERFLOW: %d * %hu = %lld\n", val, other.val, tmp);
+          fflush(stdout);
 #else
-        r.val = MAX;
-        printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
+          r.val = MAX;
+          printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
 #endif
-      }        
+        }        
+      }
+      else {
+        big_type tmp = ((big_type)val) * other.val;
+      
+        printf("\npreTMP1   is %hd.\n", tmp);
+
+        uint8_t shift = unsigned_frac<charac,mantissa>::FX_SHIFT;
+        
+        if (val < 0) {
+          shift --;
+        }
+
+        tmp >>= shift;
+        
+        r.val = (type)tmp;
+
+        printf("SHIFT is %d.\n", shift);
+        printf("r.val is %d.\n", r.val);
+            
+        if (tmp > MAX) {
+#ifndef LAMB_FP_SATURATE
+          printf("OVERFLOW: %d * %d = %hd\n", val, other.val, tmp);
+          fflush(stdout);
+#else
+          r.val = MAX;
+          printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
+#endif
+        }        
+      }
+     
       return r;
     }    
 
@@ -958,7 +994,7 @@ namespace lamb {
       static_assert(0 == charac, "Reverse operand order!");
 
       typedef typename unsigned_frac<charac,mantissa>::big_type   right_big_type;
-      typedef typename signed_int<(sizeof(right_big_type))>::type pseudo_right_big_type;
+      typedef typename unsigned_int<(sizeof(right_big_type))>::type pseudo_right_big_type;
 
       signed_frac r(0);
       
