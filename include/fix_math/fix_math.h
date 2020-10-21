@@ -17,37 +17,37 @@ namespace lamb {
 
 // 8 bits //////////////////////////////////////////////////////////////////////
 
-  typedef uint8_t  q0n8_t;                        
+  typedef uint8_t  q0n8_value_t;                        
 
-  typedef int8_t   q0n7_t;                        
+  typedef int8_t   q0n7_value_t;                        
   
 // 16 bits /////////////////////////////////////////////////////////////////////
 
-  typedef uint16_t  q0n16_t;                      
+  typedef uint16_t  q0n16_value_t;                      
 
-  typedef uint16_t  q8n8_t;                       
+  typedef uint16_t  q8n8_value_t;                       
 
-  typedef int16_t   q0n15_t;                      
+  typedef int16_t   q0n15_value_t;                      
 
-  typedef int16_t   q7n8_t;                        
+  typedef int16_t   q7n8_value_type;                        
 
 // 32 bits /////////////////////////////////////////////////////////////////////
 
-  typedef uint32_t  q0n32_t;                    
+  typedef uint32_t  q0n32_value_t;                    
 
-  typedef uint32_t  q16n16_t;                     
+  typedef uint32_t  q16n16_value_t;                     
 
-  typedef int32_t   q0n31_t;                      
+  typedef int32_t   q0n31_value_t;                      
 
-  typedef int32_t   q15n16_t;                     
+  typedef int32_t   q15n16_value_t;                     
 
 // 64 bits /////////////////////////////////////////////////////////////////////
 
 // these are used only as the 'big_type' for some operations.
 
-  typedef uint64_t q0n64_t;
+  typedef uint64_t q0n64_value_t;
 
-  typedef int64_t q0n63_t;
+  typedef int64_t q0n63_value_t;
   
 ////////////////////////////////////////////////////////////////////////////////
 // Fixed type helpers
@@ -471,7 +471,7 @@ namespace lamb {
 //
 //  template <> class unsigned_frac<8,8> {
 //  public:
-//    typedef      q8n8_t  type;
+//    typedef      q8n8_value_t  type;
 //    typedef typename unsigned_int<(sizeof(type) << 1)>::type big_type;
 //    static const type    ONE      = 1 << ((sizeof(type) >> 1) << 3)  ;
 //    static const type    MAX      = unsigned_int<(sizeof(type))>::MAX;
@@ -483,14 +483,14 @@ namespace lamb {
 //    explicit unsigned_frac(type const & val_) :
 //      val(val_) {}
 //
-//    explicit unsigned_frac(uint8_t const & charac_, q0n8_t const & frac_) :
+//    explicit unsigned_frac(uint8_t const & charac_, q0n8_value_t const & frac_) :
 //      val((((uint16_t)charac_) << FX_SHIFT) | frac_){}
 //
 //    uint8_t chararac() const {
 //      return val >> FX_SHIFT;
 //    }
 //
-//    q0n8_t frac() const {
+//    q0n8_value_t frac() const {
 //      return val & 0xff;
 //    }
 //
@@ -580,7 +580,7 @@ namespace lamb {
 //
 //  template <> class unsigned_frac<16,16> {
 //  public:
-//    typedef      q16n16_t  type;
+//    typedef      q16n16_value_t  type;
 //    typedef typename unsigned_int<(sizeof(type) << 1)>::type big_type;
 //    static const type      ONE      = 1 << ((sizeof(type) >> 1) << 3);
 //    static const type      MAX      = unsigned_int<(sizeof(type))>::MAX;
@@ -592,14 +592,14 @@ namespace lamb {
 //    explicit unsigned_frac(type const & val_) :
 //      val(val_) {}
 //
-//    explicit unsigned_frac(uint16_t const & charac_, q0n16_t const & frac_) :
+//    explicit unsigned_frac(uint16_t const & charac_, q0n16_value_t const & frac_) :
 //      val((((uint32_t)charac_) << FX_SHIFT) | frac_){}
 //
 //    uint16_t chararac() const {
 //      return val >> FX_SHIFT;
 //    }
 //
-//    q0n16_t frac() const {
+//    q0n16_value_t frac() const {
 //      return val & 0xffff;
 //    }
 //
@@ -687,7 +687,7 @@ namespace lamb {
 //   
 //   template <> class signed_frac<7,8> {
 //   public:
-//     typedef      q7n8_t  type;
+//     typedef      q7n8_value_type  type;
 //     typedef typename signed_int<(sizeof(type) << 1)>::type big_type;
 //     static const type    ONE      = 1 << ((sizeof(type) >> 1) << 3);
 //     static const type    MAX      = signed_int<(sizeof(type))>::MAX;
@@ -699,14 +699,14 @@ namespace lamb {
 //     explicit signed_frac(type const & val_) :
 //       val(val_) {}
 // 
-//     explicit signed_frac(int8_t const & charac_, q0n8_t const & frac_) :
+//     explicit signed_frac(int8_t const & charac_, q0n8_value_t const & frac_) :
 //       val((((int8_t)charac_) << FX_SHIFT) | frac_){}
 // 
 //     int8_t chararac() const {
 //       return val >> FX_SHIFT;
 //     }
 // 
-//     q0n8_t frac() const {
+//     q0n8_value_t frac() const {
 //       return val & 0xff;
 //     }
 // 
@@ -813,7 +813,7 @@ namespace lamb {
 //   
 //   template <> class signed_frac<15,16> {
 //   public:
-//     typedef      q15n16_t type;
+//     typedef      q15n16_value_t type;
 //     typedef typename signed_int<(sizeof(type) << 1)>::type big_type;
 //     static const type     ONE      = 1 << ((sizeof(type) >> 1) << 3);
 //     static const type     MAX      = signed_int<(sizeof(type))>::MAX;
@@ -825,14 +825,14 @@ namespace lamb {
 //     explicit signed_frac(type const & val_) :
 //       val(val_) {}
 // 
-//     explicit signed_frac(int16_t const & charac_, q0n16_t const & frac_) :
+//     explicit signed_frac(int16_t const & charac_, q0n16_value_t const & frac_) :
 //       val((((int16_t)charac_) << FX_SHIFT) | frac_){}
 // 
 //     int16_t chararac() const {
 //       return val >> FX_SHIFT;
 //     }
 // 
-//     q0n16_t frac() const {
+//     q0n16_value_t frac() const {
 //       return val & 0xff;
 //     }
 // 

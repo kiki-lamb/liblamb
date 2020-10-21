@@ -5,8 +5,8 @@ namespace lamb {
   class moog_filter {
   public:
     typedef int16_t  out_t;   // int16_t
-    typedef q15n16_t int_t;   // int32_t
-    typedef q0n31_t  uint_t;   // uint32_t
+    typedef q15n16_value_t int_t;   // int32_t
+    typedef q0n31_value_t  uint_t;   // uint32_t
     typedef uint64_t ubig_t;
     typedef int64_t big_t;
     
