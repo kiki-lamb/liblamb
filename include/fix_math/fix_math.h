@@ -55,13 +55,14 @@ namespace lamb {
   
 // Unsigned
   
-  template <uint8_t characteristic_, uint8_t mantissa_>
+  template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_ = false>
   class unsigned_frac {
     static_assert(((mantissa_ % 8) == 0), "bad bit count in mantissa");
 
   public:
+    static const bool    saturate       = saturate_;
     static const uint8_t characteristic = characteristic_;
-    static const uint8_t mantissa = mantissa_;
+    static const uint8_t mantissa       = mantissa_;
     
     typedef typename unsigned_int<(mantissa / 8)>::type  type;
     typedef typename unsigned_int<((mantissa / 8) << 1)>::type big_type;
@@ -78,14 +79,15 @@ namespace lamb {
     unsigned_frac operator + (unsigned_frac const & other ) {
       unsigned_frac r = unsigned_frac(val + other.val);
       if (r.val < val) {
-#ifndef LAMB_FP_SATURATE
-        printf("OVERFLOW: %u + %u = %u\n", val, other.val, r.val);
-#else
-        r.val = ONE;
-        printf("SAT HI:  %u + %u = %u\n", val, other.val, r.val);
-#endif
+        if (saturate) {
+          r.val = ONE;
+          printf("SAT HI:  %u + %u = %u\n", val, other.val, r.val);
+        }
+        else {
+          printf("OVERFLOW: %u + %u = %u\n", val, other.val, r.val);
+        }        
         fflush(stdout);
-      }
+      }      
       return r;
     }    
     unsigned_frac operator += (unsigned_frac const & other) {
@@ -96,12 +98,13 @@ namespace lamb {
     unsigned_frac operator - (unsigned_frac const & other ) {
       unsigned_frac<0,8> r = unsigned_frac<0,8>(val - other.val);
       if (r.val > val) {
-#ifndef LAMB_FP_SATURATE
-        printf("UNDERFLOW: %u - %u = %u\n", val, other.val, r.val);
-#else
-        r.val = 0;
-        printf("SAT LO: %u - %u = %u\n", val, other.val, r.val);
-#endif
+        if (saturate) {
+          r.val = 0;
+          printf("SAT LO: %u - %u = %u\n", val, other.val, r.val);
+        }
+        else {
+          printf("UNDERFLOW: %u - %u = %u\n", val, other.val, r.val);
+        }
         fflush(stdout);
       }
       return r;
@@ -165,13 +168,13 @@ namespace lamb {
         printf("r.val = %d\n", r.val);
       
         if (tmp > MAX) {
-#ifndef LAMB_FP_SATURATE
-          printf("OVERFLOW: %d * %d = %llu\n", val, other.val, tmp);
-          fflush(stdout);
-#else
-          r.val = MAX;
-          printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
-#endif
+          if (saturate) {
+            r.val = MAX;
+            printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
+          }
+          else {
+            printf("OVERFLOW: %d * %d = %llu\n", val, other.val, tmp);
+          }
         }
         
         return r;
@@ -201,13 +204,14 @@ namespace lamb {
 
 // Signed
   
-  template <uint8_t characteristic_, uint8_t mantissa_>
+  template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_ = false>
   class signed_frac {
     static_assert((((mantissa_ + 1) % 8) == 0), "bad bit count in mantissa");
 
   public:
     static const uint8_t characteristic = characteristic_;
-    static const uint8_t mantissa = mantissa_;
+    static const uint8_t mantissa       = mantissa_;
+    static const bool    saturate       = saturate_;
     
     typedef typename signed_int<((characteristic+mantissa+1) >> 3)>::type  type;
     typedef typename signed_int<(sizeof(type) << 1)>::type big_type;
@@ -225,12 +229,13 @@ namespace lamb {
     signed_frac operator + (signed_frac const & other ) {
       signed_frac r = signed_frac(val + other.val);
       if (r.val < val) {
-#ifndef LAMB_FP_SATURATE
-        printf("OVERFLOW: %d + %d = %d\n", val, other.val, r.val);
-#else
-        r.val = MAX;
-        printf("SAT HI:  %d + %d = %d\n", val, other.val, r.val);
-#endif
+        if (saturate) {
+          r.val = MAX;
+          printf("SAT HI:  %d + %d = %d\n", val, other.val, r.val);
+        }
+        else {
+          printf("OVERFLOW: %d + %d = %d\n", val, other.val, r.val);
+        }
         fflush(stdout);
       }
       return r;
@@ -243,12 +248,13 @@ namespace lamb {
     signed_frac operator - (signed_frac const & other ) {
       signed_frac r = signed_frac(val - other.val);
       if (r.val > val) {
-#ifndef LAMB_FP_SATURATE
-        printf("UNDERFLOW: %d - %d = %d\n", val, other.val, r.val);
-#else
-        r.val = 0;
-        printf("SAT LO: %d - %d = %d\n", val, other.val, r.val);
-#endif
+        if (saturate) {
+          r.val = 0;
+          printf("SAT LO: %d - %d = %d\n", val, other.val, r.val);
+        }
+        else {
+          printf("UNDERFLOW: %d - %d = %d\n", val, other.val, r.val);
+        }
         fflush(stdout);
       }
       return r;
@@ -288,20 +294,20 @@ namespace lamb {
         printf("r.val is %d.\n", r.val);
             
         if (r.val > MAX) {
-#ifndef LAMB_FP_SATURATE
-          printf("OVERFLOW: %d * ", val);   
-          cout << other.val << " = " << r.val << "\n";
-          fflush(stdout);
-#else
-          r.val = MAX;
-          printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
-#endif
+          if (saturate) {
+            r.val = MAX;
+            printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
+          }
+          else {
+            printf("OVERFLOW: %d * ", val);   
+            cout << other.val << " = " << r.val << "\n";
+          }
         }        
       }
       else {
         big_type tmp = ((big_type)val) * other.val;
       
-        printf("preTMP1   is %hd.\n", tmp);
+        printf("preTMP1   is %d.\n", tmp);
 
         uint8_t shift = unsigned_frac<other_charac,other_mantissa>::FX_SHIFT;
 
@@ -317,13 +323,13 @@ namespace lamb {
         printf("r.val is %d.\n", r.val);
             
         if (r.val > MAX) {
-#ifndef LAMB_FP_SATURATE
-          printf("OVERFLOW: %d * %d = %hd\n", val, other.val, r.val);
-          fflush(stdout);
-#else
-          r.val = MAX;
-          printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
-#endif
+          if (saturate) {
+            r.val = MAX;
+            printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
+          }
+          else {
+            printf("OVERFLOW: %d * %d = %hd\n", val, other.val, r.val);
+          }
         }        
       }
      
@@ -360,13 +366,13 @@ namespace lamb {
         printf("r.val is %d.\n", r.val);
         
         if (tmp > MAX) {
-#ifndef LAMB_FP_SATURATE
-          printf("OVERFLOW: %d * %d = %lld\n", val, other.val, tmp);
-          fflush(stdout);
-#else
-          r.val = MAX;
-          printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
-#endif
+          if (saturate) {
+            r.val = MAX;
+            printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
+          }
+          else {
+            printf("OVERFLOW: %d * %d = %lld\n", val, other.val, tmp);
+          }
         }
       }
       else {
@@ -382,13 +388,13 @@ namespace lamb {
         printf("r.val is %d.\n", r.val);
         
         if (tmp > MAX) {
-#ifndef LAMB_FP_SATURATE
-          printf("OVERFLOW: %d * %d = %hd\n", val, other.val, tmp);
-          fflush(stdout);
-#else
-          r.val = MAX;
-          printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
-#endif
+          if (saturate) {
+            r.val = MAX;
+            printf("SAT HI:  %d * %d = %d\n", val, other.val, r.val);
+          }
+          else {
+            printf("OVERFLOW: %d * %d = %hd\n", val, other.val, tmp);
+          }
         }
       }
 
