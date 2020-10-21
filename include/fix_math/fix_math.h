@@ -75,7 +75,7 @@ namespace lamb {
     typedef typename unsigned_int<SIZE>::type  type;
     typedef typename unsigned_int<(SIZE << 1)>::type big_type;
 
-    static const type    ONE            = unsigned_int<SIZE>::MAX;
+    static const type    ONE            = (((big_type)1) << MANTISSA) - 1; 
     static const type    MAX            = unsigned_int<SIZE>::MAX;
     static const type    MIN            = unsigned_int<SIZE>::MIN;
     
@@ -260,16 +260,16 @@ namespace lamb {
     static const uint8_t MANTISSA       = mantissa_;
     static const bool    SATURATE       = saturate_;
     static const uint8_t FX_SHIFT       = CHARACTERISTIC + MANTISSA;
-    static const size_t  SIZE           = FX_SHIFT / 8;
+    static const size_t  SIZE           = (FX_SHIFT + 1) / 8;
 
     static_assert((((FX_SHIFT + 1) % 8) == 0), "bad bit count for this type");
 
     typedef typename signed_int<SIZE>::type  type;
     typedef typename signed_int<(SIZE << 1)>::type big_type;
     
-    static const type    ONE      = signed_int<(SIZE)>::MAX;
-    static const type    MAX      = signed_int<(SIZE)>::MAX;
-    static const type    MIN      = signed_int<(SIZE)>::MIN;
+    static const big_type ONE      = signed_int<(SIZE)>::MAX;
+    static const type     MAX      = signed_int<(SIZE)>::MAX;
+    static const type     MIN      = signed_int<(SIZE)>::MIN;
     
     
     type val;
@@ -500,9 +500,10 @@ namespace lamb {
   typedef signed_frac<0,  7, false> q0n7;
   typedef signed_frac<0, 15, false> q0n15;
   typedef signed_frac<0, 31, false> q0n31;
-  typedef signed_frac<0,  7, true>  sat_q0n7;
-  typedef signed_frac<0, 15, true>  sat_q0n15;
-  typedef signed_frac<0, 31, true>  sat_q0n31;
+
+  // typedef signed_frac<0,  7, true>  sat_q0n7;
+  // typedef signed_frac<0, 15, true>  sat_q0n15;
+  // typedef signed_frac<0, 31, true>  sat_q0n31;
 
 ///////////////////////////////////////////////////////////////////////////////
 //

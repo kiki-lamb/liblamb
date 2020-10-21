@@ -37,7 +37,7 @@ using namespace std;
 
 using namespace lamb;
 
-typedef q0n15 l_test_t;
+typedef q0n7  l_test_t;
 typedef q0n8  r_test_t;
 
 #define L_BASE ((l_test_t::MAX >> (sizeof(l_test_t::type) >> 1) >> 4) + 1)
