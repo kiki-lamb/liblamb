@@ -225,6 +225,15 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+  typedef unsigned_frac<0,  8, false> q0n8;
+  typedef unsigned_frac<0, 16, false> q0n16;
+  typedef unsigned_frac<0, 32, false> q0n32;
+  typedef unsigned_frac<0,  8, true>  sat_q0n8;
+  typedef unsigned_frac<0, 16, true>  sat_q0n16;
+  typedef unsigned_frac<0, 32, true>  sat_q0n32;
+  
+////////////////////////////////////////////////////////////////////////////////
+
 // Signed
   
   template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_ = false>
@@ -467,7 +476,16 @@ namespace lamb {
     }
   };
 
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+  typedef signed_frac<0,  7, false> q0n7;
+  typedef signed_frac<0, 15, false> q0n15;
+  typedef signed_frac<0, 31, false> q0n31;
+  typedef signed_frac<0,  7, true>  sat_q0n7;
+  typedef signed_frac<0, 15, true>  sat_q0n15;
+  typedef signed_frac<0, 31, true>  sat_q0n31;
+
+///////////////////////////////////////////////////////////////////////////////
 //
 //  template <> class unsigned_frac<8,8> {
 //  public:

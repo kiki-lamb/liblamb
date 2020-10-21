@@ -37,20 +37,20 @@ using namespace std;
 
 using namespace lamb;
 
-typedef signed_frac< 0, 15>  l_test_t;
-typedef unsigned_frac< 0,  8>   r_test_t;
+typedef q0n15 l_test_t;
+typedef q0n8  r_test_t;
 
 #define L_BASE ((l_test_t::MAX >> (sizeof(l_test_t::type) >> 1) >> 4) + 1)
 #define R_BASE ((r_test_t::MAX >> (sizeof(r_test_t::type) >> 1) >> 4) + 1)
 
 int main() {
-  unsigned_frac<0,8,true> x(0x40);
+  sat_q0n8  x(0x40);
 
-  unsigned_frac<0,16,true> z(x);
+  sat_q0n16 z(x);
 
   printf("Conv: %d\n", z.val);
-  
-  unsigned_frac<0,8,false> y(0x80);
+
+  q0n8  y(0x80);
   
   printf("Add: %d\n", (x + y).val);
 
