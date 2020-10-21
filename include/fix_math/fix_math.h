@@ -7,6 +7,20 @@
   #include <iostream>
 #endif
 
+// Multiply tests:
+//
+// L/R     u0,8   u0,16  u0,32  u8,8  u16,16  s0,7  s0,15  s0,31  s7,8  s15,16
+// u0,8    Yes    Yes    Yes    EXCL  EXCL    EXCL  EXCL   EXCL   EXCL  EXCL
+// u0,16   Yes    Yes    Yes    EXCL  EXCL    EXCL  EXCL   EXCL   EXCL  EXCL
+// u0,32   Yes    Yes    Yes    EXCL  EXCL    EXCL  EXCL   EXCL   EXCL  EXCL
+// u8,8    Redo   Redo   Redo   ?     ?       EXCL  EXCL   EXCL   EXCL  EXCL
+// u16,16  Redo   Redo   Redo   ?     ?       EXCL  EXCL   EXCL   EXCL  EXCL
+// s0,7    Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL
+// s0,15   Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL
+// s0,31   Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL
+// s7,8    Redo   Redo   Redo   ?     ?       Redo  Redo   Redo   EXCL  EXL
+// s15,16  Redo   Redo   Redo   ?     ?       Redo  Redo   Redo   EXCL  EXCL
+
 using namespace std;
 
 namespace lamb {

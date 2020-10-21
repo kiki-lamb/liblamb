@@ -7,34 +7,6 @@ using namespace std;
 // g++ -std=gnu++14 -DNO_ARDUINO -DLAMB_FP_SATURATE test.cpp && ./a.out
 // g++ -std=gnu++14 -DNO_ARDUINO test.cpp && ./a.out
 
-// Multiply tests:
-//
-// L/R     u0,8   u0,16  u0,32  u8,8  u16,16  s0,7  s0,15  s0,31  s7,8  s15,16
-// u0,8    Yes    Yes    Yes    EXCL  EXCL    EXCL  EXCL   EXCL   EXCL  EXCL
-// u0,16   Yes    Yes    Yes    EXCL  EXCL    EXCL  EXCL   EXCL   EXCL  EXCL
-// u0,32   Yes    Yes    Yes    EXCL  EXCL    EXCL  EXCL   EXCL   EXCL  EXCL
-// u8,8    Yes    Yes    Yes    ?     ?       EXCL  EXCL   EXCL   EXCL  EXCL
-// u16,16  Yes    Yes    Yes    ?     ?       EXCL  EXCL   EXCL   EXCL  EXCL
-// s0,7    Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL
-// s0,15   Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL
-// s0,31   Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL
-// s7,8    
-// s15,16  
-
-// Multiply tests #2:
-//
-// L/R     u0,8   u0,16  u0,32  u8,8  u16,16  s0,7  s0,15  s0,31  s7,8  s15,16
-// u0,8    Yes    Yes    Yes    EXCL  EXCL    EXCL  EXCL   EXCL   EXCL  EXCL
-// u0,16   Yes    Yes    Yes    EXCL  EXCL    EXCL  EXCL   EXCL   EXCL  EXCL
-// u0,32   Yes    Yes    Yes    EXCL  EXCL    EXCL  EXCL   EXCL   EXCL  EXCL
-// u8,8    Redo   Redo   Redo   ?     ?       EXCL  EXCL   EXCL   EXCL  EXCL
-// u16,16  Redo   Redo   Redo   ?     ?       EXCL  EXCL   EXCL   EXCL  EXCL
-// s0,7    Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL
-// s0,15   Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL
-// s0,31   Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL
-// s7,8    Redo   Redo   Redo   ?     ?       Redo  Redo   Redo   EXCL  EXL
-// s15,16  Redo   Redo   Redo   ?     ?       Redo  Redo   Redo   EXCL  EXCL
-
 using namespace lamb;
 
 typedef q0n7  l_test_t;
@@ -67,8 +39,6 @@ int main() {
   printf("r MAX  is %u.\n", r_test_t::MAX);
   printf("r MIN  is %u.\n", r_test_t::MIN);
 
-  return 0;
-  
   for (    l_test_t::big_type x = l_test_t::MIN; x <= l_test_t::MAX; x += L_BASE) {
     for (  r_test_t::big_type y = r_test_t::MIN; y <= r_test_t::MAX; y += R_BASE) {    
       l_test_t fx(x);
