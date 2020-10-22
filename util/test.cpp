@@ -14,6 +14,14 @@ typedef q0n8    r_test_t;
 
 int main() {
  moog_filter mf;
+
+
+ q0n16 acc(q0n16::MIN);
+   
+ for(size_t ix = 0; ix < 100000L; ix ++) {
+  acc += 256;
+  printf("%d\n", acc);
+ }
 }
 
 // void test() {

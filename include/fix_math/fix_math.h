@@ -210,6 +210,30 @@ namespace lamb {
 
 ///////////////////////////////////////////////////////////////////////////////
     
+  unsigned_frac
+  operator + (
+   type const & val_
+  ) const {
+   type          old    = val;
+   big_type      new_   = old + val_;
+   unsigned_frac ret    = unsigned_frac(new_);
+
+   check_overflow('+', old, val_, new_, ret.val);
+
+   return ret;
+  }    
+
+  unsigned_frac &
+  operator += (
+   type const & val_
+  ) {
+   val += val_;
+
+   return *this;
+  }
+
+///////////////////////////////////////////////////////////////////////////////
+    
   template <bool saturate__>
   unsigned_frac
   operator - (
@@ -229,7 +253,31 @@ namespace lamb {
   operator -= (
    unsigned_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other
   ) {
-   val = ((*this) - other).val;
+   val -= other.val;
+
+   return *this;
+  }
+
+///////////////////////////////////////////////////////////////////////////////
+    
+  unsigned_frac
+  operator - (
+   type const & val_
+  ) const {
+   type          old    = val;
+   big_type      new_   = old - val_;
+   unsigned_frac ret    = unsigned_frac(new_);
+
+   check_overflow('-', old, val_, new_, ret.val);
+
+   return ret;
+  }    
+
+  unsigned_frac &
+  operator -= (
+   type const & val_
+  ) {
+   val -= val_;
 
    return *this;
   }
@@ -437,6 +485,30 @@ namespace lamb {
 
 ///////////////////////////////////////////////////////////////////////////////
     
+  unsigned_frac
+  operator + (
+   type const & val_
+  ) const {
+   type          old    = val;
+   big_type      new_   = old + val_;
+   unsigned_frac ret    = unsigned_frac(new_);
+
+   check_overflow('+', old, val_, new_, ret.val);
+
+   return ret;
+  }    
+
+  unsigned_frac &
+  operator += (
+   type const & val_
+  ) {
+   val += val_;
+
+   return *this;
+  }
+
+///////////////////////////////////////////////////////////////////////////////
+    
   template <bool saturate__>
   signed_frac
   operator - (
@@ -457,6 +529,30 @@ namespace lamb {
    signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other
   ) {
    val = ((*this) - other).val;
+
+   return *this;
+  }
+
+///////////////////////////////////////////////////////////////////////////////
+    
+  unsigned_frac
+  operator - (
+   type const & val_
+  ) const {
+   type          old    = val;
+   big_type      new_   = old - val_;
+   unsigned_frac ret    = unsigned_frac(new_);
+
+   check_overflow('-', old, val_, new_, ret.val);
+
+   return ret;
+  }    
+
+  unsigned_frac &
+  operator -= (
+   type const & val_
+  ) {
+   val -= val_;
 
    return *this;
   }
