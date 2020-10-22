@@ -122,6 +122,22 @@ namespace lamb {
   static constexpr type    MAX            = unsigned_int<SIZE>::MAX;
   static constexpr type    MIN            = unsigned_int<SIZE>::MIN;
 
+  static constexpr type mask() {
+   type m = 0;
+
+   for (uint8_t ix = 0; ix < MANTISSA; ix++) {
+    m |= 1 << ix;
+   }
+  }
+  
+  type bottom() const { // return smaller type?
+   return val & mask;
+  }
+
+  type top() const {    // return smaller type?
+   return (val & (~mask)) >> MANTISSA;
+  }     
+  
  private:
   type val;
 
@@ -402,6 +418,22 @@ namespace lamb {
     
   static constexpr type     MAX      = signed_int<(SIZE)>::MAX;
   static constexpr type     MIN      = signed_int<(SIZE)>::MIN;
+  
+  static constexpr type mask() {
+   type m = 0;
+
+   for (uint8_t ix = 0; ix < MANTISSA; ix++) {
+    m |= 1 << ix;
+   }
+  }
+  
+  type bottom() const { // return smaller type?
+   return val & mask;
+  }
+
+  type top() const {    // return smaller type?
+   return (val & (~mask)) >> MANTISSA;
+  }     
   
  private:
   type val;
