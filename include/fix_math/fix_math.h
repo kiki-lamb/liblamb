@@ -121,8 +121,14 @@ namespace lamb {
     
   static constexpr type    MAX            = unsigned_int<SIZE>::MAX;
   static constexpr type    MIN            = unsigned_int<SIZE>::MIN;
-    
+
+ private:
   type val;
+
+ public:
+  type value() const {
+   return val;
+  }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -396,12 +402,21 @@ namespace lamb {
     
   static constexpr type     MAX      = signed_int<(SIZE)>::MAX;
   static constexpr type     MIN      = signed_int<(SIZE)>::MIN;
-        
+  
+ private:
   type val;
 
+ public:
+  type value() const {
+   return val;
+  }
+  
 ///////////////////////////////////////////////////////////////////////////////
 
- private:
+  operator unsigned int () = delete;
+  operator int ()          = delete;
+
+ private: 
   CHECK_OVERFLOW;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -449,7 +464,7 @@ namespace lamb {
    return ret;
   }
     
-  explicit constexpr signed_frac(type const & val_ = 0) :
+  explicit constexpr signed_frac(type const & val_) :
    val(val_) {}
 
   // v should use smaller types.
@@ -723,7 +738,8 @@ namespace lamb {
  typedef unsigned_frac<  0, 16, false > q0n16;
  typedef unsigned_frac< 16, 16, false > q16n16;
  typedef unsigned_frac<  0, 32, false > q0n32;
- 
+
+ typedef unsigned_frac<  2, 14, false > q2n14;
  typedef unsigned_frac<  2, 30, false > q2n30;
   
  typedef signed_frac<    0,  7, false > q0n7;
@@ -739,7 +755,8 @@ namespace lamb {
  typedef unsigned_frac<  0, 16, true  > sat_q0n16;
  typedef unsigned_frac< 16, 16, true  > sat_q16n16;  
  typedef unsigned_frac<  0, 32, true  > sat_q0n32;
- 
+
+ typedef unsigned_frac<  2, 14, true  > sat_q2n14;
  typedef unsigned_frac<  2, 30, true  > sat_q2n30;
   
  typedef signed_frac<    0,  7, true  > sat_q0n7;

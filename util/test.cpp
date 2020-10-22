@@ -16,12 +16,16 @@ int main() {
  moog_filter mf;
 
 
- q0n16 acc(q0n16::MIN);
-   
- for(size_t ix = 0; ix < 100000L; ix ++) {
+ q0n15 acc(q0n15::MIN);
+ 
+ printf("INIT: %ld\n", acc.value());
+ 
+ for(size_t ix = 0; ix < 1000L; ix ++) {
   acc += 256;
-  printf("%d\n", acc);
+  printf("%ld\n", acc.value());
  }
+
+ printf("MIN: %ld\n", q0n15::MIN);
 }
 
 // void test() {
@@ -47,7 +51,7 @@ int main() {
 //         
 //     fflush(stdout);
 //    }
-// 
+/// 
 //    // {
 //    //   test_t fz = fx + fy;
 //    //   printf("Try %d + %d: = %d \n", x, y, fz.val);

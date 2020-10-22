@@ -5,31 +5,24 @@
 namespace lamb {
   class moog_filter {
   private:
-    sat_q0n32  freq;     
-    sat_q2n30  q;    
-    sat_q0n31  out1, out2, out3, out4;
-    sat_q0n31  in1,  in2,  in3,  in4;
+    sat_q0n16  freq;     
+    sat_q2n14  q;    
+    sat_q0n15  out1, out2, out3, out4;
+    sat_q0n15  in1,  in2,  in3,  in4;
     
   public:
     moog_filter() :
-     freq(sat_q0n32::ONE),
+     freq(sat_q0n16::ONE),
      q(0),
      out1(0), out2(0), out3(0), out4(0),
      in1(0), in2(0), in3(0), in4(0) {}
       
-   static constexpr sat_q16n16 _1_pt_16     = sat_q16n16::from_float(1.16);
-   static constexpr sat_q16n16 _1_pt_0      = sat_q16n16(sat_q16n16::ONE);
-   static constexpr sat_q16n16 _big_1_pt_0  = sat_q16n16(sat_q16n16::MAX);
-   static constexpr sat_q0n32  _0_pt_15     = sat_q0n32::from_float(0.15);
-   static constexpr sat_q0n32  _0_pt_35013  = sat_q0n32::from_float(0.35013);
-   static constexpr sat_q0n32  _0_pt_3      = sat_q0n32::from_float(0.3);
+   static constexpr sat_q8n8   _1_pt_0      = sat_q8n8(sat_q8n8::ONE);
+   static constexpr sat_q8n8   _1_pt_16     = sat_q8n8 ::from_float(1.16);
+   static constexpr sat_q0n16  _0_pt_15     = sat_q0n16::from_float(0.15);
+   static constexpr sat_q0n16  _0_pt_35013  = sat_q0n16::from_float(0.35013);
+   static constexpr sat_q0n16  _0_pt_3      = sat_q0n16::from_float(0.3);
 
-   uint16_t acc = 0;
-   
-   //  for(size_t ix = 0; ix < 100000L; ix ++) 
-   //  acc += 256;
-   // printf("%d\n", acc);
-   // }
    
 // in[x] and out[x] are member variables, init to 0.0 the controls:
 // 
@@ -58,7 +51,9 @@ namespace lamb {
 //   return out4;
 // }
 
-   sat_q0n31 process(sat_q0n31 input) {
+   sat_q0n15 process(sat_q0n15 input) {
+    
+    
     return out4;
    }
   };
