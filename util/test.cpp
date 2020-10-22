@@ -9,10 +9,16 @@ using namespace lamb;
 typedef q15n16  l_test_t;
 typedef q0n8    r_test_t;
 
+typedef signed_frac<8, 7> garbage_t;
+
+garbage_t garbage(7);
+
 #define L_BASE ((l_test_t::MAX >> (sizeof(l_test_t::type) >> 1) >> 4) + 1)
 #define R_BASE ((r_test_t::MAX >> (sizeof(r_test_t::type) >> 1) >> 4) + 1)
 
 int main() {
+ printf("Garbage: %d\n", garbage.val);
+ 
  sat_q0n8  x(0x40);
 
  sat_q0n16 z(x);

@@ -98,7 +98,13 @@ namespace lamb {
   static const uint8_t FX_SHIFT       = CHARACTERISTIC + MANTISSA;
   static const size_t  SIZE           = FX_SHIFT / 8;
 
-  static_assert(((FX_SHIFT % 8) == 0), "bad bit count for this type");
+  static_assert(
+   (
+    ((CHARACTERISTIC % 8) == 0) &&
+    ((MANTISSA      % 8) == 0)
+   ),
+   "bad bit count for this type"
+  );
     
   typedef typename unsigned_int<SIZE>::type         type;
   typedef typename unsigned_int<(SIZE << 1)>::type  big_type;
@@ -128,6 +134,7 @@ namespace lamb {
    unsigned_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), saturate__> tmp(
     val << 1
    );
+
    return tmp;
   }
 
@@ -137,6 +144,7 @@ namespace lamb {
     unsigned_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), saturate__> tmp(
      val >> 1
     );
+
     return tmp;
    }
 
@@ -146,6 +154,7 @@ namespace lamb {
    unsigned_frac<CHARACTERISTIC,MANTISSA,saturate__> tmp(
     val >> 1
    );
+   
    return tmp;
   }
 
@@ -163,11 +172,11 @@ namespace lamb {
   ) const {
    type          old    = val;
    big_type      new_   = old + other.val;
-   unsigned_frac r      = unsigned_frac(new_);
+   unsigned_frac ret    = unsigned_frac(new_);
 
-   check_overflow('+', old, other.val, new_, r.val);
+   check_overflow('+', old, other.val, new_, ret.val);
 
-   return r;
+   return ret;
   }    
 
   template <bool saturate__>
@@ -189,11 +198,11 @@ namespace lamb {
   ) const {
    type          old    = val;
    big_type      new_   = old - other.val;
-   unsigned_frac r      = unsigned_frac(new_);
+   unsigned_frac ret    = unsigned_frac(new_);
 
-   check_overflow('-', old, other.val, new_, r.val);
+   check_overflow('-', old, other.val, new_, ret.val);
 
-   return r;
+   return ret;
   }    
 
   template <bool saturate__>
@@ -222,49 +231,33 @@ namespace lamb {
    typedef typename unsigned_int<(sizeof(right_big_type))>::type
     pseudo_right_big_type;
 
-   unsigned_frac r(0);
-   type          old(val);
+   unsigned_frac          ret(0);
+   type                   old(val);
 
 #if __cplusplus >= 201703L   
    if constexpr(sizeof(other_type) > sizeof(unsigned_frac)) {
 #else
    if (sizeof(other_type) > sizeof(unsigned_frac)) {
 #endif
-    pseudo_right_big_type tmp   = ((pseudo_right_big_type)val) * other.val;
-    static const uint8_t  shift = other_type::FX_SHIFT;
-
-    tmp   >>= shift;
-    r.val   = (type)tmp;
+    static const uint8_t  shift =
+     other_type::FX_SHIFT;
     
-    check_overflow('*', old, other.val, tmp, r.val);
+    pseudo_right_big_type tmp   = ((pseudo_right_big_type)val) * other.val;
+    ret.val                     = (type)(tmp >> shift);
+    
+    check_overflow('*', old, other.val, tmp, ret.val);
    }
    else {
-    printf("\n");
-    printf("sizeof(type) = %lu\n", sizeof(type));
-    printf("sizeof(big_type) = %lu\n", sizeof(big_type));
-    printf("me.val = %d\n", val);
-    printf("other.val = %d\n", other.val);
-    printf("other.charac = %d\n", other_charac);
-    printf("other.mantissa = %d\n", other_mantissa);        
-
-    big_type tmp = ((big_type)val) * other.val;        
-
-    printf("tmp2 = %u\n", tmp);
-
-    static const uint8_t shift =
+    static const uint8_t  shift =
      unsigned_frac<other_charac, other_mantissa>::FX_SHIFT;      
 
-    tmp >>= shift;
+    big_type              tmp   = ((big_type)val) * other.val; 
+    ret.val                     = (type)(tmp >> shift);
 
-    r.val = (type)tmp;
-
-    printf("shift = %d\n", shift);
-    printf("r.val = %d\n", r.val);
-
-    check_overflow('*', old, other.val, tmp, r.val);        
-
-    return r;
+    check_overflow('*', old, other.val, tmp, ret.val);        
    }
+   
+   return ret;
   }
 
   template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
@@ -284,9 +277,7 @@ namespace lamb {
   operator / (
    unsigned_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other
   ) const {
-   unsigned_frac<0,8> r = unsigned_frac<0,8>(val / other.val);
-
-   return r;
+   return unsigned_frac<0,8>(val / other.val);
   }        
 
   template <bool saturate__>
@@ -314,7 +305,18 @@ namespace lamb {
   static const uint8_t FX_SHIFT       = CHARACTERISTIC + MANTISSA;
   static const size_t  SIZE           = (FX_SHIFT + 1) / 8;
 
-  static_assert((((FX_SHIFT + 1) % 8) == 0), "bad bit count for this type");
+  static_assert(
+   (
+    (
+     (CHARACTERISTIC == 0) &&
+     (((MANTISSA + 1) % 8) == 0) 
+    ) || (
+     (((CHARACTERISTIC + 1) % 8) == 0) &&
+     ((MANTISSA % 8) == 0)
+    )
+   ),
+   "bad bit count for this type"
+  );
 
   typedef typename signed_int<SIZE>::type         type;
   typedef typename signed_int<(SIZE << 1)>::type  big_type;
@@ -373,11 +375,11 @@ namespace lamb {
   ) const {
    type        old  = val;
    big_type    new_ = val + other.val;
-   signed_frac r    = signed_frac(new_);
+   signed_frac ret  = signed_frac(new_);
 
-   check_overflow('+', old, other.val, new_, r.val);
+   check_overflow('+', old, other.val, new_, ret.val);
 
-   return r;
+   return ret;
   }
 
   template <bool saturate__>
@@ -399,11 +401,11 @@ namespace lamb {
   ) const {
    type        old   = val;
    big_type    new_  = val - other.val;
-   signed_frac r     = signed_frac(new_);
+   signed_frac ret   = signed_frac(new_);
 
-   check_overflow('-', old, other.val, new_, r.val);
+   check_overflow('-', old, other.val, new_, ret.val);
 
-   return r;
+   return ret;
   }
 
   template <bool saturate__>
@@ -433,7 +435,7 @@ namespace lamb {
    typedef typename unsigned_int<(sizeof(right_big_type))>::type
     pseudo_right_big_type;
 
-   signed_frac r(0);
+   signed_frac ret(0);
    type        old(val);
 
 #if __cplusplus >= 201703L      
@@ -441,41 +443,29 @@ namespace lamb {
 #else
    if (sizeof(other_type) > sizeof(signed_frac)) {
 #endif     
-    pseudo_right_big_type tmp =
+    pseudo_right_big_type tmp     =
      ((pseudo_right_big_type)val) * other.val;        
+    static const uint8_t  shift   = other_type::FX_SHIFT;
+    tmp                         >>= shift;
+    ret.val                       = (type)tmp;
 
-    uint8_t shift = other_type::FX_SHIFT;
-
-    printf("shift: %d\n", shift);
-
-    tmp         >>= shift;
-
-    r.val = (type)tmp;
-
-    printf("tmp2: %d\n", tmp);        
-    printf("SHIFT is %d.\n", shift);
-    printf("r.val is %d.\n", r.val);
-
-    check_overflow('*', old, other.val, tmp, r.val);
+    check_overflow('*', old, other.val, tmp, ret.val);
    }
    else {
-    big_type   tmp   = ((big_type)val) * other.val;      
-    uint8_t    shift = other_type::FX_SHIFT;
+    big_type              tmp     = ((big_type)val) * other.val;      
+    uint8_t               shift   = other_type::FX_SHIFT;
 
     if (val < 0) {
      shift --;
     }        
 
-    tmp >>= shift;        
+    tmp                         >>= shift;
+    ret.val                       = (type)tmp;
 
-    r.val = (type)tmp;
-
-    printf("\nSHIFT is %d.\n", shift);
-    printf("r.val is %d.\n", r.val);            
-
-    check_overflow('*', old, other.val, tmp, r.val);
+    check_overflow('*', old, other.val, tmp, ret.val);
    }     
-   return r;
+
+   return ret;
   }    
 
   template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
@@ -514,17 +504,14 @@ namespace lamb {
 #endif
     pseudo_right_big_type tmp   = ((pseudo_right_big_type)val) * other.val; 
     tmp                       >>= other_type::FX_SHIFT - 1;
-
-    r.val = (type)tmp;
-    printf("SHIFT is %d.\n", other_type::FX_SHIFT - 1);         
-    printf("r.val is %d.\n", r.val);
+    r.val                       = (type)tmp;
 
     check_overflow('*', old, other.val, tmp, r.val);
    }
    else {
-    big_type tmp   = ((big_type)val) * other.val;
-    tmp          >>= other_type::FX_SHIFT - 1;     
-    r.val          = (type)tmp;        
+    big_type              tmp   = ((big_type)val) * other.val;
+    tmp                       >>= other_type::FX_SHIFT - 1;     
+    r.val                       = (type)tmp;        
 
     printf("SHIFT is %d.\n", other_type::FX_SHIFT - 1);
     printf("r.val is %d.\n", r.val);        
