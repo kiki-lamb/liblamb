@@ -485,7 +485,7 @@ namespace lamb {
 
 ///////////////////////////////////////////////////////////////////////////////
     
-  unsigned_frac
+  signed_frac
   operator + (
    type const & val_
   ) const {
@@ -498,7 +498,7 @@ namespace lamb {
    return ret;
   }    
 
-  unsigned_frac &
+  signed_frac &
   operator += (
    type const & val_
   ) {
@@ -535,7 +535,7 @@ namespace lamb {
 
 ///////////////////////////////////////////////////////////////////////////////
     
-  unsigned_frac
+  signed_frac
   operator - (
    type const & val_
   ) const {
@@ -548,7 +548,7 @@ namespace lamb {
    return ret;
   }    
 
-  unsigned_frac &
+  signed_frac &
   operator -= (
    type const & val_
   ) {
