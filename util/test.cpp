@@ -15,14 +15,18 @@ typedef q0n8    r_test_t;
 int main() {
  moog_filter mf;
 
-
- q0n15 acc(q0n15::MIN);
+ sat_q0n15 acc(q0n15::MIN);
  
- printf("INIT: %ld\n", acc.value());
+ printf("INIT: %ld\n", acc.val);
  
  for(size_t ix = 0; ix < 1000L; ix ++) {
   acc += 256;
-  printf("%ld\n", acc.value());
+
+  // printf("%ld\n", acc.val);
+  
+  auto x = mf.process(acc);
+
+  printf("Final: %f \n", x.to_float());
  }
 
  printf("MIN: %ld\n", q0n15::MIN);

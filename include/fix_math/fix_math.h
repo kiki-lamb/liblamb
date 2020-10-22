@@ -58,7 +58,10 @@ namespace lamb {
     printf(" %c ", symbol);                       \
     cout << delta;                                \
     printf(" = ");                                \
-    cout << new_val << "\n";                      \
+    cout << new_val;                              \
+    cout << " over ";                             \
+    cout << MAX;                                  \
+    cout<< "\n";                                  \
    }                                              \
    else {                                         \
     printf("%sFLOW: ", over ? "OVER" : "UNDER");  \
@@ -67,10 +70,10 @@ namespace lamb {
     cout << delta << " = " << new_val << "\n";    \
    }                                              \
   }                                               \
- }                                                    
+ }                                                
 #else
 #define CHECK_OVERFLOW                            \
- template <typename delta_t, typename new_t>      \
+ temoplate <typename delta_t, typename new_t>     \
  static void check_overflow(                      \
   char    const & symbol,                         \
   type    const & old_val,                        \
@@ -96,16 +99,16 @@ namespace lamb {
   static const bool    SATURATE       = saturate_;
   static const uint8_t CHARACTERISTIC = characteristic_;
   static const uint8_t MANTISSA       = mantissa_;
-  static const uint8_t FX_SHIFT       = CHARACTERISTIC + MANTISSA;
-  static const size_t  SIZE           = FX_SHIFT / 8;
+  static const uint8_t FX_SHIFT       = /* CHARACTERISTIC + */ MANTISSA;
+  static const size_t  SIZE           = (CHARACTERISTIC + MANTISSA) / 8;
 
   static_assert(
    (
     (MANTISSA > 0) &&
     (((MANTISSA + CHARACTERISTIC) % 8) == 0)
-    
-//    ((CHARACTERISTIC % 8) == 0) &&
-//    ((MANTISSA      % 8) == 0)
+   ) || (
+    ((CHARACTERISTIC % 8) == 0) &&
+    ((MANTISSA      % 8) == 0)
    ),
    "bad bit count for this type"
   );
@@ -138,14 +141,15 @@ namespace lamb {
    return (val & (~mask)) >> MANTISSA;
   }     
   
- private:
   type val;
 
- public:
-  type value() const {
-   return val;
-  }
+  
+///////////////////////////////////////////////////////////////////////////////
 
+  unsigned_frac<CHARACTERISTIC, MANTISSA, ( ! SATURATE )> sat_cast () const {
+   return unsigned_frac<CHARACTERISTIC, MANTISSA, ( ! SATURATE)>(val);
+  }
+  
 ///////////////////////////////////////////////////////////////////////////////
 
  private:
@@ -195,6 +199,10 @@ namespace lamb {
    
    return unsigned_frac(ipart);
   }
+
+  float to_float() const {
+   return val / (ONE * 1.0);
+  }
   
   explicit constexpr unsigned_frac(type const & val_ = 0) :
    val(val_) {}
@@ -215,7 +223,7 @@ namespace lamb {
    big_type      new_   = old + other.val;
    unsigned_frac ret    = unsigned_frac(new_);
 
-   check_overflow('+', old, other.val, new_, ret.val);
+   check_overflow('+', old, other.val, ret.val, ret.val);
 
    return ret;
   }    
@@ -240,7 +248,7 @@ namespace lamb {
    big_type      new_   = old + val_;
    unsigned_frac ret    = unsigned_frac(new_);
 
-   check_overflow('+', old, val_, new_, ret.val);
+   check_overflow('+', old, val_, ret.val, ret.val);
 
    return ret;
   }    
@@ -256,24 +264,24 @@ namespace lamb {
 
 ///////////////////////////////////////////////////////////////////////////////
     
-  template <bool saturate__>
+  template <uint8_t c, uint8_t m, bool s>
   unsigned_frac
   operator - (
-   unsigned_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other
+   unsigned_frac<c,m,s> const & other
   ) const {
    type          old    = val;
    big_type      new_   = old - other.val;
    unsigned_frac ret    = unsigned_frac(new_);
 
-   check_overflow('-', old, other.val, new_, ret.val);
+   check_overflow('-', old, other.val, ret.val, ret.val);
 
    return ret;
   }    
 
-  template <bool saturate__>
+  template <uint8_t c, uint8_t m, bool s>
   unsigned_frac &
   operator -= (
-   unsigned_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other
+   unsigned_frac<c,m,s> const & other
   ) {
    val -= other.val;
 
@@ -290,7 +298,7 @@ namespace lamb {
    big_type      new_   = old - val_;
    unsigned_frac ret    = unsigned_frac(new_);
 
-   check_overflow('-', old, val_, new_, ret.val);
+   check_overflow('-', old, val_, ret.val, ret.val);
 
    return ret;
   }    
@@ -311,7 +319,7 @@ namespace lamb {
   operator * (
    unsigned_frac<other_charac,other_mantissa,other_saturate> const & other
   ) const {
-   static_assert(0 == other_charac, "Reverse operand order!");
+   // static_assert(0 == other_charac, "Reverse operand order!");
 
    typedef unsigned_frac<other_charac,other_mantissa, other_saturate>
     other_type;
@@ -328,22 +336,27 @@ namespace lamb {
 #else
    if (sizeof(other_type) > sizeof(unsigned_frac)) {
 #endif
-    static const uint8_t  shift =
-     other_type::FX_SHIFT;
+    static const uint8_t  shift = 
+     unsigned_frac<other_charac, other_mantissa>::FX_SHIFT;   
     
     pseudo_right_big_type tmp   = ((pseudo_right_big_type)val) * other.val;
     ret.val                     = (type)(tmp >> shift);
     
-    check_overflow('*', old, other.val, tmp, ret.val);
+    check_overflow('x', old, other.val, ret.val, ret.val);
    }
    else {
-    static const uint8_t  shift =
+    static const uint8_t  shift = 
      unsigned_frac<other_charac, other_mantissa>::FX_SHIFT;      
 
-    big_type              tmp   = ((big_type)val) * other.val; 
-    ret.val                     = (type)(tmp >> shift);
+    big_type              tmp   = ((big_type)val) * other.val;
 
-    check_overflow('*', old, other.val, tmp, ret.val);        
+//    cout << "TMP: " << tmp   << endl;
+//    printf("SHIFT: %d\n", shift);
+
+    ret.val                     = (type)(tmp >> shift);
+  
+//    printf("RET.VAL: %d\n", ret.val);
+    check_overflow('*', old, other.val, ret.val, ret.val);        
    }
    
    return ret;
@@ -435,12 +448,12 @@ namespace lamb {
    return (val & (~mask)) >> MANTISSA;
   }     
   
- private:
   type val;
 
- public:
-  type value() const {
-   return val;
+////////////////////////////////////////////////////////////////////////////////
+  
+  unsigned_frac<CHARACTERISTIC, MANTISSA, ( ! SATURATE )> sat_cast () const {
+   return unsigned_frac<CHARACTERISTIC, MANTISSA, ( ! SATURATE)>(val);
   }
   
 ///////////////////////////////////////////////////////////////////////////////
@@ -495,7 +508,11 @@ namespace lamb {
    
    return ret;
   }
-    
+
+  float to_float() const {
+   return val / (ONE * 1.0);
+  }
+
   explicit constexpr signed_frac(type const & val_) :
    val(val_) {}
 
@@ -515,7 +532,7 @@ namespace lamb {
    big_type    new_ = val + other.val;
    signed_frac ret  = signed_frac(new_);
 
-   check_overflow('+', old, other.val, new_, ret.val);
+   check_overflow('+', old, other.val, ret.val, ret.val);
 
    return ret;
   }
@@ -540,7 +557,7 @@ namespace lamb {
    big_type      new_   = old + val_;
    unsigned_frac ret    = unsigned_frac(new_);
 
-   check_overflow('+', old, val_, new_, ret.val);
+   check_overflow('+', old, val_, ret.val, ret.val);
 
    return ret;
   }    
@@ -565,7 +582,7 @@ namespace lamb {
    big_type    new_  = val - other.val;
    signed_frac ret   = signed_frac(new_);
 
-   check_overflow('-', old, other.val, new_, ret.val);
+   check_overflow('-', old, other.val, ret.val, ret.val);
 
    return ret;
   }
@@ -590,7 +607,7 @@ namespace lamb {
    big_type      new_   = old - val_;
    unsigned_frac ret    = unsigned_frac(new_);
 
-   check_overflow('-', old, val_, new_, ret.val);
+   check_overflow('-', old, val_, ret.val, ret.val);
 
    return ret;
   }    
@@ -612,7 +629,7 @@ namespace lamb {
   operator * (
    unsigned_frac<other_charac,other_mantissa,other_saturate> const & other
   ) const {
-   static_assert(0 == other_charac, "Reverse operand order!");
+   // static_assert(0 == other_charac, "Reverse operand order!");
 
    typedef unsigned_frac<other_charac,other_mantissa, other_saturate>
     other_type;
@@ -635,7 +652,7 @@ namespace lamb {
     tmp                         >>= shift;
     ret.val                       = (type)tmp;
 
-    check_overflow('*', old, other.val, tmp, ret.val);
+    check_overflow('*', old, other.val, ret.val, ret.val);
    }
    else {
     big_type              tmp     = ((big_type)val) * other.val;      
@@ -648,7 +665,7 @@ namespace lamb {
     tmp                         >>= shift;
     ret.val                       = (type)tmp;
 
-    check_overflow('*', old, other.val, tmp, ret.val);
+    check_overflow('*', old, other.val, ret.val, ret.val);
    }     
 
    return ret;
@@ -692,7 +709,7 @@ namespace lamb {
     tmp                       >>= other_type::FX_SHIFT - 1;
     r.val                       = (type)tmp;
 
-    check_overflow('*', old, other.val, tmp, r.val);
+    check_overflow('*', old, other.val, r.val, r.val);
    }
    else {
     big_type              tmp   = ((big_type)val) * other.val;
@@ -702,7 +719,7 @@ namespace lamb {
     printf("SHIFT is %d.\n", other_type::FX_SHIFT - 1);
     printf("r.val is %d.\n", r.val);        
 
-    check_overflow('*', old, other.val, tmp, r.val);
+    check_overflow('*', old, other.val, r.val, r.val);
    }
 
    return r;
@@ -761,7 +778,7 @@ namespace lamb {
 
  // used only as 'big_type's:
  typedef uint64_t                       q0n64_value_type;
- typedef int64_t                        q0n63_value_type;
+ typedef int64_t                        q0n63_valuete_type;
 
 // Overflow-able types ////////////////////////////////////////////////////////
   
