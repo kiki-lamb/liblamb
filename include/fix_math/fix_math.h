@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <cmath>
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -160,6 +161,16 @@ namespace lamb {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+  // v This can overflow, especially if val > 1.0 and CHARACTERISTIC == 0;
+  
+  static constexpr unsigned_frac from_float(float const & val_) {
+   int           divisor = int(val_);
+   float         modulus = val_ - divisor;
+   type          ipart   = ONE * divisor + int(ONE * modulus);
+   
+   return unsigned_frac(ipart);
+  }
+  
   explicit unsigned_frac(type const & val_) :
    val(val_) {}
 
@@ -362,6 +373,25 @@ namespace lamb {
    }
 
 ///////////////////////////////////////////////////////////////////////////////
+
+  // v This can overflow, especially if val > 1.0 and CHARACTERISTIC == 0;
+  //   Not yet well tested.
+  
+  static constexpr signed_frac from_float(float val_) {
+   bool          negative = val_ < 0;
+   val_                   = abs(val_);   
+   int           divisor  = int(val_);
+   float         modulus  = val_ - divisor;
+   signed_frac   ret(
+    ONE * divisor, int(ONE * modulus)
+   );
+
+   if (negative) {
+    ret.val              *= -1;
+   }
+   
+   return ret;
+  }
     
   explicit signed_frac(type const & val_) :
    val(val_) {}

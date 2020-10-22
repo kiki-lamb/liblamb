@@ -6,26 +6,30 @@ using namespace std;
 
 using namespace lamb;
 
-typedef q15n16  l_test_t;
+typedef q8n8    l_test_t;
 typedef q0n8    r_test_t;
 
 typedef signed_frac<8, 7> garbage_t;
 
-garbage_t garbage(7);
+//garbage_t garbage(7);
 
 #define L_BASE ((l_test_t::MAX >> (sizeof(l_test_t::type) >> 1) >> 4) + 1)
 #define R_BASE ((r_test_t::MAX >> (sizeof(r_test_t::type) >> 1) >> 4) + 1)
 
 int main() {
- printf("Garbage: %d\n", garbage.val);
- 
+// printf("Garbage: %d\n", garbage.val);
+
+ q16n16    xx(q16n16::from_float(1.3105));
+
+ printf("Val: %lu\n", xx.val);
+  
  sat_q0n8  x(0x40);
 
  sat_q0n16 z(x);
 
  printf("Conv: %d\n", z.val);
 
- q0n8  y(0x80);
+ q0n8      y(0x80);
   
  printf("Add: %d\n", (x + y).val);
 
@@ -34,9 +38,9 @@ int main() {
  printf("Add2: %d\n", (x + y).val);
   
  printf("l BASE is %u.\n", L_BASE);
- printf("l ONE  is %d.\n", l_test_t::ONE);
- printf("l MAX  is %d.\n", l_test_t::MAX);
- printf("l MIN  is %d.\n", l_test_t::MIN);
+ printf("l ONE  is %u.\n", l_test_t::ONE);
+ printf("l MAX  is %u.\n", l_test_t::MAX);
+ printf("l MIN  is %u.\n", l_test_t::MIN);
  printf("r BASE is %u.\n", R_BASE);
  printf("r ONE  is %u.\n", r_test_t::ONE);
  printf("r MAX  is %u.\n", r_test_t::MAX);
