@@ -101,8 +101,11 @@ namespace lamb {
 
   static_assert(
    (
-    ((CHARACTERISTIC % 8) == 0) &&
-    ((MANTISSA      % 8) == 0)
+    (MANTISSA > 0) &&
+    (((MANTISSA + CHARACTERISTIC) % 8) == 0)
+    
+//    ((CHARACTERISTIC % 8) == 0) &&
+//    ((MANTISSA      % 8) == 0)
    ),
    "bad bit count for this type"
   );
@@ -110,14 +113,14 @@ namespace lamb {
   typedef typename unsigned_int<SIZE>::type         type;
   typedef typename unsigned_int<(SIZE << 1)>::type  big_type;
 
-  static const type    ONE            = (
+  static constexpr type    ONE            = (
    (CHARACTERISTIC == 0) ? 
    ((((big_type)1) << MANTISSA) - 1) :
    (1 << MANTISSA)
   );
     
-  static const type    MAX            = unsigned_int<SIZE>::MAX;
-  static const type    MIN            = unsigned_int<SIZE>::MIN;
+  static constexpr type    MAX            = unsigned_int<SIZE>::MAX;
+  static constexpr type    MIN            = unsigned_int<SIZE>::MIN;
     
   type val;
 
@@ -171,8 +174,13 @@ namespace lamb {
    return unsigned_frac(ipart);
   }
   
-  explicit unsigned_frac(type const & val_) :
+  explicit constexpr unsigned_frac(type const & val_ = 0) :
    val(val_) {}
+
+  explicit constexpr unsigned_frac(
+   type const & characteristic__,
+   type const & mantissa__
+  ) : val((characteristic__ * ONE) + mantissa__) {}
 
 ///////////////////////////////////////////////////////////////////////////////
     
@@ -332,14 +340,14 @@ namespace lamb {
   typedef typename signed_int<SIZE>::type         type;
   typedef typename signed_int<(SIZE << 1)>::type  big_type;
     
-  static const type     ONE      = (
+  static constexpr type     ONE      = (
    (CHARACTERISTIC == 0) ? 
    ((((big_type)1) << MANTISSA) - 1) :
    (1 << MANTISSA)
   );
     
-  static const type     MAX      = signed_int<(SIZE)>::MAX;
-  static const type     MIN      = signed_int<(SIZE)>::MIN;
+  static constexpr type     MAX      = signed_int<(SIZE)>::MAX;
+  static constexpr type     MIN      = signed_int<(SIZE)>::MIN;
         
   type val;
 
@@ -393,8 +401,13 @@ namespace lamb {
    return ret;
   }
     
-  explicit signed_frac(type const & val_) :
+  explicit constexpr signed_frac(type const & val_ = 0) :
    val(val_) {}
+
+  // v should use smaller types.
+  
+  explicit constexpr signed_frac(type const & characteristic__, type const & mantissa__) :
+   val((characteristic__ * ONE) + mantissa__) {}
   
 ///////////////////////////////////////////////////////////////////////////////
     
@@ -615,6 +628,8 @@ namespace lamb {
  typedef unsigned_frac< 16, 16, false > q16n16;
  typedef unsigned_frac<  0, 32, false > q0n32;
  
+ typedef unsigned_frac<  2, 30, false > q2n30;
+  
  typedef signed_frac<    0,  7, false > q0n7;
  typedef signed_frac<    7,  8, false > q7n8;
  typedef signed_frac<    0, 15, false > q0n15;
@@ -629,11 +644,14 @@ namespace lamb {
  typedef unsigned_frac< 16, 16, true  > sat_q16n16;  
  typedef unsigned_frac<  0, 32, true  > sat_q0n32;
  
+ typedef unsigned_frac<  2, 30, true  > sat_q2n30;
+  
  typedef signed_frac<    0,  7, true  > sat_q0n7;
  typedef signed_frac<    7,  8, true  > sat_q7n8;
  typedef signed_frac<    0, 15, true  > sat_q0n15;
  typedef signed_frac<   15, 16, true  > sat_q15n16;
  typedef signed_frac<    0, 31, true  > sat_q0n31;  
+
  
 ///////////////////////////////////////////////////////////////////////////////
 
