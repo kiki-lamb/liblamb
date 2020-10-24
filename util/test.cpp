@@ -11,22 +11,27 @@ int main() {
 
  sat_q0n15 acc(q0n15::MIN);
 
- printf("A, F, I, L, H, B, N, D1, D2 \n");
- 
- for (size_t fix = 300; fix > 5; fix -= 5) {
-  cf.F    = fix;
-  acc.val = 0;
-  
-  cf.set_frequency();
-  
-  for(size_t ix = 0; ix < 5120; ix ++) {
-   acc += 65536L / 128;
+ printf("F, I, L, H, B, N, D1, D2 \n");
 
-   q0n15_value_type y = (acc.val > 32768u ) ? sat_q0n15::MAX : 0;
-
-   auto x = cf.process(sat_q0n15(y));
+ for (size_t qix = 1; qix < 100; qix++) {
+  cf.Q = qix;
+  cf.set_q();
+  
+  for (size_t fix = 200; fix > 120; fix -= 5) {
+   cf.F    = fix;
+   acc.val = 0;
    
-   printf("\n");
+   cf.set_frequency();
+   
+   for(size_t ix = 0; ix < 256; ix ++) {
+    acc += 65536L / 128;
+    
+    // q0n15_value_type y = (acc.val > 32768u ) ? sat_q0n15::MAX : 0;
+    
+    auto x = cf.process(sat_q0n15(acc));
+   
+    printf("\n");
+   }
   }
  }
 }
