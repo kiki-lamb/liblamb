@@ -496,10 +496,15 @@ namespace lamb {
   static constexpr signed_frac from_float(float val_) {
    bool          negative = val_ < 0;
    val_                   = abs(val_);   
+
    int           divisor  = int(val_);
+//   printf("Divisor: %d \n", divisor);
+
    float         modulus  = val_ - divisor;
+//   printf("Modulus: %lf \n", modulus);
+   
    signed_frac   ret(
-    ONE * divisor, int(ONE * modulus)
+    divisor, int(ONE * modulus)
    );
 
    if (negative) {
@@ -684,7 +689,7 @@ namespace lamb {
   operator * (
    signed_frac<other_charac,other_mantissa,other_saturate> const & other
   ) const {
-   static_assert(0 == other_charac, "Reverse operand order!");
+//   static_assert(0 == other_charac, "Reverse operand order!");
 
    typedef signed_frac<other_charac,other_mantissa,other_saturate>
     other_type;
@@ -712,9 +717,6 @@ namespace lamb {
     tmp                       >>= other_type::FX_SHIFT - 1;     
     r.val                       = (type)tmp;        
 
-    printf("SHIFT is %d.\n", other_type::FX_SHIFT - 1);
-    printf("r.val is %d.\n", r.val);        
-
     check_overflow('*', old, other.val, r.val, r.val);
    }
 
@@ -738,7 +740,17 @@ namespace lamb {
   operator / (
    signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other
   ) const {
-   signed_frac r = signed_frac(val / other.val);
+   big_type scaled = (big_type)val << MANTISSA;
+   big_type otherv = (big_type)other.val;
+   big_type div    = otherv / scaled;
+   div /= ONE;
+   
+   printf("scaled: %lld / %lu div: %ld \n", scaled, otherv, div);
+
+
+   signed_frac r = signed_frac(div);
+
+   printf("result: % 05.05lf \n", r.to_float());
    
    return r;
   }        

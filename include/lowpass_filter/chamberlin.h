@@ -2,103 +2,52 @@
 #define LAMB_CHAMBERLIN_H_
 
 #include <cmath>
+#include <stdio.h>
 
 namespace lamb {
-  class chamberlin {
-  public:
-   double Q1, Q, F1, F, FS, D1, D2, L, H, B, N;
-    
-   chamberlin() :
-    Q1(0), Q(0), F1(0), F(0), FS(0), D1(0), D2(0), L(0), H(0), B(0), N(0) {
-    Q  = 1.0;
-    F  = 1000;
-    FS = 44100;
-
-    set_frequency();
-    set_q();
-   }
-
-   void set_frequency() {
-    F1 = 2.0 * M_PI * F / FS;
-    // printf("F1: % 05.5lf \n", F1);
-   }
-
-   void set_q() {
-    Q1 = 1 / Q;
-    // printf("Q1: % 05.5lf \n", Q1);
-   }
-   
-   sat_q0n15 process(sat_q0n15 input) {
-//    printf("% 5.5lf, ", Q1)    ;
-
-    printf("% 5.5lf, ", F1)    ;
-    
-    double I = input.to_float();
-    printf("% 5.5lf, ", I)    ;
-    
-//    L = D2 + F1 * D1
-//    H = I - L - Q1*D1
-//    B = F1 * H + D1
-//    N = H + L
-//    D1 = B
-//    D2 = L
-
-    L  = D2 + F1 * D1         ;
-    printf("% 5.5lf, ", L)    ;
-
-    H  = I  - L  - Q1*D1      ;
-    printf("% 5.5lf, ", H)    ;
-
-    B  = F1 * H  + D1         ;
-    printf("% 5.5lf, ", B)    ;
-    
-    N  = H  + L               ;
-    printf("% 5.5lf, ", N)    ;
-
-    D1 = B                    ;
-    printf("% 5.5lf, ", D1)   ;
-    
-    D2 = L                    ;
-    printf("% 5.5lf  ", D2)   ;
-        
-    return sat_q0n15::from_float(L);
-   }
-  };
-
   class fx_chamberlin {
   public:
-   sat_q7n8 Q1, Q, F1, F, FS, D1, D2, L, H, B, N;
+   sat_q15n16 Q1, Q, F1, F, FS, D1, D2, L, H, B, N;
     
    fx_chamberlin() :
-    Q1(0), Q(0), F1(0), F(0), FS(0), D1(0), D2(0), L(0), H(0), B(0), N(0) {
+    Q1(0), Q(0), F1(0), F(1000,0), FS(44100,0), D1(0), D2(0), L(0), H(0), B(0), N(0) {
     Q.val  = 1.0;
-    F.val  = 1000;
-    FS.val = 44100;
 
     set_frequency();
     set_q();
    }
 
    void set_frequency() {
-    auto pi2 = sat_q7n8::from_float(2.0 * M_PI);
+    printf("Set frequency to % 05.5lf %u... \n", F.to_float(), F.val);
+    
+    float fpi2 = 2.0 * M_PI;
+    // printf("fpi2: % 05.5lf \n", fpi2);
+    
+    sat_q15n16 pi2 = sat_q15n16::from_float(fpi2);
+
+    // printf("PI2: % 05.5lf \n", pi2.to_float()); fflush(stdout);
+
+    sat_q15n16 f_div_fs(F / FS);
+
+    // printf("f_div_fs: % 05.5lf %u \n", f_div_fs.to_float(), f_div_fs.val);
+    
     F1       = pi2;
-    F1      *= F / FS;
+    F1      *= f_div_fs;
     
 
-    printf("F1: % 05.5lf \n", F1.to_float());
+    printf("F1: % 05.5lf %u \n", F1.to_float(), F1.val);
    }
 
    void set_q() {
-    Q1 = sat_q7n8(sat_q7n8::ONE) / Q;
-    // printf("Q1: % 05.5lf \n", Q1);
+    Q1 = sat_q15n16(sat_q15n16::ONE) / Q;
    }
    
-   sat_q7n8 process(sat_q7n8 input) {
+   sat_q15n16 process(sat_q15n16 input) {
 //    printf("% 5.5lf, ", Q1)    ;
 
     printf("% 5.5lf, ", F1)    ;
     
-    sat_q7n8 I = input;
+    sat_q15n16 I = input;
     printf("% 5.5lf, ", I.to_float())    ;
     
 //    L = D2 + F1 * D1

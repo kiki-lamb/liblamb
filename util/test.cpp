@@ -1,4 +1,5 @@
 #include "../include/lamb.h"
+#include <stdio.h>
 
 using namespace std;
 
@@ -7,61 +8,34 @@ using namespace std;
 using namespace lamb;
 
 int main() {
- {
-  chamberlin cf;
+
+  printf("Start...\n");
+  fflush(stdout);
+ 
+  fx_chamberlin cf;
   
-  sat_q0n15 acc(q0n15::MIN);
-  
-  printf("F, I, L, H, B, N, D1, D2 \n");
+  sat_q15n16 acc(q15n16::MIN);
   
   for (size_t qix = 1; qix < 300; qix += 2) {
-   cf.Q = qix;
+   cf.Q = sat_q15n16::from_float(qix);
+   
    cf.set_q();
    
-   for (size_t fix = 150; fix > 100; fix -= 10) {
-    cf.F    = fix;
+   for (size_t fix = 1000; fix > 100; fix -= 100) {
+    cf.F    = sat_q15n16(fix, 0);
     acc.val = 0;
     
     cf.set_frequency();
-   
+    
     for(size_t ix = 0; ix < 64; ix ++) {
      acc += 65536L / 64;
      
-     // q0n15_value_type y = (acc.val > 32768u ) ? sat_q0n15::MAX : 0;
+     // q15n16_value_type y = (acc.val > 32768u ) ? sat_q15n16::MAX : 0;
      
-     auto x = cf.process(sat_q0n15(acc));
+     auto x = cf.process(acc);
      
      printf("\n");
-    }
-   }
-  }
-
-  {
-   fx_chamberlin cf;
-  
-   sat_q7n8 acc(q7n8::MIN);
-  
-   for (size_t qix = 1; qix < 300; qix += 2) {
-    cf.Q = sat_q7n8::from_float(qix);
-    cf.set_q();
-   
-    for (size_t fix = 150; fix > 100; fix -= 10) {
-     cf.F    = sat_q7n8(fix, 0);
-     acc.val = 0;
-    
-     cf.set_frequency();
-   
-     for(size_t ix = 0; ix < 64; ix ++) {
-      acc += 65536L / 64;
-    
-      // q7n8_value_type y = (acc.val > 32768u ) ? sat_q7n8::MAX : 0;
-    
-      auto x = cf.process(acc);
-    
-      printf("\n");
      }
-    }
    }
   }
- }
 }
