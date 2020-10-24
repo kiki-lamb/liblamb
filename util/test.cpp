@@ -2,7 +2,7 @@
 
 using namespace std;
 
-// g++ -std=gnu++14 -DLAMB_NO_ARDUINO test.cpp && ./a.out
+// g++ -std=gnu++17 -DLAMB_NO_ARDUINO test.cpp && .\a.exe > a.csv && sigrok-cli -I csv:column_formats="*a" -i a.csv -o x.sr
 
 using namespace lamb;
 
@@ -16,20 +16,24 @@ int main() {
  moog_filter mf;
 
  sat_q0n15 acc(q0n15::MIN);
+
+ sat_q8n8  mul = sat_q8n8::from_float(0.605);
+ sat_q0n15 inp = sat_q0n15::from_float(-0.992);
+
+ printf("m=> % 04.3f \n", mul.to_float());
+ printf("i=> % 04.3f \n", inp.to_float()); 
+ printf("*=> % 04.3f \n", (inp * mul).to_float());
  
- printf("INIT: %ld\n", acc.val);
- 
- for(size_t ix = 0; ix < 1000L; ix ++) {
+ printf("input,   ffff,   fbc,    fb,     sub,    inpp,   mul,    inppp,  inv_fp, inv_fpp,out1,   in1\n");
+ for(size_t ix = 0; ix < 200L; ix ++) {
   acc += 256;
 
   // printf("%ld\n", acc.val);
   
   auto x = mf.process(acc);
 
-  printf("Final: %f \n", x.to_float());
+  printf("\n");
  }
-
- printf("MIN: %ld\n", q0n15::MIN);
 }
 
 // void test() {
