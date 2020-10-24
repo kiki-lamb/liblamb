@@ -553,9 +553,9 @@ namespace lamb {
   operator + (
    type const & val_
   ) const {
-   type          old    = val;
-   big_type      new_   = old + val_;
-   unsigned_frac ret    = unsigned_frac(new_);
+   type          old  = val;
+   big_type      new_ = old + val_;
+   signed_frac   ret  = signed_frac<CHARACTERISTIC,MANTISSA,SATURATE>(new_);
 
    check_overflow('+', old, val_, ret.val, ret.val);
 
@@ -605,7 +605,7 @@ namespace lamb {
   ) const {
    type          old    = val;
    big_type      new_   = old - val_;
-   unsigned_frac ret    = unsigned_frac(new_);
+   signed_frac   ret    = signed_frac(new_);
 
    check_overflow('-', old, val_, ret.val, ret.val);
 
