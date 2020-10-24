@@ -341,7 +341,7 @@ namespace lamb {
     
     pseudo_right_big_type tmp   = ((pseudo_right_big_type)val) * other.val;
     ret.val                     = (type)(tmp >> shift);
-    
+
     check_overflow('x', old, other.val, ret.val, ret.val);
    }
    else {
@@ -657,10 +657,6 @@ namespace lamb {
    else {
     big_type              tmp     = ((big_type)val) * other.val;      
     uint8_t               shift   = other_type::FX_SHIFT;
-
-    if (val < 0) {
-     shift --;
-    }        
 
     tmp                         >>= shift;
     ret.val                       = (type)tmp;
