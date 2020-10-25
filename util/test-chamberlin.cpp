@@ -5,8 +5,29 @@
 using namespace std;
 using namespace lamb;
 
+
+void pprint_bits_32(uint32_t t0) {
+ for(uint32_t mask = 0x80000000; mask; mask >>= 1) {
+  if (mask & t0) {
+   printf("1");
+  }
+  else {
+   printf("0");
+  }
+ }
+}
+
+
 int main() {
  {
+
+  int64_t big = -133441;
+  printf("big: %ld \n", big);
+  
+  int32_t small = (int32_t)big;
+  printf("small: %d \n", small);
+
+
   chamberlin    cf;
   fx_chamberlin fx_cf;
   
@@ -23,7 +44,45 @@ int main() {
   fx_cf.Q = fx_chamberlin::qtype(fx_chamberlin::qtype::ONE >> 1);
   fx_cf.set_q();
 
-  printf("HERE: %5.5lf \n", sat_q15n16::from_float(1.21175) * sat_q15n16::from_float(0.99997));
+  sat_q15n16 l(sat_q15n16::from_float(1.212));
+  sat_q15n16 r(sat_q15n16::from_float(-1.680));
+
+  printf(
+   "MULF: %5.5lf * %5.5lf \n",
+   l.to_float(),
+   r.to_float()
+  );
+
+  printf(
+   "MUL: %ld * %ld \n",
+   l,
+   r
+  );
+
+  sat_q15n16 x(l);
+  
+  printf(
+   "DHERE: %ld \n",
+   (int64_t)x.val
+  );
+
+  x *= r;
+
+  pprint_bits_32(x.val); printf("\n");
+  
+  printf(
+   "DHERE2: %ld \n",
+   (int64_t)x.val
+  );
+  
+  printf("r.val is %lld.\n", r.val);
+      
+  printf(
+   "FHERE: %5.5lf \n",
+   x.to_float()
+  );
+
+  return 0;
   
   printf(
    "F1 = % 05.5lf, Q1 = % 05.5lf \n",
@@ -38,7 +97,7 @@ int main() {
   );
   
 //  printf("A, AF, F1, I, L, H, B, N, D1, D2 \n");
-  printf("Af,        I,        F1,       Q1,       L,        H,        B,        N,        D1,       D2,        I,        F1,           Q1,       L,        H,        B,        N,        D1,       D2 \n");
+  printf("Af,        I,      F1,     Q1,     L,      H,      B,      N,      D1,     D2,        I,    F1,     Q1,     L,              H,           B,           N,           D1,          D2 \n");
 
 //  for (double qix = 1.0; qix < 30.0; qix += 1.0) {
   for (double qix = 1.0; qix < 4.0; qix += 1.0) {
@@ -60,18 +119,6 @@ int main() {
     fx_cf.F.val = fix;
     fx_cf.set_frequency();
     
-  printf(
-   "F1 = % 05.5lf, Q1 = % 05.5lf \n",
-   cf.F1,
-   cf.Q1
-  );
-  
-  printf(
-   "F1 = % 05.5lf, Q1 = % 05.5lf \n",
-   fx_cf.F1.to_float(),
-   fx_cf.Q1.to_float()
-  );
-
   const size_t fdiv = 512;
 
     for(size_t cycle_ix = 0; cycle_ix < 1; cycle_ix++) {

@@ -56,34 +56,34 @@ namespace lamb {
    sat_q0n15 process(sat_q0n15 I_) {
     sat_q15n16 I(I_.val << 1);
     
-    printf("% 5.5lf, ", I.to_float())    ;
-    printf("% 5.5lf, ", F1.to_float())   ;        
-    printf("% 5.5lf, ", Q1.to_float())   ;
+    printf("% 6.3lf, ", I.to_float())    ;
+    printf("% 6.3lf, ", F1.to_float())   ;        
+    printf("% 6.3lf, ", Q1.to_float())   ;
         
     L  = D2 + F1 * D1                    ;
-    printf("% 5.5lf, ", L.to_float())    ;
+    printf("% 9.3lf, ", L.to_float())    ;
 
     H  = I - L - (Q1*D1)                 ;
-    printf("% 5.5lf, ", H.to_float())    ;
+    printf("% 14.3lf, ", H.to_float())    ;
 
     printf(
-     "[ (%5.5lf * %5.5lf) + %5.5lf ]",
+     "[(%6.3lf * %6.3lf) + %6.3lf]",
      F1.to_float(),
      H.to_float(),
      D1.to_float()
     );
     
     B  = (F1 * H)  + D1                  ;
-    printf("% 5.5lf, ", B.to_float())    ;
+    printf("% 9.3lf, ", B.to_float())    ;
     
     N  = H  + L                          ;
-    printf("% 5.5lf, ", N.to_float())    ;
+    printf("% 9.3lf, ", N.to_float())    ;
 
     D1 = B                               ;
-    printf("% 5.5lf, ", D1.to_float())   ;
+    printf("% 9.3lf, ", D1.to_float())   ;
       
     D2 = L                               ;
-    printf("% 5.5lf  ", D2.to_float())   ;
+    printf("% 9.3lf  ", D2.to_float())   ;
         
     return sat_q0n15::from_float(0.0);
    }

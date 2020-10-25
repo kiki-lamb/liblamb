@@ -16,10 +16,18 @@ void lamb::print_bits_8(uint8_t const & t0) {
   {
     for(uint16_t mask = 0x80; mask; mask >>= 1) {
       if (mask & t0) {
-        Serial.print('1'); Serial.flush();
+#ifdef LAMB_NO_ARDUINO
+       printf("1");
+#else
+       Serial.print('1'); Serial.flush();
+#endif
       }
       else {
-        Serial.print('0'); Serial.flush();
+#ifdef LAMB_NO_ARDUINO
+       printf("0");
+#else
+       Serial.print('0'); Serial.flush();
+#endif
       }
     }
   }
@@ -29,10 +37,18 @@ void lamb::print_bits_16(uint16_t const & t0) {
   {
     for(uint16_t mask = 0x8000; mask; mask >>= 1) {
       if (mask & t0) {
-        Serial.print('1'); Serial.flush();
+#ifdef LAMB_NO_ARDUINO
+       printf("1");
+#else
+       Serial.print('1'); Serial.flush();
+#endif
       }
       else {
-        Serial.print('0'); Serial.flush();
+#ifdef LAMB_NO_ARDUINO
+       printf("0");
+#else
+       Serial.print('0'); Serial.flush();
+#endif
       }
     }
   }
@@ -42,10 +58,18 @@ void lamb::print_bits_32(uint32_t const & t0) {
   {
     for(uint32_t mask = 0x80000000; mask; mask >>= 1) {
       if (mask & t0) {
-        Serial.print('1'); Serial.flush();
+#ifdef LAMB_NO_ARDUINO
+       printf("1");
+#else
+       Serial.print('1'); Serial.flush();
+#endif
       }
       else {
-        Serial.print('0'); Serial.flush();
+#ifdef LAMB_NO_ARDUINO
+       printf("0");
+#else
+       Serial.print('0'); Serial.flush();
+#endif
       }
     }
   }

@@ -55,7 +55,7 @@ namespace lamb {
   bool under = tmp < MIN;                                       \
                                                                 \
   if (delta < 0) {                                              \
-   if (-delta > old_val) {                                       \
+   if (-delta > old_val) {                                      \
     under = true;                                               \
    }                                                            \
   }                                                             \
@@ -867,6 +867,34 @@ namespace lamb {
     return *this;
    }
 
+
+///////////////////////////////////////////////////////////////////////////////
+   
+   void print_bits_32(uint32_t t0) const {
+    for(uint32_t mask = 0x80000000; mask; mask >>= 1) {
+      if (mask & t0) {
+       printf("1");
+      }
+      else {
+       printf("0");
+      }
+    }
+   }  
+
+
+///////////////////////////////////////////////////////////////////////////////
+   
+   void print_bits_64(uint64_t t0) const {
+    for(uint64_t mask = 0x80000000'00000000; mask; mask >>= 1) {
+      if (mask & t0) {
+       printf("1");
+      }
+      else {
+       printf("0");
+      }
+    }
+   }  
+
 ///////////////////////////////////////////////////////////////////////////////
 
    template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
@@ -892,7 +920,7 @@ namespace lamb {
      if (sizeof(other_type) > sizeof(signed_frac)) {
 #endif
       pseudo_right_big_type tmp   = ((pseudo_right_big_type)val) * other.val; 
-      tmp                       >>= other_type::FX_SHIFT - 1;
+      tmp                       >>= other_type::MANTISSA;
       r.val                       = (type)tmp;
 
 #ifndef LAMB_TEST_FIX_MATH
@@ -904,12 +932,23 @@ namespace lamb {
 #endif
      }
      else {
-      big_type              tmp   = ((big_type)val) * other.val;
-      tmp                       >>= other_type::FX_SHIFT - 1;     
+      printf("This case: %ld * %ld.\n", val, other.val);
+
+      type              tmp   = ((big_type)val) * other.val >> other_type::MANTISSA;;
+//      tmp                       >>= other_type::MANTISSA;
+
+      r.val += tmp;
+      printf("This tmp2: %lld \n", tmp);
+
+      printf("BEFORE: "); print_bits_64(tmp);   printf("\n");
+
       r.val                       = (type)tmp;        
 
-//    printf("SHIFT is %d.\n", other_type::FX_SHIFT - 1);
-//    printf("r.val is %d.\n", r.val);        
+      // printf("MIN: %ld \n", MIN); 
+      // printf("AFTER:  ");  print_bits_32(r.val); printf("\n");      
+      // printf("This tmp2f: %9.3lf \n", r.to_float());
+      // printf("r.val cast is %lld.\n", (big_type)r.val);
+      // printf("r.val uncast is %d.\n", (type)val);        
 
 #ifndef LAMB_TEST_FIX_MATH
       check_overflow<big_type>('*', old, other.val, r.val, r.val);
@@ -918,6 +957,8 @@ namespace lamb {
        overflow = true;
       }
 #endif
+
+      return signed_frac(tmp);
      }
 
      return r;

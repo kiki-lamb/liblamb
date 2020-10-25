@@ -20,12 +20,12 @@ namespace lamb {
 
    void set_frequency() {
     F1 = 2.0 * M_PI * F / FS;
-    // printf("F1: % 05.5lf \n", F1);
+    // printf("F1: % 05.3lf \n", F1);
    }
 
    void set_q() {
     Q1 = 1 / Q;
-    // printf("Q1: % 05.5lf \n", Q1);
+    // printf("Q1: % 05.3lf \n", Q1);
    }
 
 //    L = D2 + F1 * D1
@@ -38,27 +38,27 @@ namespace lamb {
    sat_q0n15 process(sat_q0n15 input) {
     double I = input.to_float();
     
-    printf("% 5.5lf, ", I)    ;
-    printf("% 5.5lf, ", F1)   ;        
-    printf("% 5.5lf, ", Q1)   ;
+    printf("% 5.3lf, ", I)    ;
+    printf("% 5.3lf, ", F1)   ;        
+    printf("% 5.3lf, ", Q1)   ;
         
     L  = D2 + F1 * D1         ;
-    printf("% 5.5lf, ", L)    ;
+    printf("% 5.3lf, ", L)    ;
 
     H  = I  - L  - Q1*D1      ;
-    printf("% 5.5lf, ", H)    ;
+    printf("% 5.3lf, ", H)    ;
 
     B  = F1 * H  + D1         ;
-    printf("% 5.5lf, ", B)    ;
+    printf("% 5.3lf, ", B)    ;
     
     N  = H  + L               ;
-    printf("% 5.5lf, ", N)    ;
+    printf("% 5.3lf, ", N)    ;
 
     D1 = B                    ;
-    printf("% 5.5lf, ", D1)   ;
+    printf("% 5.3lf, ", D1)   ;
     
     D2 = L                    ;
-    printf("% 5.5lf,  ", D2)   ;
+    printf("% 5.3lf,  ", D2)   ;
         
     return sat_q0n15::from_float(L);
    }
