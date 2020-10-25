@@ -16,34 +16,37 @@ int main() {
   cf.set_frequency();
   cf.Q = 0.5;
   cf.set_q();
-
   printf("\n");
   
-  fx_cf.F = fx_chamberlin::pqtype( 5000 );
+  fx_cf.F = fx_chamberlin::pqtype(5000);
   fx_cf.set_frequency();
-  fx_cf.Q = fx_chamberlin::qtype::from_float(0.5);
+  fx_cf.Q = fx_chamberlin::qtype(fx_chamberlin::qtype::ONE >> 1);
   fx_cf.set_q();
 
-  printf("F1 = % 05.5lf, Q1 = % 05.5lf \n", cf.F1, cf.Q1);
+  printf(
+   "F1 = % 05.5lf, Q1 = % 05.5lf \n",
+   cf.F1,
+   cf.Q1
+  );
 
   printf(
    "F1 = % 05.5lf, Q1 = % 05.5lf \n",
    fx_cf.F1.to_float(),
    fx_cf.Q1.to_float()
   );
-
-  return 0;
   
 //  printf("A, AF, F1, I, L, H, B, N, D1, D2 \n");
   printf("Af, I, F1, Q1, L, H, B, N, D1, D2 \n");
-  
-  for (double qix = 1.0; qix < 30.0; qix += 1.0) {
+
+//  for (double qix = 1.0; qix < 30.0; qix += 1.0) {
+  for (double qix = 1.0; qix == 1.0; qix += 1.0) {
    cf.Q = qix;
    cf.set_q();
 
    const size_t fix_incr = 100;
    
-   for (size_t fix = 8500 + 5; fix > 5; fix -= fix_incr) {
+   //for (size_t fix = 8500 + 5; fix > 8505; fix -= fix_incr) {
+   for (size_t fix = 8500 + 5; fix == 8505; fix -= fix_incr) {
     cf.F    = fix;
     acc     = 0;
     
