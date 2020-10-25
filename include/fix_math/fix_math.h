@@ -126,7 +126,7 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
  template <
-  template <uint8_t char_, uint8_t mant_, bool sat_> class derived,
+  template <uint8_t char_, uint8_t mant_, bool sat_> class derived_template,
   uint8_t characteristic_,
   uint8_t mantissa_,
   bool saturate_ = false
@@ -164,6 +164,14 @@ namespace lamb {
    typename unsigned_int<(SIZE << 1)>::type
    >::type big_type;
 
+  typedef
+  derived_template<CHARACTERISTIC, MANTISSA, (! SATURATE )>
+  sat_cast_type;
+  
+  typedef
+  derived_template<CHARACTERISTIC, MANTISSA, SATURATE>
+  derived_type;
+  
 ////////////////////////////////////////////////////////////////////////////////
 
   static constexpr
@@ -242,13 +250,23 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  derived<CHARACTERISTIC, MANTISSA, ( ! SATURATE )> sat_cast () const {
-   return derived<CHARACTERISTIC, MANTISSA, ( ! SATURATE)>(val);
+  sat_cast_type sat_cast () const {
+   return sat_cat_type(val);
   }
   
+///////////////////////////////////////////////////////////////////////////////
+
+  static constexpr derived_type from_float(float const & tmp_) {
+   int           divisor = int(tmp_);
+   float         modulus = tmp_ - divisor;
+   type          ipart   = ONE * divisor + int(ONE * modulus);
+   
+   return derived_type(ipart);
+  }
+
 ////////////////////////////////////////////////////////////////////////////////
 
- };
+ }; // template frac_base
  
 ///////////////////////////////////////////////////////////////////////////////
 // Unsigned fixed point numbers
@@ -304,18 +322,6 @@ namespace lamb {
    );
    
    return tmp;
-  }
-
-///////////////////////////////////////////////////////////////////////////////
-
-  // v This can overflow, especially if val > 1.0 and base::CHARACTERISTIC == 0;
-  
-  static constexpr unsigned_frac from_float(float const & tmp_) {
-   int           divisor = int(tmp_);
-   float         modulus = tmp_ - divisor;
-   type          ipart   = base::ONE * divisor + int(base::ONE * modulus);
-   
-   return unsigned_frac(ipart);
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -568,14 +574,14 @@ namespace lamb {
     // v This can overflow, especially if val > 1.0 and base::CHARACTERISTIC == 0;
     //   Not yet well tested.
   
-    static constexpr signed_frac from_float(float tmp_) {
-     bool          neg     = tmp_ < 0;
-     int           divisor = int(tmp_);
-     float         modulus = tmp_ - divisor;
-     type          ipart   = base::ONE * divisor + int(base::ONE * modulus);
+    // static constexpr signed_frac from_float(float tmp_) {
+    //  bool          neg     = tmp_ < 0;
+    //  int           divisor = int(tmp_);
+    //  float         modulus = tmp_ - divisor;
+    //  type          ipart   = base::ONE * divisor + int(base::ONE * modulus);
    
-     return signed_frac(ipart);
-    }
+    //  return signed_frac(ipart);
+    // }
 
     explicit constexpr
     signed_frac(type const & tmp_) :
