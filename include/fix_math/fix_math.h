@@ -55,9 +55,7 @@ namespace lamb {
   bool under = tmp < MIN;                                       \
                                                                 \
   if (delta < 0) {                                              \
-   printf("%d vs %d\n", delta, old_val);                        \
-                                                                \
-   if (delta > old_val) {                                       \
+   if (-delta > old_val) {                                       \
     under = true;                                               \
    }                                                            \
   }                                                             \
