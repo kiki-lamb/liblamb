@@ -75,8 +75,6 @@ int main() {
    (int64_t)x.val
   );
   
-  printf("r.val is %lld.\n", r.val);
-      
   printf(
    "FHERE: %5.5lf \n",
    x.to_float()

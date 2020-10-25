@@ -46,13 +46,13 @@ namespace lamb {
   new_t   const & new_val,                                      \
   type          & set                                           \
  ) {                                                            \
-  int64_t tmp = old_val;                                        \
-  int64_t tmp_delta = delta;                                    \
+  int64_t ttmp = old_val;                                        \
+  int64_t ttmp_delta = delta;                                    \
                                                                 \
-  tmp += tmp_delta;                                             \
+  ttmp += ttmp_delta;                                             \
                                                                 \
-  bool over  = tmp > MAX;                                       \
-  bool under = tmp < MIN;                                       \
+  bool over  = ttmp > MAX;                                       \
+  bool under = ttmp < MIN;                                       \
                                                                 \
   if (delta < 0) {                                              \
    if (-delta > old_val) {                                      \
@@ -62,7 +62,8 @@ namespace lamb {
                                                                 \
   if (over || under) {                                          \
    if (SATURATE) {                                              \
-    set = MAX;                                                  \
+    printf("SATURATE: %ld %c %ld = %lld MIN: %lld MAX: %lld \n", old_val, symbol, delta, new_val, MIN, MAX); \
+    set = MAX;                                                          \
    }                                                            \
    else {                                                       \
    }                                                            \
@@ -919,9 +920,13 @@ namespace lamb {
 #else     
      if (sizeof(other_type) > sizeof(signed_frac)) {
 #endif
-      pseudo_right_big_type tmp   = ((pseudo_right_big_type)val) * other.val; 
-      tmp                       >>= other_type::MANTISSA;
-      r.val                       = (type)tmp;
+      type              tmp   =
+       ((pseudo_right_big_type)val)
+       *  other.val
+       >> other_type::MANTISSA;
+      
+//      tmp                       >>= other_type::MANTISSA;
+//      r.val                       = (type)tmp;
 
 #ifndef LAMB_TEST_FIX_MATH
       check_overflow<big_type>('*', old, other.val, r.val, r.val);
@@ -930,19 +935,25 @@ namespace lamb {
        overflow = true;
       }
 #endif
+
+      return r;
      }
      else {
-      printf("This case: %ld * %ld.\n", val, other.val);
+      // printf("This case: %ld * %ld.\n", val, other.val);
 
-      type              tmp   = ((big_type)val) * other.val >> other_type::MANTISSA;;
-//      tmp                       >>= other_type::MANTISSA;
+      type              tmp   =
+       ((big_type)val)
+       * other.val
+       >> other_type::MANTISSA;;
+      
+      // tmp                       >>= other_type::MANTISSA;
 
-      r.val += tmp;
-      printf("This tmp2: %lld \n", tmp);
+      // r.val += tmp;
+      // printf("This tmp2: %lld \n", tmp);
 
-      printf("BEFORE: "); print_bits_64(tmp);   printf("\n");
+      // printf("BEFORE: "); print_bits_64(tmp);   printf("\n");
 
-      r.val                       = (type)tmp;        
+      // r.val                       = (type)tmp;        
 
       // printf("MIN: %ld \n", MIN); 
       // printf("AFTER:  ");  print_bits_32(r.val); printf("\n");      
@@ -961,7 +972,7 @@ namespace lamb {
       return signed_frac(tmp);
      }
 
-     return r;
+//     return r;
     }    
 
     template <uint8_t other_charac,uint8_t other_mantissa, bool other_saturate>
