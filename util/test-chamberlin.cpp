@@ -12,23 +12,23 @@ int main() {
   uint16_t acc(0);
 
 //  printf("A, AF, F1, I, L, H, B, N, D1, D2 \n");
-  printf("Af, I, F1, L, H, B, N, D1, D2 \n");
+  printf("Af, I, F1, Q1, L, H, B, N, D1, D2 \n");
   
-  for (size_t qix = 1; qix == 1; qix += 100) {
+  for (double qix = 1.0; qix < 20.0; qix += 1.0) {
    cf.Q = qix;
    cf.set_q();
 
-   const size_t fix_incr = 5;
+   const size_t fix_incr = 100;
    
-   for (size_t fix = 300; fix > fix_incr; fix -= fix_incr) {
+   for (size_t fix = 10000 + 2; fix > 2; fix -= fix_incr) {
     cf.F    = fix;
     acc     = 0;
     
     cf.set_frequency();
 
-    const size_t fdiv = 2048;
+    const size_t fdiv = 1024;
 
-    for(size_t cycle_ix = 0; cycle_ix < 10; cycle_ix++) {
+    for(size_t cycle_ix = 0; cycle_ix < 1; cycle_ix++) {
      for(size_t pix = 0; pix < (65534L / fdiv); pix ++) {
       acc += fdiv;
       
