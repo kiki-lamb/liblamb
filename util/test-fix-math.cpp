@@ -1,3 +1,7 @@
+// TODO:
+// - division tests
+// - multiplication tests
+
 #define LAMB_TEST_FIX_MATH
 
 #include "../include/lamb.h"
