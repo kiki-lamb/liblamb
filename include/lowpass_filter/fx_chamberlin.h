@@ -7,7 +7,7 @@ namespace lamb {
   class fx_chamberlin {
   public:
    typedef sat_q15n16 qtype;
-   typedef sat_q0n16 pqtype;
+   typedef sat_q0n32 pqtype;
    
    qtype  Q1, Q, F1, D1, D2, L, H, B, N;
    pqtype F,  FS;
