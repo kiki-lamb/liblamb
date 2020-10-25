@@ -509,9 +509,9 @@ namespace lamb {
   
 //    printf("RET.VAL: %d\n", ret.val);
 #ifndef LAMB_TEST_FIX_MATH
-      check_overflow<big_type>('*', old, other.val, ret.val, ret.val);
+      check_overflow<big_type>('/', old, other.val, ret.val, ret.val);
 #else
-      if (check_overflow<big_type>('*', old, other.val, ret.val, ret.val)) {
+      if (check_overflow<big_type>('/', old, other.val, ret.val, ret.val)) {
        overflow = true;
       }
 #endif
@@ -937,23 +937,76 @@ namespace lamb {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-    template <bool saturate__>
-     signed_frac
-     operator / (
-      signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other
-     ) const {
-     signed_frac r = signed_frac(val / other.val);
-   
-     return r;
-    }        
+   template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
+    signed_frac
+    operator / (
+     signed_frac<other_charac,other_mantissa,other_saturate> const & other
+    ) const {
+    typedef signed_frac<other_charac,other_mantissa, other_saturate>
+     other_type;
+    typedef typename other_type::big_type
+     right_big_type;
+    typedef typename signed_int<(sizeof(right_big_type))>::type
+     pseudo_right_big_type;
 
-    template <bool saturate__>
-     signed_frac &
+    signed_frac          ret(0);
+    type                   old(val);
+
+#if __cplusplus >= 201703L   
+    if constexpr(sizeof(other_type) > sizeof(signed_frac)) {
+#else
+     if (sizeof(other_type) > sizeof(signed_frac)) {
+#endif
+      static const uint8_t  shift = 
+       signed_frac<other_charac, other_mantissa>::FX_SHIFT;   
+    
+      pseudo_right_big_type tmp   = ((pseudo_right_big_type)val) * other.val;
+      ret.val                     = (type)(tmp >> shift);
+
+#ifndef LAMB_TEST_FIX_MATH
+      check_overflow<big_type>('x', old, other.val, ret.val, ret.val);
+#else
+      if (check_overflow<big_type>('x', old, other.val, ret.val, ret.val)) {
+       overflow = true;
+      }
+#endif
+     }
+     else {    
+      static const uint8_t  shift = other_mantissa;
+
+      cout << "VAL: "    << val        << endl;
+      cout << "SHIFT: "  << shift      << endl;
+
+      big_type              tmp   = ((big_type)val) << shift;
+
+      cout << "TMP0: "   << tmp        << endl;
+      cout << "OVAL: "   << other.val  << endl;
+     
+      tmp                        /= other.val;
+      cout << "TMP1: " << tmp   << endl;
+
+      ret.val                     = (type)tmp;
+  
+//    printf("RET.VAL: %d\n", ret.val);
+#ifndef LAMB_TEST_FIX_MATH
+      check_overflow<big_type>('/', old, other.val, ret.val, ret.val);
+#else
+      if (check_overflow<big_type>('/', old, other.val, ret.val, ret.val)) {
+       overflow = true;
+      }
+#endif
+     }
+   
+     return ret;
+    }
+
+    template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
+     signed_frac & 
      operator /= (
-      signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other
+      signed_frac<other_charac,other_mantissa, saturate__> const & other
      ) {
      val = ((*this) / other).val;
-   
+
      return *this;
     }
    };
