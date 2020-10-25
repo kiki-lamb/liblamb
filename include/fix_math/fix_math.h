@@ -91,21 +91,18 @@ namespace lamb {
  ) { return false; }                                                    
 #endif
 
-//    printf("SAT %s:  ", over ? "HI" : "LO");                          
-//    cout << old_val;                                                  
-//    printf(" %c ", symbol);                                           
-//    cout << delta;                                                    
-//    printf(" = ");                                                    
-//    cout << new_val;                                                  
-//    cout << " over ";                                                 
-//    cout << MAX;                                                      
-//    cout<< "\n";                              
- 
-//    printf("%sFLOW: ", over ? "OVER" : "UNDER");                      
-//    printf("%d %c %d = %d\n", old_val, symbol, delta, new_val);         
+////////////////////////////////////////////////////////////////////////////////
+// Base
+////////////////////////////////////////////////////////////////////////////////
 
+ template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_ = false>
+ class frac_base {
+
+ };
  
+//////////////////////////////////////////////////////////////////////////////// 
 // Advance declaration:
+////////////////////////////////////////////////////////////////////////////////
 
  template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_ = false>
  class signed_frac;
@@ -121,7 +118,6 @@ namespace lamb {
   static const bool    SATURATE       = saturate_;
   static const uint8_t CHARACTERISTIC = characteristic_;
   static const uint8_t MANTISSA       = mantissa_;
-  static const uint8_t FX_SHIFT       = /* CHARACTERISTIC + */ MANTISSA;
   static const size_t  SIZE           = (CHARACTERISTIC + MANTISSA) / 8;
 
   static_assert(
@@ -414,8 +410,7 @@ namespace lamb {
 #else
     if (sizeof(other_type) > sizeof(unsigned_frac)) {
 #endif
-     static const uint8_t  shift = 
-      unsigned_frac<other_charac, other_mantissa>::FX_SHIFT;   
+     static const uint8_t  shift = other_mantissa;
     
      pseudo_right_big_type tmp   = ((pseudo_right_big_type)val) * other.val;
      ret.val                     = (type)(tmp >> shift);
@@ -429,8 +424,7 @@ namespace lamb {
 #endif
     }
     else {
-     static const uint8_t  shift = 
-      unsigned_frac<other_charac, other_mantissa>::FX_SHIFT;      
+     static const uint8_t  shift = other_mantissa;
 
      big_type              tmp   = ((big_type)val) * other.val;
 
@@ -484,8 +478,7 @@ namespace lamb {
 #else
      if (sizeof(other_type) > sizeof(unsigned_frac)) {
 #endif
-      static const uint8_t  shift = 
-       unsigned_frac<other_charac, other_mantissa>::FX_SHIFT;   
+      static const uint8_t  shift = other_mantissa;
     
       pseudo_right_big_type tmp   = ((pseudo_right_big_type)val) * other.val;
       ret.val                     = (type)(tmp >> shift);
@@ -549,8 +542,7 @@ namespace lamb {
   static const uint8_t CHARACTERISTIC = characteristic_;
   static const uint8_t MANTISSA       = mantissa_;
   static const bool    SATURATE       = saturate_;
-  static const uint8_t FX_SHIFT       = CHARACTERISTIC + MANTISSA;
-  static const size_t  SIZE           = (FX_SHIFT + 1) / 8;
+  static const size_t  SIZE           = (CHARACTERISTIC + MANTISSA  + 1) / 8;
 
   static_assert(
    (
@@ -835,7 +827,7 @@ namespace lamb {
 #endif     
      pseudo_right_big_type tmp     =
       ((pseudo_right_big_type)val) * other.val;        
-     static const uint8_t  shift   = other_type::FX_SHIFT;
+     static const uint8_t  shift   = other_type::MANTISSA;
      tmp                         >>= shift;
      ret.val                       = (type)tmp;
 
@@ -849,7 +841,7 @@ namespace lamb {
     }
     else {
      big_type              tmp     = ((big_type)val) * other.val;      
-     uint8_t               shift   = other_type::FX_SHIFT;
+     uint8_t               shift   = other_type::MANTISSA;
 
      tmp                         >>= shift;
      ret.val                       = (type)tmp;
@@ -1015,9 +1007,7 @@ namespace lamb {
 #else
      if (sizeof(other_type) > sizeof(signed_frac)) {
 #endif
-      static const uint8_t  shift = 
-       signed_frac<other_charac, other_mantissa>::FX_SHIFT;   
-    
+      static const uint8_t  shift = other_mantissa;
       pseudo_right_big_type tmp   = ((pseudo_right_big_type)val) * other.val;
       ret.val                     = (type)(tmp >> shift);
 
