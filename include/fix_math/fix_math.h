@@ -37,51 +37,50 @@ namespace lamb {
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef LAMB_FP_NO_OVERFLOW_CHECKING
-#define CHECK_OVERFLOW                            \
- template <typename delta_t, typename new_t>      \
- static bool check_overflow(                      \
-  char    const & symbol,                         \
-  type    const & old_val,                        \
-  delta_t const & delta,                          \
-  new_t   const & new_val,                        \
-  type          & set                             \
- ) {                                              \
-  bool over  = new_val > MAX;                     \
-  bool under = new_val < MIN;                     \
-                                                  \
-  if (over || under) {                            \
-   if (SATURATE) {                                \
-    set = MAX;                                    \
-                                                  \
-    printf("SAT %s:  ", over ? "HI" : "LO");      \
-    cout << old_val;                              \
-    printf(" %c ", symbol);                       \
-    cout << delta;                                \
-    printf(" = ");                                \
-    cout << new_val;                              \
-    cout << " over ";                             \
-    cout << MAX;                                  \
-    cout<< "\n";                                  \
-   }                                              \
-   else {                                         \
-    printf("%sFLOW: ", over ? "OVER" : "UNDER");  \
-    cout << old_val;                              \
-    printf(" %c ", symbol);                       \
-    cout << delta << " = " << new_val << "\n";    \
-   }                                              \
-  }                                               \
-                                                  \
-  return (over || under);                         \
+#define CHECK_OVERFLOW                                                  \
+ template <typename big_t, typename delta_t, typename new_t>            \
+ static bool check_overflow(                                            \
+  char    const & symbol,                                               \
+  type    const & old_val,                                              \
+  delta_t const & delta,                                                \
+  new_t   const & new_val,                                              \
+  type          & set                                                   \
+ ) {                                                                    \
+  printf("old: %u, delta: %u, new: %u \n", old_val, delta, new_val);    \
+  bool over  = (((big_t)old_val) + delta) > MAX;                        \
+  bool under = new_val < MIN;                                           \
+                                                                        \
+  if (over || under) {                                                  \
+   if (SATURATE) {                                                      \
+    set = MAX;                                                          \
+                                                                        \
+    printf("SAT %s:  ", over ? "HI" : "LO");                            \
+    cout << old_val;                                                    \
+    printf(" %c ", symbol);                                             \
+    cout << delta;                                                      \
+    printf(" = ");                                                      \
+    cout << new_val;                                                    \
+    cout << " over ";                                                   \
+    cout << MAX;                                                        \
+    cout<< "\n";                                                        \
+   }                                                                    \
+   else {                                                               \
+    printf("%sFLOW: ", over ? "OVER" : "UNDER");                        \
+    printf("%d %c %d = %d\n", old_val, symbol, delta, new_val);         \
+   }                                                                    \
+  }                                                                     \
+                                                                        \
+  return (over || under);                                               \
  }                                                
 #else
-#define CHECK_OVERFLOW                            \
- template <typename delta_t, typename new_t>      \
- static bool check_overflow(                      \
-  char    const & symbol,                         \
-  type    const & old_val,                        \
-  delta_t const & delta,                          \
-  new_t   const & new_val,                        \
-  type          & set                             \
+#define CHECK_OVERFLOW                                           \
+ template <typename big_t, typename delta_t, typename new_t>     \
+ static bool check_overflow(                                     \
+  char    const & symbol,                                        \
+  type    const & old_val,                                       \
+  delta_t const & delta,                                         \
+  new_t   const & new_val,                                       \
+  type          & set                                            \
  ) { return false; }                                                    
 #endif
 
@@ -255,7 +254,7 @@ namespace lamb {
    big_type      new_   = old + other.val;
    unsigned_frac ret    = unsigned_frac(new_);
 
-   check_overflow('+', old, other.val, ret.val, ret.val);
+   check_overflow<big_type>('+', old, other.val, ret.val, ret.val);
 
    return ret;
   }    
@@ -280,7 +279,7 @@ namespace lamb {
    big_type      new_   = old + val_;
    unsigned_frac ret    = unsigned_frac(new_);
 
-   check_overflow('+', old, val_, ret.val, ret.val);
+   check_overflow<big_type>('+', old, val_, ret.val, ret.val);
 
    return ret;
   }    
@@ -305,7 +304,7 @@ namespace lamb {
    big_type      new_   = old - other.val;
    unsigned_frac ret    = unsigned_frac(new_);
 
-   check_overflow('-', old, other.val, ret.val, ret.val);
+   check_overflow<big_type>('-', old, other.val, ret.val, ret.val);
 
    return ret;
   }    
@@ -330,7 +329,7 @@ namespace lamb {
    big_type      new_   = old - val_;
    unsigned_frac ret    = unsigned_frac(new_);
 
-   check_overflow('-', old, val_, ret.val, ret.val);
+   check_overflow<big_type>('-', old, val_, ret.val, ret.val);
 
    return ret;
   }    
@@ -374,7 +373,7 @@ namespace lamb {
     pseudo_right_big_type tmp   = ((pseudo_right_big_type)val) * other.val;
     ret.val                     = (type)(tmp >> shift);
 
-    check_overflow('x', old, other.val, ret.val, ret.val);
+    check_overflow<big_type>('x', old, other.val, ret.val, ret.val);
    }
    else {
     static const uint8_t  shift = 
@@ -388,7 +387,7 @@ namespace lamb {
     ret.val                     = (type)(tmp >> shift);
   
 //    printf("RET.VAL: %d\n", ret.val);
-    check_overflow('*', old, other.val, ret.val, ret.val);        
+    check_overflow<big_type>('*', old, other.val, ret.val, ret.val);        
    }
    
    return ret;
@@ -580,7 +579,7 @@ namespace lamb {
    big_type    new_ = val + other.val;
    signed_frac ret  = signed_frac(new_);
 
-   check_overflow('+', old, other.val, ret.val, ret.val);
+   check_overflow<big_type>('+', old, other.val, ret.val, ret.val);
 
    return ret;
   }
@@ -605,7 +604,7 @@ namespace lamb {
    big_type      new_ = old + val_;
    signed_frac   ret  = signed_frac<CHARACTERISTIC,MANTISSA,SATURATE>(new_);
 
-   check_overflow('+', old, val_, ret.val, ret.val);
+   check_overflow<big_type>('+', old, val_, ret.val, ret.val);
 
    return ret;
   }    
@@ -630,7 +629,7 @@ namespace lamb {
    big_type    new_  = val - other.val;
    signed_frac ret   = signed_frac(new_);
 
-   check_overflow('-', old, other.val, ret.val, ret.val);
+   check_overflow<big_type>('-', old, other.val, ret.val, ret.val);
 
    return ret;
   }
@@ -655,7 +654,7 @@ namespace lamb {
    big_type      new_   = old - val_;
    signed_frac   ret    = signed_frac(new_);
 
-   check_overflow('-', old, val_, ret.val, ret.val);
+   check_overflow<big_type>('-', old, val_, ret.val, ret.val);
 
    return ret;
   }    
@@ -700,7 +699,7 @@ namespace lamb {
     tmp                         >>= shift;
     ret.val                       = (type)tmp;
 
-    check_overflow('*', old, other.val, ret.val, ret.val);
+    check_overflow<big_type>('*', old, other.val, ret.val, ret.val);
    }
    else {
     big_type              tmp     = ((big_type)val) * other.val;      
@@ -709,7 +708,7 @@ namespace lamb {
     tmp                         >>= shift;
     ret.val                       = (type)tmp;
 
-    check_overflow('*', old, other.val, ret.val, ret.val);
+    check_overflow<big_type>('*', old, other.val, ret.val, ret.val);
    }     
 
    return ret;
@@ -753,7 +752,7 @@ namespace lamb {
     tmp                       >>= other_type::FX_SHIFT - 1;
     r.val                       = (type)tmp;
 
-    check_overflow('*', old, other.val, r.val, r.val);
+    check_overflow<big_type>('*', old, other.val, r.val, r.val);
    }
    else {
     big_type              tmp   = ((big_type)val) * other.val;
@@ -763,7 +762,7 @@ namespace lamb {
     printf("SHIFT is %d.\n", other_type::FX_SHIFT - 1);
     printf("r.val is %d.\n", r.val);        
 
-    check_overflow('*', old, other.val, r.val, r.val);
+    check_overflow<big_type>('*', old, other.val, r.val, r.val);
    }
 
    return r;

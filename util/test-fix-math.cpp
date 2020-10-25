@@ -248,6 +248,9 @@ int main() {
  size_t errors = 0;
  
  test_fix_math_type<q0n8,   2, 0>(successes, errors);
+
+ return 0;
+ 
  test_fix_math_type<q0n7,   2, 0>(successes, errors);
 
  test_fix_math_type<q0n16,  3, 0>(successes, errors);
