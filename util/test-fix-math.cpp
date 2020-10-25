@@ -8,32 +8,71 @@ using namespace std;
 
 using namespace lamb;
 
+
+////////////////////////////////////////////////////////////////////////////////
+
+bool compare_floats(float x, float y, uint8_t precis) {
+ char buff0[32];
+ char buff1[32];
+
+ char fmt[32];
+
+ snprintf(fmt, 32, "%%05.0%dlf", precis);
+
+ snprintf(buff0, 32, fmt, x);
+ snprintf(buff1, 32, fmt, y);
+
+ bool ret = strcmp(buff0, buff1) == 0;
+
+ if (! ret) {
+ printf("Failed compare '%s' <> '%s'\n", buff0, buff1);
+ }
+
+ return ret;
+}
+////////////////////////////////////////////////////////////////////////////////
+
 #define PRINT(fmt, name, x)                                             \
  {                                                                      \
   char  buff[32];                                                       \
-  snprintf(buff, 32, "%-8s: %% 05.5lf %%%s.%%%s \n", name, fmt, fmt);     \
+  snprintf(buff, 32, "%-8s: %% 05.5lf %%%s.%%%s \n", name, fmt, fmt);   \
   printf(buff, x.to_float(), x.top(), x.bottom());                      \
  }                                               
 
-#define TEST_EQ(x, y)  \
- if (x == y) {         \
-  successes ++;        \
- } else {              \
-  printf("FAIL.\n");   \
-  errors ++;           \
+#define TEST_EQ(fmt,x, y)                                 \
+ if (x == y) {                                            \
+  successes ++;                                           \
+ }                                                        \
+ else {                                                   \
+  char buff[32];                                          \
+  snprintf(buff, 32, "FAILED %%%s == %%%s.\n", fmt, fmt); \
+  printf(buff, x, y);                                     \
+  errors ++;                                              \
+ }
+
+
+#define TEST_FLEQ(fmt,x, y, precis)                       \
+ if (compare_floats(x, y, precis)) {                      \
+  successes ++;                                           \
+ }                                                        \
+ else {                                                   \
+  char buff[32];                                          \
+  snprintf(buff, 32, "FAILED %%%s == %%%s.\n", fmt, fmt); \
+  printf(buff, x, y);                                     \
+  errors ++;                                              \
  }                     
 
-#define TEST_STREQ(x, y)  \
- if (strcmp(x, y) == 0) { \
-  successes ++;           \
- } else {                 \
-  printf("FAIL.\n");      \
+#define TEST_STREQ(x, y)                          \
+ if (strcmp(x, y) == 0) {                         \
+  successes ++;                                   \
+ } else {                                         \
+  printf("FAILED %s streq %s.\n", x, y);          \
  }                     
 
 #define NL \
  printf("\n")
 
-#define CONVERSIONS(x, y, z0, z1)               \
+#define CONVERSIONS(x, y, z0, z1, fprecis)              \
 {                                               \
  fix_t a(fix_t::from_float(x));                 \
  fix_t b(y);                                    \
@@ -43,12 +82,13 @@ using namespace lamb;
  PRINT("u", "b", b);                            \
  PRINT("u", "c", c);                            \
                                                 \
- TEST_EQ(a, b);                                 \
- TEST_EQ(b, c);                                 \
- TEST_EQ(a, c);                                 \
- TEST_EQ(x, a.to_float());                      \
- TEST_EQ(x, b.to_float());                      \
- TEST_EQ(x, c.to_float());                      \
+ TEST_EQ("u", a, b);                            \
+ TEST_EQ("u", b, c);                            \
+ TEST_EQ("u", a, c);                            \
+                                                \
+ TEST_FLEQ("lf", x, a.to_float(), fprecis);                \
+ TEST_FLEQ("lf", x, b.to_float(), fprecis);                \
+ TEST_FLEQ("lf", x, c.to_float(), fprecis);                \
 }
 
 #define TEST_PI(pi_precis)                      \
@@ -70,22 +110,52 @@ using namespace lamb;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-template <typename fix_t, uint8_t pi_precis>
+template <typename fix_t, uint8_t f_precis, uint8_t pi_precis>
 void test_fix_math_type() {
  size_t successes = 0;
  size_t errors    = 0;
 
- printf("Testing Q%un%u:\n\n", fix_t::CHARACTERISTIC, fix_t::MANTISSA);
+ printf("[TESTING q%un%u:]\n\n", fix_t::CHARACTERISTIC, fix_t::MANTISSA);
  
- CONVERSIONS(1.0, fix_t::ONE, 1, 0);
- CONVERSIONS(0.5, fix_t::ONE >> 1, 0, 1 << (fix_t::MANTISSA - 1));
- CONVERSIONS(2.0, fix_t::ONE << 1, 0, 1 << (fix_t::MANTISSA + 1));
+ CONVERSIONS(
+  1.0,
+  fix_t::ONE,
+  1, 0,
+  f_precis
+ );
+
+ NL;
+ 
+ 
+ CONVERSIONS(
+  0.5,
+  fix_t::ONE >> 1,
+  0, fix_t::ONE >> 1,
+  f_precis
+ );
+
+ 
+ if (fix_t::CHARACTERISTIC > 0) {
+  CONVERSIONS(
+   2.0,
+   fix_t::ONE << 1,
+   0, 1 << (fix_t::MANTISSA + 1),
+   f_precis
+  );
+ }
 
  if ((fix_t::MANTISSA % 2) == 1) {
-  CONVERSIONS(-1.0, fix_t::ONE * -1, 1, 0);  
+  CONVERSIONS(
+   -1.0,
+   fix_t::ONE * -1,
+   1, 0,
+   f_precis
+  );
  }
  
- TEST_PI(pi_precis);
+ if (fix_t::CHARACTERISTIC > 0) {
+  TEST_PI(pi_precis);
+ }
  
  printf("\nPassed: %u / %u", successes, successes + errors);
 
@@ -101,9 +171,19 @@ void test_fix_math_type() {
 int main() {
  NL;
  NL;
- 
- test_fix_math_type<q8n8, 2>();
- test_fix_math_type<q7n8, 2>();
- test_fix_math_type<q16n16, 4>();
- test_fix_math_type<q15n16, 4>();
+
+// test_fix_math_type<q0n8,   2, 5>();
+// test_fix_math_type<q0n7,   2, 5>();
+
+// test_fix_math_type<q0n16,  3, 5>();
+// test_fix_math_type<q0n15,  3, 5>();
+ test_fix_math_type<q8n8,   3, 5>();
+// test_fix_math_type<q7n8,   3, 5>();
+
+// test_fix_math_type<q0n32,  3, 5>();
+// test_fix_math_type<q0n31,  3, 5>();
+// test_fix_math_type<q16n16, 3, 5>();
+// test_fix_math_type<q15n16, 3, 5>();
+
+
 }

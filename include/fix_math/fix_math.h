@@ -73,7 +73,7 @@ namespace lamb {
  }                                                
 #else
 #define CHECK_OVERFLOW                            \
- temoplate <typename delta_t, typename new_t>     \
+ template <typename delta_t, typename new_t>     \
  static void check_overflow(                      \
   char    const & symbol,                         \
   type    const & old_val,                        \
@@ -112,7 +112,7 @@ namespace lamb {
    ),
    "bad bit count for this type"
   );
-    
+
   typedef typename unsigned_int<SIZE>::type         type;
   typedef typename unsigned_int<(SIZE << 1)>::type  big_type;
 
@@ -140,7 +140,12 @@ namespace lamb {
   }
 
   type top() const {    // return smaller type?
-   return (val & (~mask())) >> MANTISSA;
+   if (CHARACTERISTIC == 0) {
+    return 0;
+   }
+   else {
+    return (val & (~mask())) >> MANTISSA;
+   }
   }     
   
   type val;
