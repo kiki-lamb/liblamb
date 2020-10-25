@@ -265,6 +265,16 @@ namespace lamb {
   }
 
 ////////////////////////////////////////////////////////////////////////////////
+    
+    template <bool saturate__> 
+    bool
+    operator == (
+     derived_template<CHARACTERISTIC, MANTISSA, saturate__> const & other
+    ) const {
+     return val == other.val;
+    }    
+
+///////////////////////////////////////////////////////////////////////////////
 
  }; // template frac_base
  
@@ -338,13 +348,13 @@ namespace lamb {
 
 //////////////////////////////////////////////////////////////////////////////
     
-  template <bool saturate__> 
-  bool
-  operator == (
-   unsigned_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> const & other
-  ) const {
-   return base::val == other.val;
-  }    
+  // template <bool saturate__> 
+  // bool
+  // operator == (
+  //  unsigned_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> const & other
+  // ) const {
+  //  return base::val == other.val;
+  // }    
 
 ///////////////////////////////////////////////////////////////////////////////
     
@@ -595,16 +605,6 @@ namespace lamb {
      base((characteristic__ * base::ONE) + mantissa__)
      {}
   
-///////////////////////////////////////////////////////////////////////////////
-    
-    template <bool saturate__> 
-    bool
-    operator == (
-     signed_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> const & other
-    ) const {
-     return base::val == other.val;
-    }    
-
 ///////////////////////////////////////////////////////////////////////////////
     
     template <bool saturate__>
