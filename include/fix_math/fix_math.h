@@ -50,28 +50,28 @@ namespace lamb {
                                                                 \
   ttmp += ttmp_delta;                                           \
                                                                 \
-  bool over  = ttmp > base::MAX;                                      \
+  bool over  = ttmp > MAX;                                      \
                                                                 \
   if (over)                                                     \
-   printf("%lld exceeds %lld.\n", ttmp, base::MAX);                   \
+   printf("%lld exceeds %lld.\n", ttmp, MAX);                   \
                                                                 \
-  bool under = ttmp < base::MIN;                                      \
+  bool under = ttmp < MIN;                                      \
                                                                 \
   if (under)                                                    \
-   printf("%lld under %lld.\n", ttmp, base::MIN);                     \
+   printf("%lld under %lld.\n", ttmp, MIN);                     \
                                                                 \
   if (over || under) {                                          \
-   if (base::SATURATE) {                                        \
+   if (SATURATE) {                                        \
     printf(                                                     \
-     "SATURATE: %ld %c %ld = %lld base::MIN: %lld base::MAX: %lld \n",      \
+     "SATURATE: %ld %c %ld = %lld MIN: %lld MAX: %lld \n",      \
      old_val,                                                   \
      symbol,                                                    \
      delta,                                                     \
      ttmp,                                                      \
-     base::MIN,                                                       \
-     base::MAX                                                        \
+     MIN,                                                       \
+     MAX                                                        \
     );                                                          \
-    set = base::MAX;                                                  \
+    set = MAX;                                                  \
    }                                                            \
    else {                                                       \
    }                                                            \
@@ -172,6 +172,8 @@ namespace lamb {
    
    return m;
   }
+
+  CHECK_OVERFLOW;
  };
  
 //////////////////////////////////////////////////////////////////////////////// 
@@ -216,11 +218,6 @@ namespace lamb {
    return unsigned_frac<base::CHARACTERISTIC, base::MANTISSA, ( ! base::SATURATE)>(val);
   }
   
-///////////////////////////////////////////////////////////////////////////////
-
- private:
-  CHECK_OVERFLOW;
-
 ///////////////////////////////////////////////////////////////////////////////
 
  public:
@@ -304,7 +301,7 @@ namespace lamb {
    big_type      new_   = old + other.val;
    unsigned_frac ret    = unsigned_frac(new_);
 
-   if (check_overflow('+', old, other.val, ret.val)) {
+   if (base::check_overflow('+', old, other.val, ret.val)) {
     overflow = true;
    }
 
@@ -332,7 +329,7 @@ namespace lamb {
    big_type      new_   = old - other.val;
    unsigned_frac ret    = unsigned_frac(new_);
 
-   if (check_overflow('-', old, other.val, ret.val)) {
+   if (base::check_overflow('-', old, other.val, ret.val)) {
     overflow = true;
    }
 
@@ -374,7 +371,7 @@ namespace lamb {
      pseudo_right_big_type tmp   = ((pseudo_right_big_type)val) * other.val;
      ret.val                     = (type)(tmp >> shift);
 
-     if (check_overflow('x', old, other.val, ret.val)) {
+     if (base::check_overflow('x', old, other.val, ret.val)) {
       overflow = true;
      }
     }
@@ -385,7 +382,7 @@ namespace lamb {
 
      ret.val                     = (type)(tmp >> shift);
  
-     if (check_overflow('*', old, other.val, ret.val)) {
+     if (base::check_overflow('*', old, other.val, ret.val)) {
       overflow = true;
      }
     }
@@ -427,7 +424,7 @@ namespace lamb {
       pseudo_right_big_type tmp   = ((pseudo_right_big_type)val) * other.val;
       ret.val                     = (type)(tmp >> shift);
 
-      if (check_overflow('x', old, other.val, ret.val)) {
+      if (base::check_overflow('x', old, other.val, ret.val)) {
        overflow = true;
       }
      }
@@ -437,7 +434,7 @@ namespace lamb {
       tmp                        /= other.val;
       ret.val                     = (type)tmp;
   
-      if (check_overflow('/', old, other.val, ret.val)) {
+      if (base::check_overflow('/', old, other.val, ret.val)) {
        overflow = true;
       }
      }
@@ -490,9 +487,6 @@ namespace lamb {
 
     operator unsigned int () = delete;
     operator int ()          = delete;
-
-   private: 
-    CHECK_OVERFLOW;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -568,7 +562,7 @@ namespace lamb {
      big_type    new_ = val + other.val;
      signed_frac ret  = signed_frac(new_);
 
-     if (check_overflow('+', old, other.val, ret.val)) {
+     if (base::check_overflow('+', old, other.val, ret.val)) {
       overflow = true;
      }
 
@@ -594,7 +588,7 @@ namespace lamb {
      big_type    new_  = val - other.val;
      signed_frac ret   = signed_frac(new_);
 
-     if (check_overflow('-', old, other.val, ret.val)) {
+     if (base::check_overflow('-', old, other.val, ret.val)) {
       overflow = true;
      }
 
@@ -635,7 +629,7 @@ namespace lamb {
        tmp                         >>= shift;
        ret.val                       = (type)tmp;
 
-       if (check_overflow('*', old, other.val, ret.val)) {
+       if (base::check_overflow('*', old, other.val, ret.val)) {
         overflow = true;
        }
       }
@@ -645,7 +639,7 @@ namespace lamb {
        tmp                         >>= shift;
        ret.val                       = (type)tmp;
 
-       if (check_overflow('*', old, other.val, ret.val)) {
+       if (base::check_overflow('*', old, other.val, ret.val)) {
         overflow = true;
        }
       }     
@@ -688,7 +682,7 @@ namespace lamb {
         other.val >>
         other_type::base::MANTISSA;
       
-        if (check_overflow('*', old, other.val, r.val)) {
+        if (base::check_overflow('*', old, other.val, r.val)) {
          overflow = true;
         }
 
@@ -700,7 +694,7 @@ namespace lamb {
          other.val >>
          other_type::base::MANTISSA;;
       
-        if (check_overflow('*', old, other.val, r.val)) {
+        if (base::check_overflow('*', old, other.val, r.val)) {
          overflow = true;
         }
 
@@ -740,7 +734,7 @@ namespace lamb {
          pseudo_right_big_type tmp   = ((pseudo_right_big_type)val) * other.val;
          ret.val                     = (type)(tmp >> shift);
 
-         if (check_overflow('x', old, other.val, ret.val)) {
+         if (base::check_overflow('x', old, other.val, ret.val)) {
           overflow = true;
          }
         }
@@ -750,7 +744,7 @@ namespace lamb {
          tmp                        /= other.val;
          ret.val                     = (type)tmp;
 
-         if (check_overflow('/', old, other.val, ret.val)) {
+         if (base::check_overflow('/', old, other.val, ret.val)) {
           overflow = true;
          }
         }
