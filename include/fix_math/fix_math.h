@@ -116,16 +116,16 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
  template <
-  typename derived_,
+  template <uint8_t char_, uint8_t mant_, bool sat_> class deriver,
   uint8_t characteristic_,
   uint8_t mantissa_,
   bool saturate_ = false
   >
  class frac_base {
- public:
-  typedef derived_ derived;
-  
+
 ////////////////////////////////////////////////////////////////////////////////
+  
+ public:
 
   static const bool    SATURATE       = saturate_;
   static const uint8_t CHARACTERISTIC = characteristic_;
@@ -232,10 +232,11 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  signed_frac<base::CHARACTERISTIC, base::MANTISSA, ( ! base::SATURATE )> sat_cast () const {
-   return signed_frac<base::CHARACTERISTIC, base::MANTISSA, ( ! base::SATURATE)>(base::val);
-  }
-
+  // signed_frac<base::CHARACTERISTIC, base::MANTISSA, ( ! base::SATURATE )> sat_cast () const {
+  //  return signed_frac<base::CHARACTERISTIC, base::MANTISSA, ( ! base::SATURATE)>(base::val);
+  // }
+  
+////////////////////////////////////////////////////////////////////////////////
  };
  
 //////////////////////////////////////////////////////////////////////////////// 
@@ -251,15 +252,14 @@ namespace lamb {
   
  template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_ = false>
  class unsigned_frac : public frac_base<
-  unsigned_frac<characteristic_, mantissa_, saturate_>,
+  unsigned_frac,
   characteristic_,
   mantissa_,
   saturate_
   > {
 
  public:
-  typedef unsigned_frac<characteristic_, mantissa_, saturate_>   self;
-  typedef frac_base<self, characteristic_, mantissa_, saturate_> base;
+  typedef frac_base<unsigned_frac, characteristic_, mantissa_, saturate_> base;
   typedef typename base::type                                    type;
   typedef typename base::big_type                                big_type;
   
@@ -505,15 +505,14 @@ namespace lamb {
   
    template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_>
    class signed_frac : public frac_base<
-    signed_frac<characteristic_, mantissa_, saturate_>,
+    signed_frac,
     characteristic_,
     mantissa_,
     saturate_
     > {
 
    public:
-    typedef signed_frac<characteristic_, mantissa_, saturate_>     self;
-    typedef frac_base<self, characteristic_, mantissa_, saturate_> base;
+    typedef frac_base<signed_frac, characteristic_, mantissa_, saturate_> base;
     typedef typename base::type                                    type;
     typedef typename base::big_type                                big_type;  
     
