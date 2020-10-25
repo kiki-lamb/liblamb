@@ -467,7 +467,7 @@ namespace lamb {
    tmp           /= other.val;
    tmp          >>= SIZE * 8;
 
-   printf("this %llu \n", tmp);
+   printf("this div %llu \n", tmp);
    
    
    return unsigned_frac(val / other.val);
