@@ -282,6 +282,37 @@ namespace lamb {
     }    
 
 ///////////////////////////////////////////////////////////////////////////////
+  
+  template <bool saturate__>
+  operator
+  derived_template<
+   (CHARACTERISTIC << 1),
+   (MANTISSA << 1),
+   saturate__
+   > () const {
+   derived_template<(CHARACTERISTIC << 1), (MANTISSA << 1), saturate__> tmp(
+    val << 1
+   );
+
+   return tmp;
+  }
+
+  template <bool saturate__>
+  operator
+  derived_template<
+   (CHARACTERISTIC >> 1),
+   (MANTISSA >> 1),
+   saturate__
+   > () const {
+   derived_template<(CHARACTERISTIC >> 1), (MANTISSA >> 1), saturate__> tmp(
+    val >> 1
+   );
+
+   return tmp;
+  }
+
+
+///////////////////////////////////////////////////////////////////////////////
 
  }; // template frac_base
  
@@ -303,43 +334,37 @@ namespace lamb {
   typedef typename base::big_type                                big_type;
   
 ///////////////////////////////////////////////////////////////////////////////
-  
-  // unsigned_frac<base::CHARACTERISTIC, base::MANTISSA, ( ! base::SATURATE )> sat_cast () const {
-  //  return unsigned_frac<base::CHARACTERISTIC, base::MANTISSA, ( ! base::SATURATE)>(base::val);
-  // }
-  
-///////////////////////////////////////////////////////////////////////////////
 
- public:
-  template <bool saturate__>
-  operator
-  unsigned_frac<(base::CHARACTERISTIC << 1), (base::MANTISSA << 1), saturate__> () const {
-   unsigned_frac<(base::CHARACTERISTIC << 1), (base::MANTISSA << 1), saturate__> tmp(
-    base::val << 1
-   );
+ // public:
+ //  template <bool saturate__>
+ //  operator
+ //  unsigned_frac<(base::CHARACTERISTIC << 1), (base::MANTISSA << 1), saturate__> () const {
+ //   unsigned_frac<(base::CHARACTERISTIC << 1), (base::MANTISSA << 1), saturate__> tmp(
+ //    base::val << 1
+ //   );
 
-   return tmp;
-  }
+ //   return tmp;
+ //  }
 
-  template <bool saturate__>
-  operator
-  unsigned_frac<(base::CHARACTERISTIC >> 1), (base::MANTISSA >> 1), saturate__> () const {
-   unsigned_frac<(base::CHARACTERISTIC >> 1), (base::MANTISSA >> 1), saturate__> tmp(
-    base::val >> 1
-   );
+ //  template <bool saturate__>
+ //  operator
+ //  unsigned_frac<(base::CHARACTERISTIC >> 1), (base::MANTISSA >> 1), saturate__> () const {
+ //   unsigned_frac<(base::CHARACTERISTIC >> 1), (base::MANTISSA >> 1), saturate__> tmp(
+ //    base::val >> 1
+ //   );
 
-   return tmp;
-  }
+ //   return tmp;
+ //  }
 
-  template <bool saturate__>
-  operator
-  signed_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> () const {
-   unsigned_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> tmp(
-    base::val >> 1
-   );
+ //  template <bool saturate__>
+ //  operator
+ //  signed_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> () const {
+ //   unsigned_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> tmp(
+ //    base::val >> 1
+ //   );
    
-   return tmp;
-  }
+ //   return tmp;
+ //  }
 
 ////////////////////////////////////////////////////////////////////////////////
   
@@ -564,27 +589,27 @@ namespace lamb {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-   public:
-    template <bool saturate__>
-    operator
-    signed_frac<(
-     base::CHARACTERISTIC << 1), (base::MANTISSA << 1), saturate__> () const {
-     signed_frac<(base::CHARACTERISTIC << 1), (base::MANTISSA << 1), saturate__> tmp(
-      base::val << 1
-     );
+   // public:
+   //  template <bool saturate__>
+   //  operator
+   //  signed_frac<(
+   //   base::CHARACTERISTIC << 1), (base::MANTISSA << 1), saturate__> () const {
+   //   signed_frac<(base::CHARACTERISTIC << 1), (base::MANTISSA << 1), saturate__> tmp(
+   //    base::val << 1
+   //   );
    
-     return tmp;
-    }
+   //   return tmp;
+   //  }
    
-    template <bool saturate__>
-    operator
-    signed_frac<(base::CHARACTERISTIC >> 1), (base::MANTISSA >> 1), saturate__> () const {
-     signed_frac<(base::CHARACTERISTIC >> 1), (base::MANTISSA >> 1), saturate__> tmp(
-      base::val >> 1
-     );
+   //  template <bool saturate__>
+   //  operator
+   //  signed_frac<(base::CHARACTERISTIC >> 1), (base::MANTISSA >> 1), saturate__> () const {
+   //   signed_frac<(base::CHARACTERISTIC >> 1), (base::MANTISSA >> 1), saturate__> tmp(
+   //    base::val >> 1
+   //   );
     
-     return tmp;
-    }
+   //   return tmp;
+   //  }
 
 ///////////////////////////////////////////////////////////////////////////////
 
