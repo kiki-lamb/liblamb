@@ -76,16 +76,15 @@ bool compare_floats(float x, float y, uint8_t precis) {
 // TEST_EQ("u", a, b);                          
 // TEST_EQ("u", b, c);                            
 // TEST_EQ("u", a, c);                            
-                                                \
+// PRINT("u", "a", a);
+// PRINT("u", "b", b);
+// PRINT("u", "c", c);
+
 #define CONVERSIONS(x, y, z0, z1, fprecis)      \
 {                                               \
  fix_t a(fix_t::from_float(x));                 \
  fix_t b(y);                                    \
  fix_t c(z0, z1);                               \
-                                                \
- PRINT("u", "a", a);                            \
- PRINT("u", "b", b);                            \
- PRINT("u", "c", c);                            \
                                                 \
  TEST_FLEQ("lf", x, a.to_float(), fprecis);                \
  TEST_FLEQ("lf", x, b.to_float(), fprecis);                \
@@ -121,53 +120,47 @@ void test_fix_math_type(size_t & out_successes, size_t & out_errors) {
 
  printf("\n\n[TESTING q%un%u:]\n\n", fix_t::CHARACTERISTIC, fix_t::MANTISSA);
 
- 
- printf("Test converted 1:\n");
+ printf("Test converted 1...\n");
  CONVERSIONS(
   1.0,
   fix_t::ONE,
   1, 0,
   f_precis
  );
- NL;
-
  
- printf("Test converted 0.5:\n");
+ printf("Test converted 0.5...\n");
  CONVERSIONS(
   0.5,
   fix_t::ONE >> 1,
   0, fix_t::ONE >> 1,
   f_precis
  );
- NL;
 
  
  if (fix_t::CHARACTERISTIC > 0) {
-  printf("Test converted 2.0:\n");
+  printf("Test converted 2.0...\n");
   CONVERSIONS(
    2.0,
    fix_t::ONE << 1,
    0, 1 << (fix_t::MANTISSA + 1),
    f_precis
   );
-  NL;
  }
 
  
  if ((fix_t::MANTISSA % 2) == 1) {
-  printf("Test converted -1.0:\n");
+  printf("Test converted -1.0...\n");
   CONVERSIONS(
    -1.0,
    fix_t::ONE * -1,
    unsigned_int<(sizeof(typename fix_t::type))>::MAX, 0,
    f_precis
   );
-  NL;
  }
 
  
  if (fix_t::CHARACTERISTIC > 0) {
-  printf("Test pi:\n");
+  printf("Test pi...\n");
 
   TEST_PI("lf", pi_precis);
  }
