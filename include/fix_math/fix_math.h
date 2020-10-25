@@ -116,12 +116,15 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
  template <
+  typename derived_,
   uint8_t characteristic_,
   uint8_t mantissa_,
   bool saturate_ = false
   >
  class frac_base {
  public:
+  typedef derived_ derived;
+  
   static const bool    SATURATE       = saturate_;
   static const uint8_t CHARACTERISTIC = characteristic_;
   static const uint8_t MANTISSA       = mantissa_;
@@ -219,12 +222,18 @@ namespace lamb {
 ///////////////////////////////////////////////////////////////////////////////
   
  template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_ = false>
- class unsigned_frac : public frac_base<characteristic_, mantissa_, saturate_> {
+ class unsigned_frac : public frac_base<
+  unsigned_frac<characteristic_, mantissa_, saturate_>,
+  characteristic_,
+  mantissa_,
+  saturate_
+  > {
 
  public:
-  typedef frac_base<characteristic_, mantissa_, saturate_> base;
-  typedef typename base::type                              type;
-  typedef typename base::big_type                          big_type;
+  typedef unsigned_frac<characteristic_, mantissa_, saturate_>   self;
+  typedef frac_base<self, characteristic_, mantissa_, saturate_> base;
+  typedef typename base::type                                    type;
+  typedef typename base::big_type                                big_type;
   
 ///////////////////////////////////////////////////////////////////////////////
   
@@ -467,12 +476,18 @@ namespace lamb {
 ///////////////////////////////////////////////////////////////////////////////
   
    template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_>
-    class signed_frac : public frac_base<characteristic_, mantissa_, saturate_> {
+   class signed_frac : public frac_base<
+    signed_frac<characteristic_, mantissa_, saturate_>,
+    characteristic_,
+    mantissa_,
+    saturate_
+    > {
 
    public:
-    typedef frac_base<characteristic_, mantissa_, saturate_> base;
-    typedef typename base::type                              type;
-    typedef typename base::big_type                          big_type;  
+    typedef signed_frac<characteristic_, mantissa_, saturate_>     self;
+    typedef frac_base<self, characteristic_, mantissa_, saturate_> base;
+    typedef typename base::type                                    type;
+    typedef typename base::big_type                                big_type;  
     
     type bottom() const { // return smaller type?
      return base::val & base::mask();
