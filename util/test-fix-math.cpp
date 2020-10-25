@@ -163,7 +163,7 @@ bool compare_floats(float x, float y, uint8_t precis) {
                                                                         \
   TEST_FLEQ(fmt, M_PI, unfix_pi, pi_precis);                            \
                                                                         \
-  if (fix_t::CHARACTERISTIC > 0) {                                      \
+  if (fix_t::CHARACTERISTIC > 2) {                                      \
    snprintf(buff0, 32, "% 05.10lf", 1.5*M_PI);                          \
    buff0[pi_precis+3] = 0;                                              \
    printf("1.5M_PI    : %s\n", buff0);                                  \
@@ -176,7 +176,9 @@ bool compare_floats(float x, float y, uint8_t precis) {
    printf("1.5FIX_PI  : %s\n", buff1);                                  \
                                                                         \
    TEST_FLEQ(fmt, 1.5*M_PI, unfix_pi, pi_precis);                       \
+  }                                                                     \
                                                                         \
+  if (fix_t::CHARACTERISTIC > 2) {                                      \
    snprintf(buff0, 32, "% 05.10lf", 2*M_PI);                            \
    buff0[pi_precis+3] = 0;                                              \
    printf("2M_PI      : %s\n", buff0);                                  \
@@ -299,8 +301,11 @@ int main() {
  test_fix_math_type<q0n32,  3, 0>(successes, errors);
  test_fix_math_type<q0n31,  3, 0>(successes, errors);
  
- test_fix_math_type<q16n16, 3, 4>(successes, errors);
- test_fix_math_type<q15n16, 3, 4>(successes, errors);
+ test_fix_math_type<q16n16, 3, 4 >(successes, errors);
+ test_fix_math_type<q15n16, 3, 4 >(successes, errors);
+
+ test_fix_math_type<q2n14,  6, 3 >(successes, errors);
+ test_fix_math_type<q2n30,  6, 5>(successes, errors); 
 
  test_fix_math_type<unsigned_frac<2, 30>, 6, 6>(successes, errors);
 
