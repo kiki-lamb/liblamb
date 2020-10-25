@@ -38,12 +38,11 @@ namespace lamb {
 
 #ifndef LAMB_FP_NO_OVERFLOW_CHECKING
 #define CHECK_OVERFLOW                                          \
- template <typename big_t, typename delta_t, typename new_t>    \
+ template <typename delta_t>    \
  static bool check_overflow(                                    \
   char    const & symbol,                                       \
   type    const & old_val,                                      \
   delta_t const & delta,                                        \
-  new_t   const & new_val,                                      \
   type          & set                                           \
  ) {                                                            \
   int64_t ttmp = old_val;                                        \
@@ -60,17 +59,10 @@ namespace lamb {
                                                                 \
   if (under)                                                     \
      printf("%lld under %lld.\n", ttmp, MIN);                 \
-                                                                \
-                                                                \
-  if (delta < 0) {                                              \
-   if (-delta > old_val) {                                      \
-    under = true;                                               \
-   }                                                            \
-  }                                                             \
-                                                                \
+                                                               \
   if (over || under) {                                          \
    if (SATURATE) {                                              \
-    printf("SATURATE: %ld %c %ld = %lld MIN: %lld MAX: %lld \n", old_val, symbol, delta, new_val, MIN, MAX); \
+    printf("SATURATE: %ld %c %ld = %lld MIN: %lld MAX: %lld \n", old_val, symbol, delta, ttmp, MIN, MAX); \
     set = MAX;                                                          \
    }                                                            \
    else {                                                       \
@@ -276,9 +268,9 @@ namespace lamb {
    unsigned_frac ret    = unsigned_frac(new_);
 
 #ifndef LAMB_TEST_FIX_MATH
-   check_overflow<big_type>('+', old, other.val, ret.val, ret.val);
+   check_overflow('+', old, other.val, ret.val);
 #else
-   if (check_overflow<big_type>('+', old, other.val, ret.val, ret.val)) {
+   if (check_overflow('+', old, other.val, ret.val)) {
     overflow = true;
    }
 #endif
@@ -307,9 +299,9 @@ namespace lamb {
 //   unsigned_frac ret    = unsigned_frac(new_);
 //
 //#ifndef LAMB_TEST_FIX_MATH
-//   check_overflow<big_type>('+', old, val_, ret.val, ret.val);
+//   check_overflow('+', old, val_, ret.val, ret.val);
 //#else
-//   if (check_overflow<big_type>('+', old, val_, ret.val, ret.val)) {
+//   if (check_overflow('+', old, val_, ret.val, ret.val)) {
 //    overflow = true;
 //   }
 //#endif
@@ -338,9 +330,9 @@ namespace lamb {
    unsigned_frac ret    = unsigned_frac(new_);
 
 #ifndef LAMB_TEST_FIX_MATH
-   check_overflow<big_type>('-', old, other.val, ret.val, ret.val);
+   check_overflow('-', old, other.val, ret.val);
 #else
-   if (check_overflow<big_type>('-', old, other.val, ret.val, ret.val)) {
+   if (check_overflow('-', old, other.val, ret.val)) {
     overflow = true;
    }
 #endif
@@ -371,9 +363,9 @@ namespace lamb {
 //   unsigned_frac ret    = unsigned_frac(new_);
 //
 //#ifndef LAMB_TEST_FIX_MATH
-//   check_overflow<big_type>('-', old, -val_, ret.val, ret.val);
+//   check_overflow('-', old, -val_, ret.val, ret.val);
 //#else
-//   if (check_overflow<big_type>('-', old, -val_, ret.val, ret.val)) {
+//   if (check_overflow('-', old, -val_, ret.val, ret.val)) {
 //    overflow = true;
 //   }
 //#endif
@@ -421,9 +413,9 @@ namespace lamb {
      ret.val                     = (type)(tmp >> shift);
 
 #ifndef LAMB_TEST_FIX_MATH
-     check_overflow<big_type>('x', old, other.val, ret.val, ret.val);
+     check_overflow('x', old, other.val, ret.val);
 #else
-     if (check_overflow<big_type>('x', old, other.val, ret.val, ret.val)) {
+     if (check_overflow('x', old, other.val, ret.val)) {
       overflow = true;
      }
 #endif
@@ -441,9 +433,9 @@ namespace lamb {
   
 //    printf("RET.VAL: %d\n", ret.val);
 #ifndef LAMB_TEST_FIX_MATH
-     check_overflow<big_type>('*', old, other.val, ret.val, ret.val);
+     check_overflow('*', old, other.val, ret.val);
 #else
-     if (check_overflow<big_type>('*', old, other.val, ret.val, ret.val)) {
+     if (check_overflow('*', old, other.val, ret.val)) {
       overflow = true;
      }
 #endif
@@ -491,9 +483,9 @@ namespace lamb {
       ret.val                     = (type)(tmp >> shift);
 
 #ifndef LAMB_TEST_FIX_MATH
-      check_overflow<big_type>('x', old, other.val, ret.val, ret.val);
+      check_overflow('x', old, other.val, ret.val);
 #else
-      if (check_overflow<big_type>('x', old, other.val, ret.val, ret.val)) {
+      if (check_overflow('x', old, other.val, ret.val)) {
        overflow = true;
       }
 #endif
@@ -516,9 +508,9 @@ namespace lamb {
   
 //    printf("RET.VAL: %d\n", ret.val);
 #ifndef LAMB_TEST_FIX_MATH
-      check_overflow<big_type>('/', old, other.val, ret.val, ret.val);
+      check_overflow('/', old, other.val, ret.val);
 #else
-      if (check_overflow<big_type>('/', old, other.val, ret.val, ret.val)) {
+      if (check_overflow('/', old, other.val, ret.val)) {
        overflow = true;
       }
 #endif
@@ -696,9 +688,9 @@ namespace lamb {
    signed_frac ret  = signed_frac(new_);
 
 #ifndef LAMB_TEST_FIX_MATH
-   check_overflow<big_type>('+', old, other.val, ret.val, ret.val);
+   check_overflow('+', old, other.val, ret.val);
 #else
-   if (check_overflow<big_type>('+', old, other.val, ret.val, ret.val)) {
+   if (check_overflow('+', old, other.val, ret.val)) {
     overflow = true;
    }
 #endif
@@ -727,9 +719,9 @@ namespace lamb {
 //   signed_frac   ret  = signed_frac<CHARACTERISTIC,MANTISSA,SATURATE>(new_);
 //
 //#ifndef LAMB_TEST_FIX_MATH
-//   check_overflow<big_type>('+', old, val_, ret.val, ret.val);
+//   check_overflow('+', old, val_, ret.val, ret.val);
 //#else
-//   if (check_overflow<big_type>('+', old, val_, ret.val, ret.val)) {
+//   if (check_overflow('+', old, val_, ret.val, ret.val)) {
 //    overflow = true;
 //   }
 //#endif
@@ -758,9 +750,9 @@ namespace lamb {
    signed_frac ret   = signed_frac(new_);
 
 #ifndef LAMB_TEST_FIX_MATH
-   check_overflow<big_type>('-', old, other.val, ret.val, ret.val);
+   check_overflow('-', old, other.val, ret.val);
 #else
-   if (check_overflow<big_type>('-', old, other.val, ret.val, ret.val)) {
+   if (check_overflow('-', old, other.val, ret.val)) {
     overflow = true;
    }
 #endif
@@ -789,9 +781,9 @@ namespace lamb {
 //   signed_frac   ret    = signed_frac(new_);
 //
 //#ifndef LAMB_TEST_FIX_MATH
-//   check_overflow<big_type>('-', old, -val_, ret.val, ret.val);
+//   check_overflow('-', old, -val_, ret.val, ret.val);
 //#else
-//   if (check_overflow<big_type>('-', old, -val_, ret.val, ret.val)) {
+//   if (check_overflow('-', old, -val_, ret.val, ret.val)) {
 //    overflow = true;
 //   }
 //#endif
@@ -840,9 +832,9 @@ namespace lamb {
      ret.val                       = (type)tmp;
 
 #ifndef LAMB_TEST_FIX_MATH
-     check_overflow<big_type>('*', old, other.val, ret.val, ret.val);
+     check_overflow('*', old, other.val, ret.val);
 #else
-     if (check_overflow<big_type>('*', old, other.val, ret.val, ret.val)) {
+     if (check_overflow('*', old, other.val, ret.val)) {
       overflow = true;
      }
 #endif
@@ -855,9 +847,9 @@ namespace lamb {
      ret.val                       = (type)tmp;
 
 #ifndef LAMB_TEST_FIX_MATH
-     check_overflow<big_type>('*', old, other.val, ret.val, ret.val);
+     check_overflow('*', old, other.val, ret.val);
 #else
-     if (check_overflow<big_type>('*', old, other.val, ret.val, ret.val)) {
+     if (check_overflow('*', old, other.val, ret.val)) {
       overflow = true;
      }
 #endif
@@ -937,9 +929,9 @@ namespace lamb {
 //      r.val                       = (type)tmp;
 
 #ifndef LAMB_TEST_FIX_MATH
-      check_overflow<big_type>('*', old, other.val, r.val, r.val);
+      check_overflow('*', old, other.val, r.val);
 #else
-      if (check_overflow<big_type>('*', old, other.val, r.val, r.val)) {
+      if (check_overflow('*', old, other.val, r.val)) {
        overflow = true;
       }
 #endif
@@ -970,9 +962,9 @@ namespace lamb {
       // printf("r.val uncast is %d.\n", (type)val);        
 
 #ifndef LAMB_TEST_FIX_MATH
-      check_overflow<big_type>('*', old, other.val, r.val, r.val);
+      check_overflow('*', old, other.val, r.val);
 #else
-      if (check_overflow<big_type>('*', old, other.val, r.val, r.val)) {
+      if (check_overflow('*', old, other.val, r.val)) {
        overflow = true;
       }
 #endif
@@ -1022,9 +1014,9 @@ namespace lamb {
       ret.val                     = (type)(tmp >> shift);
 
 #ifndef LAMB_TEST_FIX_MATH
-      check_overflow<big_type>('x', old, other.val, ret.val, ret.val);
+      check_overflow('x', old, other.val, ret.val);
 #else
-      if (check_overflow<big_type>('x', old, other.val, ret.val, ret.val)) {
+      if (check_overflow('x', old, other.val, ret.val)) {
        overflow = true;
       }
 #endif
@@ -1047,9 +1039,9 @@ namespace lamb {
   
 //    printf("RET.VAL: %d\n", ret.val);
 #ifndef LAMB_TEST_FIX_MATH
-      check_overflow<big_type>('/', old, other.val, ret.val, ret.val);
+      check_overflow('/', old, other.val, ret.val);
 #else
-      if (check_overflow<big_type>('/', old, other.val, ret.val, ret.val)) {
+      if (check_overflow('/', old, other.val, ret.val)) {
        overflow = true;
       }
 #endif

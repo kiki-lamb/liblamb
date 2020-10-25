@@ -62,8 +62,8 @@ int main() {
   sat_q15n16 x(l);
   
   printf(
-   "DHERE: %ld \n",
-   (int64_t)x.val
+   "DHERE: %lld \n",
+   x.val
   );
 
   x *= r;
@@ -71,7 +71,7 @@ int main() {
   pprint_bits_32(x.val); printf("\n");
   
   printf(
-   "DHERE2: %ld \n",
+   "DHERE2: %lld \n",
    (int64_t)x.val
   );
   
