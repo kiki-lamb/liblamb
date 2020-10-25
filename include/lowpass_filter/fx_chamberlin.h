@@ -64,14 +64,14 @@ namespace lamb {
     printf("% 9.3lf, ", L.to_float())    ;
 
     H  = I - L - (Q1*D1)                 ;
-    printf("% 14.3lf, ", H.to_float())    ;
-
-    printf(
-     "[(%6.3lf * %6.3lf) + %6.3lf]",
-     F1.to_float(),
-     H.to_float(),
-     D1.to_float()
-    );
+    printf("% 14.3lf, ", H.to_float())   ;
+        
+    // printf(
+    //  "[(%6.3lf * %6.3lf) + %6.3lf]",
+    //  F1.to_float(),
+    //  H.to_float(),
+    //  D1.to_float()
+    // );
     
     B  = (F1 * H)  + D1                  ;
     printf("% 9.3lf, ", B.to_float())    ;

@@ -80,7 +80,7 @@ int main() {
    x.to_float()
   );
 
-  return 0;
+//  return 0;
   
   printf(
    "F1 = % 05.5lf, Q1 = % 05.5lf \n",
@@ -95,7 +95,7 @@ int main() {
   );
   
 //  printf("A, AF, F1, I, L, H, B, N, D1, D2 \n");
-  printf("Af,        I,      F1,     Q1,     L,      H,      B,      N,      D1,     D2,        I,    F1,     Q1,     L,              H,           B,           N,           D1,          D2 \n");
+  printf("Af,        I,      F1,     Q1,     L,      H,      B,      N,      D1,     D2,        I,    F1,     Q1,        L,              H,         B,         N,         D1,        D2 \n");
 
 //  for (double qix = 1.0; qix < 30.0; qix += 1.0) {
   for (double qix = 1.0; qix < 4.0; qix += 1.0) {
