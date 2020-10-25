@@ -116,7 +116,10 @@ void test_fix_math_type() {
  size_t successes = 0;
  size_t errors    = 0;
 
- printf("[TESTING q%un%u:]\n\n", fix_t::CHARACTERISTIC, fix_t::MANTISSA);
+ for (uint8_t ix = 0; ix < 80; ix++) {
+  printf("/");
+ }
+ printf("\n\n[TESTING q%un%u:]\n\n", fix_t::CHARACTERISTIC, fix_t::MANTISSA);
 
  printf("Test converted 1:\n");
  CONVERSIONS(
@@ -154,7 +157,7 @@ void test_fix_math_type() {
   CONVERSIONS(
    -1.0,
    fix_t::ONE * -1,
-   1, 0,
+   unsigned_int<(sizeof(typename fix_t::type))>::MAX, 0,
    f_precis
   );
   NL;
@@ -169,7 +172,7 @@ void test_fix_math_type() {
  printf("\nPassed: %u / %u", successes, successes + errors);
 
  if (errors > 0) {
-  printf(" [ERRRORS]");
+  printf(" [ERRORS]");
  }
  
  printf("\n\n");
@@ -181,18 +184,20 @@ int main() {
  NL;
  NL;
 
-// test_fix_math_type<q0n8,   2, 5>();
- test_fix_math_type<q0n7,   2, 5>();
+ // test_fix_math_type<q0n8,   2, 0>();
+ // test_fix_math_type<q0n7,   2, 0>();
 
-// test_fix_math_type<q0n16,  3, 5>();
-// test_fix_math_type<q0n15,  3, 5>();
-// test_fix_math_type<q8n8,   3, 2>();
-// test_fix_math_type<q7n8,   3, 5>();
-
-// test_fix_math_type<q0n32,  3, 5>();
-// test_fix_math_type<q0n31,  3, 5>();
-// test_fix_math_type<q16n16, 3, 5>();
-// test_fix_math_type<q15n16, 3, 5>();
+ // test_fix_math_type<q0n16,  3, 0>();
+ // test_fix_math_type<q0n15,  3, 0>();
+ 
+ // test_fix_math_type<q8n8,   3, 2>();
+ // test_fix_math_type<q7n8,   3, 2>();
+ 
+ test_fix_math_type<q0n32,  3, 0>();
+ test_fix_math_type<q0n31,  3, 0>();
+ 
+ // test_fix_math_type<q16n16, 3, 3>();
+ // test_fix_math_type<q15n16, 3, 3>();
 
 
 }
