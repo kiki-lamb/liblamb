@@ -82,7 +82,21 @@ bool compare_floats(float x, float y, uint8_t precis) {
 // PRINT("u", "b", b);
 // PRINT("u", "c", c);
 
-#define CONVERSIONS(x, y, z0, z1, fprecis)                              \
+#define TEST_OVERFLOW                                                   \
+ {                                                                      \
+  fix_t a(fix_t::MAX);                                                  \
+                                                                        \
+  a += a;                                                               \
+                                                                        \
+  if (a.overflow) {                                                     \
+   printf("Overflow.\n");                                               \
+  }                                                                     \
+  else {                                                                \
+   printf("No overflow.\n");                                            \
+  }                                                                     \
+ }                                                                      
+
+#define TEST_CONVERSIONS(x, y, z0, z1, fprecis)                         \
  {                                                                      \
   fix_t a(fix_t::from_float(x));                                        \
   fix_t b(y);                                                           \
@@ -167,7 +181,7 @@ void test_fix_math_type(size_t & out_successes, size_t & out_errors) {
  printf("\n\n[TESTING q%un%u:]\n\n", fix_t::CHARACTERISTIC, fix_t::MANTISSA);
 
  printf("Test converted 1...\n");
- CONVERSIONS(
+ TEST_CONVERSIONS(
   1.0,
   fix_t::ONE,
   1, 0,
@@ -175,7 +189,7 @@ void test_fix_math_type(size_t & out_successes, size_t & out_errors) {
  );
  
  printf("Test converted 0.5...\n");
- CONVERSIONS(
+ TEST_CONVERSIONS(
   0.5,
   fix_t::ONE >> 1,
   0, fix_t::ONE >> 1,
@@ -185,7 +199,7 @@ void test_fix_math_type(size_t & out_successes, size_t & out_errors) {
  
  if (fix_t::CHARACTERISTIC > 0) {
   printf("Test converted 2.0...\n");
-  CONVERSIONS(
+  TEST_CONVERSIONS(
    2.0,
    fix_t::ONE << 1,
    0, 1 << (fix_t::MANTISSA + 1),
@@ -193,10 +207,9 @@ void test_fix_math_type(size_t & out_successes, size_t & out_errors) {
   );
  }
 
- 
  if ((fix_t::MANTISSA % 2) == 1) {
   printf("Test converted -1.0...\n");
-  CONVERSIONS(
+  TEST_CONVERSIONS(
    -1.0,
    fix_t::ONE * -1,
    unsigned_int<(sizeof(typename fix_t::type))>::MAX, 0,
@@ -204,6 +217,7 @@ void test_fix_math_type(size_t & out_successes, size_t & out_errors) {
   );
  }
 
+ TEST_OVERFLOW;
  
  if (fix_t::CHARACTERISTIC > 0) {
   printf("\nTest pi...\n");
