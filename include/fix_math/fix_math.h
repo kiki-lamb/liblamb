@@ -290,35 +290,35 @@ namespace lamb {
   }
 
 ///////////////////////////////////////////////////////////////////////////////
-    
-  unsigned_frac
-  operator + (
-   type const & val_
-  ) const {
-   type          old    = val;
-   big_type      new_   = old + val_;
-   unsigned_frac ret    = unsigned_frac(new_);
-
-#ifndef LAMB_TEST_FIX_MATH
-   check_overflow<big_type>('+', old, val_, ret.val, ret.val);
-#else
-   if (check_overflow<big_type>('+', old, val_, ret.val, ret.val)) {
-    overflow = true;
-   }
-#endif
-
-   return ret;
-  }    
-
-  unsigned_frac &
-  operator += (
-   type const & val_
-  ) {
-   val += val_;
-
-   return *this;
-  }
-
+//    
+//  unsigned_frac
+//  operator + (
+//   type const & val_
+//  ) const {
+//   type          old    = val;
+//   big_type      new_   = old + val_;
+//   unsigned_frac ret    = unsigned_frac(new_);
+//
+//#ifndef LAMB_TEST_FIX_MATH
+//   check_overflow<big_type>('+', old, val_, ret.val, ret.val);
+//#else
+//   if (check_overflow<big_type>('+', old, val_, ret.val, ret.val)) {
+//    overflow = true;
+//   }
+//#endif
+//
+//   return ret;
+//  }    
+//
+//  unsigned_frac &
+//  operator += (
+//   type const & val_
+//  ) {
+//   val += val_;
+//
+//   return *this;
+//  }
+//
 ///////////////////////////////////////////////////////////////////////////////
     
   template <uint8_t c, uint8_t m, bool s>
@@ -653,35 +653,35 @@ namespace lamb {
   }
 
 ///////////////////////////////////////////////////////////////////////////////
-    
-  signed_frac
-  operator + (
-   type const & val_
-  ) const {
-   type          old  = val;
-   big_type      new_ = old + val_;
-   signed_frac   ret  = signed_frac<CHARACTERISTIC,MANTISSA,SATURATE>(new_);
-
-#ifndef LAMB_TEST_FIX_MATH
-   check_overflow<big_type>('+', old, val_, ret.val, ret.val);
-#else
-   if (check_overflow<big_type>('+', old, val_, ret.val, ret.val)) {
-    overflow = true;
-   }
-#endif
-
-   return ret;
-  }    
-
-  signed_frac &
-  operator += (
-   type const & val_
-  ) {
-   val += val_;
-
-   return *this;
-  }
-
+//    
+//  signed_frac
+//  operator + (
+//   type const & val_
+//  ) const {
+//   type          old  = val;
+//   big_type      new_ = old + val_;
+//   signed_frac   ret  = signed_frac<CHARACTERISTIC,MANTISSA,SATURATE>(new_);
+//
+//#ifndef LAMB_TEST_FIX_MATH
+//   check_overflow<big_type>('+', old, val_, ret.val, ret.val);
+//#else
+//   if (check_overflow<big_type>('+', old, val_, ret.val, ret.val)) {
+//    overflow = true;
+//   }
+//#endif
+//
+//   return ret;
+//  }    
+//
+//  signed_frac &
+//  operator += (
+//   type const & val_
+//  ) {
+//   val += val_;
+//
+//   return *this;
+//  }
+//
 ///////////////////////////////////////////////////////////////////////////////
     
   template <bool saturate__>
