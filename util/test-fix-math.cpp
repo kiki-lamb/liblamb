@@ -199,8 +199,8 @@ int main() {
  test_fix_math_type<q0n32,  3, 0>(successes, errors);
  test_fix_math_type<q0n31,  3, 0>(successes, errors);
  
- test_fix_math_type<q16n16, 3, 3>(successes, errors);
- test_fix_math_type<q15n16, 3, 3>(successes, errors);
+ test_fix_math_type<q16n16, 3, 5>(successes, errors);
+ test_fix_math_type<q15n16, 3, 5>(successes, errors);
 
  for (uint8_t ix = 0; ix < 80; ix++) printf("/");
 
