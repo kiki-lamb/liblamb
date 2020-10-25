@@ -133,37 +133,43 @@ namespace lamb {
    (SIGNED ? 1 : 0)
   ) / 8;
 
-  typedef typename typedef_if<
+  typedef
+  typename typedef_if<
    SIGNED,
    typename signed_int<SIZE>::type,
    typename unsigned_int<SIZE>::type
    >::type type;
 
-  typedef typename typedef_if<
+  typedef
+  typename typedef_if<
    SIGNED,
    typename signed_int<(SIZE << 1)>::type,
    typename unsigned_int<(SIZE << 1)>::type
    >::type big_type;
 
-  static constexpr type    ONE = (
+  static constexpr
+  type    ONE = (
    (CHARACTERISTIC == 0) ? 
    ((((big_type)1) << MANTISSA) - 1) :
    (1 << MANTISSA)
   );
   
-  static constexpr type    MAX = (
+  static constexpr
+  type    MAX = (
    SIGNED ?
    signed_int<SIZE>::MAX :
    unsigned_int<SIZE>::MAX
   );
    
-  static constexpr type    MIN = (
+  static constexpr
+  type    MIN = (
    SIGNED?
    signed_int<SIZE>::MIN :
    unsigned_int<SIZE>::MIN
   );
   
-  static constexpr type mask() {
+  static constexpr
+  type mask() {
    type m = 0;
    
    for (uint8_t ix = 0; ix < MANTISSA; ix++) {
@@ -173,13 +179,26 @@ namespace lamb {
    return m;
   }
 
+  type bottom() const { // return smaller type?
+   return val & mask();
+  }
+  
+  type top() const {    // return smaller type?
+   if (CHARACTERISTIC == 0) {
+    return 0;
+   }
+   else {
+    return (val & (~mask())) >> MANTISSA;
+   }
+  }     
+  
   explicit constexpr
   frac_base(type const & tmp_) : val(tmp_), overflow(false) {}
 
   type val;
   
-  mutable bool overflow;
-  
+  mutable
+  bool overflow;  
 
   CHECK_OVERFLOW;
  };
@@ -202,19 +221,6 @@ namespace lamb {
   typedef frac_base<characteristic_, mantissa_, saturate_> base;
   typedef typename base::type                              type;
   typedef typename base::big_type                          big_type;
-  
-  type bottom() const { // return smaller type?
-   return base::val & base::mask();
-  }
-  
-  type top() const {    // return smaller type?
-   if (base::CHARACTERISTIC == 0) {
-    return 0;
-   }
-   else {
-    return (base::val & (~base::mask())) >> base::MANTISSA;
-   }
-  }     
   
 ///////////////////////////////////////////////////////////////////////////////
   
