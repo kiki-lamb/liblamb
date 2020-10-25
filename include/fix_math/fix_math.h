@@ -171,6 +171,13 @@ namespace lamb {
   typedef
   derived_template<CHARACTERISTIC, MANTISSA, SATURATE>
   derived_type;
+
+  typedef
+  typename typedef_if<
+   SIGNED,
+   unsigned_frac<CHARACTERISTIC, MANTISSA, SATURATE>,
+   signed_frac<CHARACTERISTIC, MANTISSA, SATURATE>
+   >::type opposite_signedness_type;
   
 ////////////////////////////////////////////////////////////////////////////////
 
