@@ -116,7 +116,7 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
  template <
-  template <uint8_t char_, uint8_t mant_, bool sat_> class deriver,
+  template <uint8_t char_, uint8_t mant_, bool sat_> class derived,
   uint8_t characteristic_,
   uint8_t mantissa_,
   bool saturate_ = false
@@ -232,9 +232,9 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  // signed_frac<base::CHARACTERISTIC, base::MANTISSA, ( ! base::SATURATE )> sat_cast () const {
-  //  return signed_frac<base::CHARACTERISTIC, base::MANTISSA, ( ! base::SATURATE)>(base::val);
-  // }
+  derived<CHARACTERISTIC, MANTISSA, ( ! SATURATE )> sat_cast () const {
+   return derived<CHARACTERISTIC, MANTISSA, ( ! SATURATE)>(val);
+  }
   
 ////////////////////////////////////////////////////////////////////////////////
  };
