@@ -89,10 +89,16 @@ bool compare_floats(float x, float y, uint8_t precis) {
   a += a;                                                               \
                                                                         \
   if (a.overflow) {                                                     \
-   printf("Overflow.\n");                                               \
+   successes ++;                                                        \
   }                                                                     \
   else {                                                                \
-   printf("No overflow.\n");                                            \
+   printf(                                                              \
+    "%05.05lf + %05.05lf should have overflowed.",                      \
+    a.to_float(),                                                       \
+    a.to_float()                                                        \
+   );                                                                   \
+                                                                        \
+   errors ++;                                                           \
   }                                                                     \
  }                                                                      
 
@@ -249,7 +255,7 @@ int main() {
  
  test_fix_math_type<q0n8,   2, 0>(successes, errors);
 
- return 0;
+// return 0;
  
  test_fix_math_type<q0n7,   2, 0>(successes, errors);
 
