@@ -28,17 +28,14 @@ namespace lamb {
 //    printf("FS.val  => %llu \n",     FS.val);
 //    printf("FS.valf => % 05.5lf \n", FS.to_float());
 
-    pqtype F_FS = (F / FS);
-    
 //    printf("F_FS   => % 05.5lf %lu\n", F_FS.to_float(), F_FS.val);
-    
-    F1 = qtype::from_float(2*M_PI); 
+    static const qtype PI2(qtype::from_float(2*M_PI));
 
 //    printf("2M_PI   => % 05.5lf\n", F1.to_float());
     
 //    printf("FF1: % 05.5lf %u\n", F1, F1.val);
 
-    F1 *= F_FS;
+    F1 = PI2 * (F / FS);
     
 //    printf("FF2: % 05.5lf %u\n", F1, F1.val);
    }
