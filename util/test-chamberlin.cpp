@@ -7,7 +7,8 @@ using namespace lamb;
 
 int main() {
  {
-  chamberlin cf;
+  chamberlin    cf;
+  fx_chamberlin fx_cf;
   
   uint16_t acc(0);
 
@@ -16,7 +17,18 @@ int main() {
   cf.Q = 0.5;
   cf.set_q();
 
+  fx_cf.F = sat_q15n16(5000, 0);
+  fx_cf.set_frequency();
+  fx_cf.Q = sat_q15n16::from_float(0.5);
+  fx_cf.set_q();
+
   printf("F1 = % 05.5lf, Q1 = % 05.5lf \n", cf.F1, cf.Q1);
+
+  printf(
+   "F1 = % 05.5lf, Q1 = % 05.5lf \n",
+   fx_cf.F1.to_float(),
+   fx_cf.Q1.to_float()
+  );
 
   return 0;
   

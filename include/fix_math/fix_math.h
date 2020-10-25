@@ -821,7 +821,7 @@ namespace lamb {
   operator * (
    signed_frac<other_charac,other_mantissa,other_saturate> const & other
   ) const {
-   static_assert(0 == other_charac, "Reverse operand order!");
+   //static_assert(0 == other_charac, "Reverse operand order!");
 
    typedef signed_frac<other_charac,other_mantissa,other_saturate>
     other_type;
@@ -855,8 +855,8 @@ namespace lamb {
     tmp                       >>= other_type::FX_SHIFT - 1;     
     r.val                       = (type)tmp;        
 
-    printf("SHIFT is %d.\n", other_type::FX_SHIFT - 1);
-    printf("r.val is %d.\n", r.val);        
+//    printf("SHIFT is %d.\n", other_type::FX_SHIFT - 1);
+//    printf("r.val is %d.\n", r.val);        
 
 #ifndef LAMB_TEST_FIX_MATH
     check_overflow<big_type>('*', old, other.val, r.val, r.val);
