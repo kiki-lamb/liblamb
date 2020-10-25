@@ -131,14 +131,16 @@ namespace lamb {
    for (uint8_t ix = 0; ix < MANTISSA; ix++) {
     m |= 1 << ix;
    }
+
+   return m;
   }
   
   type bottom() const { // return smaller type?
-   return val & mask;
+   return val & mask();
   }
 
   type top() const {    // return smaller type?
-   return (val & (~mask)) >> MANTISSA;
+   return (val & (~mask())) >> MANTISSA;
   }     
   
   type val;
@@ -211,6 +213,16 @@ namespace lamb {
    type const & characteristic__,
    type const & mantissa__
   ) : val((characteristic__ * ONE) + mantissa__) {}
+
+///////////////////////////////////////////////////////////////////////////////
+    
+  template <bool saturate__> 
+  bool
+  operator == (
+   unsigned_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other
+  ) const {
+   return val == other.val;
+  }    
 
 ///////////////////////////////////////////////////////////////////////////////
     
@@ -521,6 +533,16 @@ namespace lamb {
   explicit constexpr signed_frac(type const & characteristic__, type const & mantissa__) :
    val((characteristic__ * ONE) + mantissa__) {}
   
+///////////////////////////////////////////////////////////////////////////////
+    
+  template <bool saturate__> 
+  bool
+  operator == (
+   signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other
+  ) const {
+   return val == other.val;
+  }    
+
 ///////////////////////////////////////////////////////////////////////////////
     
   template <bool saturate__>
