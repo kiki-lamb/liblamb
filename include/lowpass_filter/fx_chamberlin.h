@@ -14,8 +14,8 @@ namespace lamb {
    
    fx_chamberlin() :
     Q1(0), Q(0), F1(0), F(0), FS(0), D1(0), D2(0), L(0), H(0), B(0), N(0) {
-    Q  = qtype::from_float(1.0);
-    F  = pqtype(1000 );
+    Q  = qtype(1,0);
+    F  = pqtype(1000);
     FS = pqtype(44100);
 
     set_frequency();

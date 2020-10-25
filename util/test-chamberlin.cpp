@@ -43,7 +43,7 @@ int main() {
    cf.Q = qix;
    cf.set_q();
 
-   fx_cf.Q.val = qix;
+   fx_cf.Q = fx_chamberlin::qtype::from_float((float)qix);
    fx_cf.set_q();
 
    const size_t fix_incr = 100;
@@ -58,7 +58,19 @@ int main() {
     fx_cf.F.val = fix;
     fx_cf.set_frequency();
     
-    const size_t fdiv = 512;
+  printf(
+   "F1 = % 05.5lf, Q1 = % 05.5lf \n",
+   cf.F1,
+   cf.Q1
+  );
+  
+  printf(
+   "F1 = % 05.5lf, Q1 = % 05.5lf \n",
+   fx_cf.F1.to_float(),
+   fx_cf.Q1.to_float()
+  );
+
+  const size_t fdiv = 512;
 
     for(size_t cycle_ix = 0; cycle_ix < 1; cycle_ix++) {
      for(size_t pix = 0; pix < (65534L / fdiv); pix ++) {
