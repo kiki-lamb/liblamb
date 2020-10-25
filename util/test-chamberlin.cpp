@@ -11,6 +11,15 @@ int main() {
   
   uint16_t acc(0);
 
+  cf.F = 5000;
+  cf.set_frequency();
+  cf.Q = 0.5;
+  cf.set_q();
+
+  printf("F1 = % 05.5lf, Q1 = % 05.5lf \n", cf.F1, cf.Q1);
+
+  return 0;
+  
 //  printf("A, AF, F1, I, L, H, B, N, D1, D2 \n");
   printf("Af, I, F1, Q1, L, H, B, N, D1, D2 \n");
   
