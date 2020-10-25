@@ -67,6 +67,7 @@ bool compare_floats(float x, float y, uint8_t precis) {
   successes ++;                                   \
  } else {                                         \
   printf("FAILED %s streq %s.\n", x, y);          \
+  errors ++;                                      \
  }                     
 
 #define NL \
@@ -116,44 +117,52 @@ void test_fix_math_type() {
  size_t errors    = 0;
 
  printf("[TESTING q%un%u:]\n\n", fix_t::CHARACTERISTIC, fix_t::MANTISSA);
- 
+
+ printf("Test converted 1:\n");
  CONVERSIONS(
   1.0,
   fix_t::ONE,
   1, 0,
   f_precis
  );
-
  NL;
  
  
+ printf("Test converted 0.5:\n");
  CONVERSIONS(
   0.5,
   fix_t::ONE >> 1,
   0, fix_t::ONE >> 1,
   f_precis
  );
+ NL;
 
  
  if (fix_t::CHARACTERISTIC > 0) {
+  printf("Test converted 2.0:\n");
   CONVERSIONS(
    2.0,
    fix_t::ONE << 1,
    0, 1 << (fix_t::MANTISSA + 1),
    f_precis
   );
+  NL;
  }
 
  if ((fix_t::MANTISSA % 2) == 1) {
+  printf("Test converted -1.0:\n");
   CONVERSIONS(
    -1.0,
    fix_t::ONE * -1,
    1, 0,
    f_precis
   );
+  NL;
  }
  
  if (fix_t::CHARACTERISTIC > 0) {
+  printf("Test pi:\n");
+
   TEST_PI(pi_precis);
  }
  
@@ -173,11 +182,11 @@ int main() {
  NL;
 
 // test_fix_math_type<q0n8,   2, 5>();
-// test_fix_math_type<q0n7,   2, 5>();
+ test_fix_math_type<q0n7,   2, 5>();
 
 // test_fix_math_type<q0n16,  3, 5>();
 // test_fix_math_type<q0n15,  3, 5>();
- test_fix_math_type<q8n8,   3, 5>();
+// test_fix_math_type<q8n8,   3, 2>();
 // test_fix_math_type<q7n8,   3, 5>();
 
 // test_fix_math_type<q0n32,  3, 5>();
