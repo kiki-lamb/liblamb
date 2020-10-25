@@ -326,9 +326,9 @@ namespace lamb {
    unsigned_frac ret    = unsigned_frac(new_);
 
 #ifndef LAMB_TEST_FIX_MATH
-   check_overflow<big_type>('-', old, other.val, ret.val, ret.val);
+   check_overflow<big_type>('-', old, -other.val, ret.val, ret.val);
 #else
-   if (check_overflow<big_type>('-', old, other.val, ret.val, ret.val)) {
+   if (check_overflow<big_type>('-', old, -other.val, ret.val, ret.val)) {
     overflow = true;
    }
 #endif
@@ -357,9 +357,9 @@ namespace lamb {
    unsigned_frac ret    = unsigned_frac(new_);
 
 #ifndef LAMB_TEST_FIX_MATH
-   check_overflow<big_type>('-', old, val_, ret.val, ret.val);
+   check_overflow<big_type>('-', old, -val_, ret.val, ret.val);
 #else
-   if (check_overflow<big_type>('-', old, val_, ret.val, ret.val)) {
+   if (check_overflow<big_type>('-', old, -val_, ret.val, ret.val)) {
     overflow = true;
    }
 #endif
@@ -687,9 +687,9 @@ namespace lamb {
    signed_frac ret   = signed_frac(new_);
 
 #ifndef LAMB_TEST_FIX_MATH
-   check_overflow<big_type>('-', old, other.val, ret.val, ret.val);
+   check_overflow<big_type>('-', old, -other.val, ret.val, ret.val);
 #else
-   if (check_overflow<big_type>('-', old, other.val, ret.val, ret.val)) {
+   if (check_overflow<big_type>('-', old, -other.val, ret.val, ret.val)) {
     overflow = true;
    }
 #endif
@@ -718,9 +718,9 @@ namespace lamb {
    signed_frac   ret    = signed_frac(new_);
 
 #ifndef LAMB_TEST_FIX_MATH
-   check_overflow<big_type>('-', old, val_, ret.val, ret.val);
+   check_overflow<big_type>('-', old, -val_, ret.val, ret.val);
 #else
-   if (check_overflow<big_type>('-', old, val_, ret.val, ret.val)) {
+   if (check_overflow<big_type>('-', old, -val_, ret.val, ret.val)) {
     overflow = true;
    }
 #endif
