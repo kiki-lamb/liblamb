@@ -23,24 +23,24 @@ namespace lamb {
    }
 
    void set_frequency() {
-    printf("F.val   => %llu \n",     F.val);
-    printf("F.valf  => % 05.5lf \n", F.to_float());
-    printf("FS.val  => %llu \n",     FS.val);
-    printf("FS.valf => % 05.5lf \n", FS.to_float());
+//    printf("F.val   => %llu \n",     F.val);
+//    printf("F.valf  => % 05.5lf \n", F.to_float());
+//    printf("FS.val  => %llu \n",     FS.val);
+//    printf("FS.valf => % 05.5lf \n", FS.to_float());
 
-    pqtype F_FS = F / FS;
+    pqtype F_FS = (F / FS);
     
-    printf("F_FS   => % 05.5lf %lu\n", F_FS.to_float(), F_FS.val);
+//    printf("F_FS   => % 05.5lf %lu\n", F_FS.to_float(), F_FS.val);
     
     F1 = qtype::from_float(2*M_PI); 
 
-    printf("2M_PI   => % 05.5lf\n", F1.to_float());
+//    printf("2M_PI   => % 05.5lf\n", F1.to_float());
     
-    printf("FF1: % 05.5lf %u\n", F1, F1.val);
+//    printf("FF1: % 05.5lf %u\n", F1, F1.val);
 
     F1 *= F_FS;
     
-    printf("FF2: % 05.5lf %u\n", F1, F1.val);
+//    printf("FF2: % 05.5lf %u\n", F1, F1.val);
    }
 
    void set_q() {
