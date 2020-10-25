@@ -391,6 +391,13 @@ namespace lamb {
   typedef typename base::type                                    type;
   typedef typename base::big_type                                big_type;
   
+  operator int ()                    = delete;
+  operator unsigned int ()           = delete;
+  operator long int ()               = delete;
+  operator unsigned long int ()      = delete;
+  operator long long int ()          = delete;
+  operator unsigned long long int () = delete;
+
 ////////////////////////////////////////////////////////////////////////////////
   
   explicit constexpr unsigned_frac(type const & tmp_ = 0) :
@@ -524,64 +531,16 @@ namespace lamb {
     typedef frac_base<signed_frac, characteristic_, mantissa_, saturate_> base;
     typedef typename base::type                                    type;
     typedef typename base::big_type                                big_type;  
-    
-    type bottom() const { // return smaller type?
-     return base::val & base::mask();
-    }
+      
+    operator int ()                    = delete;
+    operator unsigned int ()           = delete;
+    operator long int ()               = delete;
+    operator unsigned long int ()      = delete;
+    operator long long int ()          = delete;
+    operator unsigned long long int () = delete;    
 
-    type top() const {    // return smaller type?
-     return (base::val & (~base::mask())) >> base::MANTISSA;
-    }     
-  
 ////////////////////////////////////////////////////////////////////////////////
-  
-    // signed_frac<base::CHARACTERISTIC, base::MANTISSA, ( ! base::SATURATE )> sat_cast () const {
-    //  return signed_frac<base::CHARACTERISTIC, base::MANTISSA, ( ! base::SATURATE)>(base::val);
-    // }
-  
-///////////////////////////////////////////////////////////////////////////////
-
-    operator unsigned int () = delete;
-    operator int ()          = delete;
-
-///////////////////////////////////////////////////////////////////////////////
-
-   // public:
-   //  template <bool saturate__>
-   //  operator
-   //  signed_frac<(
-   //   base::CHARACTERISTIC << 1), (base::MANTISSA << 1), saturate__> () const {
-   //   signed_frac<(base::CHARACTERISTIC << 1), (base::MANTISSA << 1), saturate__> tmp(
-   //    base::val << 1
-   //   );
-   
-   //   return tmp;
-   //  }
-   
-   //  template <bool saturate__>
-   //  operator
-   //  signed_frac<(base::CHARACTERISTIC >> 1), (base::MANTISSA >> 1), saturate__> () const {
-   //   signed_frac<(base::CHARACTERISTIC >> 1), (base::MANTISSA >> 1), saturate__> tmp(
-   //    base::val >> 1
-   //   );
     
-   //   return tmp;
-   //  }
-
-///////////////////////////////////////////////////////////////////////////////
-
-    // v This can overflow, especially if val > 1.0 and base::CHARACTERISTIC == 0;
-    //   Not yet well tested.
-  
-    // static constexpr signed_frac from_float(float tmp_) {
-    //  bool          neg     = tmp_ < 0;
-    //  int           divisor = int(tmp_);
-    //  float         modulus = tmp_ - divisor;
-    //  type          ipart   = base::ONE * divisor + int(base::ONE * modulus);
-   
-    //  return signed_frac(ipart);
-    // }
-
     explicit constexpr
     signed_frac(type const & tmp_) :
      base(tmp_)
@@ -594,60 +553,8 @@ namespace lamb {
      base((characteristic__ * base::ONE) + mantissa__)
      {}
   
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
     
-    // template <bool saturate__>
-    // signed_frac
-    // operator + (
-    //  signed_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> const & other
-    // ) const {
-    //  type        old  = base::val;
-    //  big_type    new_ = base::val + other.val;
-    //  signed_frac ret  = signed_frac(new_);
-
-    //  if (base::check_overflow('+', old, other.val, ret.val)) {
-    //   base::overflow = true;
-    //  }
-
-    //  return ret;
-    // }
-
-    // template <bool saturate__>
-    // signed_frac const &
-    // operator += (
-    //  signed_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> const & other
-    // ) {
-    //  base::val = ((*this) + other).val;
-
-    //  return *this;
-    // }
-
-    // template <bool saturate__>
-    // signed_frac
-    // operator - (
-    //  signed_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> const & other
-    // ) const {
-    //  type        old   = base::val;
-    //  big_type    new_  = base::val - other.val;
-    //  signed_frac ret   = signed_frac(new_);
-
-    //  if (base::check_overflow('-', old, other.val, ret.val)) {
-    //   base::overflow = true;
-    //  }
-
-    //  return ret;
-    // }
-
-    // template <bool saturate__>
-    // signed_frac &
-    // operator -= (
-    //  signed_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> const & other
-    // ) {
-    //  base::val = ((*this) - other).val;
-
-    //  return *this;
-    // }
-
    public:      
     template <uint8_t other_charac,uint8_t other_mantissa, bool other_saturate>
     signed_frac
