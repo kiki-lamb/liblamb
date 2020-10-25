@@ -302,6 +302,8 @@ int main() {
  test_fix_math_type<q16n16, 3, 4>(successes, errors);
  test_fix_math_type<q15n16, 3, 4>(successes, errors);
 
+ test_fix_math_type<unsigned_frac<2, 30>, 6, 6>(successes, errors);
+
  for (uint8_t ix = 0; ix < 80; ix++) printf("/");
 
  printf("\n\nTOTAL PASSED: %u / %u \n", successes, successes + errors);

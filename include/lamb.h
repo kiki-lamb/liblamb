@@ -56,6 +56,7 @@
 
   #include "lowpass_filter/moog_filter.h"
   #include "lowpass_filter/chamberlin.h"
+  #include "lowpass_filter/fx_chamberlin.h"
   #include "lowpass_filter/lowpass_filter.h"
   #include "lowpass_filter/lowpass_filter_8.h"
 
