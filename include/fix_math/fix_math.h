@@ -38,32 +38,40 @@ namespace lamb {
 
 #ifndef LAMB_FP_NO_OVERFLOW_CHECKING
 #define CHECK_OVERFLOW                                          \
- template <typename delta_t>    \
+ template <typename delta_t>                                    \
  static bool check_overflow(                                    \
   char    const & symbol,                                       \
   type    const & old_val,                                      \
   delta_t const & delta,                                        \
   type          & set                                           \
  ) {                                                            \
-  int64_t ttmp = old_val;                                        \
-  int64_t ttmp_delta = delta;                                    \
+  int64_t ttmp = old_val;                                       \
+  int64_t ttmp_delta = delta;                                   \
                                                                 \
-  ttmp += ttmp_delta;                                             \
+  ttmp += ttmp_delta;                                           \
                                                                 \
-  bool over  = ttmp > MAX;                                       \
-                                                                 \
-  if (over)                                                      \
-   printf("%lld exceeds %lld.\n", ttmp, MAX);                    \
-                                                                 \
+  bool over  = ttmp > MAX;                                      \
+                                                                \
+  if (over)                                                     \
+   printf("%lld exceeds %lld.\n", ttmp, MAX);                   \
+                                                                \
   bool under = ttmp < MIN;                                      \
                                                                 \
-  if (under)                                                     \
-     printf("%lld under %lld.\n", ttmp, MIN);                 \
-                                                               \
+  if (under)                                                    \
+     printf("%lld under %lld.\n", ttmp, MIN);                   \
+                                                                \
   if (over || under) {                                          \
    if (SATURATE) {                                              \
-    printf("SATURATE: %ld %c %ld = %lld MIN: %lld MAX: %lld \n", old_val, symbol, delta, ttmp, MIN, MAX); \
-    set = MAX;                                                          \
+    printf(                                                     \
+     "SATURATE: %ld %c %ld = %lld MIN: %lld MAX: %lld \n",      \
+     old_val,                                                   \
+     symbol,                                                    \
+     delta,                                                     \
+     ttmp,                                                      \
+     MIN,                                                       \
+     MAX                                                        \
+    );                                                          \
+    set = MAX;                                                  \
    }                                                            \
    else {                                                       \
    }                                                            \
