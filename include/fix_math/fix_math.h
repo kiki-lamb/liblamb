@@ -97,7 +97,7 @@ namespace lamb {
  template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_ = false>
  class unsigned_frac {
     
- public:
+ public:  
   static const bool    SATURATE       = saturate_;
   static const uint8_t CHARACTERISTIC = characteristic_;
   static const uint8_t MANTISSA       = mantissa_;
@@ -152,6 +152,9 @@ namespace lamb {
   
   type val;
 
+#ifdef LAMB_TEST_FIX_MATH
+  bool overflow;
+#endif
   
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -212,14 +215,24 @@ namespace lamb {
   float to_float() const {
    return val / (ONE * 1.0);
   }
+
+  ////////////////////////////////////////////////////////////////////////////////
   
   explicit constexpr unsigned_frac(type const & val_ = 0) :
-   val(val_) {}
+   val(val_)
+#ifdef LAMB_TEST_FIX_MATH
+   , overflow(false)
+#endif
+   {}
 
   explicit constexpr unsigned_frac(
    type const & characteristic__,
    type const & mantissa__
-  ) : val((characteristic__ * ONE) + mantissa__) {}
+  ) : val((characteristic__ * ONE) + mantissa__)
+#ifdef LAMB_TEST_FIX_MATH
+   , overflow(false)
+#endif
+   {}
 
 //////////////////////////////////////////////////////////////////////////////
     
@@ -471,6 +484,10 @@ namespace lamb {
   
   type val;
 
+#ifdef LAMB_TEST_FIX_MATH
+  bool overflow;
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////
   
   unsigned_frac<CHARACTERISTIC, MANTISSA, ( ! SATURATE )> sat_cast () const {
@@ -527,12 +544,20 @@ namespace lamb {
   }
 
   explicit constexpr signed_frac(type const & val_) :
-   val(val_) {}
+   val(val_)
+#ifdef LAMB_TEST_FIX_MATH
+   , overflow(false)
+#endif
+   {}
 
   // v should use smaller types.
   
   explicit constexpr signed_frac(type const & characteristic__, type const & mantissa__) :
-   val((characteristic__ * ONE) + mantissa__) {}
+   val((characteristic__ * ONE) + mantissa__)
+#ifdef LAMB_TEST_FIX_MATH
+   , overflow(false)
+#endif
+   {}
   
 ///////////////////////////////////////////////////////////////////////////////
     
