@@ -73,7 +73,11 @@ bool compare_floats(float x, float y, uint8_t precis) {
 #define NL \
  printf("\n")
 
-#define CONVERSIONS(x, y, z0, z1, fprecis)              \
+// TEST_EQ("u", a, b);                          
+// TEST_EQ("u", b, c);                            
+// TEST_EQ("u", a, c);                            
+                                                \
+#define CONVERSIONS(x, y, z0, z1, fprecis)      \
 {                                               \
  fix_t a(fix_t::from_float(x));                 \
  fix_t b(y);                                    \
@@ -82,10 +86,6 @@ bool compare_floats(float x, float y, uint8_t precis) {
  PRINT("u", "a", a);                            \
  PRINT("u", "b", b);                            \
  PRINT("u", "c", c);                            \
-                                                \
- TEST_EQ("u", a, b);                            \
- TEST_EQ("u", b, c);                            \
- TEST_EQ("u", a, c);                            \
                                                 \
  TEST_FLEQ("lf", x, a.to_float(), fprecis);                \
  TEST_FLEQ("lf", x, b.to_float(), fprecis);                \
@@ -112,15 +112,15 @@ bool compare_floats(float x, float y, uint8_t precis) {
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename fix_t, uint8_t f_precis, uint8_t pi_precis>
-void test_fix_math_type() {
+void test_fix_math_type(size_t & out_successes, size_t & out_errors) {
  size_t successes = 0;
  size_t errors    = 0;
 
- for (uint8_t ix = 0; ix < 80; ix++) {
-  printf("/");
- }
+ for (uint8_t ix = 0; ix < 80; ix++) printf("/");
+
  printf("\n\n[TESTING q%un%u:]\n\n", fix_t::CHARACTERISTIC, fix_t::MANTISSA);
 
+ 
  printf("Test converted 1:\n");
  CONVERSIONS(
   1.0,
@@ -129,7 +129,7 @@ void test_fix_math_type() {
   f_precis
  );
  NL;
- 
+
  
  printf("Test converted 0.5:\n");
  CONVERSIONS(
@@ -152,6 +152,7 @@ void test_fix_math_type() {
   NL;
  }
 
+ 
  if ((fix_t::MANTISSA % 2) == 1) {
   printf("Test converted -1.0:\n");
   CONVERSIONS(
@@ -162,12 +163,14 @@ void test_fix_math_type() {
   );
   NL;
  }
+
  
  if (fix_t::CHARACTERISTIC > 0) {
   printf("Test pi:\n");
 
   TEST_PI(pi_precis);
  }
+
  
  printf("\nPassed: %u / %u", successes, successes + errors);
 
@@ -176,6 +179,9 @@ void test_fix_math_type() {
  }
  
  printf("\n\n");
+
+ out_successes += successes;
+ out_errors += errors;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -184,20 +190,25 @@ int main() {
  NL;
  NL;
 
- // test_fix_math_type<q0n8,   2, 0>();
- // test_fix_math_type<q0n7,   2, 0>();
-
- // test_fix_math_type<q0n16,  3, 0>();
- // test_fix_math_type<q0n15,  3, 0>();
+ size_t successes = 0;
+ size_t errors = 0;
  
- // test_fix_math_type<q8n8,   3, 2>();
- // test_fix_math_type<q7n8,   3, 2>();
- 
- test_fix_math_type<q0n32,  3, 0>();
- test_fix_math_type<q0n31,  3, 0>();
- 
- // test_fix_math_type<q16n16, 3, 3>();
- // test_fix_math_type<q15n16, 3, 3>();
+ test_fix_math_type<q0n8,   2, 0>(successes, errors);
+ test_fix_math_type<q0n7,   2, 0>(successes, errors);
 
+ test_fix_math_type<q0n16,  3, 0>(successes, errors);
+ test_fix_math_type<q0n15,  3, 0>(successes, errors);
+ 
+ test_fix_math_type<q8n8,   3, 2>(successes, errors);
+ test_fix_math_type<q7n8,   3, 2>(successes, errors);
+ 
+ test_fix_math_type<q0n32,  3, 0>(successes, errors);
+ test_fix_math_type<q0n31,  3, 0>(successes, errors);
+ 
+ test_fix_math_type<q16n16, 3, 3>(successes, errors);
+ test_fix_math_type<q15n16, 3, 3>(successes, errors);
 
+ for (uint8_t ix = 0; ix < 80; ix++) printf("/");
+
+ printf("\n\nTOTAL PASSED: %u / %u \n", successes, successes + errors);
 }
