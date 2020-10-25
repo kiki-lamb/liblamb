@@ -491,18 +491,21 @@ namespace lamb {
       }
 #endif
      }
-     else {
-      printf("adsd\n");
-    
-      static const uint8_t  shift = 
-       unsigned_frac<other_charac, other_mantissa>::FX_SHIFT;      
+     else {    
+      static const uint8_t  shift = other_mantissa;
 
-      big_type              tmp   = ((big_type)val) * other.val;
+      cout << "VAL: "    << val        << endl;
+      cout << "SHIFT: "  << shift      << endl;
 
-//    cout << "TMP: " << tmp   << endl;
-//    printf("SHIFT: %d\n", shift);
+      big_type              tmp   = ((big_type)val) << shift;
 
-      ret.val                     = (type)(tmp >> shift);
+      cout << "TMP0: "   << tmp        << endl;
+      cout << "OVAL: "   << other.val  << endl;
+     
+      tmp                        /= other.val;
+      cout << "TMP1: " << tmp   << endl;
+
+      ret.val                     = (type)tmp;
   
 //    printf("RET.VAL: %d\n", ret.val);
 #ifndef LAMB_TEST_FIX_MATH

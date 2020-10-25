@@ -7,7 +7,7 @@ namespace lamb {
   class fx_chamberlin {
   public:
    typedef sat_q15n16 qtype;
-   typedef sat_q0n32 pqtype;
+   typedef sat_q0n16 pqtype;
    
    qtype  Q1, Q, F1, D1, D2, L, H, B, N;
    pqtype F,  FS;
@@ -29,14 +29,18 @@ namespace lamb {
     printf("FS.valf => % 05.5lf \n", FS.to_float());
 
     pqtype F_FS = F / FS;
-
-    printf("F_FS   => % 05.5lf\n", F_FS.to_float());
+    
+    printf("F_FS   => % 05.5lf %lu\n", F_FS.to_float(), F_FS.val);
     
     F1 = qtype::from_float(2*M_PI); 
 
     printf("2M_PI   => % 05.5lf\n", F1.to_float());
     
-    // printf("F1: % 05.5lf \n", F1);
+    printf("FF1: % 05.5lf %u\n", F1, F1.val);
+
+    F1 *= F_FS;
+    
+    printf("FF2: % 05.5lf %u\n", F1, F1.val);
    }
 
    void set_q() {
