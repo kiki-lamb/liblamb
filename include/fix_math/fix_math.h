@@ -337,7 +337,37 @@ namespace lamb {
   ) {
    val = ((*this) + other).val;
 
-   return *this;
+   return *(static_cast<derived_type *>(this));
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////
+    
+  template <uint8_t c, uint8_t m, bool s>
+  derived_type
+  operator - (
+   derived_template<c,m,s> const & other
+  ) const {
+   type          old  = val;
+   big_type      new_ = old - other.val;
+   derived_type  ret  = derived_type(new_);
+
+   if (check_overflow('-', old, other.val, ret.val)) {
+    overflow = true;
+   }
+
+   return ret;
+  }    
+
+  template <uint8_t c, uint8_t m, bool s>
+  derived_type &
+  operator -= (
+   derived_template<c,m,s> const & other
+  ) {
+   derived_type tmp = (*this) - other;
+  
+   val = tmp.val;
+
+   return *(static_cast<derived_type *>(this));
   }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -372,36 +402,6 @@ namespace lamb {
    type const & mantissa__
   ) : base((characteristic__ * base::ONE) + mantissa__)
    {}
-
-///////////////////////////////////////////////////////////////////////////////
-    
-  template <uint8_t c, uint8_t m, bool s>
-  unsigned_frac
-  operator - (
-   unsigned_frac<c,m,s> const & other
-  ) const {
-   type          old    = base::val;
-   big_type      new_   = old - other.val;
-   unsigned_frac ret    = unsigned_frac(new_);
-
-   if (base::check_overflow('-', old, other.val, ret.val)) {
-    base::overflow = true;
-   }
-
-   return ret;
-  }    
-
-  template <uint8_t c, uint8_t m, bool s>
-  unsigned_frac &
-  operator -= (
-   unsigned_frac<c,m,s> const & other
-  ) {
-   unsigned_frac tmp = (*this) - other;
-  
-   base::val = tmp.val;
-
-   return *this;
-  }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -622,31 +622,31 @@ namespace lamb {
     //  return *this;
     // }
 
-    template <bool saturate__>
-    signed_frac
-    operator - (
-     signed_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> const & other
-    ) const {
-     type        old   = base::val;
-     big_type    new_  = base::val - other.val;
-     signed_frac ret   = signed_frac(new_);
+    // template <bool saturate__>
+    // signed_frac
+    // operator - (
+    //  signed_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> const & other
+    // ) const {
+    //  type        old   = base::val;
+    //  big_type    new_  = base::val - other.val;
+    //  signed_frac ret   = signed_frac(new_);
 
-     if (base::check_overflow('-', old, other.val, ret.val)) {
-      base::overflow = true;
-     }
+    //  if (base::check_overflow('-', old, other.val, ret.val)) {
+    //   base::overflow = true;
+    //  }
 
-     return ret;
-    }
+    //  return ret;
+    // }
 
-    template <bool saturate__>
-    signed_frac &
-    operator -= (
-     signed_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> const & other
-    ) {
-     base::val = ((*this) - other).val;
+    // template <bool saturate__>
+    // signed_frac &
+    // operator -= (
+    //  signed_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> const & other
+    // ) {
+    //  base::val = ((*this) - other).val;
 
-     return *this;
-    }
+    //  return *this;
+    // }
 
    public:      
     template <uint8_t other_charac,uint8_t other_mantissa, bool other_saturate>
