@@ -49,8 +49,12 @@ namespace lamb {
   bool over  = (((big_t)old_val) + delta) > MAX;                        \
   bool under = false;                                                   \
                                                                         \
-  if ((delta < 0) && (delta > old_val)) {                               \
-   under = true;                                                        \
+  if (delta < 0) {                                                      \
+   printf("%d vs %d\n", delta, old_val);                                \
+                                                                        \
+   if (delta > old_val) {                                               \
+    under = true;                                                       \
+   }                                                                    \
   }                                                                     \
                                                                         \
   if (over || under) {                                                  \
