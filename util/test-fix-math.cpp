@@ -1,6 +1,8 @@
 // TODO:
 // - division tests
 // - multiplication tests
+//
+// g++ -std=gnu++17 -DLAMB_NO_ARDUINO test-fix-math.cpp && .\a.exe
 
 #define LAMB_TEST_FIX_MATH
 
@@ -9,11 +11,7 @@
 #include <cmath>
 
 using namespace std;
-
-// g++ -std=gnu++17 -DLAMB_NO_ARDUINO test-fix-math.cpp && .\a.exe
-
 using namespace lamb;
-
 
 ////////////////////////////////////////////////////////////////////////////////
 
