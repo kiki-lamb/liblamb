@@ -20,18 +20,9 @@ void pprint_bits_32(uint32_t t0) {
 
 int main() {
  {
-
-  int64_t big = -133441;
-  printf("big: %ld \n", big);
-  
-  int32_t small = (int32_t)big;
-  printf("small: %d \n", small);
-
-
   chamberlin    cf;
   fx_chamberlin fx_cf;
-  
-  uint16_t acc(0);
+  uint16_t      acc(0);
 
   cf.F = 5000;
   cf.set_frequency();
@@ -44,58 +35,7 @@ int main() {
   fx_cf.Q = fx_chamberlin::qtype(fx_chamberlin::qtype::ONE >> 1);
   fx_cf.set_q();
 
-  sat_q15n16 l(sat_q15n16::from_float(1.212));
-  sat_q15n16 r(sat_q15n16::from_float(-1.680));
-
-  printf(
-   "MULF: %5.5lf * %5.5lf \n",
-   l.to_float(),
-   r.to_float()
-  );
-
-  printf(
-   "MUL: %ld * %ld \n",
-   l,
-   r
-  );
-
-  sat_q15n16 x(l);
-  
-  printf(
-   "DHERE: %lld \n",
-   x.val
-  );
-
-  x *= r;
-
-  pprint_bits_32(x.val); printf("\n");
-  
-  printf(
-   "DHERE2: %lld \n",
-   (int64_t)x.val
-  );
-  
-  printf(
-   "FHERE: %5.5lf \n",
-   x.to_float()
-  );
-
-//  return 0;
-  
-  printf(
-   "F1 = % 05.5lf, Q1 = % 05.5lf \n",
-   cf.F1,
-   cf.Q1
-  );
-  
-  printf(
-   "F1 = % 05.5lf, Q1 = % 05.5lf \n",
-   fx_cf.F1.to_float(),
-   fx_cf.Q1.to_float()
-  );
-  
-//  printf("A, AF, F1, I, L, H, B, N, D1, D2 \n");
-  printf("Af,        I,      F1,     Q1,     L,      H,      B,      N,      D1,     D2,        I,    F1,     Q1,        L,              H,         B,         N,         D1,        D2 \n");
+  printf("Af,        I,    F1,     Q1,        L,              H,         B,         N,         D1,        D2 \n");
 
 //  for (double qix = 1.0; qix < 30.0; qix += 1.0) {
   for (double qix = 1.0; qix < 4.0; qix += 1.0) {
@@ -125,8 +65,7 @@ int main() {
       
       printf("%lf, ", acc / 65536.0);
 
-      auto x = cf.process(sat_q0n15(acc >= 32768 ? q0n15::MIN : q0n15::MAX));
-      auto y = fx_cf.process(sat_q0n15(acc >= 32768 ? q0n15::MIN : q0n15::MAX));
+        auto y = fx_cf.process(sat_q0n15(acc >= 32768 ? q0n15::MIN : q0n15::MAX));
       
       printf("\n");
      }
