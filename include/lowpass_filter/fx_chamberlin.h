@@ -66,7 +66,6 @@ namespace lamb {
     H  = I - L - (Q1*D1)                 ;
     printf("% 5.5lf, ", H.to_float())    ;
 
-
     printf(
      "[ (%5.5lf * %5.5lf) + %5.5lf ]",
      F1.to_float(),

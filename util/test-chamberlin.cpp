@@ -23,6 +23,8 @@ int main() {
   fx_cf.Q = fx_chamberlin::qtype(fx_chamberlin::qtype::ONE >> 1);
   fx_cf.set_q();
 
+  printf("HERE: %5.5lf \n", sat_q15n16::from_float(1.21175) * sat_q15n16::from_float(0.99997));
+  
   printf(
    "F1 = % 05.5lf, Q1 = % 05.5lf \n",
    cf.F1,
