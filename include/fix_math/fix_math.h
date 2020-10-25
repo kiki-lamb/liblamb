@@ -39,7 +39,7 @@ namespace lamb {
 #ifndef LAMB_FP_NO_OVERFLOW_CHECKING
 #define CHECK_OVERFLOW                            \
  template <typename delta_t, typename new_t>      \
- static void check_overflow(                      \
+ static bool check_overflow(                      \
   char    const & symbol,                         \
   type    const & old_val,                        \
   delta_t const & delta,                          \
@@ -70,17 +70,19 @@ namespace lamb {
     cout << delta << " = " << new_val << "\n";    \
    }                                              \
   }                                               \
+                                                  \
+  return (over || under);                         \
  }                                                
 #else
 #define CHECK_OVERFLOW                            \
- template <typename delta_t, typename new_t>     \
- static void check_overflow(                      \
+ template <typename delta_t, typename new_t>      \
+ static bool check_overflow(                      \
   char    const & symbol,                         \
   type    const & old_val,                        \
   delta_t const & delta,                          \
   new_t   const & new_val,                        \
   type          & set                             \
- ) {}                                                    
+ ) { return false; }                                                    
 #endif
 
 // Advance declaration:

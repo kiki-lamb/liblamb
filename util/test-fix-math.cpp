@@ -1,3 +1,5 @@
+#define LAMB_TEST_FIX_MATH
+
 #include "../include/lamb.h"
 #include <cstring>
 #include <cmath>
