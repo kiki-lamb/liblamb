@@ -313,6 +313,34 @@ namespace lamb {
 
 
 ///////////////////////////////////////////////////////////////////////////////
+    
+  template <bool saturate__> 
+  derived_type
+  operator + (
+   derived_template<CHARACTERISTIC,MANTISSA,saturate__> const & other
+  ) const {
+   type          old    = val;
+   big_type      new_   = old + other.val;
+   derived_type ret    = derived_type(new_);
+
+   if (check_overflow('+', old, other.val, ret.val)) {
+    overflow = true;
+   }
+
+   return ret;
+  }    
+
+  template <bool saturate__>
+  derived_type &
+  operator += (
+   derived_template<CHARACTERISTIC,MANTISSA,saturate__> const & other
+  ) {
+   val = ((*this) + other).val;
+
+   return *this;
+  }
+
+///////////////////////////////////////////////////////////////////////////////
 
  }; // template frac_base
  
@@ -333,39 +361,6 @@ namespace lamb {
   typedef typename base::type                                    type;
   typedef typename base::big_type                                big_type;
   
-///////////////////////////////////////////////////////////////////////////////
-
- // public:
- //  template <bool saturate__>
- //  operator
- //  unsigned_frac<(base::CHARACTERISTIC << 1), (base::MANTISSA << 1), saturate__> () const {
- //   unsigned_frac<(base::CHARACTERISTIC << 1), (base::MANTISSA << 1), saturate__> tmp(
- //    base::val << 1
- //   );
-
- //   return tmp;
- //  }
-
- //  template <bool saturate__>
- //  operator
- //  unsigned_frac<(base::CHARACTERISTIC >> 1), (base::MANTISSA >> 1), saturate__> () const {
- //   unsigned_frac<(base::CHARACTERISTIC >> 1), (base::MANTISSA >> 1), saturate__> tmp(
- //    base::val >> 1
- //   );
-
- //   return tmp;
- //  }
-
- //  template <bool saturate__>
- //  operator
- //  signed_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> () const {
- //   unsigned_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> tmp(
- //    base::val >> 1
- //   );
-   
- //   return tmp;
- //  }
-
 ////////////////////////////////////////////////////////////////////////////////
   
   explicit constexpr unsigned_frac(type const & tmp_ = 0) :
@@ -377,44 +372,6 @@ namespace lamb {
    type const & mantissa__
   ) : base((characteristic__ * base::ONE) + mantissa__)
    {}
-
-//////////////////////////////////////////////////////////////////////////////
-    
-  // template <bool saturate__> 
-  // bool
-  // operator == (
-  //  unsigned_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> const & other
-  // ) const {
-  //  return base::val == other.val;
-  // }    
-
-///////////////////////////////////////////////////////////////////////////////
-    
-  template <bool saturate__> 
-  unsigned_frac
-  operator + (
-   unsigned_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> const & other
-  ) const {
-   type          old    = base::val;
-   big_type      new_   = old + other.val;
-   unsigned_frac ret    = unsigned_frac(new_);
-
-   if (base::check_overflow('+', old, other.val, ret.val)) {
-    base::overflow = true;
-   }
-
-   return ret;
-  }    
-
-  template <bool saturate__>
-  unsigned_frac &
-  operator += (
-   unsigned_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> const & other
-  ) {
-   base::val = ((*this) + other).val;
-
-   return *this;
-  }
 
 ///////////////////////////////////////////////////////////////////////////////
     
@@ -639,31 +596,31 @@ namespace lamb {
   
 ///////////////////////////////////////////////////////////////////////////////
     
-    template <bool saturate__>
-    signed_frac
-    operator + (
-     signed_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> const & other
-    ) const {
-     type        old  = base::val;
-     big_type    new_ = base::val + other.val;
-     signed_frac ret  = signed_frac(new_);
+    // template <bool saturate__>
+    // signed_frac
+    // operator + (
+    //  signed_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> const & other
+    // ) const {
+    //  type        old  = base::val;
+    //  big_type    new_ = base::val + other.val;
+    //  signed_frac ret  = signed_frac(new_);
 
-     if (base::check_overflow('+', old, other.val, ret.val)) {
-      base::overflow = true;
-     }
+    //  if (base::check_overflow('+', old, other.val, ret.val)) {
+    //   base::overflow = true;
+    //  }
 
-     return ret;
-    }
+    //  return ret;
+    // }
 
-    template <bool saturate__>
-    signed_frac const &
-    operator += (
-     signed_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> const & other
-    ) {
-     base::val = ((*this) + other).val;
+    // template <bool saturate__>
+    // signed_frac const &
+    // operator += (
+    //  signed_frac<base::CHARACTERISTIC,base::MANTISSA,saturate__> const & other
+    // ) {
+    //  base::val = ((*this) + other).val;
 
-     return *this;
-    }
+    //  return *this;
+    // }
 
     template <bool saturate__>
     signed_frac
