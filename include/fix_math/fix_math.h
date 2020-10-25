@@ -541,8 +541,8 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
   
-  unsigned_frac<CHARACTERISTIC, MANTISSA, ( ! SATURATE )> sat_cast () const {
-   return unsigned_frac<CHARACTERISTIC, MANTISSA, ( ! SATURATE)>(val);
+  signed_frac<CHARACTERISTIC, MANTISSA, ( ! SATURATE )> sat_cast () const {
+   return signed_frac<CHARACTERISTIC, MANTISSA, ( ! SATURATE)>(val);
   }
   
 ///////////////////////////////////////////////////////////////////////////////
@@ -583,6 +583,7 @@ namespace lamb {
   //   Not yet well tested.
   
   static constexpr signed_frac from_float(float val_) {
+   bool          neg     = val_ < 0;
    int           divisor = int(val_);
    float         modulus = val_ - divisor;
    type          ipart   = ONE * divisor + int(ONE * modulus);
@@ -591,6 +592,7 @@ namespace lamb {
   }
 
   float to_float() const {
+//   printf("%lld ", val);
    return val / (ONE * 1.0);
   }
 

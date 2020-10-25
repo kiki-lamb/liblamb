@@ -27,15 +27,7 @@ namespace lamb {
     Q1 = 1 / Q;
     // printf("Q1: % 05.5lf \n", Q1);
    }
-   
-   sat_q0n15 process(sat_q0n15 input) {
-//    printf("% 5.5lf, ", Q1)    ;
 
-    printf("% 5.5lf, ", F1)    ;
-    
-    double I = input.to_float();
-    printf("% 5.5lf, ", I)    ;
-    
 //    L = D2 + F1 * D1
 //    H = I - L - Q1*D1
 //    B = F1 * H + D1
@@ -43,6 +35,12 @@ namespace lamb {
 //    D1 = B
 //    D2 = L
 
+   sat_q0n15 process(sat_q0n15 input) {
+    double I = input.to_float();
+    printf("% 5.5lf, ", I)    ;
+
+    printf("% 5.5lf, ", F1)    ;
+        
     L  = D2 + F1 * D1         ;
     printf("% 5.5lf, ", L)    ;
 
