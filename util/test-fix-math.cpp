@@ -41,35 +41,35 @@ bool compare_floats(float x, float y, uint8_t precis) {
   printf(buff, x.to_float(), x.top(), x.bottom());                      \
  }                                               
 
-#define TEST_EQ(fmt,x, y)                                 \
- if (x == y) {                                            \
-  successes ++;                                           \
- }                                                        \
- else {                                                   \
-  char buff[32];                                          \
-  snprintf(buff, 32, "FAILED EQ %%%s == %%%s.\n", fmt, fmt); \
-  printf(buff, x, y);                                     \
-  errors ++;                                              \
+#define TEST_EQ(fmt,x, y)                                               \
+ if (x == y) {                                                          \
+  successes ++;                                                         \
+ }                                                                      \
+ else {                                                                 \
+  char buff[32];                                                        \
+  snprintf(buff, 32, "FAILED EQ %%%s == %%%s.\n", fmt, fmt);            \
+  printf(buff, x, y);                                                   \
+  errors ++;                                                            \
  }
 
 
-#define TEST_FLEQ(fmt, x, y, precis)                      \
- if (compare_floats(x, y, precis)) {                      \
-  successes ++;                                           \
- }                                                        \
- else {                                                   \
-  char buff[32];                                          \
-  snprintf(buff, 32, "FAILED FLEQ %%%s == %%%s.\n", fmt, fmt); \
-  printf(buff, x, y);                                     \
-  errors ++;                                              \
+#define TEST_FLEQ(fmt, x, y, precis)                                    \
+ if (compare_floats(x, y, precis)) {                                    \
+  successes ++;                                                         \
+ }                                                                      \
+ else {                                                                 \
+  char buff[32];                                                        \
+  snprintf(buff, 32, "FAILED FLEQ %%%s == %%%s.\n", fmt, fmt);          \
+  printf(buff, x, y);                                                   \
+  errors ++;                                                            \
  }                     
 
-#define TEST_STREQ(x, y)                          \
- if (strcmp(x, y) == 0) {                         \
-  successes ++;                                   \
- } else {                                         \
-  printf("FAILED STREQ %s == %s.\n", x, y);       \
-  errors ++;                                      \
+#define TEST_STREQ(x, y)                                                \
+ if (strcmp(x, y) == 0) {                                               \
+  successes ++;                                                         \
+ } else {                                                               \
+  printf("FAILED STREQ %s == %s.\n", x, y);                             \
+  errors ++;                                                            \
  }                     
 
 #define NL \
@@ -82,16 +82,16 @@ bool compare_floats(float x, float y, uint8_t precis) {
 // PRINT("u", "b", b);
 // PRINT("u", "c", c);
 
-#define CONVERSIONS(x, y, z0, z1, fprecis)      \
-{                                               \
- fix_t a(fix_t::from_float(x));                 \
- fix_t b(y);                                    \
- fix_t c(z0, z1);                               \
-                                                \
- TEST_FLEQ("lf", x, a.to_float(), fprecis);                \
- TEST_FLEQ("lf", x, b.to_float(), fprecis);                \
- TEST_FLEQ("lf", x, c.to_float(), fprecis);                \
-}
+#define CONVERSIONS(x, y, z0, z1, fprecis)                              \
+ {                                                                      \
+  fix_t a(fix_t::from_float(x));                                        \
+  fix_t b(y);                                                           \
+  fix_t c(z0, z1);                                                      \
+                                                                        \
+  TEST_FLEQ("lf", x, a.to_float(), fprecis);                            \
+  TEST_FLEQ("lf", x, b.to_float(), fprecis);                            \
+  TEST_FLEQ("lf", x, c.to_float(), fprecis);                            \
+ }
 
 #define TEST_PI(fmt, pi_precis)                                         \
  {                                                                      \
