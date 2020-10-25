@@ -54,28 +54,36 @@ namespace lamb {
 //    D2 = L
 
    sat_q0n15 process(sat_q0n15 I_) {
-    sat_q15n16 I(I_. val << 1);
+    sat_q15n16 I(I_.val << 1);
     
     printf("% 5.5lf, ", I.to_float())    ;
     printf("% 5.5lf, ", F1.to_float())   ;        
     printf("% 5.5lf, ", Q1.to_float())   ;
         
-    L  = D2 + F1 * D1         ;
+    L  = D2 + F1 * D1                    ;
     printf("% 5.5lf, ", L.to_float())    ;
 
-    H  = qtype(I)  - L  - Q1*D1      ;
+    H  = I - L - (Q1*D1)                 ;
     printf("% 5.5lf, ", H.to_float())    ;
 
-    B  = F1 * H  + D1         ;
+
+    printf(
+     "[ (%5.5lf * %5.5lf) + %5.5lf ]",
+     F1.to_float(),
+     H.to_float(),
+     D1.to_float()
+    );
+    
+    B  = (F1 * H)  + D1                  ;
     printf("% 5.5lf, ", B.to_float())    ;
     
-    N  = H  + L               ;
+    N  = H  + L                          ;
     printf("% 5.5lf, ", N.to_float())    ;
 
-    D1 = B                    ;
+    D1 = B                               ;
     printf("% 5.5lf, ", D1.to_float())   ;
-    
-    D2 = L                    ;
+      
+    D2 = L                               ;
     printf("% 5.5lf  ", D2.to_float())   ;
         
     return sat_q0n15::from_float(0.0);
