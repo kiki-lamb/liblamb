@@ -51,7 +51,7 @@ bool compare_floats(float x, float y, uint8_t precis) {
  }
 
 
-#define TEST_FLEQ(fmt,x, y, precis)                       \
+#define TEST_FLEQ(fmt, x, y, precis)                      \
  if (compare_floats(x, y, precis)) {                      \
   successes ++;                                           \
  }                                                        \
@@ -66,7 +66,7 @@ bool compare_floats(float x, float y, uint8_t precis) {
  if (strcmp(x, y) == 0) {                         \
   successes ++;                                   \
  } else {                                         \
-  printf("FAILED STREQ %s == %s.\n", x, y);          \
+  printf("FAILED STREQ %s == %s.\n", x, y);       \
   errors ++;                                      \
  }                     
 
@@ -92,21 +92,22 @@ bool compare_floats(float x, float y, uint8_t precis) {
  TEST_FLEQ("lf", x, c.to_float(), fprecis);                \
 }
 
-#define TEST_PI(pi_precis)                      \
+#define TEST_PI(fmt, pi_precis)                  \
  {                                              \
+  fix_t fix_pi = fix_t::from_float(M_PI);       \
+  float unfix_pi = fix_pi.to_float();           \
+                                                \
   char buff0[32];                               \
   snprintf(buff0, 32, "% 05.10lf", M_PI);       \
   buff0[pi_precis+3] = 0;                       \
   printf("M_PI    : %s\n", buff0);              \
                                                 \
-  fix_t fix_pi = fix_t::from_float(M_PI);       \
-  float unfix_pi = fix_pi.to_float();           \
   char buff1[32];                               \
   snprintf(buff1, 32, "% 05.10lf", unfix_pi);   \
   buff1[pi_precis+3] = 0;                       \
   printf("FIX_PI  : %s\n", buff1);              \
                                                 \
-  TEST_STREQ(buff0, buff1);                     \
+  TEST_FLEQ(fmt, M_PI, unfix_pi, pi_precis)     \
 }                                               
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -168,11 +169,11 @@ void test_fix_math_type(size_t & out_successes, size_t & out_errors) {
  if (fix_t::CHARACTERISTIC > 0) {
   printf("Test pi:\n");
 
-  TEST_PI(pi_precis);
+  TEST_PI("lf", pi_precis);
  }
 
  
- printf("\nPassed: %u / %u", successes, successes + errors);
+ printf("\nPASSED: %u / %u", successes, successes + errors);
 
  if (errors > 0) {
   printf(" [ERRORS]");
