@@ -65,16 +65,6 @@ namespace lamb {
   if (over || under) {                                                  \
    if (SATURATE) {                                                      \
     set = MAX;                                                          \
-                                                                        \
-    printf("SAT %s:  ", over ? "HI" : "LO");                            \
-    cout << old_val;                                                    \
-    printf(" %c ", symbol);                                             \
-    cout << delta;                                                      \
-    printf(" = ");                                                      \
-    cout << new_val;                                                    \
-    cout << " over ";                                                   \
-    cout << MAX;                                                        \
-    cout<< "\n";                                                        \
    }                                                                    \
    else {                                                               \
    }                                                                    \
@@ -94,6 +84,16 @@ namespace lamb {
  ) { return false; }                                                    
 #endif
 
+//    printf("SAT %s:  ", over ? "HI" : "LO");                          
+//    cout << old_val;                                                  
+//    printf(" %c ", symbol);                                           
+//    cout << delta;                                                    
+//    printf(" = ");                                                    
+//    cout << new_val;                                                  
+//    cout << " over ";                                                 
+//    cout << MAX;                                                      
+//    cout<< "\n";                              
+ 
 //    printf("%sFLOW: ", over ? "OVER" : "UNDER");                      
 //    printf("%d %c %d = %d\n", old_val, symbol, delta, new_val);         
 

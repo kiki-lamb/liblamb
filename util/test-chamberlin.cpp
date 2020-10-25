@@ -24,9 +24,7 @@ int main() {
     cf.set_frequency();
    
     for(size_t ix = 0; ix < 64; ix ++) {
-     acc += 65536L / 64;
-     
-     // q0n15_value_type y = (acc.val > 32768u ) ? sat_q0n15::MAX : 0;
+     acc += q0n15(65536L / 64);     
      
      auto x = cf.process(sat_q0n15(acc));
      
