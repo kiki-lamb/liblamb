@@ -125,6 +125,8 @@ namespace lamb {
  public:
   typedef derived_ derived;
   
+////////////////////////////////////////////////////////////////////////////////
+
   static const bool    SATURATE       = saturate_;
   static const uint8_t CHARACTERISTIC = characteristic_;
   static const uint8_t MANTISSA       = mantissa_;
@@ -135,6 +137,8 @@ namespace lamb {
    MANTISSA +
    (SIGNED ? 1 : 0)
   ) / 8;
+
+////////////////////////////////////////////////////////////////////////////////
 
   typedef
   typename typedef_if<
@@ -149,6 +153,8 @@ namespace lamb {
    typename signed_int<(SIZE << 1)>::type,
    typename unsigned_int<(SIZE << 1)>::type
    >::type big_type;
+
+////////////////////////////////////////////////////////////////////////////////
 
   static constexpr
   type    ONE = (
@@ -170,6 +176,16 @@ namespace lamb {
    signed_int<SIZE>::MIN :
    unsigned_int<SIZE>::MIN
   );
+
+////////////////////////////////////////////////////////////////////////////////
+
+  type val;
+  
+  mutable
+
+  bool overflow;  
+
+////////////////////////////////////////////////////////////////////////////////
   
   static constexpr
   type mask() {
@@ -182,10 +198,14 @@ namespace lamb {
    return m;
   }
 
+////////////////////////////////////////////////////////////////////////////////
+
   type bottom() const { // return smaller type?
    return val & mask();
   }
   
+////////////////////////////////////////////////////////////////////////////////
+
   type top() const {    // return smaller type?
    if (CHARACTERISTIC == 0) {
     return 0;
@@ -195,19 +215,27 @@ namespace lamb {
    }
   }     
   
+////////////////////////////////////////////////////////////////////////////////
+
   explicit constexpr
   frac_base(type const & tmp_) : val(tmp_), overflow(false) {}
 
-  type val;
-  
-  mutable
-  bool overflow;  
+////////////////////////////////////////////////////////////////////////////////
 
   CHECK_OVERFLOW;
 
+////////////////////////////////////////////////////////////////////////////////
+  
   float to_float() const {
    return val / (ONE * 1.0);
   }
+
+////////////////////////////////////////////////////////////////////////////////
+
+  signed_frac<base::CHARACTERISTIC, base::MANTISSA, ( ! base::SATURATE )> sat_cast () const {
+   return signed_frac<base::CHARACTERISTIC, base::MANTISSA, ( ! base::SATURATE)>(base::val);
+  }
+
  };
  
 //////////////////////////////////////////////////////////////////////////////// 
@@ -237,9 +265,9 @@ namespace lamb {
   
 ///////////////////////////////////////////////////////////////////////////////
   
-  unsigned_frac<base::CHARACTERISTIC, base::MANTISSA, ( ! base::SATURATE )> sat_cast () const {
-   return unsigned_frac<base::CHARACTERISTIC, base::MANTISSA, ( ! base::SATURATE)>(base::val);
-  }
+  // unsigned_frac<base::CHARACTERISTIC, base::MANTISSA, ( ! base::SATURATE )> sat_cast () const {
+  //  return unsigned_frac<base::CHARACTERISTIC, base::MANTISSA, ( ! base::SATURATE)>(base::val);
+  // }
   
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -499,9 +527,9 @@ namespace lamb {
   
 ////////////////////////////////////////////////////////////////////////////////
   
-    signed_frac<base::CHARACTERISTIC, base::MANTISSA, ( ! base::SATURATE )> sat_cast () const {
-     return signed_frac<base::CHARACTERISTIC, base::MANTISSA, ( ! base::SATURATE)>(base::val);
-    }
+    // signed_frac<base::CHARACTERISTIC, base::MANTISSA, ( ! base::SATURATE )> sat_cast () const {
+    //  return signed_frac<base::CHARACTERISTIC, base::MANTISSA, ( ! base::SATURATE)>(base::val);
+    // }
   
 ///////////////////////////////////////////////////////////////////////////////
 
