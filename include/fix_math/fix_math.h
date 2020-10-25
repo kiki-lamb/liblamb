@@ -49,13 +49,7 @@ namespace lamb {
   int64_t tmp = old_val;                                                \
   int64_t tmp_delta = delta;                                            \
                                                                         \
-  if (symbol == '-') {                                                  \
-   tmp_delta *= -1;                                                     \
-  }                                                                     \
-                                                                        \
   tmp += tmp_delta;                                                     \
-                                                                        \
-  printf("old: %lld delta: %lld TMP: %lld \n", old_val, tmp_delta, tmp);\
                                                                         \
   bool over  = tmp > MAX;                                               \
   bool under = tmp < MIN;                                               \
@@ -336,8 +330,6 @@ namespace lamb {
    big_type      new_   = old - other.val;
    unsigned_frac ret    = unsigned_frac(new_);
 
-   printf("HERE.\n");
-   
 #ifndef LAMB_TEST_FIX_MATH
    check_overflow<big_type>('-', old, other.val, ret.val, ret.val);
 #else
