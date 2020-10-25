@@ -201,6 +201,10 @@ namespace lamb {
   bool overflow;  
 
   CHECK_OVERFLOW;
+
+  float to_float() const {
+   return val / (ONE * 1.0);
+  }
  };
  
 //////////////////////////////////////////////////////////////////////////////// 
@@ -271,10 +275,6 @@ namespace lamb {
    type          ipart   = base::ONE * divisor + int(base::ONE * modulus);
    
    return unsigned_frac(ipart);
-  }
-
-  float to_float() const {
-   return base::val / (base::ONE * 1.0);
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -529,11 +529,6 @@ namespace lamb {
      type          ipart   = base::ONE * divisor + int(base::ONE * modulus);
    
      return signed_frac(ipart);
-    }
-
-    float to_float() const {
-//   printf("%lld ", val);
-     return base::val / (base::ONE * 1.0);
     }
 
     explicit constexpr
