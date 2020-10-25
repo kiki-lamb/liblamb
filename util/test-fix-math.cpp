@@ -84,6 +84,8 @@ bool compare_floats(float x, float y, uint8_t precis) {
 
 #define TEST_OVERFLOW                                                   \
  {                                                                      \
+  printf("Test for overflow:\n");                                       \
+                                                                        \
   fix_t a(fix_t::MAX);                                                  \
                                                                         \
   a += a;                                                               \
@@ -106,10 +108,12 @@ bool compare_floats(float x, float y, uint8_t precis) {
 
 #define TEST_UNDERFLOW                                                  \
  {                                                                      \
+  printf("Test for underflow:\n");                                      \
+                                                                        \
   fix_t a(fix_t::MAX);                                                  \
                                                                         \
-  a -= a;                                                               \
-  a -= a;                                                               \
+  a -= fix_t(fix_t::MAX);                                               \
+  a -= fix_t(fix_t::MAX);                                               \
                                                                         \
   if (a.overflow) {                                                     \
    successes ++;                                                        \
@@ -283,10 +287,10 @@ int main() {
  
  test_fix_math_type<q0n8,   2, 0>(successes, errors);
 
-// return 0;
+ return 0;
  
  test_fix_math_type<q0n7,   2, 0>(successes, errors);
-
+ 
  test_fix_math_type<q0n16,  3, 0>(successes, errors);
  test_fix_math_type<q0n15,  3, 0>(successes, errors);
  

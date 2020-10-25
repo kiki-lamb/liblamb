@@ -47,9 +47,15 @@ namespace lamb {
   type          & set                                                   \
  ) {                                                                    \
   int64_t tmp = old_val;                                                \
-  tmp += delta;                                                         \
+  int64_t tmp_delta = delta;                                            \
                                                                         \
-  printf("TMP: %lld \n", tmp);                                          \
+  if (symbol == '-') {                                                  \
+   tmp_delta *= -1;                                                     \
+  }                                                                     \
+                                                                        \
+  tmp += tmp_delta;                                                     \
+                                                                        \
+  printf("old: %lld delta: %lld TMP: %lld \n", old_val, tmp_delta, tmp);\
                                                                         \
   bool over  = tmp > MAX;                                               \
   bool under = tmp < MIN;                                               \
@@ -330,10 +336,12 @@ namespace lamb {
    big_type      new_   = old - other.val;
    unsigned_frac ret    = unsigned_frac(new_);
 
+   printf("HERE.\n");
+   
 #ifndef LAMB_TEST_FIX_MATH
-   check_overflow<big_type>('-', old, -other.val, ret.val, ret.val);
+   check_overflow<big_type>('-', old, other.val, ret.val, ret.val);
 #else
-   if (check_overflow<big_type>('-', old, -other.val, ret.val, ret.val)) {
+   if (check_overflow<big_type>('-', old, other.val, ret.val, ret.val)) {
     overflow = true;
    }
 #endif
@@ -346,41 +354,43 @@ namespace lamb {
   operator -= (
    unsigned_frac<c,m,s> const & other
   ) {
-   val -= other.val;
+   unsigned_frac tmp = (*this) - other;
+  
+   val = tmp.val;
 
    return *this;
   }
 
 ///////////////////////////////////////////////////////////////////////////////
-    
-  unsigned_frac
-  operator - (
-   type const & val_
-  ) const {
-   type          old    = val;
-   big_type      new_   = old - val_;
-   unsigned_frac ret    = unsigned_frac(new_);
-
-#ifndef LAMB_TEST_FIX_MATH
-   check_overflow<big_type>('-', old, -val_, ret.val, ret.val);
-#else
-   if (check_overflow<big_type>('-', old, -val_, ret.val, ret.val)) {
-    overflow = true;
-   }
-#endif
-
-   return ret;
-  }    
-
-  unsigned_frac &
-  operator -= (
-   type const & val_
-  ) {
-   val -= val_;
-
-   return *this;
-  }
-
+//    
+//  unsigned_frac
+//  operator - (
+//   type const & val_
+//  ) const {
+//   type          old    = val;
+//   big_type      new_   = old - val_;
+//   unsigned_frac ret    = unsigned_frac(new_);
+//
+//#ifndef LAMB_TEST_FIX_MATH
+//   check_overflow<big_type>('-', old, -val_, ret.val, ret.val);
+//#else
+//   if (check_overflow<big_type>('-', old, -val_, ret.val, ret.val)) {
+//    overflow = true;
+//   }
+//#endif
+//
+//   return ret;
+//  }    
+//
+//  unsigned_frac &
+//  operator -= (
+//   type const & val_
+//  ) {
+//   val -= val_;
+//
+//   return *this;
+//  }
+//
 ///////////////////////////////////////////////////////////////////////////////
 
   template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
@@ -692,9 +702,9 @@ namespace lamb {
    signed_frac ret   = signed_frac(new_);
 
 #ifndef LAMB_TEST_FIX_MATH
-   check_overflow<big_type>('-', old, -other.val, ret.val, ret.val);
+   check_overflow<big_type>('-', old, other.val, ret.val, ret.val);
 #else
-   if (check_overflow<big_type>('-', old, -other.val, ret.val, ret.val)) {
+   if (check_overflow<big_type>('-', old, other.val, ret.val, ret.val)) {
     overflow = true;
    }
 #endif
@@ -713,35 +723,35 @@ namespace lamb {
   }
 
 ///////////////////////////////////////////////////////////////////////////////
-    
-  signed_frac
-  operator - (
-   type const & val_
-  ) const {
-   type          old    = val;
-   big_type      new_   = old - val_;
-   signed_frac   ret    = signed_frac(new_);
-
-#ifndef LAMB_TEST_FIX_MATH
-   check_overflow<big_type>('-', old, -val_, ret.val, ret.val);
-#else
-   if (check_overflow<big_type>('-', old, -val_, ret.val, ret.val)) {
-    overflow = true;
-   }
-#endif
-
-   return ret;
-  }    
-
-  signed_frac &
-  operator -= (
-   type const & val_
-  ) {
-   val -= val_;
-
-   return *this;
-  }
-
+//    
+//  signed_frac
+//  operator - (
+//   type const & val_
+//  ) const {
+//   type          old    = val;
+//   big_type      new_   = old - val_;
+//   signed_frac   ret    = signed_frac(new_);
+//
+//#ifndef LAMB_TEST_FIX_MATH
+//   check_overflow<big_type>('-', old, -val_, ret.val, ret.val);
+//#else
+//   if (check_overflow<big_type>('-', old, -val_, ret.val, ret.val)) {
+//    overflow = true;
+//   }
+//#endif
+//
+//   return ret;
+//  }    
+//
+//  signed_frac &
+//  operator -= (
+//   type const & val_
+//  ) {
+//   val -= val_;
+//
+//   return *this;
+//  }
+//
 ///////////////////////////////////////////////////////////////////////////////
 
  public:      
