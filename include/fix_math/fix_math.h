@@ -163,7 +163,15 @@ namespace lamb {
    unsigned_int<SIZE>::MIN
   );
   
-
+  static constexpr type mask() {
+   type m = 0;
+   
+   for (uint8_t ix = 0; ix < MANTISSA; ix++) {
+    m |= 1 << ix;
+   }
+   
+   return m;
+  }
  };
  
 //////////////////////////////////////////////////////////////////////////////// 
@@ -185,18 +193,8 @@ namespace lamb {
   typedef typename base::type                              type;
   typedef typename base::big_type                          big_type;
   
-  static constexpr type mask() {
-   type m = 0;
-   
-   for (uint8_t ix = 0; ix < base::MANTISSA; ix++) {
-    m |= 1 << ix;
-   }
-   
-   return m;
-  }
-  
   type bottom() const { // return smaller type?
-   return val & mask();
+   return val & base::mask();
   }
   
   type top() const {    // return smaller type?
@@ -204,7 +202,7 @@ namespace lamb {
     return 0;
    }
    else {
-    return (val & (~mask())) >> base::MANTISSA;
+    return (val & (~base::mask())) >> base::MANTISSA;
    }
   }     
   
@@ -470,22 +468,12 @@ namespace lamb {
     typedef typename base::type                              type;
     typedef typename base::big_type                          big_type;  
     
-    static constexpr type mask() {
-     type m = 0;
-
-     for (uint8_t ix = 0; ix < base::MANTISSA; ix++) {
-      m |= 1 << ix;
-     }
-
-     return m;
-    }
-  
     type bottom() const { // return smaller type?
-     return val & mask();
+     return val & base::mask();
     }
 
     type top() const {    // return smaller type?
-     return (val & (~mask())) >> base::MANTISSA;
+     return (val & (~base::mask())) >> base::MANTISSA;
     }     
   
     type val;
