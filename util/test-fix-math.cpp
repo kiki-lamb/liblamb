@@ -93,66 +93,66 @@ bool compare_floats(float x, float y, uint8_t precis) {
  TEST_FLEQ("lf", x, c.to_float(), fprecis);                \
 }
 
-#define TEST_PI(fmt, pi_precis)                  \
- {                                              \
-  fix_t fix_pi = fix_t::from_float(M_PI);       \
-  float unfix_pi = fix_pi.to_float();           \
-                                                \
-  char buff0[32];                               \
-  char buff1[32];                               \
-                                                \
-  snprintf(buff0, 32, "% 05.10lf", M_PI);       \
-  buff0[pi_precis+3] = 0;                       \
-  printf("M_PI       : %s\n", buff0);           \
-                                                \
-  snprintf(buff1, 32, "% 05.10lf", unfix_pi);   \
-  buff1[pi_precis+3] = 0;                          \
-  printf("FIX_PI     : %s\n", buff1);              \
-                                                \
-  TEST_FLEQ(fmt, M_PI, unfix_pi, pi_precis)     \
-                                                \
-   if (fix_t::CHARACTERISTIC > 0) {             \
-    snprintf(buff0, 32, "% 05.10lf", 1.5*M_PI); \
-    buff0[pi_precis+3] = 0;                     \
-    printf("1.5M_PI    : %s\n", buff0);         \
-                                                \
-    fix_pi = fix_t::from_float(1.5*M_PI);       \
-    unfix_pi = fix_pi.to_float();               \
-                                                \
-    snprintf(buff1, 32, "% 05.10lf", unfix_pi); \
-    buff1[pi_precis+3] = 0;                       \
-    printf("1.5FIX_PI  : %s\n", buff1);                 \
-                                                        \
-    TEST_FLEQ(fmt, 1.5*M_PI, unfix_pi, pi_precis);      \
-                                                        \
-    snprintf(buff0, 32, "% 05.10lf", 2*M_PI);           \
-    buff0[pi_precis+3] = 0;                             \
-    printf("2M_PI      : %s\n", buff0);                   \
-                                                        \
-    fix_pi = fix_t::from_float(2*M_PI);                 \
-    unfix_pi = fix_pi.to_float();                       \
-                                                        \
-    snprintf(buff1, 32, "% 05.10lf", unfix_pi);         \
-    buff1[pi_precis+3] = 0;                             \
-    printf("2FIX_PI    : %s\n", buff1);                   \
-                                                        \
-    TEST_FLEQ(fmt, 2*M_PI, unfix_pi, pi_precis);        \
-   }                                                    \
-                                                        \
-  if (((fix_t::CHARACTERISTIC+fix_t::MANTISSA) % 2) == 1) {     \
-   snprintf(buff0, 32, "% 05.10lf", -M_PI);                     \
-   buff0[pi_precis+3] = 0;                                      \
-   printf("-M_PI      : %s\n", buff0);                            \
-                                                                \
-   fix_pi = fix_t::from_float(-M_PI);                           \
-   unfix_pi = fix_pi.to_float();                                \
-                                                                \
-   snprintf(buff1, 32, "% 05.10lf", unfix_pi);                  \
-   buff1[pi_precis+3] = 0;                                      \
-   printf("-FIX_PI    : %s\n", buff1);                            \
-                                                                \
-   TEST_FLEQ(fmt, -M_PI, unfix_pi, pi_precis);                  \
-  }                                                             \
+#define TEST_PI(fmt, pi_precis)                                         \
+ {                                                                      \
+  fix_t fix_pi = fix_t::from_float(M_PI);                               \
+  float unfix_pi = fix_pi.to_float();                                   \
+                                                                        \
+  char buff0[32];                                                       \
+  char buff1[32];                                                       \
+                                                                        \
+  snprintf(buff0, 32, "% 05.10lf", M_PI);                               \
+  buff0[pi_precis+3] = 0;                                               \
+  printf("M_PI       : %s\n", buff0);                                   \
+                                                                        \
+  snprintf(buff1, 32, "% 05.10lf", unfix_pi);                           \
+  buff1[pi_precis+3] = 0;                                               \
+  printf("FIX_PI     : %s\n", buff1);                                   \
+                                                                        \
+  TEST_FLEQ(fmt, M_PI, unfix_pi, pi_precis)                             \
+                                                                        \
+   if (fix_t::CHARACTERISTIC > 0) {                                     \
+    snprintf(buff0, 32, "% 05.10lf", 1.5*M_PI);                         \
+    buff0[pi_precis+3] = 0;                                             \
+    printf("1.5M_PI    : %s\n", buff0);                                 \
+                                                                        \
+    fix_pi = fix_t::from_float(1.5*M_PI);                               \
+    unfix_pi = fix_pi.to_float();                                       \
+                                                                        \
+    snprintf(buff1, 32, "% 05.10lf", unfix_pi);                         \
+    buff1[pi_precis+3] = 0;                                             \
+    printf("1.5FIX_PI  : %s\n", buff1);                                 \
+                                                                        \
+    TEST_FLEQ(fmt, 1.5*M_PI, unfix_pi, pi_precis);                      \
+                                                                        \
+    snprintf(buff0, 32, "% 05.10lf", 2*M_PI);                           \
+    buff0[pi_precis+3] = 0;                                             \
+    printf("2M_PI      : %s\n", buff0);                                 \
+                                                                        \
+    fix_pi = fix_t::from_float(2*M_PI);                                 \
+    unfix_pi = fix_pi.to_float();                                       \
+                                                                        \
+    snprintf(buff1, 32, "% 05.10lf", unfix_pi);                         \
+    buff1[pi_precis+3] = 0;                                             \
+    printf("2FIX_PI    : %s\n", buff1);                                 \
+                                                                        \
+    TEST_FLEQ(fmt, 2*M_PI, unfix_pi, pi_precis);                        \
+   }                                                                    \
+                                                                        \
+  if (((fix_t::CHARACTERISTIC+fix_t::MANTISSA) % 2) == 1) {             \
+   snprintf(buff0, 32, "% 05.10lf", -M_PI);                             \
+   buff0[pi_precis+3] = 0;                                              \
+   printf("-M_PI      : %s\n", buff0);                                  \
+                                                                        \
+   fix_pi = fix_t::from_float(-M_PI);                                   \
+   unfix_pi = fix_pi.to_float();                                        \
+                                                                        \
+   snprintf(buff1, 32, "% 05.10lf", unfix_pi);                          \
+   buff1[pi_precis+3] = 0;                                              \
+   printf("-FIX_PI    : %s\n", buff1);                                  \
+                                                                        \
+   TEST_FLEQ(fmt, -M_PI, unfix_pi, pi_precis);                          \
+  }                                                                     \
  }                                               
 
 ////////////////////////////////////////////////////////////////////////////////
