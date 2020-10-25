@@ -91,16 +91,47 @@ namespace lamb {
  ) { return false; }                                                    
 #endif
 
+
+ ////////////////////////////////////////////////////////////////////////////////
+ 
+ template <bool use_left, typename left, typename right>
+ class typedef_if {
+  
+ };
+
+ template <typename left, typename right>
+ class typedef_if<true, left, right> {
+ public:
+  typedef left type;
+ };
+
+ template <typename left, typename right>
+ class typedef_if<false, left, right> {
+ public:
+  typedef right type;
+ };
+ 
 ////////////////////////////////////////////////////////////////////////////////
 // Base
 ////////////////////////////////////////////////////////////////////////////////
 
- template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_ = false>
+ template <
+  uint8_t characteristic_,
+  uint8_t mantissa_,
+  bool saturate_ = false
+  >
  class frac_base {
  public:
   static const bool    SATURATE       = saturate_;
   static const uint8_t CHARACTERISTIC = characteristic_;
   static const uint8_t MANTISSA       = mantissa_;
+  static const bool    SIGNED         = ((CHARACTERISTIC + MANTISSA ) % 2) == 1;
+  static const size_t  SIZE           = (
+   CHARACTERISTIC +
+   MANTISSA +
+   (SIGNED ? 1 : 0)
+  ) / 8;
+
  };
  
 //////////////////////////////////////////////////////////////////////////////// 
@@ -120,8 +151,6 @@ namespace lamb {
  public:  
   typedef frac_base<characteristic_, mantissa_, saturate_> base;
   
-  static const size_t  SIZE           = (base::CHARACTERISTIC + base::MANTISSA) / 8;
-
   static_assert(
    (
     (base::MANTISSA > 0) &&
@@ -133,8 +162,8 @@ namespace lamb {
    "bad bit count for this type"
   );
 
-  typedef typename unsigned_int<SIZE>::type         type;
-  typedef typename unsigned_int<(SIZE << 1)>::type  big_type;
+  typedef typename unsigned_int<base::SIZE>::type         type;
+  typedef typename unsigned_int<(base::SIZE << 1)>::type  big_type;
 
   static constexpr type    ONE            = (
    (base::CHARACTERISTIC == 0) ? 
@@ -142,8 +171,8 @@ namespace lamb {
    (1 << base::MANTISSA)
   );
     
-  static constexpr type    MAX            = unsigned_int<SIZE>::MAX;
-  static constexpr type    MIN            = unsigned_int<SIZE>::MIN;
+  static constexpr type    MAX            = unsigned_int<base::SIZE>::MAX;
+  static constexpr type    MIN            = unsigned_int<base::SIZE>::MIN;
 
   static constexpr type mask() {
    type m = 0;
@@ -543,8 +572,6 @@ namespace lamb {
  public:
   typedef frac_base<characteristic_, mantissa_, saturate_> base;
   
-  static const size_t  SIZE           = (base::CHARACTERISTIC + base::MANTISSA  + 1) / 8;
-
   static_assert(
    (
     (
@@ -558,8 +585,8 @@ namespace lamb {
    "bad bit count for this type"
   );
 
-  typedef typename signed_int<SIZE>::type         type;
-  typedef typename signed_int<(SIZE << 1)>::type  big_type;
+  typedef typename signed_int<base::SIZE>::type         type;
+  typedef typename signed_int<(base::SIZE << 1)>::type  big_type;
     
   static constexpr type     ONE      = (
    (base::CHARACTERISTIC == 0) ? 
@@ -567,8 +594,8 @@ namespace lamb {
    (1 << base::MANTISSA)
   );
     
-  static constexpr type     MAX      = signed_int<(SIZE)>::MAX;
-  static constexpr type     MIN      = signed_int<(SIZE)>::MIN;
+  static constexpr type     MAX      = signed_int<(base::SIZE)>::MAX;
+  static constexpr type     MIN      = signed_int<(base::SIZE)>::MIN;
   
   static constexpr type mask() {
    type m = 0;
