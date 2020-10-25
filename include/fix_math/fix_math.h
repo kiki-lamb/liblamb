@@ -50,28 +50,28 @@ namespace lamb {
                                                                 \
   ttmp += ttmp_delta;                                           \
                                                                 \
-  bool over  = ttmp > MAX;                                      \
+  bool over  = ttmp > base::MAX;                                      \
                                                                 \
   if (over)                                                     \
-   printf("%lld exceeds %lld.\n", ttmp, MAX);                   \
+   printf("%lld exceeds %lld.\n", ttmp, base::MAX);                   \
                                                                 \
-  bool under = ttmp < MIN;                                      \
+  bool under = ttmp < base::MIN;                                      \
                                                                 \
   if (under)                                                    \
-   printf("%lld under %lld.\n", ttmp, MIN);                     \
+   printf("%lld under %lld.\n", ttmp, base::MIN);                     \
                                                                 \
   if (over || under) {                                          \
    if (base::SATURATE) {                                        \
     printf(                                                     \
-     "SATURATE: %ld %c %ld = %lld MIN: %lld MAX: %lld \n",      \
+     "SATURATE: %ld %c %ld = %lld base::MIN: %lld base::MAX: %lld \n",      \
      old_val,                                                   \
      symbol,                                                    \
      delta,                                                     \
      ttmp,                                                      \
-     MIN,                                                       \
-     MAX                                                        \
+     base::MIN,                                                       \
+     base::MAX                                                        \
     );                                                          \
-    set = MAX;                                                  \
+    set = base::MAX;                                                  \
    }                                                            \
    else {                                                       \
    }                                                            \
@@ -144,7 +144,26 @@ namespace lamb {
    typename signed_int<(SIZE << 1)>::type,
    typename unsigned_int<(SIZE << 1)>::type
    >::type big_type;
+
+  static constexpr type    ONE = (
+   (CHARACTERISTIC == 0) ? 
+   ((((big_type)1) << MANTISSA) - 1) :
+   (1 << MANTISSA)
+  );
   
+  static constexpr type    MAX = (
+   SIGNED ?
+   signed_int<SIZE>::MAX :
+   unsigned_int<SIZE>::MAX
+  );
+   
+  static constexpr type    MIN = (
+   SIGNED?
+   signed_int<SIZE>::MIN :
+   unsigned_int<SIZE>::MIN
+  );
+  
+
  };
  
 //////////////////////////////////////////////////////////////////////////////// 
@@ -165,15 +184,6 @@ namespace lamb {
   typedef frac_base<characteristic_, mantissa_, saturate_> base;
   typedef typename base::type                              type;
   typedef typename base::big_type                          big_type;
-  
-  static constexpr type    ONE            = (
-   (base::CHARACTERISTIC == 0) ? 
-   ((((big_type)1) << base::MANTISSA) - 1) :
-   (1 << base::MANTISSA)
-  );
-  
-  static constexpr type    MAX            = unsigned_int<base::SIZE>::MAX;
-  static constexpr type    MIN            = unsigned_int<base::SIZE>::MIN;
   
   static constexpr type mask() {
    type m = 0;
@@ -253,13 +263,13 @@ namespace lamb {
   static constexpr unsigned_frac from_float(float const & val_) {
    int           divisor = int(val_);
    float         modulus = val_ - divisor;
-   type          ipart   = ONE * divisor + int(ONE * modulus);
+   type          ipart   = base::ONE * divisor + int(base::ONE * modulus);
    
    return unsigned_frac(ipart);
   }
 
   float to_float() const {
-   return val / (ONE * 1.0);
+   return val / (base::ONE * 1.0);
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -272,7 +282,7 @@ namespace lamb {
   explicit constexpr unsigned_frac(
    type const & characteristic__,
    type const & mantissa__
-  ) : val((characteristic__ * ONE) + mantissa__), overflow(false)
+  ) : val((characteristic__ * base::ONE) + mantissa__), overflow(false)
    {}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -460,15 +470,6 @@ namespace lamb {
     typedef typename base::type                              type;
     typedef typename base::big_type                          big_type;  
     
-    static constexpr type     ONE      = (
-     (base::CHARACTERISTIC == 0) ? 
-     ((((big_type)1) << base::MANTISSA) - 1) :
-     (1 << base::MANTISSA)
-    );
-    
-    static constexpr type     MAX      = signed_int<(base::SIZE)>::MAX;
-    static constexpr type     MIN      = signed_int<(base::SIZE)>::MIN;
-  
     static constexpr type mask() {
      type m = 0;
 
@@ -538,14 +539,14 @@ namespace lamb {
      bool          neg     = val_ < 0;
      int           divisor = int(val_);
      float         modulus = val_ - divisor;
-     type          ipart   = ONE * divisor + int(ONE * modulus);
+     type          ipart   = base::ONE * divisor + int(base::ONE * modulus);
    
      return signed_frac(ipart);
     }
 
     float to_float() const {
 //   printf("%lld ", val);
-     return val / (ONE * 1.0);
+     return val / (base::ONE * 1.0);
     }
 
     explicit constexpr signed_frac(type const & val_) :
@@ -555,7 +556,7 @@ namespace lamb {
     // v should use smaller types.
   
     explicit constexpr signed_frac(type const & characteristic__, type const & mantissa__) :
-     val((characteristic__ * ONE) + mantissa__), overflow(false)
+     val((characteristic__ * base::ONE) + mantissa__), overflow(false)
      {}
   
 ///////////////////////////////////////////////////////////////////////////////
