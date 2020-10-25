@@ -173,6 +173,12 @@ namespace lamb {
    return m;
   }
 
+  explicit constexpr
+  frac_base() : overflow(false) {}
+
+  mutable bool overflow;
+  
+
   CHECK_OVERFLOW;
  };
  
@@ -209,8 +215,6 @@ namespace lamb {
   }     
   
   type val;
-  
-  mutable bool overflow;
   
 ///////////////////////////////////////////////////////////////////////////////
   
@@ -271,13 +275,12 @@ namespace lamb {
   
   explicit constexpr unsigned_frac(type const & val_ = 0) :
    val(val_)
-   , overflow(false)
    {}
 
   explicit constexpr unsigned_frac(
    type const & characteristic__,
    type const & mantissa__
-  ) : val((characteristic__ * base::ONE) + mantissa__), overflow(false)
+  ) : val((characteristic__ * base::ONE) + mantissa__)
    {}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -302,7 +305,7 @@ namespace lamb {
    unsigned_frac ret    = unsigned_frac(new_);
 
    if (base::check_overflow('+', old, other.val, ret.val)) {
-    overflow = true;
+    base::overflow = true;
    }
 
    return ret;
@@ -330,7 +333,7 @@ namespace lamb {
    unsigned_frac ret    = unsigned_frac(new_);
 
    if (base::check_overflow('-', old, other.val, ret.val)) {
-    overflow = true;
+    base::overflow = true;
    }
 
    return ret;
@@ -372,7 +375,7 @@ namespace lamb {
      ret.val                     = (type)(tmp >> shift);
 
      if (base::check_overflow('x', old, other.val, ret.val)) {
-      overflow = true;
+      base::overflow = true;
      }
     }
     else {
@@ -383,7 +386,7 @@ namespace lamb {
      ret.val                     = (type)(tmp >> shift);
  
      if (base::check_overflow('*', old, other.val, ret.val)) {
-      overflow = true;
+      base::overflow = true;
      }
     }
    
@@ -425,7 +428,7 @@ namespace lamb {
       ret.val                     = (type)(tmp >> shift);
 
       if (base::check_overflow('x', old, other.val, ret.val)) {
-       overflow = true;
+       base::overflow = true;
       }
      }
      else {    
@@ -435,7 +438,7 @@ namespace lamb {
       ret.val                     = (type)tmp;
   
       if (base::check_overflow('/', old, other.val, ret.val)) {
-       overflow = true;
+       base::overflow = true;
       }
      }
    
@@ -532,13 +535,13 @@ namespace lamb {
     }
 
     explicit constexpr signed_frac(type const & val_) :
-     val(val_), overflow(false)
+     val(val_)
      {}
 
     // v should use smaller types.
   
     explicit constexpr signed_frac(type const & characteristic__, type const & mantissa__) :
-     val((characteristic__ * base::ONE) + mantissa__), overflow(false)
+     val((characteristic__ * base::ONE) + mantissa__)
      {}
   
 ///////////////////////////////////////////////////////////////////////////////
@@ -563,7 +566,7 @@ namespace lamb {
      signed_frac ret  = signed_frac(new_);
 
      if (base::check_overflow('+', old, other.val, ret.val)) {
-      overflow = true;
+      base::overflow = true;
      }
 
      return ret;
@@ -589,7 +592,7 @@ namespace lamb {
      signed_frac ret   = signed_frac(new_);
 
      if (base::check_overflow('-', old, other.val, ret.val)) {
-      overflow = true;
+      base::overflow = true;
      }
 
      return ret;
@@ -630,7 +633,7 @@ namespace lamb {
        ret.val                       = (type)tmp;
 
        if (base::check_overflow('*', old, other.val, ret.val)) {
-        overflow = true;
+        base::overflow = true;
        }
       }
       else {
@@ -640,7 +643,7 @@ namespace lamb {
        ret.val                       = (type)tmp;
 
        if (base::check_overflow('*', old, other.val, ret.val)) {
-        overflow = true;
+        base::overflow = true;
        }
       }     
 
@@ -683,7 +686,7 @@ namespace lamb {
         other_type::base::MANTISSA;
       
         if (base::check_overflow('*', old, other.val, r.val)) {
-         overflow = true;
+         base::overflow = true;
         }
 
         return r;
@@ -695,7 +698,7 @@ namespace lamb {
          other_type::base::MANTISSA;;
       
         if (base::check_overflow('*', old, other.val, r.val)) {
-         overflow = true;
+         base::overflow = true;
         }
 
         return signed_frac(tmp);
@@ -735,7 +738,7 @@ namespace lamb {
          ret.val                     = (type)(tmp >> shift);
 
          if (base::check_overflow('x', old, other.val, ret.val)) {
-          overflow = true;
+          base::overflow = true;
          }
         }
         else {    
@@ -745,7 +748,7 @@ namespace lamb {
          ret.val                     = (type)tmp;
 
          if (base::check_overflow('/', old, other.val, ret.val)) {
-          overflow = true;
+          base::overflow = true;
          }
         }
    
