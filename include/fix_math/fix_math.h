@@ -214,7 +214,7 @@ namespace lamb {
    type const & mantissa__
   ) : val((characteristic__ * ONE) + mantissa__) {}
 
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
     
   template <bool saturate__> 
   bool
@@ -450,14 +450,16 @@ namespace lamb {
    for (uint8_t ix = 0; ix < MANTISSA; ix++) {
     m |= 1 << ix;
    }
+
+   return m;
   }
   
   type bottom() const { // return smaller type?
-   return val & mask;
+   return val & mask();
   }
 
   type top() const {    // return smaller type?
-   return (val & (~mask)) >> MANTISSA;
+   return (val & (~mask())) >> MANTISSA;
   }     
   
   type val;
@@ -506,19 +508,11 @@ namespace lamb {
   //   Not yet well tested.
   
   static constexpr signed_frac from_float(float val_) {
-   bool          negative = val_ < 0;
-   val_                   = abs(val_);   
-   int           divisor  = int(val_);
-   float         modulus  = val_ - divisor;
-   signed_frac   ret(
-    ONE * divisor, int(ONE * modulus)
-   );
-
-   if (negative) {
-    ret.val              *= -1;
-   }
+   int           divisor = int(val_);
+   float         modulus = val_ - divisor;
+   type          ipart   = ONE * divisor + int(ONE * modulus);
    
-   return ret;
+   return signed_frac(ipart);
   }
 
   float to_float() const {
