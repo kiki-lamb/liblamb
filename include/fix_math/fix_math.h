@@ -46,8 +46,13 @@ namespace lamb {
   new_t   const & new_val,                                              \
   type          & set                                                   \
  ) {                                                                    \
-  bool over  = (((big_t)old_val) + delta) > MAX;                        \
-  bool under = false;                                                   \
+  int64_t tmp = old_val;                                                \
+  tmp += delta;                                                         \
+                                                                        \
+  printf("TMP: %lld \n", tmp);                                          \
+                                                                        \
+  bool over  = tmp > MAX;                                               \
+  bool under = tmp < MIN;                                               \
                                                                         \
   if (delta < 0) {                                                      \
    printf("%d vs %d\n", delta, old_val);                                \
