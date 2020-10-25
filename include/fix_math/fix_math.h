@@ -52,7 +52,15 @@ namespace lamb {
   ttmp += ttmp_delta;                                             \
                                                                 \
   bool over  = ttmp > MAX;                                       \
-  bool under = ttmp < MIN;                                       \
+                                                                 \
+  if (over)                                                      \
+   printf("%lld exceeds %lld.\n", ttmp, MAX);                    \
+                                                                 \
+  bool under = ttmp < MIN;                                      \
+                                                                \
+  if (under)                                                     \
+     printf("%lld under %lld.\n", ttmp, MIN);                 \
+                                                                \
                                                                 \
   if (delta < 0) {                                              \
    if (-delta > old_val) {                                      \
