@@ -92,10 +92,36 @@ bool compare_floats(float x, float y, uint8_t precis) {
    successes ++;                                                        \
   }                                                                     \
   else {                                                                \
+   fix_t b(fix_t::MAX);                                                 \
+                                                                        \
    printf(                                                              \
     "%05.05lf + %05.05lf should have overflowed.",                      \
-    a.to_float(),                                                       \
-    a.to_float()                                                        \
+    b.to_float(),                                                       \
+    b.to_float()                                                        \
+   );                                                                   \
+                                                                        \
+   errors ++;                                                           \
+  }                                                                     \
+ }                                                                      
+
+#define TEST_UNDERFLOW                                                  \
+ {                                                                      \
+  fix_t a(fix_t::MAX);                                                  \
+                                                                        \
+  a -= a;                                                               \
+  a -= a;                                                               \
+                                                                        \
+  if (a.overflow) {                                                     \
+   successes ++;                                                        \
+  }                                                                     \
+  else {                                                                \
+   fix_t b(fix_t::MAX);                                                 \
+                                                                        \
+   printf(                                                              \
+    "%05.05lf - %05.05lf - %05.05lf should have underflowed.",          \
+    b.to_float(),                                                       \
+    b.to_float(),                                                       \
+    b.to_float()                                                        \
    );                                                                   \
                                                                         \
    errors ++;                                                           \
@@ -224,6 +250,8 @@ void test_fix_math_type(size_t & out_successes, size_t & out_errors) {
  }
 
  TEST_OVERFLOW;
+
+ TEST_UNDERFLOW;
  
  if (fix_t::CHARACTERISTIC > 0) {
   printf("\nTest pi...\n");
