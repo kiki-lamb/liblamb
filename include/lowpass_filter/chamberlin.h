@@ -58,7 +58,7 @@ namespace lamb {
     printf("% 5.5lf, ", D1)   ;
     
     D2 = L                    ;
-    printf("% 5.5lf  ", D2)   ;
+    printf("% 5.5lf,  ", D2)   ;
         
     return sat_q0n15::from_float(L);
    }

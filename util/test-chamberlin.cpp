@@ -23,20 +23,20 @@ int main() {
   fx_cf.Q = fx_chamberlin::qtype(fx_chamberlin::qtype::ONE >> 1);
   fx_cf.set_q();
 
-  printf(
-   "F1 = % 05.5lf, Q1 = % 05.5lf \n",
-   cf.F1,
-   cf.Q1
-  );
+  // printf(
+  //  "F1 = % 05.5lf, Q1 = % 05.5lf \n",
+  //  cf.F1,
+  //  cf.Q1
+  // );
 
-  printf(
-   "F1 = % 05.5lf, Q1 = % 05.5lf \n",
-   fx_cf.F1.to_float(),
-   fx_cf.Q1.to_float()
-  );
+  // printf(
+  //  "F1 = % 05.5lf, Q1 = % 05.5lf \n",
+  //  fx_cf.F1.to_float(),
+  //  fx_cf.Q1.to_float()
+  // );
   
 //  printf("A, AF, F1, I, L, H, B, N, D1, D2 \n");
-  printf("Af, I, F1, Q1, L, H, B, N, D1, D2 \n");
+  printf("Af,        I,        F1,       Q1,       L,        H,        B,        N,        D1,       D2,        I,        F1,       Q1,       L,        H,        B,        N,        D1,       D2 \n");
 
 //  for (double qix = 1.0; qix < 30.0; qix += 1.0) {
   for (double qix = 1.0; qix == 1.0; qix += 1.0) {
@@ -47,11 +47,14 @@ int main() {
    
    //for (size_t fix = 8500 + 5; fix > 8505; fix -= fix_incr) {
    for (size_t fix = 8500 + 5; fix == 8505; fix -= fix_incr) {
-    cf.F    = fix;
     acc     = 0;
     
+    cf.F    = fix;        
     cf.set_frequency();
 
+    fx_cf.F = fx_chamberlin::pqtype(fix, 0);
+    fx_cf.set_frequency();
+    
     const size_t fdiv = 512;
 
     for(size_t cycle_ix = 0; cycle_ix < 1; cycle_ix++) {
@@ -61,6 +64,7 @@ int main() {
       printf("%lf, ", acc / 65536.0);
 
       auto x = cf.process(sat_q0n15(acc >= 32768 ? q0n15::MIN : q0n15::MAX));
+      auto y = fx_cf.process(sat_q0n15(acc));
       
       printf("\n");
      }
