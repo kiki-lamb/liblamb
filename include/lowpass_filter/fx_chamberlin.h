@@ -41,9 +41,9 @@ namespace lamb {
    }
 
    void set_q() {
-    Q1 = qtype::from_float(1) / Q;
+    Q1 = qtype(1,0) / Q;
 
-    printf("Q1: % 05.5lf \n", Q1);
+    //printf("Q1: % 05.5lf \n", Q1);
    }
 
 //    L = D2 + F1 * D1

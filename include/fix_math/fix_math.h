@@ -494,16 +494,16 @@ namespace lamb {
      else {    
       static const uint8_t  shift = other_mantissa;
 
-      cout << "VAL: "    << val        << endl;
-      cout << "SHIFT: "  << shift      << endl;
+      // cout << "VAL: "    << val        << endl;
+      // cout << "SHIFT: "  << shift      << endl;
 
       big_type              tmp   = ((big_type)val) << shift;
 
-      cout << "TMP0: "   << tmp        << endl;
-      cout << "OVAL: "   << other.val  << endl;
+      // cout << "TMP0: "   << tmp        << endl;
+      // cout << "OVAL: "   << other.val  << endl;
      
       tmp                        /= other.val;
-      cout << "TMP1: " << tmp   << endl;
+//      cout << "TMP1: " << tmp   << endl;
 
       ret.val                     = (type)tmp;
   
@@ -974,16 +974,16 @@ namespace lamb {
      else {    
       static const uint8_t  shift = other_mantissa;
 
-      cout << "VAL: "    << val        << endl;
-      cout << "SHIFT: "  << shift      << endl;
+//      cout << "VAL: "    << val        << endl;
+//      cout << "SHIFT: "  << shift      << endl;
 
       big_type              tmp   = ((big_type)val) << shift;
 
-      cout << "TMP0: "   << tmp        << endl;
-      cout << "OVAL: "   << other.val  << endl;
+//      cout << "TMP0: "   << tmp        << endl;
+//      cout << "OVAL: "   << other.val  << endl;
      
       tmp                        /= other.val;
-      cout << "TMP1: " << tmp   << endl;
+//      cout << "TMP1: " << tmp   << endl;
 
       ret.val                     = (type)tmp;
   
