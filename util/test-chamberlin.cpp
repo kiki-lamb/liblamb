@@ -14,13 +14,13 @@ int main() {
 //  printf("A, AF, F1, I, L, H, B, N, D1, D2 \n");
   printf("Af, I, F1, Q1, L, H, B, N, D1, D2 \n");
   
-  for (double qix = 1.0; qix < 20.0; qix += 1.0) {
+  for (double qix = 1.0; qix < 10.0; qix += 1.0) {
    cf.Q = qix;
    cf.set_q();
 
    const size_t fix_incr = 100;
    
-   for (size_t fix = 10000 + 2; fix > 2; fix -= fix_incr) {
+   for (size_t fix = 10000 + 5; fix > 5; fix -= fix_incr) {
     cf.F    = fix;
     acc     = 0;
     
