@@ -37,50 +37,50 @@ namespace lamb {
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef LAMB_FP_NO_OVERFLOW_CHECKING
-#define CHECK_OVERFLOW                                                  \
- template <typename big_t, typename delta_t, typename new_t>            \
- static bool check_overflow(                                            \
-  char    const & symbol,                                               \
-  type    const & old_val,                                              \
-  delta_t const & delta,                                                \
-  new_t   const & new_val,                                              \
-  type          & set                                                   \
- ) {                                                                    \
-  int64_t tmp = old_val;                                                \
-  int64_t tmp_delta = delta;                                            \
-                                                                        \
-  tmp += tmp_delta;                                                     \
-                                                                        \
-  bool over  = tmp > MAX;                                               \
-  bool under = tmp < MIN;                                               \
-                                                                        \
-  if (delta < 0) {                                                      \
-   printf("%d vs %d\n", delta, old_val);                                \
-                                                                        \
-   if (delta > old_val) {                                               \
-    under = true;                                                       \
-   }                                                                    \
-  }                                                                     \
-                                                                        \
-  if (over || under) {                                                  \
-   if (SATURATE) {                                                      \
-    set = MAX;                                                          \
-   }                                                                    \
-   else {                                                               \
-   }                                                                    \
-  }                                                                     \
-                                                                        \
-  return (over || under);                                               \
+#define CHECK_OVERFLOW                                          \
+ template <typename big_t, typename delta_t, typename new_t>    \
+ static bool check_overflow(                                    \
+  char    const & symbol,                                       \
+  type    const & old_val,                                      \
+  delta_t const & delta,                                        \
+  new_t   const & new_val,                                      \
+  type          & set                                           \
+ ) {                                                            \
+  int64_t tmp = old_val;                                        \
+  int64_t tmp_delta = delta;                                    \
+                                                                \
+  tmp += tmp_delta;                                             \
+                                                                \
+  bool over  = tmp > MAX;                                       \
+  bool under = tmp < MIN;                                       \
+                                                                \
+  if (delta < 0) {                                              \
+   printf("%d vs %d\n", delta, old_val);                        \
+                                                                \
+   if (delta > old_val) {                                       \
+    under = true;                                               \
+   }                                                            \
+  }                                                             \
+                                                                \
+  if (over || under) {                                          \
+   if (SATURATE) {                                              \
+    set = MAX;                                                  \
+   }                                                            \
+   else {                                                       \
+   }                                                            \
+  }                                                             \
+                                                                \
+  return (over || under);                                       \
  }                                                
 #else
-#define CHECK_OVERFLOW                                           \
- template <typename big_t, typename delta_t, typename new_t>     \
- static bool check_overflow(                                     \
-  char    const & symbol,                                        \
-  type    const & old_val,                                       \
-  delta_t const & delta,                                         \
-  new_t   const & new_val,                                       \
-  type          & set                                            \
+#define CHECK_OVERFLOW                                          \
+ template <typename big_t, typename delta_t, typename new_t>    \
+ static bool check_overflow(                                    \
+  char    const & symbol,                                       \
+  type    const & old_val,                                      \
+  delta_t const & delta,                                        \
+  new_t   const & new_val,                                      \
+  type          & set                                           \
  ) { return false; }                                                    
 #endif
 
@@ -193,15 +193,15 @@ namespace lamb {
    return tmp;
   }
 
-   template <bool saturate__>
-   operator
-   unsigned_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), saturate__> () const {
-    unsigned_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), saturate__> tmp(
-     val >> 1
-    );
+  template <bool saturate__>
+  operator
+  unsigned_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), saturate__> () const {
+   unsigned_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), saturate__> tmp(
+    val >> 1
+   );
 
-    return tmp;
-   }
+   return tmp;
+  }
 
   template <bool saturate__>
   operator
@@ -243,7 +243,7 @@ namespace lamb {
    type const & mantissa__
   ) : val((characteristic__ * ONE) + mantissa__)
 #ifdef LAMB_TEST_FIX_MATH
-   , overflow(false)
+    , overflow(false)
 #endif
    {}
 
@@ -405,85 +405,129 @@ namespace lamb {
 #if __cplusplus >= 201703L   
    if constexpr(sizeof(other_type) > sizeof(unsigned_frac)) {
 #else
-   if (sizeof(other_type) > sizeof(unsigned_frac)) {
+    if (sizeof(other_type) > sizeof(unsigned_frac)) {
 #endif
-    static const uint8_t  shift = 
-     unsigned_frac<other_charac, other_mantissa>::FX_SHIFT;   
+     static const uint8_t  shift = 
+      unsigned_frac<other_charac, other_mantissa>::FX_SHIFT;   
     
-    pseudo_right_big_type tmp   = ((pseudo_right_big_type)val) * other.val;
-    ret.val                     = (type)(tmp >> shift);
+     pseudo_right_big_type tmp   = ((pseudo_right_big_type)val) * other.val;
+     ret.val                     = (type)(tmp >> shift);
 
 #ifndef LAMB_TEST_FIX_MATH
-    check_overflow<big_type>('x', old, other.val, ret.val, ret.val);
+     check_overflow<big_type>('x', old, other.val, ret.val, ret.val);
 #else
-    if (check_overflow<big_type>('x', old, other.val, ret.val, ret.val)) {
-     overflow = true;
-    }
+     if (check_overflow<big_type>('x', old, other.val, ret.val, ret.val)) {
+      overflow = true;
+     }
 #endif
-   }
-   else {
-    static const uint8_t  shift = 
-     unsigned_frac<other_charac, other_mantissa>::FX_SHIFT;      
+    }
+    else {
+     static const uint8_t  shift = 
+      unsigned_frac<other_charac, other_mantissa>::FX_SHIFT;      
 
-    big_type              tmp   = ((big_type)val) * other.val;
+     big_type              tmp   = ((big_type)val) * other.val;
 
 //    cout << "TMP: " << tmp   << endl;
 //    printf("SHIFT: %d\n", shift);
 
-    ret.val                     = (type)(tmp >> shift);
+     ret.val                     = (type)(tmp >> shift);
   
 //    printf("RET.VAL: %d\n", ret.val);
 #ifndef LAMB_TEST_FIX_MATH
-    check_overflow<big_type>('*', old, other.val, ret.val, ret.val);
+     check_overflow<big_type>('*', old, other.val, ret.val, ret.val);
 #else
-    if (check_overflow<big_type>('*', old, other.val, ret.val, ret.val)) {
-     overflow = true;
-    }
+     if (check_overflow<big_type>('*', old, other.val, ret.val, ret.val)) {
+      overflow = true;
+     }
 #endif
+    }
+   
+    return ret;
    }
+
+   template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
+    unsigned_frac & 
+    operator *= (
+     unsigned_frac<other_charac,other_mantissa, saturate__> const & other
+    ) {
+    val = ((*this) * other).val;
+
+    return *this;
+   }
+
+///////////////////////////////////////////////////////////////////////////////
+
+   template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
+    unsigned_frac
+    operator / (
+     unsigned_frac<other_charac,other_mantissa,other_saturate> const & other
+    ) const {
+    typedef unsigned_frac<other_charac,other_mantissa, other_saturate>
+     other_type;
+    typedef typename other_type::big_type
+     right_big_type;
+    typedef typename unsigned_int<(sizeof(right_big_type))>::type
+     pseudo_right_big_type;
+
+    unsigned_frac          ret(0);
+    type                   old(val);
+
+#if __cplusplus >= 201703L   
+    if constexpr(sizeof(other_type) > sizeof(unsigned_frac)) {
+#else
+     if (sizeof(other_type) > sizeof(unsigned_frac)) {
+#endif
+      static const uint8_t  shift = 
+       unsigned_frac<other_charac, other_mantissa>::FX_SHIFT;   
+    
+      pseudo_right_big_type tmp   = ((pseudo_right_big_type)val) * other.val;
+      ret.val                     = (type)(tmp >> shift);
+
+#ifndef LAMB_TEST_FIX_MATH
+      check_overflow<big_type>('x', old, other.val, ret.val, ret.val);
+#else
+      if (check_overflow<big_type>('x', old, other.val, ret.val, ret.val)) {
+       overflow = true;
+      }
+#endif
+     }
+     else {
+      printf("adsd\n");
+    
+      static const uint8_t  shift = 
+       unsigned_frac<other_charac, other_mantissa>::FX_SHIFT;      
+
+      big_type              tmp   = ((big_type)val) * other.val;
+
+//    cout << "TMP: " << tmp   << endl;
+//    printf("SHIFT: %d\n", shift);
+
+      ret.val                     = (type)(tmp >> shift);
+  
+//    printf("RET.VAL: %d\n", ret.val);
+#ifndef LAMB_TEST_FIX_MATH
+      check_overflow<big_type>('*', old, other.val, ret.val, ret.val);
+#else
+      if (check_overflow<big_type>('*', old, other.val, ret.val, ret.val)) {
+       overflow = true;
+      }
+#endif
+     }
    
-   return ret;
-  }
+     return ret;
+    }
 
-  template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
-  unsigned_frac & 
-  operator *= (
-   unsigned_frac<other_charac,other_mantissa, saturate__> const & other
-  ) {
-   val = ((*this) * other).val;
+    template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
+     unsigned_frac & 
+     operator /= (
+      unsigned_frac<other_charac,other_mantissa, saturate__> const & other
+     ) {
+     val = ((*this) / other).val;
 
-   return *this;
-  }
-
-  ///////////////////////////////////////////////////////////////////////////////
-
-  template <bool saturate__>
-  unsigned_frac
-  operator / (
-   unsigned_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other
-  ) const {
-   big_type tmp   = val;
-   tmp          <<= SIZE * 8;
-   tmp           /= other.val;
-   tmp          >>= SIZE * 8;
-
-   printf("this div %llu \n", tmp);
-   
-   
-   return unsigned_frac(val / other.val);
-  }        
-
-  template <bool saturate__>
-  unsigned_frac &
-  operator /= (
-   unsigned_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other
-  ) {
-   val = ((*this) / other).val;
-
-   return *this;
-  }
- };
-
+     return *this;
+    }
+   };
+  
 ///////////////////////////////////////////////////////////////////////////////
 // Signed fixed point numbers
 ///////////////////////////////////////////////////////////////////////////////
@@ -575,15 +619,15 @@ namespace lamb {
    return tmp;
   }
    
-   template <bool saturate__>
-   operator
-   signed_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), saturate__> () const {
-    signed_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), saturate__> tmp(
-     val >> 1
-    );
+  template <bool saturate__>
+  operator
+  signed_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), saturate__> () const {
+   signed_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), saturate__> tmp(
+    val >> 1
+   );
     
-    return tmp;
-   }
+   return tmp;
+  }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -777,139 +821,139 @@ namespace lamb {
 #if __cplusplus >= 201703L      
    if constexpr(sizeof(other_type) > sizeof(signed_frac)) {
 #else
-   if (sizeof(other_type) > sizeof(signed_frac)) {
+    if (sizeof(other_type) > sizeof(signed_frac)) {
 #endif     
-    pseudo_right_big_type tmp     =
-     ((pseudo_right_big_type)val) * other.val;        
-    static const uint8_t  shift   = other_type::FX_SHIFT;
-    tmp                         >>= shift;
-    ret.val                       = (type)tmp;
+     pseudo_right_big_type tmp     =
+      ((pseudo_right_big_type)val) * other.val;        
+     static const uint8_t  shift   = other_type::FX_SHIFT;
+     tmp                         >>= shift;
+     ret.val                       = (type)tmp;
 
 #ifndef LAMB_TEST_FIX_MATH
-    check_overflow<big_type>('*', old, other.val, ret.val, ret.val);
+     check_overflow<big_type>('*', old, other.val, ret.val, ret.val);
 #else
-    if (check_overflow<big_type>('*', old, other.val, ret.val, ret.val)) {
-     overflow = true;
-    }
+     if (check_overflow<big_type>('*', old, other.val, ret.val, ret.val)) {
+      overflow = true;
+     }
 #endif
+    }
+    else {
+     big_type              tmp     = ((big_type)val) * other.val;      
+     uint8_t               shift   = other_type::FX_SHIFT;
+
+     tmp                         >>= shift;
+     ret.val                       = (type)tmp;
+
+#ifndef LAMB_TEST_FIX_MATH
+     check_overflow<big_type>('*', old, other.val, ret.val, ret.val);
+#else
+     if (check_overflow<big_type>('*', old, other.val, ret.val, ret.val)) {
+      overflow = true;
+     }
+#endif
+    }     
+
+    return ret;
+   }    
+
+   template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
+    signed_frac &
+    operator *= (
+     unsigned_frac<other_charac,other_mantissa,other_saturate> const & other
+    ) {
+    val = ((*this) * other).val;
+
+    return *this;
    }
-   else {
-    big_type              tmp     = ((big_type)val) * other.val;      
-    uint8_t               shift   = other_type::FX_SHIFT;
-
-    tmp                         >>= shift;
-    ret.val                       = (type)tmp;
-
-#ifndef LAMB_TEST_FIX_MATH
-    check_overflow<big_type>('*', old, other.val, ret.val, ret.val);
-#else
-    if (check_overflow<big_type>('*', old, other.val, ret.val, ret.val)) {
-     overflow = true;
-    }
-#endif
-   }     
-
-   return ret;
-  }    
-
-  template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
-  signed_frac &
-  operator *= (
-   unsigned_frac<other_charac,other_mantissa,other_saturate> const & other
-  ) {
-   val = ((*this) * other).val;
-
-   return *this;
-  }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-  template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
-  signed_frac
-  operator * (
-   signed_frac<other_charac,other_mantissa,other_saturate> const & other
-  ) const {
-   //static_assert(0 == other_charac, "Reverse operand order!");
+   template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
+    signed_frac
+    operator * (
+     signed_frac<other_charac,other_mantissa,other_saturate> const & other
+    ) const {
+    //static_assert(0 == other_charac, "Reverse operand order!");
 
-   typedef signed_frac<other_charac,other_mantissa,other_saturate>
-    other_type;
-   typedef typename other_type::big_type
-    right_big_type;
-   typedef typename signed_int<(sizeof(right_big_type))>::type
-    pseudo_right_big_type;
+    typedef signed_frac<other_charac,other_mantissa,other_saturate>
+     other_type;
+    typedef typename other_type::big_type
+     right_big_type;
+    typedef typename signed_int<(sizeof(right_big_type))>::type
+     pseudo_right_big_type;
 
-   signed_frac r(0);
-   type        old(val);
+    signed_frac r(0);
+    type        old(val);
    
 #if __cplusplus >= 201703L      
-   if constexpr(sizeof(other_type) > sizeof(signed_frac)) {
+    if constexpr(sizeof(other_type) > sizeof(signed_frac)) {
 #else     
-   if (sizeof(other_type) > sizeof(signed_frac)) {
+     if (sizeof(other_type) > sizeof(signed_frac)) {
 #endif
-    pseudo_right_big_type tmp   = ((pseudo_right_big_type)val) * other.val; 
-    tmp                       >>= other_type::FX_SHIFT - 1;
-    r.val                       = (type)tmp;
+      pseudo_right_big_type tmp   = ((pseudo_right_big_type)val) * other.val; 
+      tmp                       >>= other_type::FX_SHIFT - 1;
+      r.val                       = (type)tmp;
 
 #ifndef LAMB_TEST_FIX_MATH
-    check_overflow<big_type>('*', old, other.val, r.val, r.val);
+      check_overflow<big_type>('*', old, other.val, r.val, r.val);
 #else
-    if (check_overflow<big_type>('*', old, other.val, r.val, r.val)) {
-     overflow = true;
-    }
+      if (check_overflow<big_type>('*', old, other.val, r.val, r.val)) {
+       overflow = true;
+      }
 #endif
-   }
-   else {
-    big_type              tmp   = ((big_type)val) * other.val;
-    tmp                       >>= other_type::FX_SHIFT - 1;     
-    r.val                       = (type)tmp;        
+     }
+     else {
+      big_type              tmp   = ((big_type)val) * other.val;
+      tmp                       >>= other_type::FX_SHIFT - 1;     
+      r.val                       = (type)tmp;        
 
 //    printf("SHIFT is %d.\n", other_type::FX_SHIFT - 1);
 //    printf("r.val is %d.\n", r.val);        
 
 #ifndef LAMB_TEST_FIX_MATH
-    check_overflow<big_type>('*', old, other.val, r.val, r.val);
+      check_overflow<big_type>('*', old, other.val, r.val, r.val);
 #else
-    if (check_overflow<big_type>('*', old, other.val, r.val, r.val)) {
-     overflow = true;
-    }
+      if (check_overflow<big_type>('*', old, other.val, r.val, r.val)) {
+       overflow = true;
+      }
 #endif
-   }
+     }
 
-   return r;
-  }    
+     return r;
+    }    
 
-  template <uint8_t other_charac,uint8_t other_mantissa, bool other_saturate>
-  signed_frac &
-  operator *= (
-   signed_frac<other_charac,other_mantissa,other_saturate> const & other
-  ) {
-   val = ((*this) * other).val;
+    template <uint8_t other_charac,uint8_t other_mantissa, bool other_saturate>
+     signed_frac &
+     operator *= (
+      signed_frac<other_charac,other_mantissa,other_saturate> const & other
+     ) {
+     val = ((*this) * other).val;
    
-   return *this;
-  }
+     return *this;
+    }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-  template <bool saturate__>
-  signed_frac
-  operator / (
-   signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other
-  ) const {
-   signed_frac r = signed_frac(val / other.val);
+    template <bool saturate__>
+     signed_frac
+     operator / (
+      signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other
+     ) const {
+     signed_frac r = signed_frac(val / other.val);
    
-   return r;
-  }        
+     return r;
+    }        
 
-  template <bool saturate__>
-  signed_frac &
-  operator /= (
-   signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other
-  ) {
-   val = ((*this) / other).val;
+    template <bool saturate__>
+     signed_frac &
+     operator /= (
+      signed_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other
+     ) {
+     val = ((*this) / other).val;
    
-   return *this;
-  }
- };
+     return *this;
+    }
+   };
 
 //////////////////////////////////////////////////////////////////////////////
 // Typedefs
@@ -917,60 +961,60 @@ namespace lamb {
   
 // Value types ///////////////////////////////////////////////////////////////
 
- typedef uint8_t                        q0n8_value_type;    
- typedef uint16_t                       q8n8_value_type;                       
- typedef uint16_t                       q0n16_value_type;                      
- typedef uint32_t                       q16n16_value_type;                     
- typedef uint32_t                       q0n32_value_type;                    
+   typedef uint8_t                        q0n8_value_type;    
+   typedef uint16_t                       q8n8_value_type;                       
+   typedef uint16_t                       q0n16_value_type;                      
+   typedef uint32_t                       q16n16_value_type;                     
+   typedef uint32_t                       q0n32_value_type;                    
 
- typedef int8_t                         q0n7_value_type;        
- typedef int16_t                        q7n8_value_type;                      
- typedef int16_t                        q0n15_value_type;                      
- typedef int32_t                        q15n16_value_type;                     
- typedef int32_t                        q0n31_value_type;                      
+   typedef int8_t                         q0n7_value_type;        
+   typedef int16_t                        q7n8_value_type;                      
+   typedef int16_t                        q0n15_value_type;                      
+   typedef int32_t                        q15n16_value_type;                     
+   typedef int32_t                        q0n31_value_type;                      
 
- // used only as 'big_type's:
- typedef uint64_t                       q0n64_value_type;
- typedef int64_t                        q0n63_valuete_type;
+   // used only as 'big_type's:
+   typedef uint64_t                       q0n64_value_type;
+   typedef int64_t                        q0n63_valuete_type;
 
 // Overflow-able types ////////////////////////////////////////////////////////
   
- typedef unsigned_frac<  0,  8, false > q0n8;
- typedef unsigned_frac<  8,  8, false > q8n8;
- typedef unsigned_frac<  0, 16, false > q0n16;
- typedef unsigned_frac< 16, 16, false > q16n16;
- typedef unsigned_frac<  0, 32, false > q0n32;
+   typedef unsigned_frac<  0,  8, false > q0n8;
+   typedef unsigned_frac<  8,  8, false > q8n8;
+   typedef unsigned_frac<  0, 16, false > q0n16;
+   typedef unsigned_frac< 16, 16, false > q16n16;
+   typedef unsigned_frac<  0, 32, false > q0n32;
 
- typedef unsigned_frac<  2, 14, false > q2n14;
- typedef unsigned_frac<  2, 30, false > q2n30;
+   typedef unsigned_frac<  2, 14, false > q2n14;
+   typedef unsigned_frac<  2, 30, false > q2n30;
   
- typedef signed_frac<    0,  7, false > q0n7;
- typedef signed_frac<    7,  8, false > q7n8;
- typedef signed_frac<    0, 15, false > q0n15;
- typedef signed_frac<   15, 16, false > q15n16;
- typedef signed_frac<    0, 31, false > q0n31;
+   typedef signed_frac<    0,  7, false > q0n7;
+   typedef signed_frac<    7,  8, false > q7n8;
+   typedef signed_frac<    0, 15, false > q0n15;
+   typedef signed_frac<   15, 16, false > q15n16;
+   typedef signed_frac<    0, 31, false > q0n31;
 
 // Saturating types ///////////////////////////////////////////////////////////
  
- typedef unsigned_frac<  0,  8, true  > sat_q0n8;
- typedef unsigned_frac<  8,  8, true  > sat_q8n8;
- typedef unsigned_frac<  0, 16, true  > sat_q0n16;
- typedef unsigned_frac< 16, 16, true  > sat_q16n16;  
- typedef unsigned_frac<  0, 32, true  > sat_q0n32;
+   typedef unsigned_frac<  0,  8, true  > sat_q0n8;
+   typedef unsigned_frac<  8,  8, true  > sat_q8n8;
+   typedef unsigned_frac<  0, 16, true  > sat_q0n16;
+   typedef unsigned_frac< 16, 16, true  > sat_q16n16;  
+   typedef unsigned_frac<  0, 32, true  > sat_q0n32;
 
- typedef unsigned_frac<  2, 14, true  > sat_q2n14;
- typedef unsigned_frac<  2, 30, true  > sat_q2n30;
+   typedef unsigned_frac<  2, 14, true  > sat_q2n14;
+   typedef unsigned_frac<  2, 30, true  > sat_q2n30;
   
- typedef signed_frac<    0,  7, true  > sat_q0n7;
- typedef signed_frac<    7,  8, true  > sat_q7n8;
- typedef signed_frac<    0, 15, true  > sat_q0n15;
- typedef signed_frac<   15, 16, true  > sat_q15n16;
- typedef signed_frac<    0, 31, true  > sat_q0n31;  
+   typedef signed_frac<    0,  7, true  > sat_q0n7;
+   typedef signed_frac<    7,  8, true  > sat_q7n8;
+   typedef signed_frac<    0, 15, true  > sat_q0n15;
+   typedef signed_frac<   15, 16, true  > sat_q15n16;
+   typedef signed_frac<    0, 31, true  > sat_q0n31;  
 
  
 ///////////////////////////////////////////////////////////////////////////////
 
-} // namespace lamb
+  } // namespace lamb
 
 ///////////////////////////////////////////////////////////////////////////////
 
