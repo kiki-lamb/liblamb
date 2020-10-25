@@ -45,7 +45,7 @@ bool compare_floats(float x, float y, uint8_t precis) {
  }                                                        \
  else {                                                   \
   char buff[32];                                          \
-  snprintf(buff, 32, "FAILED %%%s == %%%s.\n", fmt, fmt); \
+  snprintf(buff, 32, "FAILED EQ %%%s == %%%s.\n", fmt, fmt); \
   printf(buff, x, y);                                     \
   errors ++;                                              \
  }
@@ -57,7 +57,7 @@ bool compare_floats(float x, float y, uint8_t precis) {
  }                                                        \
  else {                                                   \
   char buff[32];                                          \
-  snprintf(buff, 32, "FAILED %%%s == %%%s.\n", fmt, fmt); \
+  snprintf(buff, 32, "FAILED FLEQ %%%s == %%%s.\n", fmt, fmt); \
   printf(buff, x, y);                                     \
   errors ++;                                              \
  }                     
@@ -66,7 +66,7 @@ bool compare_floats(float x, float y, uint8_t precis) {
  if (strcmp(x, y) == 0) {                         \
   successes ++;                                   \
  } else {                                         \
-  printf("FAILED %s streq %s.\n", x, y);          \
+  printf("FAILED STREQ %s == %s.\n", x, y);          \
   errors ++;                                      \
  }                     
 
