@@ -462,7 +462,15 @@ namespace lamb {
   operator / (
    unsigned_frac<CHARACTERISTIC,MANTISSA,saturate__> const & other
   ) const {
-   return unsigned_frac<0,8>(val / other.val);
+   big_type tmp   = val;
+   tmp          <<= SIZE * 8;
+   tmp           /= other.val;
+   tmp          >>= SIZE * 8;
+
+   printf("this %llu \n", tmp);
+   
+   
+   return unsigned_frac(val / other.val);
   }        
 
   template <bool saturate__>

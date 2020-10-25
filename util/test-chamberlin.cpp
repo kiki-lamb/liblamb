@@ -17,9 +17,11 @@ int main() {
   cf.Q = 0.5;
   cf.set_q();
 
-  fx_cf.F = sat_q15n16(5000, 0);
+  printf("\n");
+  
+  fx_cf.F = fx_chamberlin::pqtype( 5000 );
   fx_cf.set_frequency();
-  fx_cf.Q = sat_q15n16::from_float(0.5);
+  fx_cf.Q = fx_chamberlin::qtype::from_float(0.5);
   fx_cf.set_q();
 
   printf("F1 = % 05.5lf, Q1 = % 05.5lf \n", cf.F1, cf.Q1);
