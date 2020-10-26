@@ -481,27 +481,17 @@ namespace lamb {
   ) const {
 
    typedef
-    typename type_if<
-     SIGNED,
-    signed_frac<other_charac, other_mantissa, other_saturate>,
     unsigned_frac<other_charac, other_mantissa, other_saturate>
-    >::type
     other_type;
-
-   typedef typename other_type::big_type
-    right_big_type;
-
-   typedef typename unsigned_int<(sizeof(right_big_type))>::type
-    pseudo_right_big_type;
 
    type                    old(val);
 
    if constexpr(sizeof(other_type) > sizeof(self_type)) {
-    pseudo_right_big_type big_tmp     = (pseudo_right_big_type)val;
+    typename
+     other_type::big_type big_tmp     = val;
     big_tmp                          *= other.val;
     big_tmp                         >>= other.mantissa;     
     type                  small_tmp   = big_tmp;
-
     
     if (check_overflow('x', old, other.val, small_tmp)) {
      overflow = true;
@@ -510,7 +500,7 @@ namespace lamb {
     return self_type(small_tmp);
    }
    else {
-    big_type              big_tmp     = (big_type)val;
+    big_type              big_tmp     = val;
     big_tmp                          *= other.val;
     big_tmp                         >>= other_mantissa;
     type                  small_tmp   = big_tmp;
