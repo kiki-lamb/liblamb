@@ -18,8 +18,6 @@ namespace lamb {
     task(void(*work)(), unsigned long interval, volatile bool * flag = 0);
     task(void(*work)(), volatile bool * flag, unsigned long interval = 0);
     task(void(*work)());
-    task(task const & other);
-    virtual ~task();
   };
 }
 

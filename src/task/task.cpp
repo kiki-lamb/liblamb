@@ -15,21 +15,6 @@ void lamb::task::describe() const {
 }
 
 lamb::task::task(
-  task const & other
-) :
-  last_ran(other.last_ran),
-  interval(other.interval),
-  flag(other.flag),
-  id(other.id),
-  work(other.work)
-{
-#ifdef LAMBOS_TASK_DEBUG
-  Serial.print("Copy ");
-  describe();
-#endif
-}
-
-lamb::task::task(
   void(*_work)(),
   unsigned long _interval,
   volatile bool * _flag
@@ -94,5 +79,3 @@ bool lamb::task::operator()(unsigned long now) {
   else
     return false;
 }
-
-lamb::task::~task() {}
