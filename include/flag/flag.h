@@ -4,7 +4,7 @@
 namespace lamb {
   class flag {
   private:
-    bool value;
+    bool _value;
 
   public:
     explicit flag(bool _value = false);

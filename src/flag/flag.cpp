@@ -2,23 +2,24 @@
 #include "Arduino.h"
 
 void lamb::flag::set() {
-  value = true;
+  _value = true;
 }
 
 void lamb::flag::unset() {
-  value = false;
+  _value = false;
 }
 
-lamb::flag::flag(bool _value) :
-  value(_value) {
+lamb::flag::flag(bool value_) :
+  _value(value_) {
 };
 
 bool lamb::flag::consume() {
-  if (value) {
-    value = false;
+  if (_value) {
+    _value = false;
     
     return true;
   }
+
   return false;
 }
 

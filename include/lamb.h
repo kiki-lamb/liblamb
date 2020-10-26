@@ -35,8 +35,6 @@
   #include "containers/ring_buffer/ring_buffer.h"
   #include "containers/positional_fixed_array/positional_fixed_array.h"
 
-  #include "fonts/fonts.h"
-
   #include "task/task.h"
 
 #ifndef LAMB_NO_ARDUINO
@@ -60,13 +58,13 @@
   #include "events/sources/source.h"
   #include "events/sources/combine.h"
 
-#ifdef LAMBOS_INCLUDE_SAMPLES
+  #ifdef LAMBOS_INCLUDE_SAMPLES
     #include "samples/samples22k.h"
     #include "samples/samples16k.h"
   #endif 
 
   #if defined(__AVR__)
-    #include "fast_math/avr_fast_math.h"
+    #include "avr_fast_math/avr_fast_math.h"
   #endif
 
   #if !defined(__AVR_ATtiny85__) && !defined(LAMB_NO_ARDUINO) 
