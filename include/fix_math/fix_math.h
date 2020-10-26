@@ -166,6 +166,22 @@ namespace lamb {
    >::type
   derived_type;
   
+  typedef
+  typename type_if<
+   SIGNED,
+   signed_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), SATURATE>,
+   unsigned_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), SATURATE>
+   >::type
+  larger_type;
+  
+  typedef
+  typename type_if<
+   SIGNED,
+   signed_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), SATURATE>,
+   unsigned_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), SATURATE>
+   >::type
+  smaller_type;
+  
 ////////////////////////////////////////////////////////////////////////////////
 
   static constexpr
