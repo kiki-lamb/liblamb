@@ -35,7 +35,7 @@ namespace lamb {
 //    D1 = B
 //    D2 = L
 
-   sat_q0n15 process(sat_q0n15 input) {
+   q0n15s process(q0n15s input) {
     double I = double(input);
     
     printf("% 5.3lf, ", I)    ;
@@ -60,7 +60,7 @@ namespace lamb {
     D2 = L                    ;
     printf("% 5.3lf,  ", D2)   ;
         
-    return sat_q0n15::from_double(L);
+    return q0n15s::from_double(L);
    }
   };
 }

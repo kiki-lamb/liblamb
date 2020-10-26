@@ -80,17 +80,17 @@ namespace lamb {
    >::type
   big_type;
   
+  template <bool sat>
+  using compatible_type = fixed<CHARACTERISTIC, MANTISSA, sat>;
+
   typedef
-  fixed<CHARACTERISTIC, MANTISSA, (! SATURATE)>
+  compatible_type<(! SATURATE)>
    sat_cast_type;
   
   typedef
   fixed<CHARACTERISTIC, MANTISSA, SATURATE>
   self_type;
 
-  template <bool sat>
-  using compatible_type = fixed<CHARACTERISTIC, MANTISSA, sat>;
-  
 ////////////////////////////////////////////////////////////////////////////////
 
  public:
@@ -184,12 +184,6 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  sat_cast_type sat_cast () const {
-   return sat_cat_type(val);
-  }
-  
-////////////////////////////////////////////////////////////////////////////////
-
   template <bool sat>
   bool
   operator == (
@@ -254,6 +248,7 @@ namespace lamb {
   
   template <bool sat>
   class adjacent_types {
+  public:
    typedef
    fixed<(CHARACTERISTIC << 1), (MANTISSA << 1), sat>
    larger_type;
@@ -263,26 +258,34 @@ namespace lamb {
    smaller_type;
   };
 
+  typedef typename adjacent_types<SATURATE>::larger_type larger_type;
+  typedef typename adjacent_types<SATURATE>::smaller_type smaller_type;
+  
 ////////////////////////////////////////////////////////////////////////////////
 
  public:
 
   template <bool saturate__>
   operator
-  typename adjacent_types<saturate__>::larger_type () const {
-   return typename adjacent_types<saturate__>::larger_type(
+  larger_type () const {
+   return larger_type(
     val << 1
    );
   }
 
   template <bool saturate__>
   operator
-  typename adjacent_types<saturate__>::smaller_type () const {
-   return typename adjacent_types<saturate__>::smaller_type(
+  smaller_type () const {
+   return smaller_type(
     val >> 1
    );
   }
 
+  operator
+  sat_cast_type () const {
+   return sat_cast_type(val);
+  }
+  
 ///////////////////////////////////////////////////////////////////////////////
 
   template <bool sat>
@@ -510,24 +513,6 @@ namespace lamb {
 // Typedefs
 //////////////////////////////////////////////////////////////////////////////
   
-// Value types ///////////////////////////////////////////////////////////////
-
- typedef uint8_t                        q0n8_value_type;    
- typedef uint16_t                       q8n8_value_type;                       
- typedef uint16_t                       q0n16_value_type;                      
- typedef uint32_t                       q16n16_value_type;                     
- typedef uint32_t                       q0n32_value_type;                    
-
- typedef int8_t                         q0n7_value_type;        
- typedef int16_t                        q7n8_value_type;                      
- typedef int16_t                        q0n15_value_type;                      
- typedef int32_t                        q15n16_value_type;                     
- typedef int32_t                        q0n31_value_type;                      
-
- // used only as 'big_type's:
- typedef uint64_t                       q0n64_value_type;
- typedef int64_t                        q0n63_value_type;
-
 // Overflow-able types ////////////////////////////////////////////////////////
   
  typedef fixed<  0,  8, false > q0n8;
@@ -547,20 +532,20 @@ namespace lamb {
 
 // Saturating types ///////////////////////////////////////////////////////////
  
- typedef fixed<  0,  8, true  > sat_q0n8;
- typedef fixed<  8,  8, true  > sat_q8n8;
- typedef fixed<  0, 16, true  > sat_q0n16;
- typedef fixed< 16, 16, true  > sat_q16n16;  
- typedef fixed<  0, 32, true  > sat_q0n32;
+ typedef fixed<  0,  8, true  > q0n8s;
+ typedef fixed<  8,  8, true  > q8n8s;
+ typedef fixed<  0, 16, true  > q0n16s;
+ typedef fixed< 16, 16, true  > q16n16s; 
+ typedef fixed<  0, 32, true  > q0n32s;
 
- typedef fixed<  2, 14, true  > sat_q2n14;
- typedef fixed<  2, 30, true  > sat_q2n30;
+ typedef fixed<  2, 14, true  > q2n14s;
+ typedef fixed<  2, 30, true  > q2n30s;
   
- typedef fixed<  0,  7, true  > sat_q0n7;
- typedef fixed<  7,  8, true  > sat_q7n8;
- typedef fixed<  0, 15, true  > sat_q0n15;
- typedef fixed< 15, 16, true  > sat_q15n16;
- typedef fixed<  0, 31, true  > sat_q0n31;  
+ typedef fixed<  0,  7, true  > q0n7s;
+ typedef fixed<  7,  8, true  > q7n8s;
+ typedef fixed<  0, 15, true  > q0n15s;
+ typedef fixed< 15, 16, true  > q15n16s;
+ typedef fixed<  0, 31, true  > q0n31s;
  
 ///////////////////////////////////////////////////////////////////////////////
 

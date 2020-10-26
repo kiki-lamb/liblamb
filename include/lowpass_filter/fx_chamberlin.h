@@ -6,8 +6,8 @@
 namespace lamb {
   class fx_chamberlin {
   public:
-   typedef sat_q15n16 qtype;
-   typedef sat_q0n32 pqtype;
+   typedef q15n16s qtype;
+   typedef q0n32s pqtype;
    
    qtype  Q1, Q, F1, D1, D2, L, H, B, N;
    pqtype F,  FS;
@@ -53,8 +53,8 @@ namespace lamb {
 //    D1 = B
 //    D2 = L
 
-   sat_q0n15 process(sat_q0n15 I_) {
-    sat_q15n16 I(I_.val << 1);
+   q0n15s process(q0n15s I_) {
+    q15n16s I(I_.val << 1);
     
     printf("% 6.3lf, ", double(I))    ;
     printf("% 6.3lf, ", double(F1))   ;        
@@ -85,7 +85,7 @@ namespace lamb {
     D2 = L                               ;
     printf("% 9.3lf  ", double(D2))   ;
         
-    return sat_q0n15::from_double(0.0);
+    return q0n15s::from_double(0.0);
    }
   };
 }

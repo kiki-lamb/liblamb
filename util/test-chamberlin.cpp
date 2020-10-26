@@ -65,7 +65,7 @@ int main() {
       
       printf("%lf, ", acc / 65536.0);
 
-        auto y = fx_cf.process(sat_q0n15(acc >= 32768 ? q0n15::MIN : q0n15::MAX));
+        auto y = fx_cf.process(q0n15s(acc >= 32768 ? q0n15::MIN : q0n15::MAX));
       
       printf("\n");
      }

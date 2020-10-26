@@ -12,53 +12,53 @@
 namespace lamb {
   class moog_filter {
   public:
-   sat_q0n16  freq;     
-   sat_q2n14  q;    
-   sat_q0n15  out1, out2;
-   sat_q0n15  in1, in2;
+   q0n16s  freq;     
+   q2n14s  q;    
+   q0n15s  out1, out2;
+   q0n15s  in1, in2;
 
    moog_filter() :
-    freq(sat_q0n16::from_double(0.65)),
+    freq(q0n16s::from_double(0.65)),
     q(0),
     out1(0), out2(0),
     in1(0), in2(0) {}
       
-   static constexpr sat_q8n8  _1_0       = sat_q8n8(sat_q8n8::ONE);
-   static constexpr sat_q8n8  _1_16      = sat_q8n8::from_double(1.16);
-   static constexpr sat_q8n8  _0_15      = sat_q8n8::from_double(0.15);
-   static constexpr sat_q8n8  _0_35013   = sat_q8n8::from_double(0.35013);
-   static constexpr sat_q8n8  _0_3       = sat_q8n8::from_double(0.3);
+   static constexpr q8n8s  _1_0       = q8n8s(q8n8s::ONE);
+   static constexpr q8n8s  _1_16      = q8n8s::from_double(1.16);
+   static constexpr q8n8s  _0_15      = q8n8s::from_double(0.15);
+   static constexpr q8n8s  _0_35013   = q8n8s::from_double(0.35013);
+   static constexpr q8n8s  _0_3       = q8n8s::from_double(0.3);
 
 //   double f = freq * 1.16;
 //   double fb = q * (1.0 - 0.15 * f * f);
 //   input -= out4 * fb;
 //   input *= 0.35013 * (f*f)*(f*f);
 
-   sat_q0n15 process(sat_q0n15 input) {
+   q0n15s process(q0n15s input) {
     printf("% 04.3f, ",      double(input));
 
-    sat_q8n8 f         = _1_16 * freq;    
+    q8n8s f         = _1_16 * freq;    
     printf("% 04.3f, ", double(f));
 
-    sat_q8n8 ff        = f * f;    
+    q8n8s ff        = f * f;    
     printf("% 04.3f, ", double(ff));
 
-    sat_q8n8 ffff      = ff * ff;
+    q8n8s ffff      = ff * ff;
     printf("% 04.3f, ", double(ffff));
 
-    sat_q8n8 fb_coeff  = _1_0 - (ffff * _0_15);    
+    q8n8s fb_coeff  = _1_0 - (ffff * _0_15);    
     printf("% 04.3f, ", double(fb_coeff));
     
-    sat_q2n14 fb       = q * fb_coeff;
+    q2n14s fb       = q * fb_coeff;
     printf("% 04.3f, ", double(fb));
     
-    sat_q0n15 sub      = out2 * fb;
+    q0n15s sub      = out2 * fb;
     printf("% 04.3f, ", double(sub));
     
     input -= sub;
     printf("% 04.3f, ", double(sub));
 
-    sat_q8n8 mul       = ffff * _0_35013;
+    q8n8s mul       = ffff * _0_35013;
     printf("% 04.3f, ", double(mul));
     
     input *= mul;
@@ -66,16 +66,16 @@ namespace lamb {
 
     printf("% 04.3f, ", double(f));
     
-    sat_q8n8 inv_f     = _1_0 - f;
+    q8n8s inv_f     = _1_0 - f;
     printf("% 04.3f, ", double(inv_f));
     
     {
      printf("% 04.3f, ", double(out1));
 
-     sat_q0n15 part_in = in1 * _0_3;
+     q0n15s part_in = in1 * _0_3;
      printf("% 04.3f, ", double(part_in));
      
-     sat_q0n15 part_out = out1 * inv_f;
+     q0n15s part_out = out1 * inv_f;
      printf("% 04.3f, ", double(part_out));     
      
      out1 = input + part_in + part_out;     
@@ -88,10 +88,10 @@ namespace lamb {
     {
      printf("% 04.3f, ", double(out1));
 
-     sat_q0n15 part_in = in2 * _0_3;
+     q0n15s part_in = in2 * _0_3;
      printf("% 04.3f, ", double(part_in));
      
-     sat_q0n15 part_out = out2 * inv_f;
+     q0n15s part_out = out2 * inv_f;
      printf("% 04.3f, ", double(part_out));     
      
      out2 = out1 + part_in + part_out;     
