@@ -497,9 +497,10 @@ namespace lamb {
    type                    old(val);
 
    if constexpr(sizeof(other_type) > sizeof(self_type)) {
-    pseudo_right_big_type big_tmp     = ((pseudo_right_big_type)val) * other.val;
+    pseudo_right_big_type big_tmp     = (pseudo_right_big_type)val;
+    big_tmp                          *= other.val;
     big_tmp                         >>= other.mantissa;     
-    type                  small_tmp   = (type)big_tmp;
+    type                  small_tmp   = big_tmp;
 
     
     if (check_overflow('x', old, other.val, small_tmp)) {
@@ -509,9 +510,10 @@ namespace lamb {
     return self_type(small_tmp);
    }
    else {
-    big_type              big_tmp     = ((big_type)val) * other.val;
+    big_type              big_tmp     = (big_type)val;
+    big_tmp                          *= other.val;
     big_tmp                         >>= other_mantissa;
-    type                  small_tmp   = (type)big_tmp;
+    type                  small_tmp   = big_tmp;
      
     if (check_overflow('*', old, other.val, small_tmp)) {
      overflow = true;
@@ -545,14 +547,14 @@ namespace lamb {
     signed_frac<other_charac, other_mantissa, other_saturate>
     other_type;
 
-   type                    old(val);
+   type                   old(val);
 
    if constexpr(sizeof(other_type) > sizeof(self_type)) {
     typename
-     other_type::big_type big_tmp        = (typename other_type::big_type)val;
-    big_tmp                             *= other.val;
-    big_tmp                            >>= other.mantissa;     
-    type                     small_tmp   = big_tmp;
+     other_type::big_type big_tmp      = (typename other_type::big_type)val;
+    big_tmp                           *= other.val;
+    big_tmp                          >>= other.mantissa;     
+    type                  small_tmp    = big_tmp;
 
     if (check_overflow('x', old, other.val, small_tmp)) {
      overflow = true;
@@ -561,10 +563,10 @@ namespace lamb {
     return self_type(small_tmp);
    }
    else {
-    big_type              big_tmp     = (big_type)val;
-    big_tmp                          *=  other.val;
-    big_tmp                         >>= other_mantissa;
-    type                  small_tmp   = big_tmp;
+    big_type              big_tmp      = (big_type)val;
+    big_tmp                           *= other.val;
+    big_tmp                          >>= other_mantissa;
+    type                  small_tmp    = big_tmp;
  
     if (check_overflow('*', old, other.val, small_tmp)) {
      overflow = true;
@@ -652,7 +654,7 @@ namespace lamb {
 
    if constexpr(sizeof(other_type) > sizeof(self_type)) {
     typename
-     other_type::big_type  big_tmp    = val;
+     other_type::big_type big_tmp     = val;
     big_tmp                         <<= other_mantissa;
     big_tmp                          /= other.val;
     type                  small_tmp   = big_tmp;
