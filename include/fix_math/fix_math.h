@@ -95,18 +95,18 @@ namespace lamb {
  ////////////////////////////////////////////////////////////////////////////////
  
  template <bool use_left, typename left, typename right>
- class typedef_if {
+ class type_if {
   
  };
 
  template <typename left, typename right>
- class typedef_if<true, left, right> {
+ class type_if<true, left, right> {
  public:
   typedef left type;
  };
 
  template <typename left, typename right>
- class typedef_if<false, left, right> {
+ class type_if<false, left, right> {
  public:
   typedef right type;
  };
@@ -151,14 +151,14 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   typedef
-  typename typedef_if<
+  typename type_if<
    SIGNED,
    typename signed_int<SIZE>::type,
    typename unsigned_int<SIZE>::type
    >::type type;
 
   typedef
-  typename typedef_if<
+  typename type_if<
    SIGNED,
    typename signed_int<(SIZE << 1)>::type,
    typename unsigned_int<(SIZE << 1)>::type
@@ -173,7 +173,7 @@ namespace lamb {
   derived_type;
 
   typedef
-  typename typedef_if<
+  typename type_if<
    SIGNED,
    unsigned_frac<CHARACTERISTIC, MANTISSA, SATURATE>,
    signed_frac<CHARACTERISTIC, MANTISSA, SATURATE>
@@ -430,6 +430,8 @@ namespace lamb {
    signed_frac<other_charac, other_mantissa, other_saturate> const & other
   ) const {
 
+   static_assert(SIGNED, "must be signed");
+   
    typedef signed_frac<other_charac,other_mantissa, other_saturate>
     other_type;
    typedef typename other_type::big_type
