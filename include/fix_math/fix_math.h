@@ -320,9 +320,7 @@ namespace lamb {
    big_tmp                 += other.val;
    type          small_tmp  = big_tmp;
    
-   if (check_overflow('+', old, other.val, small_tmp)) {
-    overflow = true;
-   }
+   overflow |= check_overflow('+', old, other.val, small_tmp);
 
    return self_type(small_tmp);
   }    
@@ -349,9 +347,7 @@ namespace lamb {
    big_tmp                 -= other.val;
    type          small_tmp  = big_tmp;
    
-   if (check_overflow('-', old, other.val, small_tmp)) {
-    overflow = true;
-   }
+   overflow |= check_overflow('-', old, other.val, small_tmp);
 
    return self_type(small_tmp);
   }    
@@ -394,9 +390,7 @@ namespace lamb {
     big_tmp                         >>= other.mantissa;     
     type                  small_tmp   = big_tmp;
     
-    if (check_overflow('x', old, other.val, small_tmp)) {
-     overflow = true;
-    }
+    overflow |= check_overflow('x', old, other.val, small_tmp);
 
     return self_type(small_tmp);
    }
@@ -406,9 +400,7 @@ namespace lamb {
     big_tmp                         >>= other_mantissa;
     type                  small_tmp   = big_tmp;
      
-    if (check_overflow('*', old, other.val, small_tmp)) {
-     overflow = true;
-    }
+    overflow |= check_overflow('*', old, other.val, small_tmp);
 
     return self_type(small_tmp);
    }
@@ -462,9 +454,7 @@ namespace lamb {
     big_tmp                          /= other.val;
     type                  small_tmp   = big_tmp;
   
-    if (check_overflow('/', old, other.val, small_tmp)) {
-     overflow = true;
-    }
+    overflow |= check_overflow('/', old, other.val, small_tmp);
 
     return self_type(small_tmp);
    }
