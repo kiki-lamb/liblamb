@@ -481,10 +481,17 @@ namespace lamb {
    unsigned_frac<other_charac, other_mantissa, other_saturate> const & other
   ) const {
 
-   typedef unsigned_frac<other_charac,other_mantissa, other_saturate>
+   typedef
+    typename type_if<
+     SIGNED,
+    signed_frac<other_charac, other_mantissa, other_saturate>,
+    unsigned_frac<other_charac, other_mantissa, other_saturate>
+    >::type
     other_type;
+
    typedef typename other_type::big_type
     right_big_type;
+
    typedef typename unsigned_int<(sizeof(right_big_type))>::type
     pseudo_right_big_type;
 
@@ -535,10 +542,17 @@ namespace lamb {
 
    static_assert(SIGNED, "must be signed");
    
-   typedef signed_frac<other_charac,other_mantissa, other_saturate>
+   typedef
+    typename type_if<
+     SIGNED,
+    signed_frac<other_charac, other_mantissa, other_saturate>,
+    unsigned_frac<other_charac, other_mantissa, other_saturate>
+    >::type
     other_type;
+
    typedef typename other_type::big_type
     right_big_type;
+
    typedef typename unsigned_int<(sizeof(right_big_type))>::type
     pseudo_right_big_type;
 
@@ -585,10 +599,18 @@ namespace lamb {
   operator / (
    derived_template<other_charac,other_mantissa,other_saturate> const & other
   ) const {
-   typedef derived_template<other_charac,other_mantissa, other_saturate>
+
+   typedef
+    typename type_if<
+     SIGNED,
+    signed_frac<other_charac, other_mantissa, other_saturate>,
+    unsigned_frac<other_charac, other_mantissa, other_saturate>
+    >::type
     other_type;
+
    typedef typename other_type::big_type
     right_big_type;
+
    typedef typename unsigned_int<(sizeof(right_big_type))>::type
     pseudo_right_big_type;
 
