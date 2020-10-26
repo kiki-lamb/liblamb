@@ -426,7 +426,7 @@ namespace lamb {
   ) const {
    type          old       = val;
    big_type      big_tmp   = ((big_type)old) - other.val;
-   type          small_tmp = (type)big_tmp;
+   type          small_tmp = big_tmp;
    
    if (check_overflow('-', old, other.val, small_tmp)) {
     overflow = true;
@@ -452,7 +452,7 @@ namespace lamb {
   ) const {
    type          old       = val;
    big_type      big_tmp   = ((big_type)old) - other.val;
-   type          small_tmp = (type)big_tmp;
+   type          small_tmp = big_tmp;
    
    if (check_overflow('-', old, other.val, small_tmp)) {
     overflow = true;
