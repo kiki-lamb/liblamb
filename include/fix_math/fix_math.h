@@ -363,7 +363,7 @@ namespace lamb {
      saturate__
      >
     >::type(
-    val >> 1
+    val << 1
    );
   }
 
