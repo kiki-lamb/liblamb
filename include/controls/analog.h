@@ -2,11 +2,6 @@
 #define LAMB_DRUMMER_ANALOG_H
 
 #include <Arduino.h>
-#include "../light_buffer/light_buffer.h"
-#include "../sample_type_traits/sample_type_traits.h"
-
-// Right now, this generally assumes pins are pulled up and brought to ground
-// by the analog.
 
 namespace lamb {
   namespace controls {
@@ -36,7 +31,10 @@ namespace lamb {
         uint8_t  signal_number;
         uint16_t adc_value;
         
-        analog_event(uint8_t const & signal_number_, uint16_t const & adc_value_) :
+        analog_event(
+         uint8_t const & signal_number_,
+         uint16_t const & adc_value_
+        ) :
           signal_number(signal_number_),
           adc_value(adc_value_) {}
       };

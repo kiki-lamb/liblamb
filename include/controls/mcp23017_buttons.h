@@ -2,7 +2,6 @@
 #define LAMB_DRUMMER_BUTTON_PAD_P_MCP23017_H
 
 #include <Arduino.h>
-#include "../light_buffer/light_buffer.h"
 #include "mcp23017.h"
 
 namespace lamb {

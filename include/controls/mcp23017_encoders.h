@@ -4,7 +4,6 @@
 #include <inttypes.h>
 #include "mcp23017.h"
 #include "encoder_state/encoder_state.h"
-#include "../light_buffer/light_buffer.h"
 
 namespace lamb {
   namespace controls {
