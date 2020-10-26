@@ -372,6 +372,110 @@ namespace lamb {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+  template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
+  derived_type
+  operator * (
+   unsigned_frac<other_charac, other_mantissa, other_saturate> const & other
+  ) const {
+
+   typedef unsigned_frac<other_charac,other_mantissa, other_saturate>
+    other_type;
+   typedef typename other_type::big_type
+    right_big_type;
+   typedef typename unsigned_int<(sizeof(right_big_type))>::type
+    pseudo_right_big_type;
+
+   derived_type            ret(0);
+   type                    old(val);
+
+   if constexpr(sizeof(other_type) > sizeof(derived_type)) {
+     pseudo_right_big_type tmp   =
+      ((pseudo_right_big_type)val) * other.val;
+
+     tmp                       >>= other.mantissa;     
+     ret.val                     = (type)tmp;
+
+     if (check_overflow('x', old, other.val, ret.val)) {
+      overflow = true;
+     }
+    }
+    else {
+     big_type              tmp   = ((big_type)val) * other.val;
+     tmp                       >>= other_mantissa;
+     ret.val                     = (type)tmp;
+ 
+     if (check_overflow('*', old, other.val, ret.val)) {
+      overflow = true;
+     }
+    }
+   
+    return ret;
+   }
+
+  template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
+    derived_type & 
+    operator *= (
+     unsigned_frac<other_charac,other_mantissa, saturate__> const & other
+    ) {
+    val = ((*this) * other).val;
+
+   return *(static_cast<derived_type *>(this));
+   }
+
+///////////////////////////////////////////////////////////////////////////////
+
+  template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
+  derived_type
+  operator * (
+   signed_frac<other_charac, other_mantissa, other_saturate> const & other
+  ) const {
+
+   typedef signed_frac<other_charac,other_mantissa, other_saturate>
+    other_type;
+   typedef typename other_type::big_type
+    right_big_type;
+   typedef typename unsigned_int<(sizeof(right_big_type))>::type
+    pseudo_right_big_type;
+
+   derived_type            ret(0);
+   type                    old(val);
+
+   if constexpr(sizeof(other_type) > sizeof(derived_type)) {
+     pseudo_right_big_type tmp   =
+      ((pseudo_right_big_type)val) * other.val;
+
+     tmp                       >>= other.mantissa;     
+     ret.val                     = (type)tmp;
+
+     if (check_overflow('x', old, other.val, ret.val)) {
+      overflow = true;
+     }
+    }
+    else {
+     big_type              tmp   = ((big_type)val) * other.val;
+     tmp                       >>= other_mantissa;
+     ret.val                     = (type)tmp;
+ 
+     if (check_overflow('*', old, other.val, ret.val)) {
+      overflow = true;
+     }
+    }
+   
+    return ret;
+   }
+
+  template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
+    derived_type & 
+    operator *= (
+     signed_frac<other_charac,other_mantissa, saturate__> const & other
+    ) {
+    val = ((*this) * other).val;
+
+   return *(static_cast<derived_type *>(this));
+   }
+
+///////////////////////////////////////////////////////////////////////////////
+
  }; // template frac_base
  
 ///////////////////////////////////////////////////////////////////////////////
@@ -409,58 +513,6 @@ namespace lamb {
    type const & mantissa__
   ) : base((characteristic__ * base::ONE) + mantissa__)
    {}
-
-///////////////////////////////////////////////////////////////////////////////
-
-  template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
-  unsigned_frac
-  operator * (
-   unsigned_frac<other_charac, other_mantissa, other_saturate> const & other
-  ) const {
-
-   typedef unsigned_frac<other_charac,other_mantissa, other_saturate>
-    other_type;
-   typedef typename other_type::big_type
-    right_big_type;
-   typedef typename unsigned_int<(sizeof(right_big_type))>::type
-    pseudo_right_big_type;
-
-   unsigned_frac          ret(0);
-   type                   old(base::val);
-
-   if constexpr(sizeof(other_type) > sizeof(unsigned_frac)) {
-     pseudo_right_big_type tmp   =
-      ((pseudo_right_big_type)base::val) * other.val;
-
-     tmp                       >>= other.mantissa;     
-     ret.val                     = (type)tmp;
-
-     if (base::check_overflow('x', old, other.val, ret.val)) {
-      base::overflow = true;
-     }
-    }
-    else {
-     big_type              tmp   = ((big_type)base::val) * other.val;
-     tmp                       >>= other_mantissa;
-     ret.val                     = (type)tmp;
- 
-     if (base::check_overflow('*', old, other.val, ret.val)) {
-      base::overflow = true;
-     }
-    }
-   
-    return ret;
-   }
-
-  template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
-    unsigned_frac & 
-    operator *= (
-     unsigned_frac<other_charac,other_mantissa, saturate__> const & other
-    ) {
-    base::val = ((*this) * other).val;
-
-    return *this;
-   }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -554,110 +606,55 @@ namespace lamb {
   
 ////////////////////////////////////////////////////////////////////////////////
     
-    template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
-    signed_frac
-    operator * (
-     unsigned_frac<other_charac, other_mantissa, other_saturate> const & other
-    ) const {
+    // template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
+    // signed_frac
+    // operator * (
+    //  unsigned_frac<other_charac, other_mantissa, other_saturate> const & other
+    // ) const {
 
-     typedef unsigned_frac<other_charac,other_mantissa, other_saturate>
-      other_type;
-     typedef typename other_type::big_type
-      right_big_type;
-     typedef typename unsigned_int<(sizeof(right_big_type))>::type
-      pseudo_right_big_type;
+    //  typedef unsigned_frac<other_charac,other_mantissa, other_saturate>
+    //   other_type;
+    //  typedef typename other_type::big_type
+    //   right_big_type;
+    //  typedef typename unsigned_int<(sizeof(right_big_type))>::type
+    //   pseudo_right_big_type;
 
-     signed_frac ret(0);
-     type        old(base::val);
+    //  signed_frac ret(0);
+    //  type        old(base::val);
 
-     if constexpr(sizeof(other_type) > sizeof(signed_frac)) {
-       pseudo_right_big_type tmp     =
-        ((pseudo_right_big_type)base::val) * other.val;
+    //  if constexpr(sizeof(other_type) > sizeof(signed_frac)) {
+    //    pseudo_right_big_type tmp     =
+    //     ((pseudo_right_big_type)base::val) * other.val;
        
-       tmp                         >>= other_mantissa;
-       ret.val                       = (type)tmp;
+    //    tmp                         >>= other_mantissa;
+    //    ret.val                       = (type)tmp;
 
-       if (base::check_overflow('*', old, other.val, ret.val)) {
-        base::overflow = true;
-       }
-      }
-      else {
-       big_type              tmp     = ((big_type)base::val) * other.val;      
-       tmp                         >>= other_mantissa;
-       ret.val                       = (type)tmp;
+    //    if (base::check_overflow('*', old, other.val, ret.val)) {
+    //     base::overflow = true;
+    //    }
+    //   }
+    //   else {
+    //    big_type              tmp     = ((big_type)base::val) * other.val;      
+    //    tmp                         >>= other_mantissa;
+    //    ret.val                       = (type)tmp;
 
-       if (base::check_overflow('*', old, other.val, ret.val)) {
-        base::overflow = true;
-       }
-      }    
+    //    if (base::check_overflow('*', old, other.val, ret.val)) {
+    //     base::overflow = true;
+    //    }
+    //   }    
 
-      return ret;
-     }    
+    //   return ret;
+    //  }    
 
-     template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
-      signed_frac &
-      operator *= (
-       unsigned_frac<other_charac,other_mantissa,other_saturate> const & other
-      ) {
-      base::val = ((*this) * other).val;
+    //  template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
+    //   signed_frac &
+    //   operator *= (
+    //    unsigned_frac<other_charac,other_mantissa,other_saturate> const & other
+    //   ) {
+    //   base::val = ((*this) * other).val;
 
-      return *this;
-     }
-
-///////////////////////////////////////////////////////////////////////////////
-
-     template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
-      signed_frac
-      operator * (
-       signed_frac<other_charac,other_mantissa,other_saturate> const & other
-      ) const {
-      //static_assert(0 == other_charac, "Reverse operand order!");
-
-      typedef signed_frac<other_charac,other_mantissa,other_saturate>
-       other_type;
-      typedef typename other_type::big_type
-       right_big_type;
-      typedef typename signed_int<(sizeof(right_big_type))>::type
-       pseudo_right_big_type;
-
-      signed_frac r(0);
-      type        old(base::val);
-   
-      if constexpr(sizeof(other_type) > sizeof(signed_frac)) {
-       type              tmp   =
-        ((pseudo_right_big_type)base::val) *
-        other.val >>
-        other_type::base::MANTISSA;
-      
-        if (base::check_overflow('*', old, other.val, r.val)) {
-         base::overflow = true;
-        }
-
-        return r;
-       }
-       else {
-        type              tmp   =
-         ((big_type)base::val) *
-         other.val >>
-         other_type::base::MANTISSA;;
-      
-        if (base::check_overflow('*', old, other.val, r.val)) {
-         base::overflow = true;
-        }
-
-        return signed_frac(tmp);
-       }
-      }    
-
-      template <uint8_t other_charac,uint8_t other_mantissa, bool other_saturate>
-       signed_frac &
-       operator *= (
-        signed_frac<other_charac,other_mantissa,other_saturate> const & other
-       ) {
-       base::val = ((*this) * other).val;
-   
-       return *this;
-      }
+    //   return *this;
+    //  }
 
 ///////////////////////////////////////////////////////////////////////////////
 
