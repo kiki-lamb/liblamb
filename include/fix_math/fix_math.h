@@ -18,66 +18,6 @@ using namespace std;
 
 namespace lamb {
 
-///////////////////////////////////////////////////////////////////////////////
-
-// This check is currently not effective for multiplication operations and
-// should really be re-written entirely:
- 
-#ifndef LAMB_FP_NO_OVERFLOW_CHECKING
-#define CHECK_OVERFLOW                                          \
- template <typename delta_t>                                    \
- static bool check_overflow(                                    \
-  char    const & symbol,                                       \
-  type    const & old_val,                                      \
-  delta_t const & delta,                                        \
-  type          & set                                           \
- ) {                                                            \
-  int64_t ttmp = old_val;                                       \
-  int64_t ttmp_delta = delta;                                   \
-                                                                \
-  ttmp += ttmp_delta;                                           \
-                                                                \
-  bool over  = ttmp > MAX;                                      \
-                                                                \
-  if (over)                                                     \
-   printf("%lld exceeds %lld.\n", ttmp, MAX);                   \
-                                                                \
-  bool under = ttmp < MIN;                                      \
-                                                                \
-  if (under)                                                    \
-   printf("%lld under %lld.\n", ttmp, MIN);                     \
-                                                                \
-  if (over || under) {                                          \
-   if (SATURATE) {                                              \
-    printf(                                                     \
-     "SATURATE: %ld %c %ld = %lld MIN: %lld MAX: %lld \n",      \
-     old_val,                                                   \
-     symbol,                                                    \
-     delta,                                                     \
-     ttmp,                                                      \
-     MIN,                                                       \
-     MAX                                                        \
-    );                                                          \
-    set = MAX;                                                  \
-   }                                                            \
-   else {                                                       \
-   }                                                            \
-  }                                                             \
-                                                                \
-  return (over || under);                                       \
- }                                                
-#else
-#define CHECK_OVERFLOW                                          \
- template <typename big_t, typename delta_t, typename new_t>    \
- static bool check_overflow(                                    \
-  char    const & symbol,                                       \
-  type    const & old_val,                                      \
-  delta_t const & delta,                                        \
-  new_t   const & new_val,                                      \
-  type          & set                                           \
- ) { return false; }                                                    
-#endif
-
 ////////////////////////////////////////////////////////////////////////////////
  
  template <bool use_left, typename left, typename right>
@@ -256,19 +196,15 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  CHECK_OVERFLOW;
-
-////////////////////////////////////////////////////////////////////////////////
-
   operator double() const {
    return val / (ONE * 1.0);
   }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-  static constexpr self_type from_float(double const & tmp_) {
-   int           divisor = tmp_;
-   double        modulus = tmp_ - divisor;
+  static constexpr self_type from_float(double const & tmp) {
+   int           divisor = tmp;
+   double        modulus = tmp - divisor;
    type          ipart   = ONE * divisor + int(ONE * modulus);
    
    return self_type(ipart);
@@ -634,7 +570,7 @@ namespace lamb {
   template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
   self_type
   operator / (
-   signed_frac<other_charac,other_mantissa,other_saturate> const & other
+   signed_frac<other_charac, other_mantissa, other_saturate> const & other
   ) const {
 
    static_assert(SIGNED, "must be signed");
@@ -684,6 +620,62 @@ namespace lamb {
   
 ///////////////////////////////////////////////////////////////////////////////
 
+// This check is currently not effective for multiplication operations and
+// should really be re-written entirely:
+ 
+#ifndef LAMB_FP_NO_OVERFLOW_CHECKING
+  template <typename delta_t>                                    
+  static bool check_overflow(                                    
+   char    const & symbol,                                       
+   type    const & old_val,                                      
+   delta_t const & delta,                                        
+   type          & set                                           
+  ) {                                                            
+   int64_t ttmp = old_val;                                       
+   int64_t ttmp_delta = delta;                                   
+   
+   ttmp += ttmp_delta;                                           
+                                                                
+   bool over  = ttmp > MAX;                                      
+   
+   if (over)                                                     
+    printf("%lld exceeds %lld.\n", ttmp, MAX);                   
+   
+   bool under = ttmp < MIN;                                      
+   
+   if (under)                                                    
+    printf("%lld under %lld.\n", ttmp, MIN);                     
+   
+   if (over || under) {                                          
+    if (SATURATE) {                                              
+     printf(                                                     
+      "SATURATE: %ld %c %ld = %lld MIN: %lld MAX: %lld \n",      
+      old_val,                                                   
+      symbol,                                                    
+      delta,                                                     
+      ttmp,                                                      
+      MIN,                                                       
+      MAX                                                        
+     );                                                          
+     set = MAX;                                                  
+    }                                                            
+    else {                                                       
+    }                                                            
+   }                                                             
+   
+   return (over || under);                                       
+  }                                                
+#else
+ template <typename big_t, typename delta_t, typename new_t>
+ static bool check_overflow(                                
+  char    const & symbol,                                   
+  type    const & old_val,                                  
+  delta_t const & delta,                                    
+  new_t   const & new_val,                                  
+  type          & set                                       
+ ) { return false; }                                                    
+#endif
+  
  }; // template frac_base
  
 ///////////////////////////////////////////////////////////////////////////////
@@ -712,8 +704,8 @@ namespace lamb {
    return double((base)*this);
   }
 
-  explicit constexpr unsigned_frac(typename base::type const & tmp_) :
-   base(tmp_) {}
+  explicit constexpr unsigned_frac(typename base::type const & tmp) :
+   base(tmp) {}
 
   explicit constexpr unsigned_frac(
    typename base::type const & characteristic__,
@@ -750,8 +742,8 @@ namespace lamb {
   }
   
   explicit constexpr
-  signed_frac(typename base::type const & tmp_) :
-   base(tmp_) {}
+  signed_frac(typename base::type const & tmp) :
+   base(tmp) {}
 
   // v should use smaller types and non-negative mantissa value  
   explicit constexpr
