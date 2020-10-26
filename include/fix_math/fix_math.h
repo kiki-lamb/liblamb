@@ -415,8 +415,9 @@ namespace lamb {
   template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
   unsigned_frac
   operator * (
-   unsigned_frac<other_charac,other_mantissa,other_saturate> const & other
+   unsigned_frac<other_charac, other_mantissa, other_saturate> const & other
   ) const {
+
    typedef unsigned_frac<other_charac,other_mantissa, other_saturate>
     other_type;
    typedef typename other_type::big_type
@@ -428,21 +429,20 @@ namespace lamb {
    type                   old(base::val);
 
    if constexpr(sizeof(other_type) > sizeof(unsigned_frac)) {
-     static const uint8_t  shift = other_mantissa;
-    
-     pseudo_right_big_type tmp   = ((pseudo_right_big_type)base::val) * other.val;
-     ret.val                     = (type)(tmp >> shift);
+     pseudo_right_big_type tmp   =
+      ((pseudo_right_big_type)base::val) * other.val;
+
+     tmp                       >>= other.mantissa;     
+     ret.val                     = (type)tmp;
 
      if (base::check_overflow('x', old, other.val, ret.val)) {
       base::overflow = true;
      }
     }
     else {
-     static const uint8_t  shift = other_mantissa;
-
      big_type              tmp   = ((big_type)base::val) * other.val;
-
-     ret.val                     = (type)(tmp >> shift);
+     tmp                       >>= other_mantissa;
+     ret.val                     = (type)tmp;
  
      if (base::check_overflow('*', old, other.val, ret.val)) {
       base::overflow = true;
@@ -451,7 +451,6 @@ namespace lamb {
    
     return ret;
    }
-  
 
   template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
     unsigned_frac & 
@@ -555,11 +554,10 @@ namespace lamb {
   
 ////////////////////////////////////////////////////////////////////////////////
     
-   public:      
-    template <uint8_t other_charac,uint8_t other_mantissa, bool other_saturate>
+    template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
     signed_frac
     operator * (
-     unsigned_frac<other_charac,other_mantissa,other_saturate> const & other
+     unsigned_frac<other_charac, other_mantissa, other_saturate> const & other
     ) const {
 
      typedef unsigned_frac<other_charac,other_mantissa, other_saturate>
@@ -574,9 +572,9 @@ namespace lamb {
 
      if constexpr(sizeof(other_type) > sizeof(signed_frac)) {
        pseudo_right_big_type tmp     =
-        ((pseudo_right_big_type)base::val) * other.val;        
-       static const uint8_t  shift   = other_type::base::MANTISSA;
-       tmp                         >>= shift;
+        ((pseudo_right_big_type)base::val) * other.val;
+       
+       tmp                         >>= other_mantissa;
        ret.val                       = (type)tmp;
 
        if (base::check_overflow('*', old, other.val, ret.val)) {
@@ -585,14 +583,13 @@ namespace lamb {
       }
       else {
        big_type              tmp     = ((big_type)base::val) * other.val;      
-       uint8_t               shift   = other_type::base::MANTISSA;
-       tmp                         >>= shift;
+       tmp                         >>= other_mantissa;
        ret.val                       = (type)tmp;
 
        if (base::check_overflow('*', old, other.val, ret.val)) {
         base::overflow = true;
        }
-      }     
+      }    
 
       return ret;
      }    
@@ -711,8 +708,9 @@ namespace lamb {
 
         return *this;
        }
-      };
+   }; // template signed
 
+ 
 //////////////////////////////////////////////////////////////////////////////
 // Typedefs
 //////////////////////////////////////////////////////////////////////////////
