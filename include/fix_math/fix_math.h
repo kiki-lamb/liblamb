@@ -279,13 +279,13 @@ namespace lamb {
    fixed<(CHARACTERISTIC >> 1), (MANTISSA >> 1), sat>
    smaller_type;
   };
+  
+ public:
 
   typedef typename adjacent_types<SATURATE>::larger_type larger_type;
   typedef typename adjacent_types<SATURATE>::smaller_type smaller_type;
   
 ////////////////////////////////////////////////////////////////////////////////
-
- public:
 
   template <bool saturate__>
   operator
