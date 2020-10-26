@@ -264,20 +264,7 @@ namespace lamb {
   template <bool saturate__>
   operator
   typename dummy<saturate__, SIGNED>::larger_type () const {
-   return typename
-    type_if<
-     SIGNED,
-    signed_frac<
-     (CHARACTERISTIC << 1),
-     (MANTISSA << 1),
-     saturate__
-     >,
-    unsigned_frac<
-     (CHARACTERISTIC << 1),
-     (MANTISSA << 1),
-     saturate__
-     >
-    >::type(
+   return typename dummy<saturate__, SIGNED>::larger_type(
     val << 1
    );
   }
@@ -285,20 +272,7 @@ namespace lamb {
   template <bool saturate__>
   operator
   typename dummy<saturate__, SIGNED>::smaller_type () const {
-   return typename
-    type_if<
-     SIGNED,
-    signed_frac<
-     (CHARACTERISTIC >> 1),
-     (MANTISSA >> 1),
-     saturate__
-     >,
-    unsigned_frac<
-     (CHARACTERISTIC >> 1),
-     (MANTISSA >> 1),
-     saturate__
-     >
-    >::type(
+   return typename dummy<saturate__, SIGNED>::smaller_type(
     val << 1
    );
   }
