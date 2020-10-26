@@ -149,8 +149,11 @@ namespace lamb {
    >::type big_type;
 
   typedef
-  derived_template<CHARACTERISTIC, MANTISSA, (! SATURATE )>
-  sat_cast_type;
+  typename type_if<
+   SIGNED,
+   signed_frac<CHARACTERISTIC, MANTISSA, (! SATURATE)>,
+   unsigned_frac<CHARACTERISTIC, MANTISSA, (! SATURATE)>
+   >::type sat_cast_type;
   
   typedef
   derived_template<CHARACTERISTIC, MANTISSA, SATURATE>

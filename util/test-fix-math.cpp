@@ -40,7 +40,7 @@ bool compare_floats(float x, float y, uint8_t precis) {
  {                                                                      \
   char  buff[32];                                                       \
   snprintf(buff, 32, "%-8s: %% 05.5lf %%%s.%%%s \n", name, fmt, fmt);   \
-  printf(buff, x.to_float(), x.top(), x.bottom());                      \
+  printf(buff, double(x), x.top(), x.bottom());                         \
  }                                               
 
 #define TEST_EQ(fmt,x, y)                                               \
@@ -100,8 +100,8 @@ bool compare_floats(float x, float y, uint8_t precis) {
                                                                         \
    printf(                                                              \
     "%05.05lf + %05.05lf should have overflowed.",                      \
-    b.to_float(),                                                       \
-    b.to_float()                                                        \
+    double(b),                                                          \
+    double(b)                                                           \
    );                                                                   \
                                                                         \
    errors ++;                                                           \
@@ -125,9 +125,9 @@ bool compare_floats(float x, float y, uint8_t precis) {
                                                                         \
    printf(                                                              \
     "%05.05lf - %05.05lf - %05.05lf should have underflowed.",          \
-    b.to_float(),                                                       \
-    b.to_float(),                                                       \
-    b.to_float()                                                        \
+    double(b),                                                          \
+    double(b),                                                          \
+    double(b)                                                           \
    );                                                                   \
                                                                         \
    errors ++;                                                           \
@@ -140,15 +140,15 @@ bool compare_floats(float x, float y, uint8_t precis) {
   fix_t b(y);                                                           \
   fix_t c(z0, z1);                                                      \
                                                                         \
-  TEST_FLEQ("lf", x, a.to_float(), fprecis);                            \
-  TEST_FLEQ("lf", x, b.to_float(), fprecis);                            \
-  TEST_FLEQ("lf", x, c.to_float(), fprecis);                            \
+  TEST_FLEQ("lf", x, double(a), fprecis);                               \
+  TEST_FLEQ("lf", x, double(b), fprecis);                               \
+  TEST_FLEQ("lf", x, double(c), fprecis);                               \
  }
 
 #define TEST_PI(fmt, pi_precis)                                         \
  {                                                                      \
   fix_t fix_pi = fix_t::from_float(M_PI);                               \
-  float unfix_pi = fix_pi.to_float();                                   \
+  float unfix_pi = double(fix_pi);                                      \
                                                                         \
   char buff0[32];                                                       \
   char buff1[32];                                                       \
@@ -169,7 +169,7 @@ bool compare_floats(float x, float y, uint8_t precis) {
    printf("1.5M_PI    : %s\n", buff0);                                  \
                                                                         \
    fix_pi = fix_t::from_float(1.5*M_PI);                                \
-   unfix_pi = fix_pi.to_float();                                        \
+   unfix_pi = double(fix_pi);                                           \
                                                                         \
    snprintf(buff1, 32, "% 05.10lf", unfix_pi);                          \
    buff1[pi_precis+3] = 0;                                              \
@@ -184,7 +184,7 @@ bool compare_floats(float x, float y, uint8_t precis) {
    printf("2M_PI      : %s\n", buff0);                                  \
                                                                         \
    fix_pi = fix_t::from_float(2*M_PI);                                  \
-   unfix_pi = fix_pi.to_float();                                        \
+   unfix_pi = double(fix_pi);                                           \
                                                                         \
    snprintf(buff1, 32, "% 05.10lf", unfix_pi);                          \
    buff1[pi_precis+3] = 0;                                              \
@@ -199,7 +199,7 @@ bool compare_floats(float x, float y, uint8_t precis) {
    printf("-M_PI      : %s\n", buff0);                                  \
                                                                         \
    fix_pi = fix_t::from_float(-M_PI);                                   \
-   unfix_pi = fix_pi.to_float();                                        \
+   unfix_pi = double(fix_pi);                                           \
                                                                         \
    snprintf(buff1, 32, "% 05.10lf", unfix_pi);                          \
    buff1[pi_precis+3] = 0;                                              \
