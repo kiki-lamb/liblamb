@@ -301,11 +301,20 @@ namespace lamb {
   
   template <bool saturate__>
   operator
-  derived_template<
+  typename
+  type_if<
+   SIGNED,
+   signed_frac<
    (CHARACTERISTIC << 1),
    (MANTISSA << 1),
    saturate__
-   > () const {
+   >,
+   unsigned_frac<
+   (CHARACTERISTIC << 1),
+   (MANTISSA << 1),
+   saturate__
+   >
+   >::type () const {
    derived_template<(CHARACTERISTIC << 1), (MANTISSA << 1), saturate__> tmp(
     val << 1
    );
@@ -315,11 +324,20 @@ namespace lamb {
 
   template <bool saturate__>
   operator
-  derived_template<
+    typename
+  type_if<
+   SIGNED,
+   signed_frac<
    (CHARACTERISTIC >> 1),
    (MANTISSA >> 1),
    saturate__
-   > () const {
+   >,
+   unsigned_frac<
+   (CHARACTERISTIC >> 1),
+   (MANTISSA >> 1),
+   saturate__
+   >
+   >::type () const {
    derived_template<(CHARACTERISTIC >> 1), (MANTISSA >> 1), saturate__> tmp(
     val >> 1
    );
