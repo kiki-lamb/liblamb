@@ -4,7 +4,6 @@
 #include <inttypes.h>
 
 #include "../abstract_list/abstract_list.h"
-#include "../global/global.h"
 
 namespace lamb {
   template <typename T0, template<typename> class DT = delete_traits::owner>

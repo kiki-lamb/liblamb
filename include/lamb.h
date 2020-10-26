@@ -22,25 +22,19 @@
  
   #include "dsp/dsp.h"
 
-  #include "light_buffer/light_buffer.h"
+  #include "containers/light_buffer/light_buffer.h"
 
-  #include "functions/functions.h"
-
-  #include "abstract_bag/abstract_bag.h"
-  #include "abstract_list/abstract_list.h"
-  #include "abstract_queue/abstract_queue.h"
-  #include "abstract_stack/abstract_stack.h"
-
-  #include "array_list/array_list.h"
-  #include "array_queue/array_queue.h"
-
-  #include "linked_list/linked_list.h"
-  #include "linked_queue/linked_queue.h"
-  #include "linked_stack/linked_stack.h"
-
-  #include "ring_buffer/ring_buffer.h"
-
-  #include "positional_fixed_array/positional_fixed_array.h"
+  #include "containers/abstract_bag/abstract_bag.h"
+  #include "containers/abstract_list/abstract_list.h"
+  #include "containers/abstract_queue/abstract_queue.h"
+  #include "containers/abstract_stack/abstract_stack.h"
+  #include "containers/array_list/array_list.h"
+  #include "containers/array_queue/array_queue.h"
+  #include "containers/linked_list/linked_list.h"
+  #include "containers/linked_queue/linked_queue.h"
+  #include "containers/linked_stack/linked_stack.h"
+  #include "containers/ring_buffer/ring_buffer.h"
+  #include "containers/positional_fixed_array/positional_fixed_array.h"
 
   #include "fonts/fonts.h"
 

@@ -2,7 +2,7 @@
 #define LAMB_DRUMMER_EVENT_SOURCE_BUFFER_H
 
 #include "source.h"
-#include "../../light_buffer/light_buffer.h"
+#include "../../containers/light_buffer/light_buffer.h"
 
 namespace lamb {
   namespace events {
