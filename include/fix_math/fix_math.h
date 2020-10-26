@@ -286,12 +286,7 @@ namespace lamb {
   template <bool saturate__> 
   bool
   operator == (
-   typename
-   type_if<
-   SIGNED,
-   signed_frac<CHARACTERISTIC, MANTISSA, saturate__>,
-   unsigned_frac<CHARACTERISTIC, MANTISSA, saturate__>
-   >::type const & other
+   derived_type const & other
   ) const {
    return val == other.val;
   }    
