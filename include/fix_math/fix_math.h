@@ -312,15 +312,15 @@ namespace lamb {
   operator + (
    derived_template<CHARACTERISTIC,MANTISSA,saturate__> const & other
   ) const {
-   type          old    = val;
-   big_type      new_   = old + other.val;
-   derived_type  ret    = derived_type(new_);
-
-   if (check_overflow('+', old, other.val, ret.val)) {
+   type          old       = val;
+   big_type      big_tmp   = ((big_type)old) + other.val;
+   type          small_tmp = (type)big_tmp;
+   
+   if (check_overflow('+', old, other.val, small_tmp)) {
     overflow = true;
    }
 
-   return ret;
+   return derived_type(small_tmp);
   }    
 
   template <bool saturate__>
