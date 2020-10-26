@@ -42,7 +42,7 @@ int main() {
    cf.Q = qix;
    cf.set_q();
 
-   fx_cf.Q = fx_chamberlin::qtype::from_float((float)qix);
+   fx_cf.Q = fx_chamberlin::qtype::from_double((float)qix);
    fx_cf.set_q();
 
    const size_t fix_incr = 100;

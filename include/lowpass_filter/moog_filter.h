@@ -18,16 +18,16 @@ namespace lamb {
    sat_q0n15  in1, in2;
 
    moog_filter() :
-    freq(sat_q0n16::from_float(0.65)),
+    freq(sat_q0n16::from_double(0.65)),
     q(0),
     out1(0), out2(0),
     in1(0), in2(0) {}
       
    static constexpr sat_q8n8  _1_0       = sat_q8n8(sat_q8n8::ONE);
-   static constexpr sat_q8n8  _1_16      = sat_q8n8::from_float(1.16);
-   static constexpr sat_q8n8  _0_15      = sat_q8n8::from_float(0.15);
-   static constexpr sat_q8n8  _0_35013   = sat_q8n8::from_float(0.35013);
-   static constexpr sat_q8n8  _0_3       = sat_q8n8::from_float(0.3);
+   static constexpr sat_q8n8  _1_16      = sat_q8n8::from_double(1.16);
+   static constexpr sat_q8n8  _0_15      = sat_q8n8::from_double(0.15);
+   static constexpr sat_q8n8  _0_35013   = sat_q8n8::from_double(0.35013);
+   static constexpr sat_q8n8  _0_3       = sat_q8n8::from_double(0.3);
 
 //   double f = freq * 1.16;
 //   double fb = q * (1.0 - 0.15 * f * f);

@@ -19,23 +19,6 @@ using namespace std;
 namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
- 
- template <bool use_left, typename left, typename right>
- class type_if {};
-
- template <typename left, typename right>
- class type_if<true, left, right> {
- public:
-  typedef left type;
- };
-
- template <typename left, typename right>
- class type_if<false, left, right> {
- public:
-  typedef right type;
- };
- 
-//////////////////////////////////////////////////////////////////////////////// 
 // Advance declarations:
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -57,14 +40,32 @@ namespace lamb {
  class frac_base {
 
 ////////////////////////////////////////////////////////////////////////////////
+
+ private: 
+
+  template <bool use_left, typename left, typename right>
+  class type_if {};
   
+  template <typename left, typename right>
+  class type_if<true, left, right> {
+  public:
+   typedef left type;
+  };
+  
+  template <typename left, typename right>
+  class type_if<false, left, right> {
+  public:
+   typedef right type;
+ };
+ 
+//////////////////////////////////////////////////////////////////////////////// 
+
  public:
 
   static const bool    SATURATE       = saturate_;
   static const uint8_t CHARACTERISTIC = characteristic_;
   static const uint8_t MANTISSA       = mantissa_;
   static const bool    SIGNED         = ((CHARACTERISTIC + MANTISSA ) % 2) == 1;
-
   static const size_t  SIZE           = (
    CHARACTERISTIC +
    MANTISSA +
@@ -105,21 +106,21 @@ namespace lamb {
    >::type
   self_type;
   
-  typedef
-  typename type_if<
-   SIGNED,
-   signed_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), SATURATE>,
-   unsigned_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), SATURATE>
-   >::type
-  larger_type;
+  // typedef
+  // typename type_if<
+  //  SIGNED,
+  //  signed_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), SATURATE>,
+  //  unsigned_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), SATURATE>
+  //  >::type
+  // larger_type;
   
-  typedef
-  typename type_if<
-   SIGNED,
-   signed_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), SATURATE>,
-   unsigned_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), SATURATE>
-   >::type
-  smaller_type;
+  // typedef
+  // typename type_if<
+  //  SIGNED,
+  //  signed_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), SATURATE>,
+  //  unsigned_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), SATURATE>
+  //  >::type
+  // smaller_type;
   
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -202,7 +203,7 @@ namespace lamb {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-  static constexpr self_type from_float(double const & tmp) {
+  static constexpr self_type from_double(double const & tmp) {
    int           divisor = tmp;
    double        modulus = tmp - divisor;
    type          ipart   = ONE * divisor + int(ONE * modulus);

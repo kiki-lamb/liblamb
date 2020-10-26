@@ -29,7 +29,7 @@ namespace lamb {
 //    printf("FS.valf => % 05.5lf \n", FS.to_float());
 
 //    printf("F_FS   => % 05.5lf %lu\n", F_FS.to_float(), F_FS.val);
-    static const qtype PI2(qtype::from_float(2*M_PI));
+    static const qtype PI2(qtype::from_double(2*M_PI));
 
 //    printf("2M_PI   => % 05.5lf\n", F1.to_float());
     
@@ -85,7 +85,7 @@ namespace lamb {
     D2 = L                               ;
     printf("% 9.3lf  ", double(D2))   ;
         
-    return sat_q0n15::from_float(0.0);
+    return sat_q0n15::from_double(0.0);
    }
   };
 }

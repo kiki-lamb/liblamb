@@ -60,7 +60,7 @@ namespace lamb {
     D2 = L                    ;
     printf("% 5.3lf,  ", D2)   ;
         
-    return sat_q0n15::from_float(L);
+    return sat_q0n15::from_double(L);
    }
   };
 }
