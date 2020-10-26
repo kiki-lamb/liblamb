@@ -105,23 +105,7 @@ namespace lamb {
    unsigned_frac<CHARACTERISTIC, MANTISSA, SATURATE>
    >::type
   self_type;
-  
-  // typedef
-  // typename type_if<
-  //  SIGNED,
-  //  signed_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), SATURATE>,
-  //  unsigned_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), SATURATE>
-  //  >::type
-  // larger_type;
-  
-  // typedef
-  // typename type_if<
-  //  SIGNED,
-  //  signed_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), SATURATE>,
-  //  unsigned_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), SATURATE>
-  //  >::type
-  // smaller_type;
-  
+    
 ////////////////////////////////////////////////////////////////////////////////
 
   static constexpr
@@ -235,21 +219,29 @@ namespace lamb {
 
 ///////////////////////////////////////////////////////////////////////////////
   
+  typedef
+  typename type_if<
+   SIGNED,
+   signed_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), SATURATE>,
+   unsigned_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), SATURATE>
+   >::type
+  larger_type;
+  
+  typedef
+  typename type_if<
+   SIGNED,
+   signed_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), SATURATE>,
+   unsigned_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), SATURATE>
+   >::type
+  smaller_type;
+
   template <bool saturate__>
   operator
   typename
   type_if<
    SIGNED,
-   signed_frac<
-    (CHARACTERISTIC << 1),
-    (MANTISSA << 1),
-    saturate__
-    >,
-   unsigned_frac<
-    (CHARACTERISTIC << 1),
-    (MANTISSA << 1),
-    saturate__
-    >
+   signed_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), saturate__>,
+   unsigned_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), saturate__>
    >::type () const {
    return typename
     type_if<
