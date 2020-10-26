@@ -3,6 +3,7 @@
 
 #include <inttypes.h>
 #include "mcp23017.h"
+#include "../containers/light_buffer/light_buffer.h"
 #include "encoder_state/encoder_state.h"
 
 namespace lamb {

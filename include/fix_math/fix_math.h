@@ -487,25 +487,25 @@ namespace lamb {
                                                                 
    bool over  = ttmp > MAX;                                      
    
-   if (over)                                                     
-    printf("%lld exceeds %lld.\n", ttmp, MAX);                   
+   // if (over)                                                     
+   //  printf("%lld exceeds %lld.\n", ttmp, MAX);                   
    
    bool under = ttmp < MIN;                                      
    
-   if (under)                                                    
-    printf("%lld under %lld.\n", ttmp, MIN);                     
+   // if (under)                                                    
+   //  printf("%lld under %lld.\n", ttmp, MIN);                     
    
    if (over || under) {                                          
     if (SATURATE) {                                              
-     printf(                                                     
-      "SATURATE: %ld %c %ld = %lld MIN: %lld MAX: %lld \n",      
-      old_val,                                                   
-      symbol,                                                    
-      delta,                                                     
-      ttmp,                                                      
-      MIN,                                                       
-      MAX                                                        
-     );                                                          
+     // printf(                                                     
+     //  "SATURATE: %ld %c %ld = %lld MIN: %lld MAX: %lld \n",      
+     //  old_val,                                                   
+     //  symbol,                                                    
+     //  delta,                                                     
+     //  ttmp,                                                      
+     //  MIN,                                                       
+     //  MAX                                                        
+     // );                                                          
      set = MAX;                                                  
     }                                                            
     else {                                                       

@@ -34,7 +34,7 @@ fixed point version of the filter
 
 /** A resonant low pass filter for audio signals.
  */
-class lowpass_filter
+class lowpass
 {
 
 public:
@@ -42,7 +42,7 @@ public:
 
   /** Constructor.
    */
-  lowpass_filter(){;
+  lowpass(){;
   }
 
 
@@ -119,8 +119,8 @@ private:
 };
 
 /**
-   @example 10.Audio_Filters/lowpass_filter/lowpass_filter.ino
-   This example demonstrates the lowpass_filter class.
+   @example 10.Audios/lowpass/lowpass.ino
+   This example demonstrates the lowpass class.
 */
 
 #endif /* LOWPASS_H_ */

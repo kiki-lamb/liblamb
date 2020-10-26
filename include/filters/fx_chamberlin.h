@@ -7,12 +7,13 @@ namespace lamb {
    typedef q15n16s qtype;
    typedef q0n32s pqtype;
    
-   qtype  Q1, Q, F1, D1, D2, L, H, B, N;
-   pqtype F,  FS;
+   qtype  Q1, Q, FF1, D1, D2, L, H, B, N;
+   pqtype FF,  FS;
    
    fx_chamberlin() :
-    Q1(0), Q(1, 0), F1(0), F(1000), FS(44100),
-    D1(0), D2(0), L(0), H(0), B(0), N(0) {
+    Q1(0), Q(1, 0), FF1(0), D1(0), D2(0), L(0), H(0), B(0), N(0),
+    FF(1000), FS(44100) {
+    
     set_frequency();
     set_q();
    }
@@ -20,7 +21,7 @@ namespace lamb {
    void set_frequency() {
     static const qtype PI2(qtype::from_double(2*M_PI));
 
-    F1 = PI2 * (F / FS);    
+    FF1 = PI2 * (FF / FS);    
    }
 
    void set_q() {
@@ -39,12 +40,12 @@ namespace lamb {
     q15n16s I(I_.val << 1)            ;
     
     printf("% 6.3lf, ", double(I))    ;
-    printf("% 6.3lf, ", double(F1))   ;        
+    printf("% 6.3lf, ", double(FF1))  ;        
     printf("% 6.3lf, ", double(Q1))   ;
     
-    L  = D2 + F1 * D1                 ;    printf("% 9.3lf, ",  double(L)) ;
+    L  = D2 + FF1 * D1                ;    printf("% 9.3lf, ",  double(L)) ;
     H  = I - L - (Q1*D1)              ;    printf("% 14.3lf, ", double(H)) ;
-    B  = (F1 * H)  + D1               ;    printf("% 9.3lf, ",  double(B)) ;
+    B  = (FF1 * H)  + D1              ;    printf("% 9.3lf, ",  double(B)) ;
     N  = H  + L                       ;    printf("% 9.3lf, ",  double(N)) ;
     D1 = B                            ;    printf("% 9.3lf, ",  double(D1));
     D2 = L                            ;    printf("% 9.3lf  ",  double(D2));

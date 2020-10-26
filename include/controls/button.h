@@ -2,6 +2,7 @@
 #define LAMB_DRUMMER_BUTTON_H
 
 #include <Arduino.h>
+#include "../containers/light_buffer/light_buffer.h"
 
 // Right now, this generally assumes pins are pulled up and brought to ground
 // by the button.

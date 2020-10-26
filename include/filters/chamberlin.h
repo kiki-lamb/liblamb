@@ -6,12 +6,12 @@
 namespace lamb {
   class chamberlin {
   public:
-   double Q1, Q, F1, F, FS, D1, D2, L, H, B, N;
+   double Q1, Q, FF1, FF, FS, D1, D2, L, H, B, N;
     
    chamberlin() :
-    Q1(0), Q(0), F1(0), F(0), FS(0), D1(0), D2(0), L(0), H(0), B(0), N(0) {
+    Q1(0), Q(0), FF1(0), FF(0), FS(0), D1(0), D2(0), L(0), H(0), B(0), N(0) {
     Q  = 1.0;
-    F  = 1000;
+    FF  = 1000;
     FS = 44100;
 
     set_frequency();
@@ -19,8 +19,8 @@ namespace lamb {
    }
 
    void set_frequency() {
-    F1 = 2.0 * M_PI * F / FS;
-    // printf("F1: % 05.3lf \n", F1);
+    FF1 = 2.0 * M_PI * FF / FS;
+    // printf("FF1: % 05.3lf \n", FF1);
    }
 
    void set_q() {
@@ -39,16 +39,16 @@ namespace lamb {
     double If = double(I)     ;
     
     printf("% 5.3lf, ", If)   ;
-    printf("% 5.3lf, ", F1)   ;        
+    printf("% 5.3lf, ", FF1)  ;        
     printf("% 5.3lf, ", Q1)   ;
         
-    L  = D2 + F1 * D1         ;
+    L  = D2 + FF1 * D1        ;
     printf("% 5.3lf, ", L)    ;
 
     H  = I  - L  - Q1*D1      ;
     printf("% 5.3lf, ", H)    ;
 
-    B  = F1 * H  + D1         ;
+    B  = FF1 * H  + D1        ;
     printf("% 5.3lf, ", B)    ;
     
     N  = H  + L               ;

@@ -2,6 +2,8 @@
 #define LAMB_DRUMMER_ANALOG_H
 
 #include <Arduino.h>
+#include "../sample_type_traits/sample_type_traits.h"
+#include "../containers/light_buffer/light_buffer.h"
 
 namespace lamb {
   namespace controls {

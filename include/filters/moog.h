@@ -10,14 +10,14 @@
 // double MoogVCF::run(double input, double freq, double q){
 
 namespace lamb {
-  class moog_filter {
+  class moog {
   public:
    q0n16s  freq;     
    q2n14s  q;    
    q0n15s  out1, out2;
    q0n15s  in1, in2;
 
-   moog_filter() :
+   moog() :
     freq(q0n16s::from_double(0.65)),
     q(0),
     out1(0), out2(0),

@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include "mcp23017.h"
+#include "../containers/light_buffer/light_buffer.h"
 
 namespace lamb {
   namespace controls {

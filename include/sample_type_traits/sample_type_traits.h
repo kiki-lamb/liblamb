@@ -2,6 +2,7 @@
 #define LAMB_SAMPLE_TYPE_TRAITS
 
 #include "../uint12_t.h"
+#include "../integer_helpers/integer_helpers.h"
 
 namespace lamb {
 

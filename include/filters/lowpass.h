@@ -3,7 +3,7 @@
 
 namespace lamb {
   template <typename sample_t_>
-  class lowpass_filter {
+  class lowpass {
   public:
     typedef sample_t_                                            sample_t;
     typedef typename sample_type_traits<sample_t>::unsigned_type unsigned_sample_t;
@@ -17,7 +17,7 @@ namespace lamb {
 
     typedef typename control_frac_t::type                        control_t;
 
-    static const control_t control_t_one = control_frac_t::one;
+    static const control_t control_t_one = control_frac_t::ONE;
 
     enum mode_t { LP, BP, HP };
 
@@ -32,7 +32,7 @@ namespace lamb {
     mode_t            _mode;
     
   public:
-    lowpass_filter() : _mode(LP) {}
+    lowpass() : _mode(LP) {}
 
     mode_t mode() const {
       return _mode;
