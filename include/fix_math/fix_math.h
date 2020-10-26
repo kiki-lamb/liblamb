@@ -225,13 +225,13 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  type bottom() const { // return smaller type?
+  type mantissa() const { // return smaller type?
    return val & mask();
   }
   
 ////////////////////////////////////////////////////////////////////////////////
 
-  type top() const {    // return smaller type?
+  type characteristic() const {    // return smaller type?
    if (CHARACTERISTIC == 0) {
     return 0;
    }
@@ -243,7 +243,15 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   explicit constexpr
-  frac_base(type const & tmp_) : val(tmp_), overflow(false) {}
+  frac_base(type const & tmp_) :
+   val(tmp_), overflow(false) {}
+
+  explicit constexpr
+  frac_base(
+   type const & characteristic__,
+   type const & mantissa__
+  ) :
+   val((characteristic__ * ONE) + mantissa__), overflow(false) {}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -251,8 +259,18 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
   
-  float to_float() const {
+  double to_float() const {
    return val / (ONE * 1.0);
+  }
+
+///////////////////////////////////////////////////////////////////////////////
+
+  static constexpr derived_type from_float(double const & tmp_) {
+   int           divisor = int(tmp_);
+   double        modulus = tmp_ - divisor;
+   type          ipart   = ONE * divisor + int(ONE * modulus);
+   
+   return derived_type(ipart);
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -261,16 +279,6 @@ namespace lamb {
    return sat_cat_type(val);
   }
   
-///////////////////////////////////////////////////////////////////////////////
-
-  static constexpr derived_type from_float(float const & tmp_) {
-   int           divisor = int(tmp_);
-   float         modulus = tmp_ - divisor;
-   type          ipart   = ONE * divisor + int(ONE * modulus);
-   
-   return derived_type(ipart);
-  }
-
 ////////////////////////////////////////////////////////////////////////////////
     
   template <bool saturate__> 
@@ -557,7 +565,7 @@ namespace lamb {
    typename base::type const & characteristic__,
    typename base::type const & mantissa__
   ) :
-   base((characteristic__ * base::ONE) + mantissa__) {}
+   base(characteristic__, mantissa__) {}
   
  };
  
@@ -593,7 +601,7 @@ namespace lamb {
    typename base::type const & characteristic__,
    typename base::type const & mantissa__
   ) :
-   base((characteristic__ * base::ONE) + mantissa__) {}
+   base(characteristic__, mantissa__) {}
  };
   
 //////////////////////////////////////////////////////////////////////////////
