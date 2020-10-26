@@ -73,7 +73,7 @@ namespace lamb {
   ) / 8;
 
 ////////////////////////////////////////////////////////////////////////////////
-
+  
   typedef
   typename type_if<
    SIGNED,
@@ -108,6 +108,8 @@ namespace lamb {
     
 ////////////////////////////////////////////////////////////////////////////////
 
+ public:
+  
   static constexpr
   type    ONE = (
    (CHARACTERISTIC == 0) ? 
@@ -219,6 +221,8 @@ namespace lamb {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+ private:
+  
   template <bool sat, bool signed_>
   class dummy {};
 
@@ -260,6 +264,9 @@ namespace lamb {
    smaller_type;
   };
 
+////////////////////////////////////////////////////////////////////////////////
+
+ public:
 
   template <bool saturate__>
   operator
@@ -273,7 +280,7 @@ namespace lamb {
   operator
   typename dummy<saturate__, SIGNED>::smaller_type () const {
    return typename dummy<saturate__, SIGNED>::smaller_type(
-    val << 1
+    val >> 1
    );
   }
 
