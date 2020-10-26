@@ -380,6 +380,11 @@ namespace lamb {
     fixed<other_charac, other_mantissa, other_saturate>
     other_type;
 
+   static_assert(
+    ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
+    "Signedness mismatch!"
+   );
+
    type                    old(val);
 
    if constexpr(sizeof(other_type) > sizeof(self_type)) {
@@ -430,6 +435,11 @@ namespace lamb {
    typedef
     fixed<other_charac, other_mantissa, other_saturate>
     other_type;
+    
+   static_assert(
+    ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
+    "Signedness mismatch!"
+   );
 
    type                   old(val);
 
@@ -464,7 +474,7 @@ namespace lamb {
   self_type & 
   operator /= (
    fixed<other_charac,other_mantissa, saturate__> const & other
-  ) {
+  ) {   
    val = ((*this) / other).val;
 
    return *this;
