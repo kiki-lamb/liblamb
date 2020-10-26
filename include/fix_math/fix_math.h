@@ -198,6 +198,56 @@ namespace lamb {
    return val == other.val;
   }    
 
+////////////////////////////////////////////////////////////////////////////////
+
+  template <bool sat>
+  bool
+  operator != (
+   compatible_type<sat> const & other
+  ) const {
+   return val != other.val;
+  }    
+
+////////////////////////////////////////////////////////////////////////////////
+
+  template <bool sat>
+  bool
+  operator > (
+   compatible_type<sat> const & other
+  ) const {
+   return val > other.val;
+  }    
+
+////////////////////////////////////////////////////////////////////////////////
+
+  template <bool sat>
+  bool
+  operator < (
+   compatible_type<sat> const & other
+  ) const {
+   return val < other.val;
+  }    
+
+////////////////////////////////////////////////////////////////////////////////
+
+  template <bool sat>
+  bool
+  operator >= (
+   compatible_type<sat> const & other
+  ) const {
+   return val >= other.val;
+  }    
+
+////////////////////////////////////////////////////////////////////////////////
+
+  template <bool sat>
+  bool
+  operator <= (
+   compatible_type<sat> const & other
+  ) const {
+   return val <= other.val;
+  }    
+
 ///////////////////////////////////////////////////////////////////////////////
 
  private:
