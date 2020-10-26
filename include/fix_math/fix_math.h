@@ -163,7 +163,7 @@ namespace lamb {
    signed_frac<CHARACTERISTIC, MANTISSA, SATURATE>,
    unsigned_frac<CHARACTERISTIC, MANTISSA, SATURATE>
    >::type
-  derived_type;
+  self_type;
   
   typedef
   typename type_if<
@@ -266,12 +266,12 @@ namespace lamb {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-  static constexpr derived_type from_float(double const & tmp_) {
+  static constexpr self_type from_float(double const & tmp_) {
    int           divisor = int(tmp_);
    double        modulus = tmp_ - divisor;
    type          ipart   = ONE * divisor + int(ONE * modulus);
    
-   return derived_type(ipart);
+   return self_type(ipart);
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -284,7 +284,7 @@ namespace lamb {
   
   bool
   operator == (
-   derived_type const & other
+   self_type const & other
   ) const {
    return val == other.val;
   }    
@@ -368,9 +368,9 @@ namespace lamb {
 
 ///////////////////////////////////////////////////////////////////////////////
     
-  derived_type
+  self_type
   operator + (
-   derived_type const & other
+   self_type const & other
   ) const {
    type          old       = val;
    big_type      big_tmp   = ((big_type)old) + other.val;
@@ -380,20 +380,20 @@ namespace lamb {
     overflow = true;
    }
 
-   return derived_type(small_tmp);
+   return self_type(small_tmp);
   }    
 
   template <bool saturate__>
-  derived_type &
+  self_type &
   operator += (
-   derived_type const & other
+   self_type const & other
   ) {
    val = ((*this) + other).val;
 
-   return *(static_cast<derived_type *>(this));
+   return *(static_cast<self_type *>(this));
   }
 
-  derived_type
+  self_type
   operator + (
    sat_cast_type const & other
   ) const {
@@ -405,24 +405,24 @@ namespace lamb {
     overflow = true;
    }
 
-   return derived_type(small_tmp);
+   return self_type(small_tmp);
   }    
 
   template <bool saturate__>
-  derived_type &
+  self_type &
   operator += (
    sat_cast_type const & other
   ) {
    val = ((*this) + other).val;
 
-   return *(static_cast<derived_type *>(this));
+   return *(static_cast<self_type *>(this));
   }
 
   ///////////////////////////////////////////////////////////////////////////////
     
-  derived_type
+  self_type
   operator - (
-   derived_type const & other
+   self_type const & other
   ) const {
    type          old       = val;
    big_type      big_tmp   = ((big_type)old) - other.val;
@@ -432,21 +432,21 @@ namespace lamb {
     overflow = true;
    }
 
-   return derived_type(small_tmp);
+   return self_type(small_tmp);
   }    
 
-  derived_type &
+  self_type &
   operator -= (
-   derived_type const & other
+   self_type const & other
   ) {
-   derived_type tmp = (*this) - other;
+   self_type tmp = (*this) - other;
   
    val = tmp.val;
 
-   return *(static_cast<derived_type *>(this));
+   return *(static_cast<self_type *>(this));
   }
 
-  derived_type
+  self_type
   operator - (
    sat_cast_type const & other
   ) const {
@@ -458,24 +458,24 @@ namespace lamb {
     overflow = true;
    }
 
-   return derived_type(small_tmp);
+   return self_type(small_tmp);
   }    
 
-  derived_type &
+  self_type &
   operator -= (
    sat_cast_type const & other
   ) {
-   derived_type tmp = (*this) - other;
+   self_type tmp = (*this) - other;
   
    val = tmp.val;
 
-   return *(static_cast<derived_type *>(this));
+   return *(static_cast<self_type *>(this));
   }
 
 ///////////////////////////////////////////////////////////////////////////////
 
   template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
-  derived_type
+  self_type
   operator * (
    unsigned_frac<other_charac, other_mantissa, other_saturate> const & other
   ) const {
@@ -496,7 +496,7 @@ namespace lamb {
 
    type                    old(val);
 
-   if constexpr(sizeof(other_type) > sizeof(derived_type)) {
+   if constexpr(sizeof(other_type) > sizeof(self_type)) {
     pseudo_right_big_type big_tmp     = ((pseudo_right_big_type)val) * other.val;
     big_tmp                         >>= other.mantissa;     
     type                  small_tmp   = (type)big_tmp;
@@ -506,7 +506,7 @@ namespace lamb {
      overflow = true;
     }
 
-    return derived_type(small_tmp);
+    return self_type(small_tmp);
    }
    else {
     big_type              big_tmp     = ((big_type)val) * other.val;
@@ -517,24 +517,24 @@ namespace lamb {
      overflow = true;
     }
 
-    return derived_type(small_tmp);
+    return self_type(small_tmp);
    }
   }
 
   template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
-  derived_type & 
+  self_type & 
   operator *= (
    unsigned_frac<other_charac,other_mantissa, saturate__> const & other
   ) {
    val = ((*this) * other).val;
 
-   return *(static_cast<derived_type *>(this));
+   return *(static_cast<self_type *>(this));
   }
 
 ///////////////////////////////////////////////////////////////////////////////
 
   template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
-  derived_type
+  self_type
   operator * (
    signed_frac<other_charac, other_mantissa, other_saturate> const & other
   ) const {
@@ -557,44 +557,44 @@ namespace lamb {
 
    type                    old(val);
 
-   if constexpr(sizeof(other_type) > sizeof(derived_type)) {
+   if constexpr(sizeof(other_type) > sizeof(self_type)) {
     pseudo_right_big_type big_tmp     = ((pseudo_right_big_type)val) * other.val;
     big_tmp                         >>= other.mantissa;     
-    type                  small_tmp   = (type)big_tmp;
+    type                  small_tmp   = big_tmp;
 
     if (check_overflow('x', old, other.val, small_tmp)) {
      overflow = true;
     }
 
-    return derived_type(small_tmp);
+    return self_type(small_tmp);
    }
    else {
     big_type              big_tmp     = ((big_type)val) * other.val;
     big_tmp                         >>= other_mantissa;
-    type                  small_tmp   = (type)big_tmp;
+    type                  small_tmp   = big_tmp;
  
     if (check_overflow('*', old, other.val, small_tmp)) {
      overflow = true;
     }
 
-    return derived_type(small_tmp);
+    return self_type(small_tmp);
    }
   }
 
   template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
-  derived_type & 
+  self_type & 
   operator *= (
    signed_frac<other_charac,other_mantissa, saturate__> const & other
   ) {
    val = ((*this) * other).val;
 
-   return *(static_cast<derived_type *>(this));
+   return *(static_cast<self_type *>(this));
   }
 
 ////////////////////////////////////////////////////////////////////////////////
   
   template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
-  derived_type
+  self_type
   operator / (
    unsigned_frac<other_charac,other_mantissa,other_saturate> const & other
   ) const {
@@ -605,7 +605,7 @@ namespace lamb {
 
    type                   old(val);
 
-   if constexpr(sizeof(other_type) > sizeof(derived_type)) {
+   if constexpr(sizeof(other_type) > sizeof(self_type)) {
     typename
      other_type::big_type big_tmp     = val;
     big_tmp                         <<= other_mantissa;
@@ -616,24 +616,24 @@ namespace lamb {
      overflow = true;
     }
 
-    return derived_type(small_tmp);
+    return self_type(small_tmp);
    }
    else {    
     big_type              big_tmp     = val;
     big_tmp                         <<= other_mantissa;
     big_tmp                          /= other.val;
-    type                  small_tmp   =big_tmp;
+    type                  small_tmp   = big_tmp;
   
     if (check_overflow('/', old, other.val, small_tmp)) {
      overflow = true;
     }
 
-    return derived_type(small_tmp);
+    return self_type(small_tmp);
    }
   }
 
   template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
-  derived_type & 
+  self_type & 
   operator /= (
    unsigned_frac<other_charac,other_mantissa, saturate__> const & other
   ) {
@@ -644,7 +644,7 @@ namespace lamb {
   
   
   template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
-  derived_type
+  self_type
   operator / (
    signed_frac<other_charac,other_mantissa,other_saturate> const & other
   ) const {
@@ -657,7 +657,7 @@ namespace lamb {
    
    type                   old(val);
 
-   if constexpr(sizeof(other_type) > sizeof(derived_type)) {
+   if constexpr(sizeof(other_type) > sizeof(self_type)) {
     typename
      other_type::big_type  big_tmp    = val;
     big_tmp                         <<= other_mantissa;
@@ -668,7 +668,7 @@ namespace lamb {
      overflow = true;
     }
 
-    return derived_type(small_tmp);
+    return self_type(small_tmp);
    }
    else {    
     big_type              big_tmp     = val;
@@ -680,12 +680,12 @@ namespace lamb {
      overflow = true;
     }
 
-    return derived_type(small_tmp);
+    return self_type(small_tmp);
    }
   }
 
   template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
-  derived_type & 
+  self_type & 
   operator /= (
    signed_frac<other_charac,other_mantissa, saturate__> const & other
   ) {
