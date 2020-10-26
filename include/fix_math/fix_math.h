@@ -305,21 +305,32 @@ namespace lamb {
   type_if<
    SIGNED,
    signed_frac<
-   (CHARACTERISTIC << 1),
-   (MANTISSA << 1),
-   saturate__
-   >,
+    (CHARACTERISTIC << 1),
+    (MANTISSA << 1),
+    saturate__
+    >,
    unsigned_frac<
-   (CHARACTERISTIC << 1),
-   (MANTISSA << 1),
-   saturate__
-   >
+    (CHARACTERISTIC << 1),
+    (MANTISSA << 1),
+    saturate__
+    >
    >::type () const {
-   derived_template<(CHARACTERISTIC << 1), (MANTISSA << 1), saturate__> tmp(
+   return typename
+    type_if<
+     SIGNED,
+    signed_frac<
+     (CHARACTERISTIC << 1),
+     (MANTISSA << 1),
+     saturate__
+     >,
+    unsigned_frac<
+     (CHARACTERISTIC << 1),
+     (MANTISSA << 1),
+     saturate__
+     >
+    >::type(
     val << 1
    );
-
-   return tmp;
   }
 
   template <bool saturate__>
@@ -338,11 +349,22 @@ namespace lamb {
    saturate__
    >
    >::type () const {
-   derived_template<(CHARACTERISTIC >> 1), (MANTISSA >> 1), saturate__> tmp(
+   return typename
+    type_if<
+     SIGNED,
+    signed_frac<
+     (CHARACTERISTIC >> 1),
+     (MANTISSA >> 1),
+     saturate__
+     >,
+    unsigned_frac<
+     (CHARACTERISTIC >> 1),
+     (MANTISSA >> 1),
+     saturate__
+     >
+    >::type(
     val >> 1
    );
-
-   return tmp;
   }
 
 ///////////////////////////////////////////////////////////////////////////////
