@@ -267,7 +267,7 @@ namespace lamb {
 ///////////////////////////////////////////////////////////////////////////////
 
   static constexpr self_type from_float(double const & tmp_) {
-   int           divisor = int(tmp_);
+   int           divisor = tmp_;
    double        modulus = tmp_ - divisor;
    type          ipart   = ONE * divisor + int(ONE * modulus);
    
@@ -372,9 +372,10 @@ namespace lamb {
   operator + (
    self_type const & other
   ) const {
-   type          old       = val;
-   big_type      big_tmp   = ((big_type)old) + other.val;
-   type          small_tmp = big_tmp;
+   type          old        = val;
+   big_type      big_tmp    = old;
+   big_tmp                 += other.val;
+   type          small_tmp  = big_tmp;
    
    if (check_overflow('+', old, other.val, small_tmp)) {
     overflow = true;
@@ -397,9 +398,10 @@ namespace lamb {
   operator + (
    sat_cast_type const & other
   ) const {
-   type          old       = val;
-   big_type      big_tmp   = ((big_type)old) + other.val;
-   type          small_tmp = big_tmp;
+   type          old        = val;
+   big_type      big_tmp    = old;
+   big_tmp                 += other.val;
+   type          small_tmp  = big_tmp;
    
    if (check_overflow('+', old, other.val, small_tmp)) {
     overflow = true;
@@ -627,8 +629,7 @@ namespace lamb {
    val = ((*this) / other).val;
 
    return *this;
-  }
-  
+  }  
   
   template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
   self_type
