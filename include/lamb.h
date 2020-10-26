@@ -8,9 +8,9 @@
     #include <Arduino.h>
   #endif
 
-  #include "global/global.h"
- 
   #include "uint12_t.h"
+
+  #include "integer_helpers/integer_helpers.h"
 
   #include "sample_type_traits/sample_type_traits.h"
 
@@ -18,6 +18,8 @@
 
   #include "sample_type_interfaces/sample_type_interfaces.h"
 
+  #include "global/global.h"
+ 
   #include "dsp/dsp.h"
 
   #include "light_buffer/light_buffer.h"
