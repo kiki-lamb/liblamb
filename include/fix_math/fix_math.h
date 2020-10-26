@@ -542,8 +542,6 @@ namespace lamb {
 
  public:
   typedef frac_base<unsigned_frac, characteristic_, mantissa_, saturate_> base;
-  typedef typename base::type                                    type;
-  typedef typename base::big_type                                big_type;
   
   operator int ()                    = delete;
   operator unsigned int ()           = delete;
@@ -552,15 +550,14 @@ namespace lamb {
   operator long long int ()          = delete;
   operator unsigned long long int () = delete;
 
-  explicit constexpr unsigned_frac(type const & tmp_ = 0) :
-   base(tmp_)
-   {}
+  explicit constexpr unsigned_frac(typename base::type const & tmp_) :
+   base(tmp_) {}
 
   explicit constexpr unsigned_frac(
-   type const & characteristic__,
-   type const & mantissa__
-  ) : base((characteristic__ * base::ONE) + mantissa__)
-   {}
+   typename base::type const & characteristic__,
+   typename base::type const & mantissa__
+  ) :
+   base((characteristic__ * base::ONE) + mantissa__) {}
   
  };
  
@@ -578,8 +575,6 @@ namespace lamb {
 
  public:
   typedef frac_base<signed_frac, characteristic_, mantissa_, saturate_> base;
-  typedef typename base::type                                    type;
-  typedef typename base::big_type                                big_type;  
       
   operator int ()                    = delete;
   operator unsigned int ()           = delete;
@@ -589,15 +584,16 @@ namespace lamb {
   operator unsigned long long int () = delete;    
 
   explicit constexpr
-  signed_frac(type const & tmp_) :
-   base(tmp_)
-   {}
+  signed_frac(typename base::type const & tmp_) :
+   base(tmp_) {}
 
   // v should use smaller types and non-negative mantissa value  
   explicit constexpr
-  signed_frac(type const & characteristic__, type const & mantissa__) :
-   base((characteristic__ * base::ONE) + mantissa__)
-   {}
+  signed_frac(
+   typename base::type const & characteristic__,
+   typename base::type const & mantissa__
+  ) :
+   base((characteristic__ * base::ONE) + mantissa__) {}
  };
   
 //////////////////////////////////////////////////////////////////////////////
