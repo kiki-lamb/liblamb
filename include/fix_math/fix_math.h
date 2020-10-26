@@ -110,7 +110,6 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
  template <
-  template <uint8_t char_, uint8_t mant_, bool sat_> class derived_template,
   uint8_t characteristic_,
   uint8_t mantissa_,
   bool saturate_ = false
@@ -705,14 +704,13 @@ namespace lamb {
   
  template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_ = false>
  class unsigned_frac : public frac_base<
-  unsigned_frac,
   characteristic_,
   mantissa_,
   saturate_
   > {
 
  public:
-  typedef frac_base<unsigned_frac, characteristic_, mantissa_, saturate_> base;
+  typedef frac_base<characteristic_, mantissa_, saturate_> base;
   
   operator int ()                    = delete;
   operator unsigned int ()           = delete;
@@ -743,14 +741,13 @@ namespace lamb {
   
  template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_>
  class signed_frac : public frac_base<
-  signed_frac,
   characteristic_,
   mantissa_,
   saturate_
   > {
 
  public:
-  typedef frac_base<signed_frac, characteristic_, mantissa_, saturate_> base;
+  typedef frac_base<characteristic_, mantissa_, saturate_> base;
       
   operator int ()                    = delete;
   operator unsigned int ()           = delete;
