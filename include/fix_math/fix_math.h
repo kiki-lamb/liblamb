@@ -87,7 +87,10 @@ namespace lamb {
   typedef
   fixed<CHARACTERISTIC, MANTISSA, SATURATE>
   self_type;
-    
+
+  template <bool sat>
+  using compatible_type = fixed<CHARACTERISTIC, MANTISSA, sat>;
+  
 ////////////////////////////////////////////////////////////////////////////////
 
  public:
@@ -190,12 +193,7 @@ namespace lamb {
   template <bool sat>
   bool
   operator == (
-   typename
-   type_if<
-   sat ^ SATURATE,
-   sat_cast_type,
-   self_type
-   >::type const & other
+   compatible_type<sat> const & other
   ) const {
    return val == other.val;
   }    
@@ -236,10 +234,11 @@ namespace lamb {
   }
 
 ///////////////////////////////////////////////////////////////////////////////
-    
+
+  template <bool sat>
   self_type
   operator + (
-   self_type const & other
+   compatible_type<sat> const & other
   ) const {
    type          old        = val;
    big_type      big_tmp    = old;
@@ -253,36 +252,10 @@ namespace lamb {
    return self_type(small_tmp);
   }    
 
-  template <bool saturate__>
+  template <bool sat>
   self_type &
   operator += (
-   self_type const & other
-  ) {
-   val = ((*this) + other).val;
-
-   return *(static_cast<self_type *>(this));
-  }
-
-  self_type
-  operator + (
-   sat_cast_type const & other
-  ) const {
-   type          old        = val;
-   big_type      big_tmp    = old;
-   big_tmp                 += other.val;
-   type          small_tmp  = big_tmp;
-   
-   if (check_overflow('+', old, other.val, small_tmp)) {
-    overflow = true;
-   }
-
-   return self_type(small_tmp);
-  }    
-
-  template <bool saturate__>
-  self_type &
-  operator += (
-   sat_cast_type const & other
+   compatible_type<sat> const & other
   ) {
    val = ((*this) + other).val;
 
@@ -290,10 +263,11 @@ namespace lamb {
   }
 
   ///////////////////////////////////////////////////////////////////////////////
-    
+
+  template <bool sat>
   self_type
   operator - (
-   self_type const & other
+   compatible_type<sat> const & other
   ) const {
    type          old        = val;
    big_type      big_tmp    = old;
@@ -307,36 +281,10 @@ namespace lamb {
    return self_type(small_tmp);
   }    
 
+  template <bool sat>
   self_type &
   operator -= (
-   self_type const & other
-  ) {
-   self_type tmp = (*this) - other;
-  
-   val = tmp.val;
-
-   return *(static_cast<self_type *>(this));
-  }
-
-  self_type
-  operator - (
-   sat_cast_type const & other
-  ) const {
-   type          old        = val;
-   big_type      big_tmp    = old;
-   big_tmp                 -= other.val;
-   type          small_tmp  = big_tmp;
-   
-   if (check_overflow('-', old, other.val, small_tmp)) {
-    overflow = true;
-   }
-
-   return self_type(small_tmp);
-  }    
-
-  self_type &
-  operator -= (
-   sat_cast_type const & other
+   compatible_type<sat> const & other
   ) {
    self_type tmp = (*this) - other;
   
