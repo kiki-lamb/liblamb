@@ -266,7 +266,6 @@ namespace lamb {
   }
   
 ////////////////////////////////////////////////////////////////////////////////
-
   
   template <bool saturate__> 
   bool
@@ -313,10 +312,9 @@ namespace lamb {
 
 ///////////////////////////////////////////////////////////////////////////////
     
-  template <bool saturate__> 
   derived_type
   operator + (
-   derived_template<CHARACTERISTIC,MANTISSA,saturate__> const & other
+   derived_type const & other
   ) const {
    type          old       = val;
    big_type      big_tmp   = ((big_type)old) + other.val;
@@ -332,7 +330,32 @@ namespace lamb {
   template <bool saturate__>
   derived_type &
   operator += (
-   derived_template<CHARACTERISTIC,MANTISSA,saturate__> const & other
+   derived_type const & other
+  ) {
+   val = ((*this) + other).val;
+
+   return *(static_cast<derived_type *>(this));
+  }
+
+  derived_type
+  operator + (
+   sat_cast_type const & other
+  ) const {
+   type          old       = val;
+   big_type      big_tmp   = ((big_type)old) + other.val;
+   type          small_tmp = (type)big_tmp;
+   
+   if (check_overflow('+', old, other.val, small_tmp)) {
+    overflow = true;
+   }
+
+   return derived_type(small_tmp);
+  }    
+
+  template <bool saturate__>
+  derived_type &
+  operator += (
+   sat_cast_type const & other
   ) {
    val = ((*this) + other).val;
 
@@ -341,10 +364,9 @@ namespace lamb {
 
   ///////////////////////////////////////////////////////////////////////////////
     
-  template <uint8_t c, uint8_t m, bool s>
   derived_type
   operator - (
-   derived_template<c,m,s> const & other
+   derived_type const & other
   ) const {
    type          old       = val;
    big_type      big_tmp   = ((big_type)old) - other.val;
@@ -357,10 +379,35 @@ namespace lamb {
    return derived_type(small_tmp);
   }    
 
-  template <uint8_t c, uint8_t m, bool s>
   derived_type &
   operator -= (
-   derived_template<c,m,s> const & other
+   derived_type const & other
+  ) {
+   derived_type tmp = (*this) - other;
+  
+   val = tmp.val;
+
+   return *(static_cast<derived_type *>(this));
+  }
+
+  derived_type
+  operator - (
+   sat_cast_type const & other
+  ) const {
+   type          old       = val;
+   big_type      big_tmp   = ((big_type)old) - other.val;
+   type          small_tmp = (type)big_tmp;
+   
+   if (check_overflow('-', old, other.val, small_tmp)) {
+    overflow = true;
+   }
+
+   return derived_type(small_tmp);
+  }    
+
+  derived_type &
+  operator -= (
+   sat_cast_type const & other
   ) {
    derived_type tmp = (*this) - other;
   
