@@ -373,34 +373,27 @@ namespace lamb {
     fixed<other_charac, other_mantissa, other_saturate>
     other_type;
 
+   typedef typename
+    type_if<
+     (sizeof(other_type) > sizeof(self_type)),
+    typename other_type::big_type,
+    big_type
+    >::type intermediary_type;
+
    static_assert(
     ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
     "Signedness mismatch!"
    );
 
-   type                    old(val);
-
-   if constexpr(sizeof(other_type) > sizeof(self_type)) {
-    typename
-     other_type::big_type big_tmp     = val;
-    big_tmp                          *= other.val;
-    big_tmp                         >>= other.mantissa;     
-    type                  small_tmp   = big_tmp;
-    
-    overflow |= check_overflow('x', old, other.val, small_tmp);
-
-    return self_type(small_tmp);
-   }
-   else {
-    big_type              big_tmp     = val;
-    big_tmp                          *= other.val;
-    big_tmp                         >>= other_mantissa;
-    type                  small_tmp   = big_tmp;
-     
-    overflow |= check_overflow('*', old, other.val, small_tmp);
-
-    return self_type(small_tmp);
-   }
+   type              old(val);      
+   intermediary_type big_tmp     = val;
+   big_tmp                      *= other.val;
+   big_tmp                     >>= other_mantissa;     
+   type              small_tmp   = big_tmp;
+   
+   overflow |= check_overflow('x', old, other.val, small_tmp);
+   
+   return self_type(small_tmp);
   }
 
   template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
@@ -425,36 +418,29 @@ namespace lamb {
     fixed<other_charac, other_mantissa, other_saturate>
     other_type;
     
+   typedef typename
+    type_if<
+     (sizeof(other_type) > sizeof(self_type)),
+    typename other_type::big_type,
+    big_type
+    >::type intermediary_type;
+
    static_assert(
     ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
     "Signedness mismatch!"
    );
 
-   type                   old(val);
-
-   if constexpr(sizeof(other_type) > sizeof(self_type)) {
-    typename
-     other_type::big_type big_tmp     = val;
-    big_tmp                         <<= other_mantissa;
-    big_tmp                          /= other.val;
-    type                  small_tmp   = big_tmp;
-
-    if (check_overflow('x', old, other.val, small_tmp)) {
-     overflow = true;
-    }
-
-    return self_type(small_tmp);
+   type              old(val);       
+   intermediary_type big_tmp     = val;
+   big_tmp                     <<= other_mantissa;
+   big_tmp                      /= other.val;
+   type              small_tmp   = big_tmp;
+   
+   if (check_overflow('x', old, other.val, small_tmp)) {
+    overflow = true;
    }
-   else {    
-    big_type              big_tmp     = val;
-    big_tmp                         <<= other_mantissa;
-    big_tmp                          /= other.val;
-    type                  small_tmp   = big_tmp;
-  
-    overflow |= check_overflow('/', old, other.val, small_tmp);
-
-    return self_type(small_tmp);
-   }
+   
+   return self_type(small_tmp);
   }
 
   template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
