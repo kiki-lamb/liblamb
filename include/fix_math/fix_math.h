@@ -139,26 +139,33 @@ namespace lamb {
    SIGNED,
    typename signed_int<SIZE>::type,
    typename unsigned_int<SIZE>::type
-   >::type type;
-
+   >::type
+  type;
+  
   typedef
   typename type_if<
    SIGNED,
    typename signed_int<(SIZE << 1)>::type,
    typename unsigned_int<(SIZE << 1)>::type
-   >::type big_type;
-
+   >::type
+  big_type;
+  
   typedef
   typename type_if<
    SIGNED,
    signed_frac<CHARACTERISTIC, MANTISSA, (! SATURATE)>,
    unsigned_frac<CHARACTERISTIC, MANTISSA, (! SATURATE)>
-   >::type sat_cast_type;
+   >::type
+  sat_cast_type;
   
   typedef
-  derived_template<CHARACTERISTIC, MANTISSA, SATURATE>
+  typename type_if<
+   SIGNED,
+   signed_frac<CHARACTERISTIC, MANTISSA, SATURATE>,
+   unsigned_frac<CHARACTERISTIC, MANTISSA, SATURATE>
+   >::type
   derived_type;
-
+  
 ////////////////////////////////////////////////////////////////////////////////
 
   static constexpr
@@ -259,11 +266,17 @@ namespace lamb {
   }
   
 ////////////////////////////////////////////////////////////////////////////////
-    
+
+  
   template <bool saturate__> 
   bool
   operator == (
-   derived_template<CHARACTERISTIC, MANTISSA, saturate__> const & other
+   typename
+   type_if<
+   SIGNED,
+   signed_frac<CHARACTERISTIC, MANTISSA, saturate__>,
+   unsigned_frac<CHARACTERISTIC, MANTISSA, saturate__>
+   >::type const & other
   ) const {
    return val == other.val;
   }    
