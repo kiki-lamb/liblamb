@@ -184,6 +184,28 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+  bool
+  operator ~ () const {
+   if (SIGNED) {
+    return self_type(val * -1);
+   }
+   else {
+    return self_type(~val);
+   }
+  }    
+
+////////////////////////////////////////////////////////////////////////////////
+
+  template <bool sat>
+  bool
+  operator ^ (
+   compatible_type<sat> const & other
+  ) const {
+    return self_type(val ^ other.val);
+  }  
+
+////////////////////////////////////////////////////////////////////////////////
+
   template <bool sat>
   bool
   operator == (
