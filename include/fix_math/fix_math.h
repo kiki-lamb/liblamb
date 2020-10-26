@@ -424,9 +424,10 @@ namespace lamb {
   operator - (
    self_type const & other
   ) const {
-   type          old       = val;
-   big_type      big_tmp   = ((big_type)old) - other.val;
-   type          small_tmp = big_tmp;
+   type          old        = val;
+   big_type      big_tmp    = old;
+   big_tmp                 -= other.val;
+   type          small_tmp  = big_tmp;
    
    if (check_overflow('-', old, other.val, small_tmp)) {
     overflow = true;
@@ -450,9 +451,10 @@ namespace lamb {
   operator - (
    sat_cast_type const & other
   ) const {
-   type          old       = val;
-   big_type      big_tmp   = ((big_type)old) - other.val;
-   type          small_tmp = big_tmp;
+   type          old        = val;
+   big_type      big_tmp    = old;
+   big_tmp                 -= other.val;
+   type          small_tmp  = big_tmp;
    
    if (check_overflow('-', old, other.val, small_tmp)) {
     overflow = true;
@@ -541,7 +543,7 @@ namespace lamb {
 
    if constexpr(sizeof(other_type) > sizeof(self_type)) {
     typename
-     other_type::big_type big_tmp      = (typename other_type::big_type)val;
+     other_type::big_type big_tmp      = val;
     big_tmp                           *= other.val;
     big_tmp                          >>= other.mantissa;     
     type                  small_tmp    = big_tmp;
@@ -553,7 +555,7 @@ namespace lamb {
     return self_type(small_tmp);
    }
    else {
-    big_type              big_tmp      = (big_type)val;
+    big_type              big_tmp      = val;
     big_tmp                           *= other.val;
     big_tmp                          >>= other_mantissa;
     type                  small_tmp    = big_tmp;
