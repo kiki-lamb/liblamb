@@ -19,17 +19,7 @@ using namespace std;
 namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
-// Advance declarations:
-////////////////////////////////////////////////////////////////////////////////
-
- template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_>
- class signed_frac;
-    
- template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_>
- class unsigned_frac;
-    
-////////////////////////////////////////////////////////////////////////////////
-// Base
+// Fixed
 ////////////////////////////////////////////////////////////////////////////////
 
  template <
@@ -37,7 +27,7 @@ namespace lamb {
   uint8_t mantissa_,
   bool saturate_ = false
   >
- class frac_base {
+ class fixed {
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -79,7 +69,7 @@ namespace lamb {
    SIGNED,
    typename signed_int<SIZE>::type,
    typename unsigned_int<SIZE>::type
-   >::type
+   >::type  
   type;
   
   typedef
@@ -91,19 +81,11 @@ namespace lamb {
   big_type;
   
   typedef
-  typename type_if<
-   SIGNED,
-   signed_frac<CHARACTERISTIC, MANTISSA, (! SATURATE)>,
-   unsigned_frac<CHARACTERISTIC, MANTISSA, (! SATURATE)>
-   >::type
-  sat_cast_type;
+  fixed<CHARACTERISTIC, MANTISSA, (! SATURATE)>
+   sat_cast_type;
   
   typedef
-  typename type_if<
-   SIGNED,
-   signed_frac<CHARACTERISTIC, MANTISSA, SATURATE>,
-   unsigned_frac<CHARACTERISTIC, MANTISSA, SATURATE>
-   >::type
+  fixed<CHARACTERISTIC, MANTISSA, SATURATE>
   self_type;
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -171,11 +153,11 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   explicit constexpr
-  frac_base(type const & tmp_) :
+  fixed(type const & tmp_) :
    val(tmp_), overflow(false) {}
 
   explicit constexpr
-  frac_base(
+  fixed(
    type const & characteristic__,
    type const & mantissa__
   ) :
@@ -204,17 +186,16 @@ namespace lamb {
   }
   
 ////////////////////////////////////////////////////////////////////////////////
-  
-  bool
-  operator == (
-   self_type const & other
-  ) const {
-   return val == other.val;
-  }    
 
+  template <bool sat>
   bool
   operator == (
-   sat_cast_type const & other
+   typename
+   type_if<
+   sat ^ SATURATE,
+   sat_cast_type,
+   self_type
+   >::type const & other
   ) const {
    return val == other.val;
   }    
@@ -223,44 +204,14 @@ namespace lamb {
 
  private:
   
-  template <bool sat, bool signed_>
-  class dummy {};
-
-  template <bool signed_>
-  class dummy<true, signed_> {     
+  template <bool sat>
+  class adjacent_types {
    typedef
-   typename type_if<
-    signed_,
-    signed_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), true>,
-    unsigned_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), true>
-    >::type
+   fixed<(CHARACTERISTIC << 1), (MANTISSA << 1), sat>
    larger_type;
 
    typedef
-   typename type_if<
-    signed_,
-    signed_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), true>,
-    unsigned_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), true>
-    >::type
-   smaller_type;
-  };
-
-  template <bool signed_>
-  class dummy<false, signed_> {
-   typedef
-   typename type_if<
-    signed_,
-    signed_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), false>,
-    unsigned_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), false>
-    >::type
-   larger_type;
-
-   typedef
-   typename type_if<
-    signed_,
-    signed_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), false>,
-    unsigned_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), false>
-    >::type
+   fixed<(CHARACTERISTIC >> 1), (MANTISSA >> 1), sat>
    smaller_type;
   };
 
@@ -270,16 +221,16 @@ namespace lamb {
 
   template <bool saturate__>
   operator
-  typename dummy<saturate__, SIGNED>::larger_type () const {
-   return typename dummy<saturate__, SIGNED>::larger_type(
+  typename adjacent_types<saturate__>::larger_type () const {
+   return typename adjacent_types<saturate__>::larger_type(
     val << 1
    );
   }
 
   template <bool saturate__>
   operator
-  typename dummy<saturate__, SIGNED>::smaller_type () const {
-   return typename dummy<saturate__, SIGNED>::smaller_type(
+  typename adjacent_types<saturate__>::smaller_type () const {
+   return typename adjacent_types<saturate__>::smaller_type(
     val >> 1
    );
   }
@@ -399,11 +350,11 @@ namespace lamb {
   template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
   self_type
   operator * (
-   unsigned_frac<other_charac, other_mantissa, other_saturate> const & other
+   fixed<other_charac, other_mantissa, other_saturate> const & other
   ) const {
 
    typedef
-    unsigned_frac<other_charac, other_mantissa, other_saturate>
+    fixed<other_charac, other_mantissa, other_saturate>
     other_type;
 
    type                    old(val);
@@ -438,60 +389,7 @@ namespace lamb {
   template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
   self_type & 
   operator *= (
-   unsigned_frac<other_charac,other_mantissa, saturate__> const & other
-  ) {
-   val = ((*this) * other).val;
-
-   return *(static_cast<self_type *>(this));
-  }
-
-///////////////////////////////////////////////////////////////////////////////
-
-  template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
-  self_type
-  operator * (
-   signed_frac<other_charac, other_mantissa, other_saturate> const & other
-  ) const {
-
-   static_assert(SIGNED, "must be signed");
-   
-   typedef
-    signed_frac<other_charac, other_mantissa, other_saturate>
-    other_type;
-
-   type                   old(val);
-
-   if constexpr(sizeof(other_type) > sizeof(self_type)) {
-    typename
-     other_type::big_type big_tmp      = val;
-    big_tmp                           *= other.val;
-    big_tmp                          >>= other.mantissa;     
-    type                  small_tmp    = big_tmp;
-
-    if (check_overflow('x', old, other.val, small_tmp)) {
-     overflow = true;
-    }
-
-    return self_type(small_tmp);
-   }
-   else {
-    big_type              big_tmp      = val;
-    big_tmp                           *= other.val;
-    big_tmp                          >>= other_mantissa;
-    type                  small_tmp    = big_tmp;
- 
-    if (check_overflow('*', old, other.val, small_tmp)) {
-     overflow = true;
-    }
-
-    return self_type(small_tmp);
-   }
-  }
-
-  template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
-  self_type & 
-  operator *= (
-   signed_frac<other_charac,other_mantissa, saturate__> const & other
+   fixed<other_charac,other_mantissa, saturate__> const & other
   ) {
    val = ((*this) * other).val;
 
@@ -503,11 +401,11 @@ namespace lamb {
   template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
   self_type
   operator / (
-   unsigned_frac<other_charac,other_mantissa,other_saturate> const & other
+   fixed<other_charac,other_mantissa,other_saturate> const & other
   ) const {
 
    typedef
-    unsigned_frac<other_charac, other_mantissa, other_saturate>
+    fixed<other_charac, other_mantissa, other_saturate>
     other_type;
 
    type                   old(val);
@@ -542,64 +440,13 @@ namespace lamb {
   template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
   self_type & 
   operator /= (
-   unsigned_frac<other_charac,other_mantissa, saturate__> const & other
-  ) {
-   val = ((*this) / other).val;
-
-   return *this;
-  }  
-  
-  template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
-  self_type
-  operator / (
-   signed_frac<other_charac, other_mantissa, other_saturate> const & other
-  ) const {
-
-   static_assert(SIGNED, "must be signed");
-   
-   typedef
-    signed_frac<other_charac, other_mantissa, other_saturate>
-    other_type;
-   
-   type                   old(val);
-
-   if constexpr(sizeof(other_type) > sizeof(self_type)) {
-    typename
-     other_type::big_type big_tmp     = val;
-    big_tmp                         <<= other_mantissa;
-    big_tmp                          /= other.val;
-    type                  small_tmp   = big_tmp;
-
-    if (check_overflow('x', old, other.val, small_tmp)) {
-     overflow = true;
-    }
-
-    return self_type(small_tmp);
-   }
-   else {    
-    big_type              big_tmp     = val;
-    big_tmp                         <<= other_mantissa;
-    big_tmp                          /= other.val;
-    type                  small_tmp   = big_tmp;
-  
-    if (check_overflow('/', old, other.val, small_tmp)) {
-     overflow = true;
-    }
-
-    return self_type(small_tmp);
-   }
-  }
-
-  template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
-  self_type & 
-  operator /= (
-   signed_frac<other_charac,other_mantissa, saturate__> const & other
+   fixed<other_charac,other_mantissa, saturate__> const & other
   ) {
    val = ((*this) / other).val;
 
    return *this;
   }
-  
+
 ///////////////////////////////////////////////////////////////////////////////
 
 // This check is currently not effective for multiplication operations and
@@ -658,83 +505,8 @@ namespace lamb {
  ) { return false; }                                                    
 #endif
   
- }; // template frac_base
+ }; // template fixed
  
-///////////////////////////////////////////////////////////////////////////////
-// Unsigned fixed point numbers
-///////////////////////////////////////////////////////////////////////////////
-  
- template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_ = false>
- class unsigned_frac : public frac_base<
-  characteristic_,
-  mantissa_,
-  saturate_
-  > {
-
- public:
-  typedef frac_base<characteristic_, mantissa_, saturate_> base;
-  
-  operator int ()                    = delete;
-  operator unsigned int ()           = delete;
-  operator long int ()               = delete;
-  operator unsigned long int ()      = delete;
-  operator long long int ()          = delete;
-  operator unsigned long long int () = delete;
-
-  explicit
-  operator double() {
-   return double((base)*this);
-  }
-
-  explicit constexpr unsigned_frac(typename base::type const & tmp) :
-   base(tmp) {}
-
-  explicit constexpr unsigned_frac(
-   typename base::type const & characteristic__,
-   typename base::type const & mantissa__
-  ) :
-   base(characteristic__, mantissa__) {}
-  
- };
- 
-///////////////////////////////////////////////////////////////////////////////
-// Signed fixed point numbers
-///////////////////////////////////////////////////////////////////////////////
-  
- template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_>
- class signed_frac : public frac_base<
-  characteristic_,
-  mantissa_,
-  saturate_
-  > {
-
- public:
-  typedef frac_base<characteristic_, mantissa_, saturate_> base;
-      
-  operator int ()                    = delete;
-  operator unsigned int ()           = delete;
-  operator long int ()               = delete;
-  operator unsigned long int ()      = delete;
-  operator long long int ()          = delete;
-  operator unsigned long long int () = delete;    
-
-  explicit
-  operator double() {
-   return double((base)*this);
-  }
-  
-  explicit constexpr
-  signed_frac(typename base::type const & tmp) :
-   base(tmp) {}
-
-  // v should use smaller types and non-negative mantissa value  
-  explicit constexpr
-  signed_frac(
-   typename base::type const & characteristic__,
-   typename base::type const & mantissa__
-  ) :
-   base(characteristic__, mantissa__) {}
- };
 
 //////////////////////////////////////////////////////////////////////////////
 // Typedefs
@@ -756,42 +528,41 @@ namespace lamb {
 
  // used only as 'big_type's:
  typedef uint64_t                       q0n64_value_type;
- typedef int64_t                        q0n63_valuete_type;
+ typedef int64_t                        q0n63_value_type;
 
 // Overflow-able types ////////////////////////////////////////////////////////
   
- typedef unsigned_frac<  0,  8, false > q0n8;
- typedef unsigned_frac<  8,  8, false > q8n8;
- typedef unsigned_frac<  0, 16, false > q0n16;
- typedef unsigned_frac< 16, 16, false > q16n16;
- typedef unsigned_frac<  0, 32, false > q0n32;
+ typedef fixed<  0,  8, false > q0n8;
+ typedef fixed<  8,  8, false > q8n8;
+ typedef fixed<  0, 16, false > q0n16;
+ typedef fixed< 16, 16, false > q16n16;
+ typedef fixed<  0, 32, false > q0n32;
 
- typedef unsigned_frac<  2, 14, false > q2n14;
- typedef unsigned_frac<  2, 30, false > q2n30;
+ typedef fixed<  2, 14, false > q2n14;
+ typedef fixed<  2, 30, false > q2n30;
   
- typedef signed_frac<    0,  7, false > q0n7;
- typedef signed_frac<    7,  8, false > q7n8;
- typedef signed_frac<    0, 15, false > q0n15;
- typedef signed_frac<   15, 16, false > q15n16;
- typedef signed_frac<    0, 31, false > q0n31;
+ typedef fixed<  0,  7, false > q0n7;
+ typedef fixed<  7,  8, false > q7n8;
+ typedef fixed<  0, 15, false > q0n15;
+ typedef fixed< 15, 16, false > q15n16;
+ typedef fixed<  0, 31, false > q0n31;
 
 // Saturating types ///////////////////////////////////////////////////////////
  
- typedef unsigned_frac<  0,  8, true  > sat_q0n8;
- typedef unsigned_frac<  8,  8, true  > sat_q8n8;
- typedef unsigned_frac<  0, 16, true  > sat_q0n16;
- typedef unsigned_frac< 16, 16, true  > sat_q16n16;  
- typedef unsigned_frac<  0, 32, true  > sat_q0n32;
+ typedef fixed<  0,  8, true  > sat_q0n8;
+ typedef fixed<  8,  8, true  > sat_q8n8;
+ typedef fixed<  0, 16, true  > sat_q0n16;
+ typedef fixed< 16, 16, true  > sat_q16n16;  
+ typedef fixed<  0, 32, true  > sat_q0n32;
 
- typedef unsigned_frac<  2, 14, true  > sat_q2n14;
- typedef unsigned_frac<  2, 30, true  > sat_q2n30;
+ typedef fixed<  2, 14, true  > sat_q2n14;
+ typedef fixed<  2, 30, true  > sat_q2n30;
   
- typedef signed_frac<    0,  7, true  > sat_q0n7;
- typedef signed_frac<    7,  8, true  > sat_q7n8;
- typedef signed_frac<    0, 15, true  > sat_q0n15;
- typedef signed_frac<   15, 16, true  > sat_q15n16;
- typedef signed_frac<    0, 31, true  > sat_q0n31;  
-
+ typedef fixed<  0,  7, true  > sat_q0n7;
+ typedef fixed<  7,  8, true  > sat_q7n8;
+ typedef fixed<  0, 15, true  > sat_q0n15;
+ typedef fixed< 15, 16, true  > sat_q15n16;
+ typedef fixed<  0, 31, true  > sat_q0n31;  
  
 ///////////////////////////////////////////////////////////////////////////////
 

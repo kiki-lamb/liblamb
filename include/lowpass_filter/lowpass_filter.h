@@ -10,7 +10,7 @@ namespace lamb {
     typedef typename sample_type_traits<sample_t>::mix_type      mix_t;
     typedef typename sample_type_traits<mix_t>::unsigned_type    unsigned_mix_t;
 
-    typedef unsigned_frac<0, (
+    typedef fixed<0, (
       sizeof(
         typename sample_type_traits<sample_t>::unmixed_type
       ) << 3)>                                                   control_frac_t;
