@@ -593,34 +593,25 @@ namespace lamb {
   }
 
 ////////////////////////////////////////////////////////////////////////////////
-
+  
   template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
   derived_type
   operator / (
-   derived_template<other_charac,other_mantissa,other_saturate> const & other
+   unsigned_frac<other_charac,other_mantissa,other_saturate> const & other
   ) const {
 
    typedef
-    typename type_if<
-     SIGNED,
-    signed_frac<other_charac, other_mantissa, other_saturate>,
     unsigned_frac<other_charac, other_mantissa, other_saturate>
-    >::type
     other_type;
-
-   typedef typename other_type::big_type
-    right_big_type;
-
-   typedef typename unsigned_int<(sizeof(right_big_type))>::type
-    pseudo_right_big_type;
 
    type                   old(val);
 
    if constexpr(sizeof(other_type) > sizeof(derived_type)) {
-    pseudo_right_big_type big_tmp     = ((pseudo_right_big_type)val);
+    typename
+     other_type::big_type big_tmp     = val;
     big_tmp                         <<= other_mantissa;
     big_tmp                          /= other.val;
-    type                  small_tmp   = (type)big_tmp;
+    type                  small_tmp   = big_tmp;
 
     if (check_overflow('x', old, other.val, small_tmp)) {
      overflow = true;
@@ -629,10 +620,10 @@ namespace lamb {
     return derived_type(small_tmp);
    }
    else {    
-    big_type              big_tmp     = ((big_type)val);
+    big_type              big_tmp     = val;
     big_tmp                         <<= other_mantissa;
     big_tmp                          /= other.val;
-    type                  small_tmp   = (type)big_tmp;
+    type                  small_tmp   =big_tmp;
   
     if (check_overflow('/', old, other.val, small_tmp)) {
      overflow = true;
@@ -645,7 +636,59 @@ namespace lamb {
   template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
   derived_type & 
   operator /= (
-   derived_template<other_charac,other_mantissa, saturate__> const & other
+   unsigned_frac<other_charac,other_mantissa, saturate__> const & other
+  ) {
+   val = ((*this) / other).val;
+
+   return *this;
+  }
+  
+  
+  template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
+  derived_type
+  operator / (
+   signed_frac<other_charac,other_mantissa,other_saturate> const & other
+  ) const {
+
+   static_assert(SIGNED, "must be signed");
+   
+   typedef
+    signed_frac<other_charac, other_mantissa, other_saturate>
+    other_type;
+   
+   type                   old(val);
+
+   if constexpr(sizeof(other_type) > sizeof(derived_type)) {
+    typename
+     other_type::big_type  big_tmp    = val;
+    big_tmp                         <<= other_mantissa;
+    big_tmp                          /= other.val;
+    type                  small_tmp   = big_tmp;
+
+    if (check_overflow('x', old, other.val, small_tmp)) {
+     overflow = true;
+    }
+
+    return derived_type(small_tmp);
+   }
+   else {    
+    big_type              big_tmp     = val;
+    big_tmp                         <<= other_mantissa;
+    big_tmp                          /= other.val;
+    type                  small_tmp   = big_tmp;
+  
+    if (check_overflow('/', old, other.val, small_tmp)) {
+     overflow = true;
+    }
+
+    return derived_type(small_tmp);
+   }
+  }
+
+  template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
+  derived_type & 
+  operator /= (
+   signed_frac<other_charac,other_mantissa, saturate__> const & other
   ) {
    val = ((*this) / other).val;
 
