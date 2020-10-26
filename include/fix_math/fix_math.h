@@ -287,7 +287,6 @@ namespace lamb {
   
 ////////////////////////////////////////////////////////////////////////////////
 
-  template <bool saturate__>
   operator
   larger_type () const {
    return larger_type(
@@ -295,7 +294,6 @@ namespace lamb {
    );
   }
 
-  template <bool saturate__>
   operator
   smaller_type () const {
    return smaller_type(
