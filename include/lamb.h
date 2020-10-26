@@ -72,7 +72,7 @@
   #endif
 
   #if defined(STM32F1)
-    #include "maple_timer/maple_timer.h"
+    #include "device/maple_timer/maple_timer.h"
     #include "device/pt8211/pt8211.h"
     #include "device/Adafruit_ILI9341_STM_SPI2/Adafruit_ILI9341_STM_SPI2.h"
   #endif
