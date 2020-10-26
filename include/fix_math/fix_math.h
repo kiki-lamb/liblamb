@@ -157,13 +157,6 @@ namespace lamb {
   derived_template<CHARACTERISTIC, MANTISSA, SATURATE>
   derived_type;
 
-  typedef
-  typename type_if<
-   SIGNED,
-   unsigned_frac<CHARACTERISTIC, MANTISSA, SATURATE>,
-   signed_frac<CHARACTERISTIC, MANTISSA, SATURATE>
-   >::type opposite_signedness_type;
-  
 ////////////////////////////////////////////////////////////////////////////////
 
   static constexpr
@@ -340,15 +333,15 @@ namespace lamb {
   operator - (
    derived_template<c,m,s> const & other
   ) const {
-   type          old  = val;
-   big_type      new_ = old - other.val;
-   derived_type  ret  = derived_type(new_);
-
-   if (check_overflow('-', old, other.val, ret.val)) {
+   type          old       = val;
+   big_type      big_tmp   = ((big_type)old) - other.val;
+   type          small_tmp = (type)big_tmp;
+   
+   if (check_overflow('-', old, other.val, small_tmp)) {
     overflow = true;
    }
 
-   return ret;
+   return derived_type(small_tmp);
   }    
 
   template <uint8_t c, uint8_t m, bool s>
