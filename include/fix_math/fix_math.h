@@ -218,31 +218,52 @@ namespace lamb {
   }    
 
 ///////////////////////////////////////////////////////////////////////////////
-  
-  typedef
-  typename type_if<
-   SIGNED,
-   signed_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), SATURATE>,
-   unsigned_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), SATURATE>
-   >::type
-  larger_type;
-  
-  typedef
-  typename type_if<
-   SIGNED,
-   signed_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), SATURATE>,
-   unsigned_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), SATURATE>
-   >::type
-  smaller_type;
+
+  template <bool sat, bool signed_>
+  class dummy {};
+
+  template <bool signed_>
+  class dummy<true, signed_> {     
+   typedef
+   typename type_if<
+    signed_,
+    signed_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), true>,
+    unsigned_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), true>
+    >::type
+   larger_type;
+
+   typedef
+   typename type_if<
+    signed_,
+    signed_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), true>,
+    unsigned_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), true>
+    >::type
+   smaller_type;
+  };
+
+  template <bool signed_>
+  class dummy<false, signed_> {
+   typedef
+   typename type_if<
+    signed_,
+    signed_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), false>,
+    unsigned_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), false>
+    >::type
+   larger_type;
+
+   typedef
+   typename type_if<
+    signed_,
+    signed_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), false>,
+    unsigned_frac<(CHARACTERISTIC >> 1), (MANTISSA >> 1), false>
+    >::type
+   smaller_type;
+  };
+
 
   template <bool saturate__>
   operator
-  typename
-  type_if<
-   SIGNED,
-   signed_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), saturate__>,
-   unsigned_frac<(CHARACTERISTIC << 1), (MANTISSA << 1), saturate__>
-   >::type () const {
+  typename dummy<saturate__, SIGNED>::larger_type () const {
    return typename
     type_if<
      SIGNED,
@@ -263,20 +284,7 @@ namespace lamb {
 
   template <bool saturate__>
   operator
-    typename
-  type_if<
-   SIGNED,
-   signed_frac<
-   (CHARACTERISTIC >> 1),
-   (MANTISSA >> 1),
-   saturate__
-   >,
-   unsigned_frac<
-   (CHARACTERISTIC >> 1),
-   (MANTISSA >> 1),
-   saturate__
-   >
-   >::type () const {
+  typename dummy<saturate__, SIGNED>::smaller_type () const {
    return typename
     type_if<
      SIGNED,
