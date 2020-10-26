@@ -36,7 +36,7 @@ namespace lamb {
 //    D2 = L
 
    sat_q0n15 process(sat_q0n15 input) {
-    double I = input.to_float();
+    double I = double(input);
     
     printf("% 5.3lf, ", I)    ;
     printf("% 5.3lf, ", F1)   ;        

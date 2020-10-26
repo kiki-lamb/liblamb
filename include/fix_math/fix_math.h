@@ -11,22 +11,6 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-//
-// Multiply tests:
-//
-// L/R     u0,8   u0,16  u0,32  u8,8  u16,16  s0,7  s0,15  s0,31  s7,8  s15,16
-// u0,8    Yes    Yes    Yes    EXCL  EXCL    EXCL  EXCL   EXCL   EXCL  EXCL
-// u0,16   Yes    Yes    Yes    EXCL  EXCL    EXCL  EXCL   EXCL   EXCL  EXCL
-// u0,32   Yes    Yes    Yes    EXCL  EXCL    EXCL  EXCL   EXCL   EXCL  EXCL
-// u8,8    Yes    Yes    Yes    ?     ?       EXCL  EXCL   EXCL   EXCL  EXCL
-// u16,16  Yes    Yes    Yes    ?     ?       EXCL  EXCL   EXCL   EXCL  EXCL
-// s0,7    Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL
-// s0,15   Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL
-// s0,31   Yes    Yes    Yes    EXCL  EXCL    Yes   Yes    Yes    EXCL  EXCL
-// s7,8    Yes    Yes    Yes    ?     ?       Redo  Redo   Redo   EXCL  EXCL
-// s15,16  Yes    Yes    Yes    ?     ?       Redo  Redo   Redo   EXCL  EXCL
-//
-///////////////////////////////////////////////////////////////////////////////
 
 using namespace std;
 
@@ -36,6 +20,9 @@ namespace lamb {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+// This check is currently not effective for multiplication operations and
+// should really be re-written entirely:
+ 
 #ifndef LAMB_FP_NO_OVERFLOW_CHECKING
 #define CHECK_OVERFLOW                                          \
  template <typename delta_t>                                    \
@@ -95,9 +82,7 @@ namespace lamb {
  ////////////////////////////////////////////////////////////////////////////////
  
  template <bool use_left, typename left, typename right>
- class type_if {
-  
- };
+ class type_if {};
 
  template <typename left, typename right>
  class type_if<true, left, right> {
@@ -258,8 +243,8 @@ namespace lamb {
   CHECK_OVERFLOW;
 
 ////////////////////////////////////////////////////////////////////////////////
-  
-  double to_float() const {
+
+  operator double() const {
    return val / (ONE * 1.0);
   }
 
@@ -329,7 +314,7 @@ namespace lamb {
   ) const {
    type          old    = val;
    big_type      new_   = old + other.val;
-   derived_type ret    = derived_type(new_);
+   derived_type  ret    = derived_type(new_);
 
    if (check_overflow('+', old, other.val, ret.val)) {
     overflow = true;
@@ -393,31 +378,31 @@ namespace lamb {
    typedef typename unsigned_int<(sizeof(right_big_type))>::type
     pseudo_right_big_type;
 
-   derived_type            ret(0);
    type                    old(val);
 
    if constexpr(sizeof(other_type) > sizeof(derived_type)) {
-    pseudo_right_big_type tmp   =
-     ((pseudo_right_big_type)val) * other.val;
+    pseudo_right_big_type big_tmp     = ((pseudo_right_big_type)val) * other.val;
+    big_tmp                         >>= other.mantissa;     
+    type                  small_tmp   = (type)big_tmp;
 
-    tmp                       >>= other.mantissa;     
-    ret.val                     = (type)tmp;
-
-    if (check_overflow('x', old, other.val, ret.val)) {
+    
+    if (check_overflow('x', old, other.val, small_tmp)) {
      overflow = true;
     }
+
+    return derived_type(small_tmp);
    }
    else {
-    big_type              tmp   = ((big_type)val) * other.val;
-    tmp                       >>= other_mantissa;
-    ret.val                     = (type)tmp;
- 
-    if (check_overflow('*', old, other.val, ret.val)) {
+    big_type              big_tmp     = ((big_type)val) * other.val;
+    big_tmp                         >>= other_mantissa;
+    type                  small_tmp   = (type)big_tmp;
+     
+    if (check_overflow('*', old, other.val, small_tmp)) {
      overflow = true;
     }
+
+    return derived_type(small_tmp);
    }
-   
-   return ret;
   }
 
   template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
@@ -558,6 +543,11 @@ namespace lamb {
   operator long long int ()          = delete;
   operator unsigned long long int () = delete;
 
+  explicit
+  operator double() {
+   return double((base)*this);
+  }
+
   explicit constexpr unsigned_frac(typename base::type const & tmp_) :
    base(tmp_) {}
 
@@ -591,6 +581,11 @@ namespace lamb {
   operator long long int ()          = delete;
   operator unsigned long long int () = delete;    
 
+  explicit
+  operator double() {
+   return double((base)*this);
+  }
+  
   explicit constexpr
   signed_frac(typename base::type const & tmp_) :
    base(tmp_) {}
@@ -603,7 +598,7 @@ namespace lamb {
   ) :
    base(characteristic__, mantissa__) {}
  };
-  
+
 //////////////////////////////////////////////////////////////////////////////
 // Typedefs
 //////////////////////////////////////////////////////////////////////////////
