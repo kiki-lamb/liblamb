@@ -283,10 +283,16 @@ namespace lamb {
   
 ////////////////////////////////////////////////////////////////////////////////
   
-  template <bool saturate__> 
   bool
   operator == (
    derived_type const & other
+  ) const {
+   return val == other.val;
+  }    
+
+  bool
+  operator == (
+   sat_cast_type const & other
   ) const {
    return val == other.val;
   }    
