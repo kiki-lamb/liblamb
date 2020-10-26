@@ -61,7 +61,7 @@ namespace lamb {
    printf("%lld under %lld.\n", ttmp, MIN);                     \
                                                                 \
   if (over || under) {                                          \
-   if (SATURATE) {                                        \
+   if (SATURATE) {                                              \
     printf(                                                     \
      "SATURATE: %ld %c %ld = %lld MIN: %lld MAX: %lld \n",      \
      old_val,                                                   \
@@ -273,13 +273,13 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
     
-    template <bool saturate__> 
-    bool
-    operator == (
-     derived_template<CHARACTERISTIC, MANTISSA, saturate__> const & other
-    ) const {
-     return val == other.val;
-    }    
+  template <bool saturate__> 
+  bool
+  operator == (
+   derived_template<CHARACTERISTIC, MANTISSA, saturate__> const & other
+  ) const {
+   return val == other.val;
+  }    
 
 ///////////////////////////////////////////////////////////////////////////////
   
@@ -389,38 +389,38 @@ namespace lamb {
    type                    old(val);
 
    if constexpr(sizeof(other_type) > sizeof(derived_type)) {
-     pseudo_right_big_type tmp   =
-      ((pseudo_right_big_type)val) * other.val;
+    pseudo_right_big_type tmp   =
+     ((pseudo_right_big_type)val) * other.val;
 
-     tmp                       >>= other.mantissa;     
-     ret.val                     = (type)tmp;
+    tmp                       >>= other.mantissa;     
+    ret.val                     = (type)tmp;
 
-     if (check_overflow('x', old, other.val, ret.val)) {
-      overflow = true;
-     }
+    if (check_overflow('x', old, other.val, ret.val)) {
+     overflow = true;
     }
-    else {
-     big_type              tmp   = ((big_type)val) * other.val;
-     tmp                       >>= other_mantissa;
-     ret.val                     = (type)tmp;
- 
-     if (check_overflow('*', old, other.val, ret.val)) {
-      overflow = true;
-     }
-    }
-   
-    return ret;
    }
+   else {
+    big_type              tmp   = ((big_type)val) * other.val;
+    tmp                       >>= other_mantissa;
+    ret.val                     = (type)tmp;
+ 
+    if (check_overflow('*', old, other.val, ret.val)) {
+     overflow = true;
+    }
+   }
+   
+   return ret;
+  }
 
   template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
-    derived_type & 
-    operator *= (
-     unsigned_frac<other_charac,other_mantissa, saturate__> const & other
-    ) {
-    val = ((*this) * other).val;
+  derived_type & 
+  operator *= (
+   unsigned_frac<other_charac,other_mantissa, saturate__> const & other
+  ) {
+   val = ((*this) * other).val;
 
    return *(static_cast<derived_type *>(this));
-   }
+  }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -443,38 +443,38 @@ namespace lamb {
    type                    old(val);
 
    if constexpr(sizeof(other_type) > sizeof(derived_type)) {
-     pseudo_right_big_type tmp   =
-      ((pseudo_right_big_type)val) * other.val;
+    pseudo_right_big_type tmp   =
+     ((pseudo_right_big_type)val) * other.val;
 
-     tmp                       >>= other.mantissa;     
-     ret.val                     = (type)tmp;
+    tmp                       >>= other.mantissa;     
+    ret.val                     = (type)tmp;
 
-     if (check_overflow('x', old, other.val, ret.val)) {
-      overflow = true;
-     }
+    if (check_overflow('x', old, other.val, ret.val)) {
+     overflow = true;
     }
-    else {
-     big_type              tmp   = ((big_type)val) * other.val;
-     tmp                       >>= other_mantissa;
-     ret.val                     = (type)tmp;
- 
-     if (check_overflow('*', old, other.val, ret.val)) {
-      overflow = true;
-     }
-    }
-   
-    return ret;
    }
+   else {
+    big_type              tmp   = ((big_type)val) * other.val;
+    tmp                       >>= other_mantissa;
+    ret.val                     = (type)tmp;
+ 
+    if (check_overflow('*', old, other.val, ret.val)) {
+     overflow = true;
+    }
+   }
+   
+   return ret;
+  }
 
   template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
-    derived_type & 
-    operator *= (
-     signed_frac<other_charac,other_mantissa, saturate__> const & other
-    ) {
-    val = ((*this) * other).val;
+  derived_type & 
+  operator *= (
+   signed_frac<other_charac,other_mantissa, saturate__> const & other
+  ) {
+   val = ((*this) * other).val;
 
    return *(static_cast<derived_type *>(this));
-   }
+  }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -504,8 +504,6 @@ namespace lamb {
   operator long long int ()          = delete;
   operator unsigned long long int () = delete;
 
-////////////////////////////////////////////////////////////////////////////////
-  
   explicit constexpr unsigned_frac(type const & tmp_ = 0) :
    base(tmp_)
    {}
@@ -518,196 +516,141 @@ namespace lamb {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-   template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
-    unsigned_frac
-    operator / (
-     unsigned_frac<other_charac,other_mantissa,other_saturate> const & other
-    ) const {
-    typedef unsigned_frac<other_charac,other_mantissa, other_saturate>
-     other_type;
-    typedef typename other_type::big_type
-     right_big_type;
-    typedef typename unsigned_int<(sizeof(right_big_type))>::type
-     pseudo_right_big_type;
+  template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
+  unsigned_frac
+  operator / (
+   unsigned_frac<other_charac,other_mantissa,other_saturate> const & other
+  ) const {
+   typedef unsigned_frac<other_charac,other_mantissa, other_saturate>
+    other_type;
+   typedef typename other_type::big_type
+    right_big_type;
+   typedef typename unsigned_int<(sizeof(right_big_type))>::type
+    pseudo_right_big_type;
 
-    unsigned_frac          ret(0);
-    type                   old(base::val);
+   unsigned_frac          ret(0);
+   type                   old(base::val);
 
-    if constexpr(sizeof(other_type) > sizeof(unsigned_frac)) {
-      static const uint8_t  shift = other_mantissa;
+   if constexpr(sizeof(other_type) > sizeof(unsigned_frac)) {
+    static const uint8_t  shift = other_mantissa;
     
-      pseudo_right_big_type tmp   = ((pseudo_right_big_type)base::val) * other.val;
-      ret.val                     = (type)(tmp >> shift);
+    pseudo_right_big_type tmp   = ((pseudo_right_big_type)base::val) * other.val;
+    ret.val                     = (type)(tmp >> shift);
 
-      if (base::check_overflow('x', old, other.val, ret.val)) {
-       base::overflow = true;
-      }
-     }
-     else {    
-      static const uint8_t  shift = other_mantissa;
-      big_type              tmp   = ((big_type)base::val) << shift;
-      tmp                        /= other.val;
-      ret.val                     = (type)tmp;
+    if (base::check_overflow('x', old, other.val, ret.val)) {
+     base::overflow = true;
+    }
+   }
+   else {    
+    static const uint8_t  shift = other_mantissa;
+    big_type              tmp   = ((big_type)base::val) << shift;
+    tmp                        /= other.val;
+    ret.val                     = (type)tmp;
   
-      if (base::check_overflow('/', old, other.val, ret.val)) {
-       base::overflow = true;
-      }
-     }
+    if (base::check_overflow('/', old, other.val, ret.val)) {
+     base::overflow = true;
+    }
+   }
    
-     return ret;
-    }
+   return ret;
+  }
 
-    template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
-     unsigned_frac & 
-     operator /= (
-      unsigned_frac<other_charac,other_mantissa, saturate__> const & other
-     ) {
-     base::val = ((*this) / other).val;
+  template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
+  unsigned_frac & 
+  operator /= (
+   unsigned_frac<other_charac,other_mantissa, saturate__> const & other
+  ) {
+   base::val = ((*this) / other).val;
 
-     return *this;
-    }
-   };
+   return *this;
+  }
+ };
   
 ///////////////////////////////////////////////////////////////////////////////
 // Signed fixed point numbers
 ///////////////////////////////////////////////////////////////////////////////
   
-   template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_>
-   class signed_frac : public frac_base<
-    signed_frac,
-    characteristic_,
-    mantissa_,
-    saturate_
-    > {
+ template <uint8_t characteristic_, uint8_t mantissa_, bool saturate_>
+ class signed_frac : public frac_base<
+  signed_frac,
+  characteristic_,
+  mantissa_,
+  saturate_
+  > {
 
-   public:
-    typedef frac_base<signed_frac, characteristic_, mantissa_, saturate_> base;
-    typedef typename base::type                                    type;
-    typedef typename base::big_type                                big_type;  
+ public:
+  typedef frac_base<signed_frac, characteristic_, mantissa_, saturate_> base;
+  typedef typename base::type                                    type;
+  typedef typename base::big_type                                big_type;  
       
-    operator int ()                    = delete;
-    operator unsigned int ()           = delete;
-    operator long int ()               = delete;
-    operator unsigned long int ()      = delete;
-    operator long long int ()          = delete;
-    operator unsigned long long int () = delete;    
+  operator int ()                    = delete;
+  operator unsigned int ()           = delete;
+  operator long int ()               = delete;
+  operator unsigned long int ()      = delete;
+  operator long long int ()          = delete;
+  operator unsigned long long int () = delete;    
 
-////////////////////////////////////////////////////////////////////////////////
-    
-    explicit constexpr
-    signed_frac(type const & tmp_) :
-     base(tmp_)
-     {}
+  explicit constexpr
+  signed_frac(type const & tmp_) :
+   base(tmp_)
+   {}
 
-    // v should use smaller types.
+  // v should use smaller types and non-negative mantissa value  
+  explicit constexpr
+  signed_frac(type const & characteristic__, type const & mantissa__) :
+   base((characteristic__ * base::ONE) + mantissa__)
+   {}
   
-    explicit constexpr
-    signed_frac(type const & characteristic__, type const & mantissa__) :
-     base((characteristic__ * base::ONE) + mantissa__)
-     {}
-  
-////////////////////////////////////////////////////////////////////////////////
-    
-    // template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
-    // signed_frac
-    // operator * (
-    //  unsigned_frac<other_charac, other_mantissa, other_saturate> const & other
-    // ) const {
-
-    //  typedef unsigned_frac<other_charac,other_mantissa, other_saturate>
-    //   other_type;
-    //  typedef typename other_type::big_type
-    //   right_big_type;
-    //  typedef typename unsigned_int<(sizeof(right_big_type))>::type
-    //   pseudo_right_big_type;
-
-    //  signed_frac ret(0);
-    //  type        old(base::val);
-
-    //  if constexpr(sizeof(other_type) > sizeof(signed_frac)) {
-    //    pseudo_right_big_type tmp     =
-    //     ((pseudo_right_big_type)base::val) * other.val;
-       
-    //    tmp                         >>= other_mantissa;
-    //    ret.val                       = (type)tmp;
-
-    //    if (base::check_overflow('*', old, other.val, ret.val)) {
-    //     base::overflow = true;
-    //    }
-    //   }
-    //   else {
-    //    big_type              tmp     = ((big_type)base::val) * other.val;      
-    //    tmp                         >>= other_mantissa;
-    //    ret.val                       = (type)tmp;
-
-    //    if (base::check_overflow('*', old, other.val, ret.val)) {
-    //     base::overflow = true;
-    //    }
-    //   }    
-
-    //   return ret;
-    //  }    
-
-    //  template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
-    //   signed_frac &
-    //   operator *= (
-    //    unsigned_frac<other_charac,other_mantissa,other_saturate> const & other
-    //   ) {
-    //   base::val = ((*this) * other).val;
-
-    //   return *this;
-    //  }
-
 ///////////////////////////////////////////////////////////////////////////////
 
-      template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
-       signed_frac
-       operator / (
-        signed_frac<other_charac,other_mantissa,other_saturate> const & other
-       ) const {
-       typedef signed_frac<other_charac,other_mantissa, other_saturate>
-        other_type;
-       typedef typename other_type::big_type
-        right_big_type;
-       typedef typename signed_int<(sizeof(right_big_type))>::type
-        pseudo_right_big_type;
+  template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
+  signed_frac
+  operator / (
+   signed_frac<other_charac,other_mantissa,other_saturate> const & other
+  ) const {
+   typedef signed_frac<other_charac,other_mantissa, other_saturate>
+    other_type;
+   typedef typename other_type::big_type
+    right_big_type;
+   typedef typename signed_int<(sizeof(right_big_type))>::type
+    pseudo_right_big_type;
 
-       signed_frac          ret(0);
-       type                   old(base::val);
+   signed_frac          ret(0);
+   type                   old(base::val);
 
-       if constexpr(sizeof(other_type) > sizeof(signed_frac)) {
-         static const uint8_t  shift = other_mantissa;
-         pseudo_right_big_type tmp   = ((pseudo_right_big_type)base::val) * other.val;
-         ret.val                     = (type)(tmp >> shift);
+   if constexpr(sizeof(other_type) > sizeof(signed_frac)) {
+    static const uint8_t  shift = other_mantissa;
+    pseudo_right_big_type tmp   = ((pseudo_right_big_type)base::val) * other.val;
+    ret.val                     = (type)(tmp >> shift);
 
-         if (base::check_overflow('x', old, other.val, ret.val)) {
-          base::overflow = true;
-         }
-        }
-        else {    
-         static const uint8_t  shift = other_mantissa;
-         big_type              tmp   = ((big_type)base::val) << shift;
-         tmp                        /= other.val;
-         ret.val                     = (type)tmp;
+    if (base::check_overflow('x', old, other.val, ret.val)) {
+     base::overflow = true;
+    }
+   }
+   else {    
+    static const uint8_t  shift = other_mantissa;
+    big_type              tmp   = ((big_type)base::val) << shift;
+    tmp                        /= other.val;
+    ret.val                     = (type)tmp;
 
-         if (base::check_overflow('/', old, other.val, ret.val)) {
-          base::overflow = true;
-         }
-        }
+    if (base::check_overflow('/', old, other.val, ret.val)) {
+     base::overflow = true;
+    }
+   }
    
-        return ret;
-       }
+   return ret;
+  }
 
-       template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
-        signed_frac & 
-        operator /= (
-         signed_frac<other_charac,other_mantissa, saturate__> const & other
-        ) {
-        base::val = ((*this) / other).val;
+  template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
+  signed_frac & 
+  operator /= (
+   signed_frac<other_charac,other_mantissa, saturate__> const & other
+  ) {
+   base::val = ((*this) / other).val;
 
-        return *this;
-       }
-   }; // template signed
+   return *this;
+  }
+ }; // template signed
 
  
 //////////////////////////////////////////////////////////////////////////////
@@ -716,60 +659,60 @@ namespace lamb {
   
 // Value types ///////////////////////////////////////////////////////////////
 
-      typedef uint8_t                        q0n8_value_type;    
-      typedef uint16_t                       q8n8_value_type;                       
-      typedef uint16_t                       q0n16_value_type;                      
-      typedef uint32_t                       q16n16_value_type;                     
-      typedef uint32_t                       q0n32_value_type;                    
+ typedef uint8_t                        q0n8_value_type;    
+ typedef uint16_t                       q8n8_value_type;                       
+ typedef uint16_t                       q0n16_value_type;                      
+ typedef uint32_t                       q16n16_value_type;                     
+ typedef uint32_t                       q0n32_value_type;                    
 
-      typedef int8_t                         q0n7_value_type;        
-      typedef int16_t                        q7n8_value_type;                      
-      typedef int16_t                        q0n15_value_type;                      
-      typedef int32_t                        q15n16_value_type;                     
-      typedef int32_t                        q0n31_value_type;                      
+ typedef int8_t                         q0n7_value_type;        
+ typedef int16_t                        q7n8_value_type;                      
+ typedef int16_t                        q0n15_value_type;                      
+ typedef int32_t                        q15n16_value_type;                     
+ typedef int32_t                        q0n31_value_type;                      
 
-      // used only as 'big_type's:
-      typedef uint64_t                       q0n64_value_type;
-      typedef int64_t                        q0n63_valuete_type;
+ // used only as 'big_type's:
+ typedef uint64_t                       q0n64_value_type;
+ typedef int64_t                        q0n63_valuete_type;
 
 // Overflow-able types ////////////////////////////////////////////////////////
   
-      typedef unsigned_frac<  0,  8, false > q0n8;
-      typedef unsigned_frac<  8,  8, false > q8n8;
-      typedef unsigned_frac<  0, 16, false > q0n16;
-      typedef unsigned_frac< 16, 16, false > q16n16;
-      typedef unsigned_frac<  0, 32, false > q0n32;
+ typedef unsigned_frac<  0,  8, false > q0n8;
+ typedef unsigned_frac<  8,  8, false > q8n8;
+ typedef unsigned_frac<  0, 16, false > q0n16;
+ typedef unsigned_frac< 16, 16, false > q16n16;
+ typedef unsigned_frac<  0, 32, false > q0n32;
 
-      typedef unsigned_frac<  2, 14, false > q2n14;
-      typedef unsigned_frac<  2, 30, false > q2n30;
+ typedef unsigned_frac<  2, 14, false > q2n14;
+ typedef unsigned_frac<  2, 30, false > q2n30;
   
-      typedef signed_frac<    0,  7, false > q0n7;
-      typedef signed_frac<    7,  8, false > q7n8;
-      typedef signed_frac<    0, 15, false > q0n15;
-      typedef signed_frac<   15, 16, false > q15n16;
-      typedef signed_frac<    0, 31, false > q0n31;
+ typedef signed_frac<    0,  7, false > q0n7;
+ typedef signed_frac<    7,  8, false > q7n8;
+ typedef signed_frac<    0, 15, false > q0n15;
+ typedef signed_frac<   15, 16, false > q15n16;
+ typedef signed_frac<    0, 31, false > q0n31;
 
 // Saturating types ///////////////////////////////////////////////////////////
  
-      typedef unsigned_frac<  0,  8, true  > sat_q0n8;
-      typedef unsigned_frac<  8,  8, true  > sat_q8n8;
-      typedef unsigned_frac<  0, 16, true  > sat_q0n16;
-      typedef unsigned_frac< 16, 16, true  > sat_q16n16;  
-      typedef unsigned_frac<  0, 32, true  > sat_q0n32;
+ typedef unsigned_frac<  0,  8, true  > sat_q0n8;
+ typedef unsigned_frac<  8,  8, true  > sat_q8n8;
+ typedef unsigned_frac<  0, 16, true  > sat_q0n16;
+ typedef unsigned_frac< 16, 16, true  > sat_q16n16;  
+ typedef unsigned_frac<  0, 32, true  > sat_q0n32;
 
-      typedef unsigned_frac<  2, 14, true  > sat_q2n14;
-      typedef unsigned_frac<  2, 30, true  > sat_q2n30;
+ typedef unsigned_frac<  2, 14, true  > sat_q2n14;
+ typedef unsigned_frac<  2, 30, true  > sat_q2n30;
   
-      typedef signed_frac<    0,  7, true  > sat_q0n7;
-      typedef signed_frac<    7,  8, true  > sat_q7n8;
-      typedef signed_frac<    0, 15, true  > sat_q0n15;
-      typedef signed_frac<   15, 16, true  > sat_q15n16;
-      typedef signed_frac<    0, 31, true  > sat_q0n31;  
+ typedef signed_frac<    0,  7, true  > sat_q0n7;
+ typedef signed_frac<    7,  8, true  > sat_q7n8;
+ typedef signed_frac<    0, 15, true  > sat_q0n15;
+ typedef signed_frac<   15, 16, true  > sat_q15n16;
+ typedef signed_frac<    0, 31, true  > sat_q0n31;  
 
  
 ///////////////////////////////////////////////////////////////////////////////
 
-     } // namespace lamb
+} // namespace lamb
 
 ///////////////////////////////////////////////////////////////////////////////
 
