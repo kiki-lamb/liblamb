@@ -23,7 +23,6 @@
   #include "dsp/dsp.h"
 
   #include "containers/light_buffer/light_buffer.h"
-
   #include "containers/abstract_bag/abstract_bag.h"
   #include "containers/abstract_list/abstract_list.h"
   #include "containers/abstract_queue/abstract_queue.h"
@@ -56,7 +55,12 @@
   #include "filters/lowpass.h"
   #include "filters/lowpass_8.h"
 
-  #ifdef LAMBOS_INCLUDE_SAMPLES
+  #include "events/event.h"
+  #include "events/sources/buffer.h"
+  #include "events/sources/source.h"
+  #include "events/sources/combine.h"
+
+#ifdef LAMBOS_INCLUDE_SAMPLES
     #include "samples/samples22k.h"
     #include "samples/samples16k.h"
   #endif 
@@ -74,11 +78,6 @@
     #include "device/pt8211/pt8211.h"
     #include "device/Adafruit_ILI9341_STM_SPI2/Adafruit_ILI9341_STM_SPI2.h"
   #endif
-
-  #include "events/event.h"
-  #include "events/sources/buffer.h"
-  #include "events/sources/source.h"
-  #include "events/sources/combine.h"
 
   #ifndef LAMB_NO_ARDUINO
     #include "controls/analog.h"
