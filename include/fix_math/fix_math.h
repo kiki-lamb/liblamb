@@ -482,28 +482,32 @@ namespace lamb {
    typedef typename unsigned_int<(sizeof(right_big_type))>::type
     pseudo_right_big_type;
 
-   derived_type          ret(0);
    type                   old(val);
 
    if constexpr(sizeof(other_type) > sizeof(derived_type)) {
-    pseudo_right_big_type tmp   = ((pseudo_right_big_type)val) * other.val;
-    ret.val                     = (type)(tmp >> other_mantissa);
+    pseudo_right_big_type big_tmp     = ((pseudo_right_big_type)val);
+    big_tmp                         <<= other_mantissa;
+    big_tmp                          /= other.val;
+    type                  small_tmp   = (type)big_tmp;
 
-    if (check_overflow('x', old, other.val, ret.val)) {
+    if (check_overflow('x', old, other.val, small_tmp)) {
      overflow = true;
     }
+
+    return derived_type(small_tmp);
    }
    else {    
-    big_type              tmp   = ((big_type)val) << other_mantissa;
-    tmp                        /= other.val;
-    ret.val                     = (type)tmp;
+    big_type              big_tmp     = ((big_type)val);
+    big_tmp                         <<= other_mantissa;
+    big_tmp                          /= other.val;
+    type                  small_tmp   = (type)big_tmp;
   
-    if (check_overflow('/', old, other.val, ret.val)) {
+    if (check_overflow('/', old, other.val, small_tmp)) {
      overflow = true;
     }
+
+    return derived_type(small_tmp);
    }
-   
-   return ret;
   }
 
   template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
