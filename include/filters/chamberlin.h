@@ -35,10 +35,10 @@ namespace lamb {
 //    D1 = B
 //    D2 = L
 
-   q0n15s process(q0n15s input) {
-    double I = double(input);
+   q0n15s process(q0n15s I) {
+    double If = double(I)     ;
     
-    printf("% 5.3lf, ", I)    ;
+    printf("% 5.3lf, ", If)   ;
     printf("% 5.3lf, ", F1)   ;        
     printf("% 5.3lf, ", Q1)   ;
         
@@ -58,7 +58,7 @@ namespace lamb {
     printf("% 5.3lf, ", D1)   ;
     
     D2 = L                    ;
-    printf("% 5.3lf,  ", D2)   ;
+    printf("% 5.3lf,  ", D2)  ;
         
     return q0n15s::from_double(L);
    }

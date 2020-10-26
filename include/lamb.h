@@ -54,11 +54,11 @@
   #include "table_osc/table_osc.h"
   #include "oneshot/oneshot.h"
 
-  #include "lowpass_filter/moog_filter.h"
-  #include "lowpass_filter/chamberlin.h"
-  #include "lowpass_filter/fx_chamberlin.h"
-  #include "lowpass_filter/lowpass_filter.h"
-  #include "lowpass_filter/lowpass_filter_8.h"
+  #include "filters/moog.h"
+  #include "filters/chamberlin.h"
+  #include "filters/fx_chamberlin.h"
+  #include "filters/lowpass.h"
+  #include "filters/lowpass_8.h"
 
   #ifdef LAMBOS_INCLUDE_SAMPLES
     #include "samples/samples22k.h"
