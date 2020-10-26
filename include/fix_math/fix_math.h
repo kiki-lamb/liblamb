@@ -561,7 +561,8 @@ namespace lamb {
     return self_type(small_tmp);
    }
    else {
-    big_type              big_tmp     = ((big_type)val) * other.val;
+    big_type              big_tmp     = (big_type)val;
+    big_tmp                          *=  other.val;
     big_tmp                         >>= other_mantissa;
     type                  small_tmp   = big_tmp;
  
