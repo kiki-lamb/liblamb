@@ -55,7 +55,8 @@ namespace lamb {
   static constexpr uint8_t CHARACTERISTIC = characteristic_;
   static constexpr uint8_t MANTISSA       = mantissa_;
   static constexpr bool    SIGNED         = ((CHARACTERISTIC + MANTISSA ) % 2) == 1;
-  static constexpr uint8_t SIZE           = at_least_bits<(CHARACTERISTIC + MANTISSA)>;
+  static constexpr uint8_t SIZE           =
+   at_least_bits<(CHARACTERISTIC + MANTISSA)>;
 
 ////////////////////////////////////////////////////////////////////////////////
 
