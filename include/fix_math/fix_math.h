@@ -55,8 +55,8 @@ namespace lamb {
   static constexpr uint8_t CHARACTERISTIC = characteristic_;
   static constexpr uint8_t MANTISSA       = mantissa_;
   static constexpr bool    SIGNED         = ((CHARACTERISTIC + MANTISSA ) % 2) == 1;
-  static constexpr uint8_t SIZE           = bytes_fit_bits<CHARACTERISTIC+MANTISSA>();
-  static constexpr uint8_t BIG_SIZE       = bytes_fit_bits<((SIZE + 1) * 8)>();
+  static constexpr uint8_t SIZE           = size_fit_bits(CHARACTERISTIC+MANTISSA);
+  static constexpr uint8_t BIG_SIZE       = size_fit_bits((SIZE + 1) * 8);
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -353,6 +353,8 @@ namespace lamb {
     type_if<
      (sizeof(other_type) > sizeof(self_type)),
     typename other_type::big_type,
+
+
     big_type
     >::type intermediary_type;
 

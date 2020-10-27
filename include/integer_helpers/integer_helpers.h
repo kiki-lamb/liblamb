@@ -20,20 +20,26 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  template <uint8_t bits>
-  constexpr uint8_t bytes_fit_bits() {
-   uint8_t siz = bits / 8;
-   uint8_t rem = bits % 8;
-
-   if (rem != 0) 
-    siz ++;
-    
-   while ((siz < 8) && ((siz & (siz - 1)) != 0))
-    siz++;
-   
-   return siz;
+ constexpr uint8_t size_fit_bytes(uint8_t siz) {
+  while ((siz < 8) && ((siz & (siz - 1)) != 0))
+   siz++;
+  
+  return siz;
   }
  
+ constexpr uint8_t size_fit_bits(uint8_t const & bits) {
+  uint8_t siz = bits / 8;
+  uint8_t rem = bits % 8;
+  
+   if (rem != 0) 
+    siz ++;
+   
+   return size_fit_bytes(siz);
+   // while ((siz < 8) && ((siz & (siz - 1)) != 0))
+   //  siz++;
+   
+   // return siz;
+  }
 ////////////////////////////////////////////////////////////////////////////////
 
  template <typename t>
