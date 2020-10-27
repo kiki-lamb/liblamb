@@ -87,18 +87,21 @@ namespace lamb {
   static constexpr type    MAX = integer_type<SIGNED, SIZE>::type::MAX;
   static constexpr type    MIN = integer_type<SIGNED, SIZE>::type::MIN;
 
-  typedef
-  typename
-  integer_type<SIGNED, (size_fit_bits(MANTISSA + 1))>::type::type
-  one_type;
+  // typedef
+  // typename
+  // integer_type<SIGNED, (size_fit_bits(MANTISSA + 1))>::type::type
+  // one_type;
   
   static constexpr
-  one_type                 ONE =
+  type                     ONE =
    CHARACTERISTIC == 0 ?
    MAX :
-   (((one_type)1) << MANTISSA) - 1;
-  
-////////////////////////////////////////////////////////////////////////////////
+   (((type)1) << MANTISSA) - 1;  
+
+  static constexpr big_type TRUE_ONE =
+   (((big_type)1) << MANTISSA);
+
+//////////////////////////////////////////////////////////////////////////////
 
   type                     val;  
   mutable      bool        overflow;  
@@ -189,7 +192,12 @@ namespace lamb {
   constexpr
   explicit
   operator double() const {
-   return val / (ONE * 1.0);
+   if constexpr(CHARACTERISTIC == 0) {    
+    return val / (TRUE_ONE * 1.0);
+   }
+   else {
+    return val / (ONE * 1.0);
+   }
   }
 
 ///////////////////////////////////////////////////////////////////////////////
