@@ -9,6 +9,11 @@
 // code:
 // double MoogVCF::run(double input, double freq, double q){
 
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/ NOT #included in lamb.h !!!
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
 namespace lamb {
   class moog {
   public:

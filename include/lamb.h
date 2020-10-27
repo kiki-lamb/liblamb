@@ -47,7 +47,7 @@
   #include "table_osc/table_osc.h"
   #include "oneshot/oneshot.h"
 
-  #include "filters/moog.h"
+//  #include "filters/moog.h"
   #include "filters/fx_chamberlin.h"
   #include "filters/lowpass.h"
   #include "filters/lowpass_8.h"
