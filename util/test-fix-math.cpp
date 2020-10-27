@@ -220,6 +220,11 @@ void test_fix_math_type(size_t & out_successes, size_t & out_errors) {
 
  printf("\n\n[TESTING q%un%u:]\n\n", fix_t::CHARACTERISTIC, fix_t::MANTISSA);
 
+ printf("MIN:  %ld \n", fix_t::MIN);
+ printf("MAX:  %ld \n", fix_t::MAX);
+ printf("ONE:  %ld \n", fix_t::ONE);
+ printf("TONE: %ld \n", fix_t::TRUE_ONE);
+ 
  printf("Test converted 1...\n");
  TEST_CONVERSIONS(
   1.0,
@@ -311,9 +316,23 @@ int main() {
 
  printf("\n\nTOTAL PASSED: %u / %u \n\n", successes, successes + errors);
 
- u0q8  x0(0, 128);      printf("u0q8:  % 05.05lf %u %llu %llu \n", double(x0), x0.val,  u0q8::TRUE_ONE,  u0q8::ONE);
- u0q16 x1 = u0q16(x0);  printf("u0q16: % 05.05lf %u %llu %llu \n", double(x1), x1.val, u0q16::TRUE_ONE, u0q16::ONE);
- u0q32 x2 = u0q32(x1);  printf("u0q32: % 05.05lf %u %llu %llu \n", double(x2), x2.val, u0q32::TRUE_ONE, u0q32::ONE);
+ {
+  u0q8  x0(0, 128);      printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x0), x0.val,  u0q8::TRUE_ONE,  u0q8::ONE);
+  u0q16 x1 = u0q16(x0);  printf("u0q16:  % 05.05lf % 12u % 12llu % 12llu \n", double(x1), x1.val, u0q16::TRUE_ONE, u0q16::ONE);
+  u0q32 x2 = u0q32(x1);  printf("u0q32:  % 05.05lf % 12u % 12llu % 12llu \n", double(x2), x2.val, u0q32::TRUE_ONE, u0q32::ONE);
+  u0q16 x3 = u0q16(x2);  printf("u0q16:  % 05.05lf % 12u % 12llu % 12llu \n", double(x3), x3.val, u0q16::TRUE_ONE, u0q16::ONE);
+  u0q8  x4 = u0q8(x3);   printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x4), x4.val,  u0q8::TRUE_ONE,  u0q8::ONE);
+
+  printf("\n");
+ }
+ {
+  u8q8   x0(1, 0);         printf("u8q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x0), x0.val,   u8q8::TRUE_ONE,   u8q8::ONE);
+  u16q16 x1 = u16q16(x0);  printf("u16q16: % 05.05lf % 12u % 12llu % 12llu \n", double(x1), x1.val, u16q16::TRUE_ONE, u16q16::ONE);
+  u8q8   x2 = u8q8(x1);    printf("u8q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x2), x2.val,   u8q8::TRUE_ONE,   u8q8::ONE);
+
+  printf("\n");
+ }
+ 
  // u0q16 x3 = u0q16(x2);  printf("u0q16: % 05.05lf %u \n", double(x3), x3.val);
  // u0q8  x4 = u0q16(x3);  printf("u0q8:  % 05.05lf %u \n", double(x4), x4.val);
  

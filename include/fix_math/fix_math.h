@@ -1,3 +1,4 @@
+
 #ifndef LAMB_FIX_MATH_H
 #define LAMB_FIX_MATH_H
 
@@ -180,9 +181,9 @@ namespace lamb {
     tmp <<= -mantissa_delta;
    }
    
-   printf("Delta is %d \n",   mantissa_delta);
-   printf("Tmp is %d \n",     tmp);
-   printf("Shifted is %d \n", tmp);
+   // printf("Delta is %d \n",   mantissa_delta);
+   // printf("Tmp is %d \n",     tmp);
+   // printf("Shifted is %d \n", tmp);
 
    return other_type(tmp);
   }
@@ -192,12 +193,12 @@ namespace lamb {
   constexpr
   explicit
   operator double() const {
-   if constexpr(CHARACTERISTIC == 0) {    
-    return val / (TRUE_ONE * 1.0);
-   }
-   else {
+   // if constexpr(CHARACTERISTIC == 0) {    
+   //  return val / (TRUE_ONE * 1.0);
+   // }
+   // else {
     return val / (ONE * 1.0);
-   }
+    // }
   }
 
 ///////////////////////////////////////////////////////////////////////////////
