@@ -20,13 +20,13 @@ namespace lamb {
   q16n16s Q0; 
   q2n30s  Q1;
 
-  q15n16s L;
-  q15n16s H;
-  q15n16s B;
-  q15n16s N;
+  q7n24s L;
+  q7n24s H;
+  q7n24s B;
+  q7n24s N;
 
-  q15n16s D0;
-  q15n16s D1;
+  q7n24s D0;
+  q7n24s D1;
 
   q24n8s FS;
    
@@ -132,22 +132,28 @@ namespace lamb {
 //  D0 = B
 //  D1 = L
 
-    q15n16s I(I_.val << 1)            ;
+   q7n24s I(((q7n24s::type)I_.val) << 9);
     
-    printf("% 6.9lf, ", double(I))    ;
-    printf("% 6.9lf, ", double(F1))   ;        
-    printf("% 6.9lf, ", double(Q1))   ;
-    
-    L  = D1 + D0 * F1                 ;    printf("% 9.9lf, ",  double(L)) ;
-    H  = I - L - (D0 * Q1)            ;    printf("% 14.9lf, ", double(H)) ;
-    B  = (H * F1)  + D0               ;    printf("% 9.9lf, ",  double(B)) ;
-    N  = H  + L                       ;    printf("% 9.9lf, ",  double(N)) ;
-    D0 = B                            ;    printf("% 9.9lf, ",  double(D0));
-    D1 = L                            ;    printf("% 9.9lf  ",  double(D1));
-        
-    return q0n15s::from_double(0.0);
-   }
+   printf("% 6.9lf, ", double(I))    ;
+   printf("% 6.9lf, ", double(F1))   ;        
+   printf("% 6.9lf, ", double(Q1))   ;
+   
+   L  = D1 + D0 * F1                 ;    printf("% 9.9lf, ",  double(L)) ;
+   H  = I - L - (D0 * Q1)            ;    printf("% 14.9lf, ", double(H)) ;
+   B  = (H * F1)  + D0               ;    printf("% 9.9lf, ",  double(B)) ;
+   N  = H  + L                       ;    printf("% 9.9lf, ",  double(N)) ;
+   D0 = B                            ;    printf("% 9.9lf, ",  double(D0));
+   D1 = L                            ;    printf("% 9.9lf,  ", double(D1));
 
+   printf("% 9.9lf, ",  double(L)) ;
+
+   q0n15s r = q0n15s(L.val >> 10);
+   
+   printf("% 9.9lf  ", double(r));
+   
+   return r;
+  }
+  
 ////////////////////////////////////////////////////////////////////////////////
   
  };
