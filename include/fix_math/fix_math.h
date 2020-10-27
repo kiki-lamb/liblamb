@@ -158,6 +158,35 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+  template <uint8_t characteristic, uint8_t mantissa, bool saturate>
+  explicit
+  constexpr 
+  operator frac<characteristic, mantissa, saturate>() const {
+   typedef frac<characteristic, mantissa, saturate>
+    destination_type;
+
+   typedef
+    typename
+    type_if<
+     SIGNED,
+    typename signed_int<(size_fit_bytes(SIZE+other_type::SIZE))>::type,
+    typename unsigned_int<(size_fit_bytes(SIZE+other_type::SIZE))>::type
+    >::type intermediary_type;
+
+   const int8_t mantissa_delta = MANTISSA - mantissa;
+
+   intermediary_type tmp = val;
+   
+   if constexpr(mantissa_delta >= 0) {
+    tmo << mantissa_delta;
+   }
+   else {
+    tmp >> mantissa * -1;
+   }
+   
+   return frac<characteristic, mantissa, saturate>(val);
+  }
+  
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
