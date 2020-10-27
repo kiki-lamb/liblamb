@@ -160,8 +160,6 @@ namespace lamb {
   explicit
   constexpr 
   operator fixed<characteristic, mantissa, saturate>() const {
-   printf("CONV...\n");
-   
    typedef fixed<characteristic, mantissa, saturate>
     other_type;
 
@@ -220,7 +218,12 @@ namespace lamb {
   constexpr
   bool
   operator ~ () const {
-   return SIGNED ? self_type(val * -1) :  self_type(~val);
+   if constexpr(SIGNED) {
+    return self_type(val * -1);
+   }
+   else {
+    return self_type(~val);
+   }
   }    
 
 ////////////////////////////////////////////////////////////////////////////////
