@@ -310,4 +310,11 @@ int main() {
  for (uint8_t ix = 0; ix < 80; ix++) printf("/");
 
  printf("\n\nTOTAL PASSED: %u / %u \n", successes, successes + errors);
+
+ u0q8  x0(1,0);              printf("u0q8:  % 05.05lf \n", double(x0));
+// u0q16 x1(0); x1 = u0q16(x0);   printf("u0q16: % 05.05lf \n", double(x1));
+// u0q32 x2(0); x2 = u0q32(x1);   printf("u0q32: % 05.05lf \n", double(x2));
+ u0q16 x1 = u0q16(x0);        printf("u0q16: % 05.05lf \n", double(x1));
+ u0q32 x2 = u0q32(x1);        printf("u0q32: % 05.05lf \n", double(x2));
+ 
 }

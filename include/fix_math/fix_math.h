@@ -164,10 +164,10 @@ namespace lamb {
     tmp << mantissa_delta;
    }
    else {
-    tmp >> mantissa * -1;
+    tmp >> -mantissa_delta;
    }
    
-   return other_type(val);
+   return other_type(tmp);
   }
   
 ////////////////////////////////////////////////////////////////////////////////
