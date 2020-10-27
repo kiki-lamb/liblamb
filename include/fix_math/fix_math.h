@@ -30,25 +30,6 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
- private: 
-
-  template <bool use_left_type, typename left_type, typename right_type>
-  class type_if {};
-  
-  template <typename left_type, typename right_type>
-  class type_if<true, left_type, right_type> {
-  public:
-   typedef left_type type;
-  };
-  
-  template <typename left_type, typename right_type>
-  class type_if<false, left_type, right_type> {
-  public:
-   typedef right_type type;
- };
-
-////////////////////////////////////////////////////////////////////////////////
-
   template <bool signedness, uint8_t size>
   class integer_type {};
   
@@ -370,11 +351,8 @@ namespace lamb {
    
    typedef
     typename
-    type_if<
-     SIGNED,
-    typename signed_int<(size_fit_bytes(SIZE+other_type::SIZE))>::type,
-    typename unsigned_int<(size_fit_bytes(SIZE+other_type::SIZE))>::type
-    >::type intermediary_type;
+    integer_type<SIGNED, (size_fit_bytes(SIZE+other_type::SIZE))>::type::type
+    intermediary_type;
 
    static_assert(
     ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
@@ -418,11 +396,8 @@ namespace lamb {
     
    typedef
     typename
-    type_if<
-     SIGNED,
-    typename signed_int<(size_fit_bytes(SIZE+other_type::SIZE))>::type,
-    typename unsigned_int<(size_fit_bytes(SIZE+other_type::SIZE))>::type
-    >::type intermediary_type;
+    integer_type<SIGNED, (size_fit_bytes(SIZE+other_type::SIZE))>::type::type
+    intermediary_type;
 
    static_assert(
     ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
