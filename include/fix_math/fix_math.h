@@ -86,7 +86,17 @@ namespace lamb {
 
   static constexpr type    MAX = integer_type<SIGNED, SIZE>::type::MAX;
   static constexpr type    MIN = integer_type<SIGNED, SIZE>::type::MIN;
-  static constexpr type    ONE = CHARACTERISTIC == 0 ? MAX : (1ll << MANTISSA) - 1;
+
+  typedef
+  typename
+  integer_type<SIGNED, (size_fit_bits(MANTISSA + 1))>::type::type
+  one_type;
+  
+  static constexpr
+  one_type                 ONE =
+   CHARACTERISTIC == 0 ?
+   MAX :
+   (((one_type)1) << MANTISSA) - 1;
   
 ////////////////////////////////////////////////////////////////////////////////
 

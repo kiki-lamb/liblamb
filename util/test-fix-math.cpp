@@ -289,23 +289,23 @@ int main() {
  size_t successes = 0;
  size_t errors = 0;
  
- test_fix_math_type<u0q8,   2, 0>(successes, errors);
- test_fix_math_type<s0q7,   2, 0>(successes, errors);
+ test_fix_math_type<u0q8,   2, 0 >(successes, errors);
+ test_fix_math_type<s0q7,   2, 0 >(successes, errors);
  
- test_fix_math_type<u0q16,  3, 0>(successes, errors);
- test_fix_math_type<s0q15,  3, 0>(successes, errors);
+ test_fix_math_type<u0q16,  3, 0 >(successes, errors);
+ test_fix_math_type<s0q15,  3, 0 >(successes, errors);
  
- test_fix_math_type<u8q8,   1, 2>(successes, errors);
- test_fix_math_type<s7q8,   1, 2>(successes, errors);
+ test_fix_math_type<u8q8,   1, 2 >(successes, errors);
+ test_fix_math_type<s7q8,   1, 2 >(successes, errors);
  
- test_fix_math_type<u0q32,  3, 0>(successes, errors);
- test_fix_math_type<s0q31,  3, 0>(successes, errors);
+ test_fix_math_type<u0q32,  3, 0 >(successes, errors);
+ test_fix_math_type<s0q31,  3, 0 >(successes, errors);
  
  test_fix_math_type<u16q16, 3, 4 >(successes, errors);
  test_fix_math_type<s15q16, 3, 4 >(successes, errors);
 
  test_fix_math_type<u2q14,  3, 3 >(successes, errors);
- test_fix_math_type<u2q30,  6, 5>(successes, errors); 
+ test_fix_math_type<u2q30,  6, 5 >(successes, errors); 
 
  for (uint8_t ix = 0; ix < 80; ix++) printf("/");
 
