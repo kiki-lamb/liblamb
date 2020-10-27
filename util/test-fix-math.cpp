@@ -295,8 +295,8 @@ int main() {
  test_fix_math_type<u0q16,  3, 0>(successes, errors);
  test_fix_math_type<s0q15,  3, 0>(successes, errors);
  
- test_fix_math_type<u8q8,   3, 2>(successes, errors);
- test_fix_math_type<s7q8,   3, 2>(successes, errors);
+ test_fix_math_type<u8q8,   1, 2>(successes, errors);
+ test_fix_math_type<s7q8,   1, 2>(successes, errors);
  
  test_fix_math_type<u0q32,  3, 0>(successes, errors);
  test_fix_math_type<s0q31,  3, 0>(successes, errors);
