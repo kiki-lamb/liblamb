@@ -60,6 +60,22 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////////////
+
+
+  template <bool signedness, uint8_t size>
+  class integer_type {};
+  
+  template <uint8_t size>
+  class integer_type<true, size> {
+   typedef typename signed_int<size>::type type;
+  };
+  
+  template <uint8_t size>
+  class integer_type<false, size> {
+   typedef typename unsigned_int<size>::type type;
+  };
+  
   typedef
   fixed<CHARACTERISTIC, MANTISSA, SATURATE>
   self_type;
@@ -157,34 +173,30 @@ namespace lamb {
    overflow(false) {}
 
 ////////////////////////////////////////////////////////////////////////////////
-
+  
   template <uint8_t characteristic, uint8_t mantissa, bool saturate>
   explicit
   constexpr 
-  operator frac<characteristic, mantissa, saturate>() const {
-   typedef frac<characteristic, mantissa, saturate>
-    destination_type;
+  operator fixed<characteristic, mantissa, saturate>() const {
+   typedef fixed<characteristic, mantissa, saturate>
+    other_type;
 
    typedef
-    typename
-    type_if<
-     SIGNED,
-    typename signed_int<(size_fit_bytes(SIZE+other_type::SIZE))>::type,
-    typename unsigned_int<(size_fit_bytes(SIZE+other_type::SIZE))>::type
-    >::type intermediary_type;
+    typename integer_type<SIGNED, (size_fit_bytes(SIZE+other_type::SIZE))>::type
+    intermediary_type;
 
    const int8_t mantissa_delta = MANTISSA - mantissa;
 
    intermediary_type tmp = val;
    
    if constexpr(mantissa_delta >= 0) {
-    tmo << mantissa_delta;
+    tmp << mantissa_delta;
    }
    else {
     tmp >> mantissa * -1;
    }
    
-   return frac<characteristic, mantissa, saturate>(val);
+   return other_type(val);
   }
   
 ////////////////////////////////////////////////////////////////////////////////
