@@ -16,7 +16,7 @@ namespace lamb {
  public:
   q15n16s Q0;
   q24n8s  F0;
-  q24n8s  F1;
+  q8n24s  F1;
 
   q15n16s Q1;
   q15n16s D0;
@@ -69,8 +69,9 @@ namespace lamb {
 
   constexpr
   void f(q24n8s::type const & x) {
-   F0 = q24n8s(x, 0);
-   F1 = (F0 / FS) * PI2;
+   F0  = q24n8s(x, 0);
+   F1  = q8n24s((F0 / FS).val << 16);
+   F1 *= PI2;
   }
 
 ////////////////////////////////////////////////////////////////////////////////
