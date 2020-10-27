@@ -20,12 +20,10 @@ namespace lamb {
 
    void set_frequency() {
     FF1 = 2.0 * M_PI * FF / FS;
-    // printf("FF1: % 05.3lf \n", FF1);
    }
 
    void set_q() {
     Q1 = 1 / Q;
-    // printf("Q1: % 05.3lf \n", Q1);
    }
 
 //    L = D2 + F1 * D1

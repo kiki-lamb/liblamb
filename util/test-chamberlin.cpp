@@ -28,8 +28,8 @@ int main() {
   cf.set_q();
   printf("\n");
   
-  fx_cf.set_frequency(5000);
-  fx_cf.set_q(fx_chamberlin::sqint::ONE >> 1);
+  fx_cf.f(5000);
+  fx_cf.q(fx_chamberlin::sqint::ONE >> 1);
 
   printf("Af,        I,    FF1,    Q1,        L,              H,         B,         N,         D1,        D2 \n");
 
@@ -37,7 +37,7 @@ int main() {
    cf.Q = qix;
    cf.set_q();
 
-   fx_cf.set_q(fx_chamberlin::sqint::from_double(qix).val);
+   fx_cf.q(fx_chamberlin::sqint::from_double(qix).val);
 
    const size_t fix_incr = 300;
    
@@ -46,7 +46,7 @@ int main() {
     cf.FF        = fix;        
     cf.set_frequency();
 
-    fx_cf.set_frequency(fix);
+    fx_cf.f(fix);
     
     const size_t fdiv = 256;
     

@@ -6,33 +6,45 @@ namespace lamb {
   public:
    typedef q15n16s sqint;
    typedef q0n32s uqint;
-   
+
+  private:
    sqint  Q1, Q0, F1, D1, D2, L, H, B, N;
    uqint F0,  FS;
 
+  public:
    constexpr
    fx_chamberlin() :
     Q1(0), Q0(1, 0), F1(0), D1(0), D2(0), L(0), H(0), B(0), N(0),
     F0(1000), FS(44100) {
     
-    set_frequency(F0);
-    set_q(Q0);
+    f(F0);
+    q(Q0);
    }
 
    static constexpr sqint PI2 = sqint::from_double(2*M_PI);
 
    constexpr
-   void set_frequency(uqint::type const & x) {
+   void f(uqint::type const & x) {
     F0.val = x;
     F1 = PI2 * (F0 / FS);    
    }
 
    constexpr
-   void set_q(sqint::type const & x) {
+   uqint f() const {
+    return F0;
+   }
+   
+   constexpr
+   void q(sqint::type const & x) {
     Q0.val  = 0;
     Q1 = sqint(1, 0) / Q0;
    }
 
+   constexpr
+   sqint q() const {
+    return Q0;
+   }
+   
    constexpr
    q0n15s process(q0n15s I_) {
 
