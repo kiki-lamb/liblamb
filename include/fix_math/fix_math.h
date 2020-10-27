@@ -96,11 +96,7 @@ namespace lamb {
 
   typedef
   typename
-  type_if<
-   SIGNED,
-   typename signed_int<BIG_SIZE>::type,
-   typename unsigned_int<BIG_SIZE>::type
-   >::type
+  integer_type<SIGNED, BIG_SIZE>::type::type
   big_type;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -128,7 +124,7 @@ namespace lamb {
   type mask() {
    type m = 0;
 
-   return ((big_type)(1 << MANTISSA)) - 1;
+   return (1ll << MANTISSA) - 1;
   }
 
 ////////////////////////////////////////////////////////////////////////////////
