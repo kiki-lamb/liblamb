@@ -159,6 +159,8 @@ namespace lamb {
    const int8_t mantissa_delta = MANTISSA - mantissa;
 
    intermediary_type tmp = val;
+
+   printf("Delta is %u \n", mantissa_delta);
    
    if constexpr(mantissa_delta >= 0) {
     tmp << mantissa_delta;
