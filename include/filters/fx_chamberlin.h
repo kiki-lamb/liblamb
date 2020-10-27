@@ -17,7 +17,8 @@ namespace lamb {
   typedef q0n32s uqint;
    
   sqint  Q1, Q, FF1, D1, D2, L, H, B, N;
-  uqint FF,  FS;
+  uqint FF;
+  uint32_t  FS;
    
   static constexpr sqint PI2 = sqint::from_double(2*M_PI);
 
@@ -35,9 +36,9 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
-   void set_frequency() {
-    FF1 = PI2 * (FF / FS);    
-   }
+  void set_frequency() {
+   FF1 = PI2 * (FF / uqint(FS));    
+  }
 
 ////////////////////////////////////////////////////////////////////////////////
 
