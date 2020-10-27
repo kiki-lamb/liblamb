@@ -21,24 +21,22 @@ int main() {
   fx_chamberlin fx_cf;
   uint16_t      acc(0);
   
-  fx_cf.FF0 = fx_chamberlin::uqint(5000);
-  fx_cf.set_frequency();
-  fx_cf.Q0.val = fx_chamberlin::sqint::ONE >> 1;
-  fx_cf.set_q();
+  fx_cf.set_frequency(5000);
+  
+  fx_cf.set_q(fx_chamberlin::sqint::ONE >> 1);
+  
 
   printf("Af,        I,    FF1,    Q1,        L,              H,         B,         N,         D1,        D2 \n");
 
   for (double qix = 1.0; qix < 20.0; qix += 3.0) {
-   fx_cf.Q0 = fx_chamberlin::sqint::from_double(qix);
-   fx_cf.set_q();
+   fx_cf.set_q(fx_chamberlin::sqint::from_double(qix));
 
    const size_t fix_incr = 200;
    
    for (size_t fix = 8500 + 5; fix > 4000; fix -= fix_incr) {
     acc          = 0;    
-    fx_cf.FF0.val = fix;
-    fx_cf.set_frequency();
-    
+    fx_cf.set_frequency(fix);
+        
     const size_t fdiv = 256;
     
     for(size_t cycle_ix = 0; cycle_ix < 1; cycle_ix++) {
