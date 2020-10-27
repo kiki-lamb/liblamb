@@ -13,18 +13,16 @@ namespace lamb {
 
  public:
 
-  typedef q15n16s sqint;
-  typedef q0n32s uqint;
-
  public:
-  sqint Q0;
-  uqint F0;
+  q15n16s Q0;
+  q0n32s F0;
   
  private:
-  sqint  Q1, F1, D0, D1, L, H, B, N;
+  q15n16s  Q1, F1, D0, D1, L, H, B, N;
+
   uint32_t  FS;
    
-  static constexpr sqint PI2 = sqint::from_double(2*M_PI);
+  static constexpr q15n16s PI2 = q15n16s::from_double(2*M_PI);
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -57,22 +55,22 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
-  uqint f() {
+  q0n32s f() {
    return F0;
   }
 
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
-  void f(uqint::type const & x) {
+  void f(q0n32s::type const & x) {
    F0.val = x;
-   F1 = PI2 * (F0 / uqint(FS));    
+   F1 = PI2 * (F0 / q0n32s(FS));    
   }
 
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
-  sqint q() {
+  q15n16s q() {
    return Q0;
   }
 
@@ -80,15 +78,15 @@ namespace lamb {
 
   constexpr
   void q(double const & x) {
-   q(sqint::from_double(x));
+   q(q15n16s::from_double(x));
    }
 
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
-  void q(sqint const & x) {
+  void q(q15n16s const & x) {
    Q0.val = x.val;
-   Q1 = sqint(1,0) / Q0;
+   Q1 = q15n16s(1,0) / Q0;
   }
 
 ////////////////////////////////////////////////////////////////////////////////
