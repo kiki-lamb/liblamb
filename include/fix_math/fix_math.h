@@ -95,36 +95,24 @@ namespace lamb {
    >::type
   big_type;
 
+////////////////////////////////////////////////////////////////////////////////
+
   static constexpr type    MAX = integer_traits::MAX;    
   static constexpr type    MIN = integer_traits::MIN;
   static constexpr type    ONE = CHARACTERISTIC == 0 ? MAX : (1 << MANTISSA) - 1;
   
 ////////////////////////////////////////////////////////////////////////////////
 
-  // constexpr
-  // operator larger_type () const {
-  //  return larger_type(
-  //   val << 1
-  //  );
-  // }
+  type                     val;  
+  mutable      bool        overflow;  
 
-  // constexpr
-  // operator smaller_type () const {
-  //  return smaller_type(
-  //   val >> 1
-  //  );
-  // }
+////////////////////////////////////////////////////////////////////////////////
 
   constexpr
   operator sat_cast_type () const {
    return sat_cast_type(val);
   }
   
-////////////////////////////////////////////////////////////////////////////////
-
-  type                     val;  
-  mutable      bool        overflow;  
-
 ////////////////////////////////////////////////////////////////////////////////
   
   static
