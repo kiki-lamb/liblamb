@@ -4,30 +4,36 @@
 namespace lamb {
   class fx_chamberlin {
   public:
-   typedef q15n16s qtype;
-   typedef q0n32s pqtype;
+   typedef q15n16s sqint;
+   typedef q0n32s uqint;
    
-   qtype  Q1, Q, FF1, D1, D2, L, H, B, N;
-   pqtype FF,  FS;
-   
+   sqint  Q1, Q0, F1, D1, D2, L, H, B, N;
+   uqint F0,  FS;
+
+   constexpr
    fx_chamberlin() :
-    Q1(0), Q(1, 0), FF1(0), D1(0), D2(0), L(0), H(0), B(0), N(0),
-    FF(1000), FS(44100) {
+    Q1(0), Q0(1, 0), F1(0), D1(0), D2(0), L(0), H(0), B(0), N(0),
+    F0(1000), FS(44100) {
     
-    set_frequency();
-    set_q();
+    set_frequency(F0);
+    set_q(Q0);
    }
 
-   void set_frequency() {
-    static const qtype PI2(qtype::from_double(2*M_PI));
+   static constexpr sqint PI2 = sqint::from_double(2*M_PI);
 
-    FF1 = PI2 * (FF / FS);    
+   constexpr
+   void set_frequency(uqint::type const & x) {
+    F0.val = x;
+    F1 = PI2 * (F0 / FS);    
    }
 
-   void set_q() {
-    Q1 = qtype(1,0) / Q;
+   constexpr
+   void set_q(sqint::type const & x) {
+    Q0.val  = 0;
+    Q1 = sqint(1, 0) / Q0;
    }
 
+   constexpr
    q0n15s process(q0n15s I_) {
 
 //  L = D2 + F1 * D1
@@ -40,12 +46,12 @@ namespace lamb {
     q15n16s I(I_.val << 1)            ;
     
     printf("% 6.9lf, ", double(I))    ;
-    printf("% 6.9lf, ", double(FF1))  ;        
+    printf("% 6.9lf, ", double(F1))  ;        
     printf("% 6.9lf, ", double(Q1))   ;
     
-    L  = D2 + FF1 * D1                ;    printf("% 9.9lf, ",  double(L)) ;
+    L  = D2 + F1 * D1                ;    printf("% 9.9lf, ",  double(L)) ;
     H  = I - L - (Q1*D1)              ;    printf("% 14.9lf, ", double(H)) ;
-    B  = (FF1 * H)  + D1              ;    printf("% 9.9lf, ",  double(B)) ;
+    B  = (F1 * H)  + D1              ;    printf("% 9.9lf, ",  double(B)) ;
     N  = H  + L                       ;    printf("% 9.9lf, ",  double(N)) ;
     D1 = B                            ;    printf("% 9.9lf, ",  double(D1));
     D2 = L                            ;    printf("% 9.9lf  ",  double(D2));

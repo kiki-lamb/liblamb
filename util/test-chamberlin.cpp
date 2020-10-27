@@ -28,28 +28,25 @@ int main() {
   cf.set_q();
   printf("\n");
   
-  fx_cf.FF = fx_chamberlin::pqtype(5000);
-  fx_cf.set_frequency();
-  fx_cf.Q = fx_chamberlin::qtype(fx_chamberlin::qtype::ONE >> 1);
-  fx_cf.set_q();
+  fx_cf.set_frequency(5000);
+  fx_cf.set_q(fx_chamberlin::sqint::ONE >> 1);
 
   printf("Af,        I,    FF1,    Q1,        L,              H,         B,         N,         D1,        D2 \n");
 
-  for (double qix = 1.0; qix < 20.0; qix += 3.0) {
+  for (double qix = 1.0; qix < 15.0; qix += 3.0) {
    cf.Q = qix;
    cf.set_q();
 
-   fx_cf.Q = fx_chamberlin::qtype::from_double(qix);
-   fx_cf.set_q();
+   fx_cf.set_q(fx_chamberlin::sqint::from_double(qix).val);
 
-   const size_t fix_incr = 200;
+   const size_t fix_incr = 300;
    
-   for (size_t fix = 8500 + 5; fix > 4000; fix -= fix_incr) {
+   for (size_t fix = 6000 + 5; fix > 4000; fix -= fix_incr) {
     acc          = 0;    
     cf.FF        = fix;        
     cf.set_frequency();
-    fx_cf.FF.val = fix;
-    fx_cf.set_frequency();
+
+    fx_cf.set_frequency(fix);
     
     const size_t fdiv = 256;
     
