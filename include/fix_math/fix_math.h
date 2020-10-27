@@ -56,6 +56,7 @@ namespace lamb {
   static constexpr uint8_t MANTISSA       = mantissa_;
   static constexpr bool    SIGNED         = ((CHARACTERISTIC + MANTISSA ) % 2) == 1;
   static constexpr uint8_t SIZE           = bytes_fit_bits<CHARACTERISTIC+MANTISSA>();
+  static constexpr uint8_t BIG_SIZE       = bytes_fit_bits<((SIZE + 1) * 8)>();
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -72,14 +73,12 @@ namespace lamb {
    >::type
   integer_traits;
    
-  static constexpr uint8_t LARGER_SIZE = SIZE < 8 ? SIZE << 1 : SIZE;
-
   typedef
   typename
   type_if<
    SIGNED,
-   typename signed_int<LARGER_SIZE>::type,
-   typename unsigned_int<LARGER_SIZE>::type
+   typename signed_int<BIG_SIZE>::type,
+   typename unsigned_int<BIG_SIZE>::type
    >::type
   big_type;
   
