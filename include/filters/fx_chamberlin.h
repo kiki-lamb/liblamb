@@ -80,22 +80,15 @@ namespace lamb {
 
   constexpr
   void q(double const & x) {
-   sqint(sqint::from_double(x));
-   }
-
-////////////////////////////////////////////////////////////////////////////////
-
-  constexpr
-  void q(sqint::type const & x) {
-   Q0.val = x;
-   Q1 = sqint(1,0) / Q0;
+   q(sqint::from_double(x));
    }
 
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
   void q(sqint const & x) {
-   q(x.val);
+   Q0.val = x.val;
+   Q1 = sqint(1,0) / Q0;
   }
 
 ////////////////////////////////////////////////////////////////////////////////

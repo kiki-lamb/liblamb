@@ -29,7 +29,7 @@ int main() {
   printf("Af,        I,    FF1,    Q1,        L,              H,         B,         N,         D1,        D2 \n");
 
   for (double qix = 1.0; qix < 20.0; qix += 3.0) {
-   fx_cf.q(fx_chamberlin::sqint::from_double(qix));
+   fx_cf.q(qix);
 
    const size_t fix_incr = 200;
    
