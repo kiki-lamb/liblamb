@@ -10,10 +10,10 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
   
  template <uint8_t bits>
- constexpr uint8_t at_least_bits  = bits >= 64 ? 64 : (bits + 7) / 8;
+ constexpr uint8_t at_least_bits  = bits >= 64 ? 64 : (bits + 7) >> 3;
 
  template <uint8_t bytes>
- constexpr uint8_t at_least_bytes  = bytes >= 8 ? 8 : (bytes + 3) / 4;
+ constexpr uint8_t at_least_bytes  = bytes >= 8 ? 8 : (bytes + 3) >> 2 << 2;
 
  template <uint8_t bits>
  constexpr uint8_t bytes_at_least_bits = at_least_bytes<at_least_bits<bits>>;
