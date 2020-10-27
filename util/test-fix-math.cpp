@@ -327,7 +327,7 @@ int main() {
  }
  {
   u0q8  x0(0, 128);      printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x0), x0.val,  u0q8::TRUE_ONE,  u0q8::ONE);
-  s7q8  x1 = s7q8(x1);   printf("s7q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x1), x1.val,  s7q8::TRUE_ONE, s7q8::ONE);
+  s7q8  x1 = s7q8(x1);   printf("s7q8:   % 05.05lf % 12d % 12lld % 12lld \n", double(x1), x1.val,  s7q8::TRUE_ONE, s7q8::ONE);
   u0q8  x2 = u0q8(x2);   printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x2), x2.val,  u0q8::TRUE_ONE,  u0q8::ONE);
 
   printf("\n");
