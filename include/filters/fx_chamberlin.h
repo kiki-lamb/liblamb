@@ -15,12 +15,18 @@ namespace lamb {
 
  public:
   q15n16s Q0;
-  q0n32s F0;
-  
- private:
-  q15n16s  Q1, F1, D0, D1, L, H, B, N;
+  q0n32s  F0;
 
-  uint32_t  FS;
+  q15n16s Q1;
+  q15n16s F1;
+  q15n16s D0;
+  q15n16s D1;
+  q15n16s L;
+  q15n16s H;
+  q15n16s B;
+  q15n16s N;
+
+  uint32_t FS;
    
   static constexpr q15n16s PI2 = q15n16s::from_double(2*M_PI);
 
