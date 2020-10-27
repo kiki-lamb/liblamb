@@ -17,7 +17,15 @@ namespace lamb {
 
  template <uint8_t bits>
  constexpr uint8_t bytes_at_least_bits = at_least_bytes<at_least_bits<bits>>;
- 
+
+ template <typename t>
+ constexpr t cmax(t const & left, t const & right) {
+  if (left > right) {
+   return left;
+  }
+
+  return right;
+ }
  
 ////////////////////////////////////////////////////////////////////////////////
 // Basic integer types
