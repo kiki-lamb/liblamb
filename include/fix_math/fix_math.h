@@ -39,13 +39,13 @@ namespace lamb {
   template <uint8_t size>
   class integer_type<true, size> {
   public:
-   typedef signed_int<size> type;
+   typedef signed_int<size> traits;
   };
   
   template <uint8_t size>
   class integer_type<false, size> {
   public:
-   typedef unsigned_int<size> type;
+   typedef unsigned_int<size> traits;
   };  
 
 //////////////////////////////////////////////////////////////////////////////// 
@@ -75,23 +75,18 @@ namespace lamb {
 
   typedef
   typename
-  integer_type<SIGNED, SIZE>::type::type
+  integer_type<SIGNED, SIZE>::traits::type
   type;
 
   typedef
   typename
-  integer_type<SIGNED, BIG_SIZE>::type::type
+  integer_type<SIGNED, BIG_SIZE>::traits::type
   big_type;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  static constexpr type    MAX = integer_type<SIGNED, SIZE>::type::MAX;
-  static constexpr type    MIN = integer_type<SIGNED, SIZE>::type::MIN;
-
-  // typedef
-  // typename
-  // integer_type<SIGNED, (size_fit_bits(MANTISSA + 1))>::type::type
-  // one_type;
+  static constexpr type    MAX = integer_type<SIGNED, SIZE>::traits::MAX;
+  static constexpr type    MIN = integer_type<SIGNED, SIZE>::traits::MIN;
   
   static constexpr
   type                     ONE =
@@ -164,7 +159,7 @@ namespace lamb {
     other_type;
 
    typedef
-    typename integer_type<SIGNED, (size_fit_bytes(SIZE+other_type::SIZE))>::type::type
+    typename integer_type<SIGNED, (size_fit_bytes(SIZE+other_type::SIZE))>::traits::type
     intermediary_type;
 
    constexpr bool    to_signed      = (! SIGNED) && other_type::SIGNED;
@@ -372,7 +367,7 @@ namespace lamb {
    
    typedef
     typename
-    integer_type<SIGNED, (size_fit_bytes(SIZE+other_type::SIZE))>::type::type
+    integer_type<SIGNED, (size_fit_bytes(SIZE+other_type::SIZE))>::traits::type
     intermediary_type;
 
    static_assert(
@@ -415,7 +410,7 @@ namespace lamb {
     
    typedef
     typename
-    integer_type<SIGNED, (size_fit_bytes(SIZE+other_type::SIZE))>::type::type
+    integer_type<SIGNED, (size_fit_bytes(SIZE+other_type::SIZE))>::traits::type
     intermediary_type;
 
    static_assert(
