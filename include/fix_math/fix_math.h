@@ -105,7 +105,6 @@ namespace lamb {
 //////////////////////////////////////////////////////////////////////////////
 
   type                     val;  
-  mutable      bool        overflow;  
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -145,8 +144,7 @@ namespace lamb {
   fixed(
    type const & tmp_
   ) :
-   val(tmp_),
-   overflow(false) {}
+   val(tmp_) {}
 
   explicit
   constexpr
@@ -154,8 +152,7 @@ namespace lamb {
    type const & characteristic,
    type const & mantissa
   ) :
-   val((characteristic * ONE) + mantissa),
-   overflow(false) {}
+   val((characteristic * ONE) + mantissa) {}
 
 ////////////////////////////////////////////////////////////////////////////////
   
@@ -202,12 +199,7 @@ namespace lamb {
   constexpr
   explicit
   operator double() const {
-   // if constexpr(CHARACTERISTIC == 0) {    
-   //  return val / (TRUE_ONE * 1.0);
-   // }
-   // else {
     return val / (ONE * 1.0);
-    // }
   }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -323,8 +315,6 @@ namespace lamb {
    big_tmp                 += other.val;
    type          small_tmp  = big_tmp;
    
-   overflow |= check_overflow('+', old, other.val, small_tmp);
-
    return self_type(small_tmp);
   }    
 
@@ -352,8 +342,6 @@ namespace lamb {
    big_tmp                 -= other.val;
    type          small_tmp  = big_tmp;
    
-   overflow |= check_overflow('-', old, other.val, small_tmp);
-
    return self_type(small_tmp);
   }    
 
@@ -399,8 +387,6 @@ namespace lamb {
    big_tmp                     >>= other_mantissa;     
    type              small_tmp   = big_tmp;
    
-   overflow |= check_overflow('x', old, other.val, small_tmp);
-   
    return self_type(small_tmp);
   }
 
@@ -444,10 +430,6 @@ namespace lamb {
    big_tmp                      /= other.val;
    type              small_tmp   = big_tmp;
    
-   if (check_overflow('x', old, other.val, small_tmp)) {
-    overflow = true;
-   }
-   
    return self_type(small_tmp);
   }
 
@@ -464,62 +446,6 @@ namespace lamb {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-// This check is currently not effective for multiplication operations and
-// should really be re-written entirely:
- 
-#ifndef LAMB_FP_NO_OVERFLOW_CHECKING
-  template <typename delta_t>                                    
-  static bool check_overflow(                                    
-   char    const & symbol,                                       
-   type    const & old_val,                                      
-   delta_t const & delta,                                        
-   type          & set                                           
-  ) {                                                            
-   int64_t ttmp = old_val;                                       
-   int64_t ttmp_delta = delta;                                   
-   
-   ttmp += ttmp_delta;                                           
-                                                                
-   bool over  = ttmp > MAX;                                      
-   
-   // if (over)                                                     
-   //  printf("%lld exceeds %lld.\n", ttmp, MAX);                   
-   
-   bool under = ttmp < MIN;                                      
-   
-   // if (under)                                                    
-   //  printf("%lld under %lld.\n", ttmp, MIN);                     
-   
-   if (over || under) {                                          
-    if (SATURATE) {                                              
-     // printf(                                                     
-     //  "SATURATE: %ld %c %ld = %lld MIN: %lld MAX: %lld \n",      
-     //  old_val,                                                   
-     //  symbol,                                                    
-     //  delta,                                                     
-     //  ttmp,                                                      
-     //  MIN,                                                       
-     //  MAX                                                        
-     // );                                                          
-     set = MAX;                                                  
-    }                                                            
-    else {                                                       
-    }                                                            
-   }                                                             
-   
-   return (over || under);                                       
-  }                                                
-#else
- template <typename big_t, typename delta_t, typename new_t>
- static bool check_overflow(                                
-  char    const & symbol,                                   
-  type    const & old_val,                                  
-  delta_t const & delta,                                    
-  new_t   const & new_val,                                  
-  type          & set                                       
- ) { return false; }                                                    
-#endif
-  
  }; // template fixed
  
 ////////////////////////////////////////////////////////////////////////////////
@@ -644,11 +570,9 @@ namespace lamb {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-#undef CHECK_OVERFLOW
-  
-#endif
 
 /* Local Variables:  */
 /* fill-column: 100  */
 /* End:              */
 
+#endif

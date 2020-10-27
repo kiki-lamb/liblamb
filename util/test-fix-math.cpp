@@ -84,56 +84,6 @@ bool compare_floats(float x, float y, uint8_t precis) {
 // PRINT("u", "b", b);
 // PRINT("u", "c", c);
 
-#define TEST_OVERFLOW                                                   \
- {                                                                      \
-  printf("Test for overflow:\n");                                       \
-                                                                        \
-  fix_t a(fix_t::MAX);                                                  \
-                                                                        \
-  a += a;                                                               \
-                                                                        \
-  if (a.overflow) {                                                     \
-   successes ++;                                                        \
-  }                                                                     \
-  else {                                                                \
-   fix_t b(fix_t::MAX);                                                 \
-                                                                        \
-   printf(                                                              \
-    "%05.05lf + %05.05lf should have overflowed.",                      \
-    double(b),                                                          \
-    double(b)                                                           \
-   );                                                                   \
-                                                                        \
-   errors ++;                                                           \
-  }                                                                     \
- }                                                                      
-
-#define TEST_UNDERFLOW                                                  \
- {                                                                      \
-  printf("Test for underflow:\n");                                      \
-                                                                        \
-  fix_t a(fix_t::MAX);                                                  \
-                                                                        \
-  a -= fix_t(fix_t::MAX);                                               \
-  a -= fix_t(fix_t::MAX);                                               \
-                                                                        \
-  if (a.overflow) {                                                     \
-   successes ++;                                                        \
-  }                                                                     \
-  else {                                                                \
-   fix_t b(fix_t::MAX);                                                 \
-                                                                        \
-   printf(                                                              \
-    "%05.05lf - %05.05lf - %05.05lf should have underflowed.",          \
-    double(b),                                                          \
-    double(b),                                                          \
-    double(b)                                                           \
-   );                                                                   \
-                                                                        \
-   errors ++;                                                           \
-  }                                                                     \
- }                                                                      
-
 #define TEST_CONVERSIONS(x, y, z0, z1, fprecis)                         \
  {                                                                      \
   fix_t a(fix_t::from_double(x));                                        \
@@ -262,10 +212,6 @@ void test_fix_math_type(size_t & out_successes, size_t & out_errors) {
   );
  }
 
- TEST_OVERFLOW;
-
- TEST_UNDERFLOW;
- 
  if (fix_t::CHARACTERISTIC > 0) {
   printf("\nTest pi...\n");
 
