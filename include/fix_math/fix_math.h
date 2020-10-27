@@ -102,9 +102,10 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+  
   static constexpr type    MAX = integer_traits::MAX;    
   static constexpr type    MIN = integer_traits::MIN;
-  static constexpr type    ONE = CHARACTERISTIC == 0 ? MAX : ((((big_type)1) << MANTISSA) - 1);
+  static constexpr type    ONE = CHARACTERISTIC == 0 ? MAX : (((big_type)1) << MANTISSA) - 1;
 
 ////////////////////////////////////////////////////////////////////////////////
 
