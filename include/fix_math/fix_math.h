@@ -72,14 +72,14 @@ namespace lamb {
    >::type
   larger_type;
   
-  typedef
-  typename
-  type_if<
-   (SIZE > 1),
-   fixed<(CHARACTERISTIC >> 1), (MANTISSA >> 1), SATURATE>,
-   self_type
-   >::type
-  smaller_type;
+  // typedef
+  // typename
+  // type_if<
+  //  (SIZE > 1),
+  //  fixed<(CHARACTERISTIC >> 1), (MANTISSA >> 1), SATURATE>,
+  //  self_type
+  //  >::type
+  // smaller_type;
   
   typedef
   typename
@@ -119,19 +119,19 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  constexpr
-  operator larger_type () const {
-   return larger_type(
-    val << 1
-   );
-  }
+  // constexpr
+  // operator larger_type () const {
+  //  return larger_type(
+  //   val << 1
+  //  );
+  // }
 
-  constexpr
-  operator smaller_type () const {
-   return smaller_type(
-    val >> 1
-   );
-  }
+  // constexpr
+  // operator smaller_type () const {
+  //  return smaller_type(
+  //   val >> 1
+  //  );
+  // }
 
   constexpr
   operator sat_cast_type () const {
@@ -525,48 +525,48 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 // 16 bits
 //////////////////////////////////////////////////////////////////////////////// 
- /*  8 */ typedef fixed<  7,  8, false > s7q8;
- /*  8 */ typedef fixed<  7,  8, false > s7q8s;
+ /*  0 */ typedef fixed<  0, 15, false > s0q15;
+ /*  0 */ typedef fixed<  0, 15, true  > s0q15s;
+ /*  0 */ typedef fixed<  0, 16, false > u0q16;
+ /*  0 */ typedef fixed<  0, 16, true  > u0q16s;
+ //-----------------------------------------------------------------------------
+ /*  1 */ typedef fixed<  1, 14, false > s1q14;
+ /*  1 */ typedef fixed<  1, 14, true  > s1q14s;
+ /*  1 */ typedef fixed<  1, 15, false > u1q15;
+ /*  1 */ typedef fixed<  1, 15, true  > u1q15s;
+ //-----------------------------------------------------------------------------
+ /*  2 */ typedef fixed<  2, 13, false > s2q13;
+ /*  2 */ typedef fixed<  2, 13, true  > s2q13s;
+ /*  2 */ typedef fixed<  2, 14, false > u2q14;
+ /*  2 */ typedef fixed<  2, 14, true  > u2q14s;
+ //-----------------------------------------------------------------------------
+ /*  3 */ typedef fixed<  3, 12, false > s3q12;
+ /*  3 */ typedef fixed<  3, 12, true  > s3q12s;
+ /*  3 */ typedef fixed<  3, 13, false > u3q13;
+ /*  3 */ typedef fixed<  3, 13, true  > u3q13s;
+ //-----------------------------------------------------------------------------
+ /*  4 */ typedef fixed<  4, 11, false > s4q11;
+ /*  4 */ typedef fixed<  4, 11, true  > s4q11s;
+ /*  4 */ typedef fixed<  4, 12, false > u4q12;
+ /*  4 */ typedef fixed<  4, 12, true  > u4q12s;
+ //-----------------------------------------------------------------------------
+ /*  5 */ typedef fixed<  5, 10, false > s5q10;
+ /*  5 */ typedef fixed<  5, 10, true  > s5q10s;
+ /*  5 */ typedef fixed<  5, 11, false > u5q11;
+ /*  5 */ typedef fixed<  5, 11, true  > u5q11s;
+ //-----------------------------------------------------------------------------
+ /*  6 */ typedef fixed<  6,  9, false > s6q9;
+ /*  6 */ typedef fixed<  6,  9, true  > s6q9s;
+ /*  6 */ typedef fixed<  6, 10, false > u6q10;
+ /*  6 */ typedef fixed<  6, 10, true  > u6q10s;
+ //-----------------------------------------------------------------------------
+ /*  7 */ typedef fixed<  7,  9, false > u7q9;
+ /*  7 */ typedef fixed<  7,  9, true  > u7q9s; 
+ /*  7 */ typedef fixed<  7,  8, false > s7q8;
+ /*  7 */ typedef fixed<  7,  8, true  > s7q8s;
+ //-----------------------------------------------------------------------------
  /*  8 */ typedef fixed<  8,  8, false > u8q8;
- /*  8 */ typedef fixed<  8,  8, false > u8q8s;
- //-----------------------------------------------------------------------------
- /*  9 */ typedef fixed<  6,  9, false > s6q9;
- /*  9 */ typedef fixed<  6,  9, false > s6q9s;
- /*  9 */ typedef fixed<  7,  9, false > u7q9;
- /*  9 */ typedef fixed<  7,  9, false > u7q9s; 
- //-----------------------------------------------------------------------------
- /* 10 */ typedef fixed<  5, 10, false > s5q10;
- /* 10 */ typedef fixed<  5, 10, false > s5q10s;
- /* 10 */ typedef fixed<  6, 10, false > u6q10;
- /* 10 */ typedef fixed<  6, 10, false > u6q10s;
- //-----------------------------------------------------------------------------
- /* 11 */ typedef fixed<  4, 11, false > s4q11;
- /* 11 */ typedef fixed<  4, 11, false > s4q11s;
- /* 11 */ typedef fixed<  5, 11, false > u5q11;
- /* 11 */ typedef fixed<  5, 11, false > u5q11s;
- //-----------------------------------------------------------------------------
- /* 12 */ typedef fixed<  3, 12, false > s3q12;
- /* 12 */ typedef fixed<  3, 12, false > s3q12s;
- /* 12 */ typedef fixed<  4, 12, false > u4q12;
- /* 12 */ typedef fixed<  4, 12, false > u4q12s;
- //-----------------------------------------------------------------------------
- /* 13 */ typedef fixed<  2, 13, false > s2q13;
- /* 13 */ typedef fixed<  2, 13, false > s2q13s;
- /* 13 */ typedef fixed<  3, 13, false > u3q13;
- /* 13 */ typedef fixed<  3, 13, false > u3q13s;
- //-----------------------------------------------------------------------------
- /* 14 */ typedef fixed<  1, 14, false > s1q14;
- /* 14 */ typedef fixed<  1, 14, false > s1q14s;
- /* 14 */ typedef fixed<  2, 14, false > u2q14;
- /* 14 */ typedef fixed<  2, 14, false > u2q14s;
- //-----------------------------------------------------------------------------
- /* 15 */ typedef fixed<  0, 15, false > s0q15;
- /* 15 */ typedef fixed<  0, 15, false > s0q15s;
- /* 15 */ typedef fixed<  1, 15, false > u1q15;
- /* 15 */ typedef fixed<  1, 15, false > u1q15s;
- //-----------------------------------------------------------------------------
- /* 16 */ typedef fixed<  0, 16, false > u0q16;
- /* 16 */ typedef fixed<  0, 16, false > u0q16s;
+ /*  8 */ typedef fixed<  8,  8, true  > u8q8s;
  //-----------------------------------------------------------------------------
 
 ////////////////////////////////////////////////////////////////////////////////
