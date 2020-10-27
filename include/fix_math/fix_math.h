@@ -325,9 +325,9 @@ namespace lamb {
   operator += (
    compatible_type<saturate> const & other
   ) {
-   val = ((*this) + other).val;
+   val = (*this + other).val;
 
-   return *(static_cast<self_type *>(this));
+   return *this;
   }
 
   ///////////////////////////////////////////////////////////////////////////////
@@ -352,11 +352,9 @@ namespace lamb {
   operator -= (
    compatible_type<saturate> const & other
   ) {
-   self_type tmp = (*this) - other;
-  
-   val = tmp.val;
+   val = (*this - other).val;
 
-   return *(static_cast<self_type *>(this));
+   return *this;
   }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -397,9 +395,9 @@ namespace lamb {
   operator *= (
    fixed<other_charac,other_mantissa, saturate> const & other
   ) {
-   val = ((*this) * other).val;
+   val = (*this * other).val;
 
-   return *(static_cast<self_type *>(this));
+   return *this;
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -440,7 +438,7 @@ namespace lamb {
   operator /= (
    fixed<other_charac,other_mantissa, saturate__> const & other
   ) {   
-   val = ((*this) / other).val;
+   val = (*this / other).val;
 
    return *this;
   }
