@@ -39,16 +39,16 @@ namespace lamb {
 
     q15n16s I(I_.val << 1)            ;
     
-    printf("% 6.3lf, ", double(I))    ;
-    printf("% 6.3lf, ", double(FF1))  ;        
-    printf("% 6.3lf, ", double(Q1))   ;
+    printf("% 6.9lf, ", double(I))    ;
+    printf("% 6.9lf, ", double(FF1))  ;        
+    printf("% 6.9lf, ", double(Q1))   ;
     
-    L  = D2 + FF1 * D1                ;    printf("% 9.3lf, ",  double(L)) ;
-    H  = I - L - (Q1*D1)              ;    printf("% 14.3lf, ", double(H)) ;
-    B  = (FF1 * H)  + D1              ;    printf("% 9.3lf, ",  double(B)) ;
-    N  = H  + L                       ;    printf("% 9.3lf, ",  double(N)) ;
-    D1 = B                            ;    printf("% 9.3lf, ",  double(D1));
-    D2 = L                            ;    printf("% 9.3lf  ",  double(D2));
+    L  = D2 + FF1 * D1                ;    printf("% 9.9lf, ",  double(L)) ;
+    H  = I - L - (Q1*D1)              ;    printf("% 14.9lf, ", double(H)) ;
+    B  = (FF1 * H)  + D1              ;    printf("% 9.9lf, ",  double(B)) ;
+    N  = H  + L                       ;    printf("% 9.9lf, ",  double(N)) ;
+    D1 = B                            ;    printf("% 9.9lf, ",  double(D1));
+    D2 = L                            ;    printf("% 9.9lf  ",  double(D2));
         
     return q0n15s::from_double(0.0);
    }

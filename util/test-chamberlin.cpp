@@ -5,7 +5,6 @@
 using namespace std;
 using namespace lamb;
 
-
 void pprint_bits_32(uint32_t t0) {
  for(uint32_t mask = 0x80000000; mask; mask >>= 1) {
   if (mask & t0) {
@@ -16,7 +15,6 @@ void pprint_bits_32(uint32_t t0) {
   }
  }
 }
-
 
 int main() {
  {
@@ -37,14 +35,14 @@ int main() {
 
   printf("Af,        I,    FF1,    Q1,        L,              H,         B,         N,         D1,        D2 \n");
 
-  for (double qix = 1.0; qix < 20.0; qix += 1.0) {
+  for (double qix = 1.0; qix < 20.0; qix += 3.0) {
    cf.Q = qix;
    cf.set_q();
 
    fx_cf.Q = fx_chamberlin::qtype::from_double(qix);
    fx_cf.set_q();
 
-   const size_t fix_incr = 100;
+   const size_t fix_incr = 200;
    
    for (size_t fix = 8500 + 5; fix > 4000; fix -= fix_incr) {
     acc          = 0;    
@@ -53,7 +51,7 @@ int main() {
     fx_cf.FF.val = fix;
     fx_cf.set_frequency();
     
-    const size_t fdiv = 32;
+    const size_t fdiv = 256;
     
     for(size_t cycle_ix = 0; cycle_ix < 1; cycle_ix++) {
      for(size_t pix = 0; pix < (65534L / fdiv); pix ++) {
