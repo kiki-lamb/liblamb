@@ -64,29 +64,31 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
   
   typedef
+  typename
   type_if<
    SIGNED,
    signed_int<SIZE>,
    unsigned_int<SIZE>
-   > integer_traits;
-  
-
+   >::type integer_traits;
+ 
   typedef
-  typename type_if<
+  typename
+  type_if<
    SIGNED,
-   typename signed_int<SIZE>::type,
-   typename unsigned_int<SIZE>::type
-   >::type  
+   signed_int<(SIZE << 1)>,
+   unsigned_int<(SIZE << 1)>
+   >::type big_integer_traits;
+  
+  typedef
+  typename
+  integer_traits::type
   type;
   
   typedef
-  typename type_if<
-   SIGNED,
-   typename signed_int<(SIZE << 1)>::type,
-   typename unsigned_int<(SIZE << 1)>::type
-   >::type
+  typename
+  big_integer_traits::type
   big_type;
-  
+    
   template <bool sat>
   using compatible_type = fixed<CHARACTERISTIC, MANTISSA, sat>;
 
@@ -100,28 +102,9 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
- public:
-  
-  static constexpr
-  type    ONE = (
-   (CHARACTERISTIC == 0) ? 
-   ((((big_type)1) << MANTISSA) - 1) :
-   (1 << MANTISSA)
-  );
-  
-  static constexpr
-  type    MAX = (
-   SIGNED ?
-   signed_int<SIZE>::MAX :
-   unsigned_int<SIZE>::MAX
-  );
-   
-  static constexpr
-  type    MIN = (
-   SIGNED?
-   signed_int<SIZE>::MIN :
-   unsigned_int<SIZE>::MIN
-  );
+  static constexpr type    MAX = integer_traits::MAX;    
+  static constexpr type    MIN = integer_traits::MIN;
+  static constexpr type    ONE = CHARACTERISTIC == 0 ? MAX : ((((big_type)1) << MANTISSA) - 1);
 
 ////////////////////////////////////////////////////////////////////////////////
 
