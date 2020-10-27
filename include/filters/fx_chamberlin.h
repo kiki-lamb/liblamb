@@ -13,15 +13,17 @@ namespace lamb {
 
  public:
 
-  typedef q15n16s qtype;
-   typedef q0n32s pqtype;
+  typedef q15n16s sqint;
+  typedef q0n32s uqint;
    
-   qtype  Q1, Q, FF1, D1, D2, L, H, B, N;
-   pqtype FF,  FS;
+  sqint  Q1, Q, FF1, D1, D2, L, H, B, N;
+  uqint FF,  FS;
    
+  static constexpr sqint PI2 = sqint::from_double(2*M_PI);
 
 ////////////////////////////////////////////////////////////////////////////////
 
+  constexpr
   fx_chamberlin() :
     Q1(0), Q(1, 0), FF1(0), D1(0), D2(0), L(0), H(0), B(0), N(0),
     FF(1000), FS(44100) {
@@ -31,22 +33,22 @@ namespace lamb {
    }
 
 ////////////////////////////////////////////////////////////////////////////////
-  
-   void set_frequency() {
-    static const qtype PI2(qtype::from_double(2*M_PI));
 
+  constexpr
+   void set_frequency() {
     FF1 = PI2 * (FF / FS);    
    }
 
-
 ////////////////////////////////////////////////////////////////////////////////
 
+  constexpr
   void set_q() {
-    Q1 = qtype(1,0) / Q;
+    Q1 = sqint(1,0) / Q;
    }
 
 ////////////////////////////////////////////////////////////////////////////////
 
+  constexpr
   q0n15s process(q0n15s I_) {
 
 //  L = D2 + F1 * D1
