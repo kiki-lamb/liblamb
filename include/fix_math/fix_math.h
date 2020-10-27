@@ -64,6 +64,14 @@ namespace lamb {
   fixed<CHARACTERISTIC, MANTISSA, SATURATE>
   self_type;
   
+  template <bool saturate>
+  using
+  compatible_type = fixed<CHARACTERISTIC, MANTISSA, saturate>;
+
+  typedef
+  compatible_type<(! SATURATE)>
+  sat_cast_type;
+
   typedef
   typename
   type_if<
@@ -75,30 +83,22 @@ namespace lamb {
    
   typedef
   typename
+  integer_traits::type
+  type;
+
+  typedef
+  typename
   type_if<
    SIGNED,
    typename signed_int<BIG_SIZE>::type,
    typename unsigned_int<BIG_SIZE>::type
    >::type
   big_type;
-  
-  typedef
-  typename
-  integer_traits::type
-  type;
 
   static constexpr type    MAX = integer_traits::MAX;    
   static constexpr type    MIN = integer_traits::MIN;
   static constexpr type    ONE = CHARACTERISTIC == 0 ? MAX : (1 << MANTISSA) - 1;
   
-  template <bool saturate>
-  using
-  compatible_type = fixed<CHARACTERISTIC, MANTISSA, saturate>;
-
-  typedef
-  compatible_type<(! SATURATE)>
-  sat_cast_type;
-
 ////////////////////////////////////////////////////////////////////////////////
 
   // constexpr
