@@ -89,22 +89,26 @@ namespace lamb {
    unsigned_int<SIZE>
    >::type
   integer_traits;
- 
+   
   typedef
   typename
   larger_type::integer_traits
   big_integer_traits;
-  
+
   typedef
   typename
   integer_traits::type
   type;
-  
+
   typedef
   typename
   big_integer_traits::type
-  big_type;
-    
+  big_type;    
+
+  static constexpr type    MAX = integer_traits::MAX;    
+  static constexpr type    MIN = integer_traits::MIN;
+  static constexpr type    ONE = CHARACTERISTIC == 0 ? MAX : (1 << MANTISSA) - 1;
+  
   template <bool sat>
   using
   compatible_type = fixed<CHARACTERISTIC, MANTISSA, sat>;
@@ -112,12 +116,7 @@ namespace lamb {
   typedef
   compatible_type<(! SATURATE)>
   sat_cast_type;
-  
-////////////////////////////////////////////////////////////////////////////////
-  
-  static constexpr type    MAX = integer_traits::MAX;    
-  static constexpr type    MIN = integer_traits::MIN;
-  static constexpr type    ONE = CHARACTERISTIC == 0 ? MAX : (((big_type)1) << MANTISSA) - 1;
+
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
@@ -141,12 +140,13 @@ namespace lamb {
   
 ////////////////////////////////////////////////////////////////////////////////
 
-  type         val;  
-  mutable bool overflow;  
+  type                     val;  
+  mutable      bool        overflow;  
 
 ////////////////////////////////////////////////////////////////////////////////
   
-  static constexpr
+  static
+  constexpr
   type mask() {
    type m = 0;
 
@@ -169,11 +169,15 @@ namespace lamb {
   
 ////////////////////////////////////////////////////////////////////////////////
 
-  explicit constexpr
-  fixed(type const & tmp_) :
+  explicit
+  constexpr
+  fixed(
+   type const & tmp_
+  ) :
    val(tmp_), overflow(false) {}
 
-  explicit constexpr
+  explicit
+  constexpr
   fixed(
    type const & characteristic__,
    type const & mantissa__
@@ -189,9 +193,12 @@ namespace lamb {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-  static constexpr
+  static
+  constexpr
   self_type
-  from_double(double const & tmp) {
+  from_double(
+   double const & tmp
+  ) {
    int           divisor = tmp;
    double        modulus = tmp - divisor;
    type          ipart   = ONE * divisor + int(ONE * modulus);
