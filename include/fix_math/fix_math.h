@@ -174,7 +174,8 @@ namespace lamb {
   fixed(
    type const & tmp_
   ) :
-   val(tmp_), overflow(false) {}
+   val(tmp_),
+   overflow(false) {}
 
   explicit
   constexpr
@@ -182,7 +183,8 @@ namespace lamb {
    type const & characteristic__,
    type const & mantissa__
   ) :
-   val((characteristic__ * ONE) + mantissa__), overflow(false) {}
+   val((characteristic__ * ONE) + mantissa__),
+   overflow(false) {}
 
 ////////////////////////////////////////////////////////////////////////////////
 
