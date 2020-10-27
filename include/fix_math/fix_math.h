@@ -91,12 +91,7 @@ namespace lamb {
 
   typedef
   typename
-  integer_type<SIGNED, SIZE>::type
-  integer_traits;
-   
-  typedef
-  typename
-  integer_traits::type
+  integer_type<SIGNED, SIZE>::type::type
   type;
 
   typedef
@@ -110,9 +105,9 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  static constexpr type    MAX = integer_traits::MAX;    
-  static constexpr type    MIN = integer_traits::MIN;
-  static constexpr type    ONE = CHARACTERISTIC == 0 ? MAX : (1 << MANTISSA) - 1;
+  static constexpr type    MAX = integer_type<SIGNED, SIZE>::type::MAX;
+  static constexpr type    MIN = integer_type<SIGNED, SIZE>::type::MIN;
+  static constexpr type    ONE = CHARACTERISTIC == 0 ? MAX : (1ll << MANTISSA) - 1;
   
 ////////////////////////////////////////////////////////////////////////////////
 
