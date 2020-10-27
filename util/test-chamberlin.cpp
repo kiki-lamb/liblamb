@@ -18,15 +18,8 @@ void pprint_bits_32(uint32_t t0) {
 
 int main() {
  {
-  chamberlin    cf;
   fx_chamberlin fx_cf;
   uint16_t      acc(0);
-
-  cf.FF = 5000;
-  cf.set_frequency();
-  cf.Q = 0.5;
-  cf.set_q();
-  printf("\n");
   
   fx_cf.FF = fx_chamberlin::pqtype(5000);
   fx_cf.set_frequency();
@@ -36,9 +29,6 @@ int main() {
   printf("Af,        I,    FF1,    Q1,        L,              H,         B,         N,         D1,        D2 \n");
 
   for (double qix = 1.0; qix < 20.0; qix += 3.0) {
-   cf.Q = qix;
-   cf.set_q();
-
    fx_cf.Q = fx_chamberlin::qtype::from_double(qix);
    fx_cf.set_q();
 
@@ -46,8 +36,6 @@ int main() {
    
    for (size_t fix = 8500 + 5; fix > 4000; fix -= fix_incr) {
     acc          = 0;    
-    cf.FF        = fix;        
-    cf.set_frequency();
     fx_cf.FF.val = fix;
     fx_cf.set_frequency();
     
