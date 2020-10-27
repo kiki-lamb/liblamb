@@ -58,6 +58,23 @@ namespace lamb {
   static constexpr uint8_t SIZE           = at_least_bits<(CHARACTERISTIC + MANTISSA)>;
 
 ////////////////////////////////////////////////////////////////////////////////
+
+  typedef
+  fixed<CHARACTERISTIC, MANTISSA, SATURATE>
+  self_type;
+  
+  typedef
+  typename
+  type_if<
+   (SIZE < 8),
+   fixed<(CHARACTERISTIC << 1), (MANTISSA << 1), SATURATE>,
+   self_type
+   >::type
+  larger_type;
+  
+  typedef
+  fixed<(CHARACTERISTIC >> 1), (MANTISSA >> 1), SATURATE>
+  smaller_type;
   
   typedef
   typename
@@ -69,11 +86,7 @@ namespace lamb {
  
   typedef
   typename
-  type_if<
-   SIGNED,
-   signed_int<(SIZE << 1)>,
-   unsigned_int<(SIZE << 1)>
-   >::type big_integer_traits;
+  larger_type::integer_traits big_integer_traits;
   
   typedef
   typename
@@ -92,38 +105,12 @@ namespace lamb {
   compatible_type<(! SATURATE)>
    sat_cast_type;
   
-  typedef
-  fixed<CHARACTERISTIC, MANTISSA, SATURATE>
-  self_type;
-
 ////////////////////////////////////////////////////////////////////////////////
 
   
   static constexpr type    MAX = integer_traits::MAX;    
   static constexpr type    MIN = integer_traits::MIN;
   static constexpr type    ONE = CHARACTERISTIC == 0 ? MAX : (((big_type)1) << MANTISSA) - 1;
-
-///////////////////////////////////////////////////////////////////////////////
-
- private:
-  
-  template <bool sat>
-  class adjacent_types {
-  public:
-   typedef
-   fixed<(CHARACTERISTIC << 1), (MANTISSA << 1), sat>
-   larger_type;
-
-   typedef
-   fixed<(CHARACTERISTIC >> 1), (MANTISSA >> 1), sat>
-   smaller_type;
-  };
-  
- public:
-
-  typedef typename adjacent_types<SATURATE>::larger_type larger_type;
-  typedef typename adjacent_types<SATURATE>::smaller_type smaller_type;
-  
 ////////////////////////////////////////////////////////////////////////////////
 
   operator
