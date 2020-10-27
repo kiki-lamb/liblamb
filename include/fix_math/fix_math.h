@@ -167,7 +167,10 @@ namespace lamb {
    typedef fixed<characteristic, mantissa, saturate>
     other_type;
 
-   static_assert(! (SIGNED && (! other_type::SIGNED)), "sign mismatch");
+   static_assert(
+    ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
+    "Signedness mismatch!"
+   );
 
    typedef
     typename integer_type<SIGNED, (size_fit_bytes(SIZE+other_type::SIZE))>::type::type
