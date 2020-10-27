@@ -13,13 +13,29 @@ namespace lamb {
  constexpr uint8_t at_least_bits  = bits >= 64 ? 64 : (bits + 7) >> 3;
 
  template <uint8_t bytes>
- constexpr uint8_t at_least_bytes  = bytes >= 8 ? 8 : (bytes + 1) >> 2 << 2;
+ constexpr uint8_t at_least_bytes  = bytes >= 8 ? 8 : (bytes + 7) >> 1;
 
  template <uint8_t bits>
  constexpr uint8_t bytes_at_least_bits = at_least_bytes<at_least_bits<bits>>;
 
 ////////////////////////////////////////////////////////////////////////////////
+
+  template <uint8_t bits>
+  constexpr uint8_t bytes_fit_bits() {
+   uint8_t siz = bits / 8;
+   uint8_t rem = bits % 8;
+
+   if (rem != 0) 
+    siz ++;
+    
+   while ((siz < 8) && ((siz & (siz - 1)) != 0))
+    siz++;
+   
+   return siz;
+  }
  
+////////////////////////////////////////////////////////////////////////////////
+
  template <typename t>
  constexpr t const_max(t const & left, t const & right) {
   if (left > right) {

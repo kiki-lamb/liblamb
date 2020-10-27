@@ -46,24 +46,7 @@ namespace lamb {
   public:
    typedef right_type type;
  };
- 
-////////////////////////////////////////////////////////////////////////////////
-
-  template <uint8_t bits>
-  constexpr uint8_t best_fit() {
-   uint8_t div = bits / 8;
-   uint8_t rem = bits % 8;
-   uint8_t siz = div;
-
-   if (bits == 0) 
-    siz ++;
     
-   while ((siz & (siz - 1)) != 0)
-    siz++;
-   
-   return siz;
-  }
-   
 //////////////////////////////////////////////////////////////////////////////// 
 
  public:
@@ -72,8 +55,7 @@ namespace lamb {
   static constexpr uint8_t CHARACTERISTIC = characteristic_;
   static constexpr uint8_t MANTISSA       = mantissa_;
   static constexpr bool    SIGNED         = ((CHARACTERISTIC + MANTISSA ) % 2) == 1;
-  static constexpr uint8_t SIZE           =
-   at_least_bits<(CHARACTERISTIC + MANTISSA)>;
+  static constexpr uint8_t SIZE           = bytes_fit_bits<CHARACTERISTIC+MANTISSA>();
 
 ////////////////////////////////////////////////////////////////////////////////
 
