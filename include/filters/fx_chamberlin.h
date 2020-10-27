@@ -16,8 +16,8 @@ namespace lamb {
   typedef q15n16s sqint;
   typedef q0n32s uqint;
    
-  sqint  Q1, Q, FF1, D1, D2, L, H, B, N;
-  uqint FF;
+  sqint  Q1, Q0, FF1, D0, D1, L, H, B, N;
+  uqint FF0;
   uint32_t  FS;
    
   static constexpr sqint PI2 = sqint::from_double(2*M_PI);
@@ -26,8 +26,8 @@ namespace lamb {
 
   constexpr
   fx_chamberlin() :
-    Q1(0), Q(1, 0), FF1(0), D1(0), D2(0), L(0), H(0), B(0), N(0),
-    FF(1000), FS(44100) {
+    Q1(0), Q0(1, 0), FF1(0), D0(0), D1(0), L(0), H(0), B(0), N(0),
+    FF0(1000), FS(44100) {
     
     set_frequency();
     set_q();
@@ -37,14 +37,14 @@ namespace lamb {
 
   constexpr
   void set_frequency() {
-   FF1 = PI2 * (FF / uqint(FS));    
+   FF1 = PI2 * (FF0 / uqint(FS));    
   }
 
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
   void set_q() {
-    Q1 = sqint(1,0) / Q;
+    Q1 = sqint(1,0) / Q0;
    }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -52,12 +52,12 @@ namespace lamb {
   constexpr
   q0n15s process(q0n15s I_) {
 
-//  L = D2 + F1 * D1
-//  H = I - L - Q1*D1
-//  B = F1 * H + D1
+//  L = D1 + F1 * D0
+//  H = I - L - Q1*D0
+//  B = F1 * H + D0
 //  N = H + L
-//  D1 = B
-//  D2 = L
+//  D0 = B
+//  D1 = L
 
     q15n16s I(I_.val << 1)            ;
     
@@ -65,12 +65,12 @@ namespace lamb {
     printf("% 6.9lf, ", double(FF1))  ;        
     printf("% 6.9lf, ", double(Q1))   ;
     
-    L  = D2 + FF1 * D1                ;    printf("% 9.9lf, ",  double(L)) ;
-    H  = I - L - (Q1*D1)              ;    printf("% 14.9lf, ", double(H)) ;
-    B  = (FF1 * H)  + D1              ;    printf("% 9.9lf, ",  double(B)) ;
+    L  = D1 + FF1 * D0                ;    printf("% 9.9lf, ",  double(L)) ;
+    H  = I - L - (Q1*D0)              ;    printf("% 14.9lf, ", double(H)) ;
+    B  = (FF1 * H)  + D0              ;    printf("% 9.9lf, ",  double(B)) ;
     N  = H  + L                       ;    printf("% 9.9lf, ",  double(N)) ;
-    D1 = B                            ;    printf("% 9.9lf, ",  double(D1));
-    D2 = L                            ;    printf("% 9.9lf  ",  double(D2));
+    D0 = B                            ;    printf("% 9.9lf, ",  double(D0));
+    D1 = L                            ;    printf("% 9.9lf  ",  double(D1));
         
     return q0n15s::from_double(0.0);
    }
