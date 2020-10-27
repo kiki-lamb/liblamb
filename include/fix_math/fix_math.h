@@ -30,6 +30,8 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+ private:
+  
   template <bool signedness, uint8_t size>
   class integer_type {};
   

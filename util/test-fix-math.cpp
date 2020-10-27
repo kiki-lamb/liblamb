@@ -237,7 +237,7 @@ void test_fix_math_type(size_t & out_successes, size_t & out_errors) {
  );
 
  
- if (fix_t::CHARACTERISTIC > 0) {
+ if (fix_t::CHARACTERISTIC > 1) {
   printf("Test converted 2.0...\n");
   TEST_CONVERSIONS(
    2.0,
@@ -289,23 +289,23 @@ int main() {
  size_t successes = 0;
  size_t errors = 0;
  
- test_fix_math_type<q0n8,   2, 0>(successes, errors);
- test_fix_math_type<q0n7,   2, 0>(successes, errors);
+ test_fix_math_type<u0q8,   2, 0>(successes, errors);
+ test_fix_math_type<s0q7,   2, 0>(successes, errors);
  
- test_fix_math_type<q0n16,  3, 0>(successes, errors);
- test_fix_math_type<q0n15,  3, 0>(successes, errors);
+ test_fix_math_type<u0q16,  3, 0>(successes, errors);
+ test_fix_math_type<s0q15,  3, 0>(successes, errors);
  
- test_fix_math_type<q8n8,   3, 2>(successes, errors);
- test_fix_math_type<q7n8,   3, 2>(successes, errors);
+ test_fix_math_type<u8q8,   3, 2>(successes, errors);
+ test_fix_math_type<s7q8,   3, 2>(successes, errors);
  
- test_fix_math_type<q0n32,  3, 0>(successes, errors);
- test_fix_math_type<q0n31,  3, 0>(successes, errors);
+ test_fix_math_type<u0q32,  3, 0>(successes, errors);
+ test_fix_math_type<s0q31,  3, 0>(successes, errors);
  
- test_fix_math_type<q16n16, 3, 4 >(successes, errors);
- test_fix_math_type<q15n16, 3, 4 >(successes, errors);
+ test_fix_math_type<u16q16, 3, 4 >(successes, errors);
+ test_fix_math_type<s15q16, 3, 4 >(successes, errors);
 
- test_fix_math_type<q2n14,  6, 3 >(successes, errors);
- test_fix_math_type<q2n30,  6, 5>(successes, errors); 
+ test_fix_math_type<u2q14,  3, 3 >(successes, errors);
+ test_fix_math_type<u2q30,  6, 5>(successes, errors); 
 
  for (uint8_t ix = 0; ix < 80; ix++) printf("/");
 
