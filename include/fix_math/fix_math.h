@@ -73,7 +73,12 @@ namespace lamb {
   larger_type;
   
   typedef
-  fixed<(CHARACTERISTIC >> 1), (MANTISSA >> 1), SATURATE>
+  typename
+  type_if<
+   (SIZE > 1),
+   fixed<(CHARACTERISTIC >> 1), (MANTISSA >> 1), SATURATE>,
+   self_type
+   >::type
   smaller_type;
   
   typedef
@@ -106,29 +111,28 @@ namespace lamb {
    sat_cast_type;
   
 ////////////////////////////////////////////////////////////////////////////////
-
   
   static constexpr type    MAX = integer_traits::MAX;    
   static constexpr type    MIN = integer_traits::MIN;
   static constexpr type    ONE = CHARACTERISTIC == 0 ? MAX : (((big_type)1) << MANTISSA) - 1;
 ////////////////////////////////////////////////////////////////////////////////
 
-  operator
-  larger_type () const {
+  constexpr
+  operator larger_type () const {
    return larger_type(
     val << 1
    );
   }
 
-  operator
-  smaller_type () const {
+  constexpr
+  operator smaller_type () const {
    return smaller_type(
     val >> 1
    );
   }
 
-  operator
-  sat_cast_type () const {
+  constexpr
+  operator sat_cast_type () const {
    return sat_cast_type(val);
   }
   
@@ -154,12 +158,14 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+  constexpr
   type mantissa() const { // return smaller type?
    return val & mask();
   }
   
 ////////////////////////////////////////////////////////////////////////////////
 
+  constexpr
   type characteristic() const {    // return smaller type?
    return CHARACTERISTIC == 0 ? 0 : (val & (~mask())) >> MANTISSA;
   }     
@@ -179,13 +185,16 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+  constexpr
   operator double() const {
    return val / (ONE * 1.0);
   }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-  static constexpr self_type from_double(double const & tmp) {
+  static constexpr
+  self_type
+  from_double(double const & tmp) {
    int           divisor = tmp;
    double        modulus = tmp - divisor;
    type          ipart   = ONE * divisor + int(ONE * modulus);
@@ -195,6 +204,7 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+  constexpr
   bool
   operator ~ () const {
    return SIGNED ? self_type(val * -1) :  self_type(~val);
@@ -203,6 +213,7 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   template <bool sat>
+  constexpr
   bool
   operator ^ (
    compatible_type<sat> const & other
@@ -213,6 +224,7 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   template <bool sat>
+  constexpr
   bool
   operator == (
    compatible_type<sat> const & other
@@ -223,6 +235,7 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   template <bool sat>
+  constexpr
   bool
   operator != (
    compatible_type<sat> const & other
@@ -233,6 +246,7 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   template <bool sat>
+  constexpr
   bool
   operator > (
    compatible_type<sat> const & other
@@ -243,6 +257,7 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   template <bool sat>
+  constexpr
   bool
   operator < (
    compatible_type<sat> const & other
@@ -253,6 +268,7 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   template <bool sat>
+  constexpr
   bool
   operator >= (
    compatible_type<sat> const & other
@@ -263,6 +279,7 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   template <bool sat>
+  constexpr
   bool
   operator <= (
    compatible_type<sat> const & other
@@ -273,6 +290,7 @@ namespace lamb {
 ///////////////////////////////////////////////////////////////////////////////
 
   template <bool sat>
+  constexpr
   self_type
   operator + (
    compatible_type<sat> const & other
@@ -288,6 +306,7 @@ namespace lamb {
   }    
 
   template <bool sat>
+  constexpr
   self_type &
   operator += (
    compatible_type<sat> const & other
@@ -300,6 +319,7 @@ namespace lamb {
   ///////////////////////////////////////////////////////////////////////////////
 
   template <bool sat>
+  constexpr
   self_type
   operator - (
    compatible_type<sat> const & other
@@ -315,6 +335,7 @@ namespace lamb {
   }    
 
   template <bool sat>
+  constexpr
   self_type &
   operator -= (
    compatible_type<sat> const & other
@@ -329,6 +350,7 @@ namespace lamb {
 ///////////////////////////////////////////////////////////////////////////////
 
   template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
+  constexpr
   self_type
   operator * (
    fixed<other_charac, other_mantissa, other_saturate> const & other
@@ -362,6 +384,7 @@ namespace lamb {
   }
 
   template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
+  constexpr
   self_type & 
   operator *= (
    fixed<other_charac,other_mantissa, saturate__> const & other
@@ -374,6 +397,7 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
   
   template <uint8_t other_charac, uint8_t other_mantissa, bool other_saturate>
+  constexpr
   self_type
   operator / (
    fixed<other_charac,other_mantissa,other_saturate> const & other
@@ -409,6 +433,7 @@ namespace lamb {
   }
 
   template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
+  constexpr
   self_type & 
   operator /= (
    fixed<other_charac,other_mantissa, saturate__> const & other
