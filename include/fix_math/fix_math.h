@@ -165,33 +165,31 @@ namespace lamb {
    typedef fixed<characteristic, mantissa, saturate>
     other_type;
 
-   static_assert(
-    ( ! ( ( SIGNED) && (! other_type::SIGNED) ) ),
-    "Signedness mismatch!"
-   );
-
-   printf(
-    "%s to %s \n",
-    (SIGNED ? "Signed" : "Unsigned"),
-    (other_type::SIGNED ? "signed" : "unsigned")
-   );
-   
    typedef
     typename integer_type<SIGNED, (size_fit_bytes(SIZE+other_type::SIZE))>::type::type
     intermediary_type;
 
-   const int8_t mantissa_delta = MANTISSA - mantissa;
-
-   intermediary_type tmp = val;
+   constexpr bool    to_signed      = (! SIGNED) && other_type::SIGNED;
+   constexpr bool    from_signed    = SIGNED     && (! other_type::SIGNED);
+   constexpr uint8_t sign_shift     = to_signed ? 1 : 0;
+   constexpr int8_t  mantissa_delta = MANTISSA - mantissa + sign_shift;
+   
+   if constexpr(from_signed) {
+    if (val < 0) {
+     return other_type(0);
+    }
+   }
+   
+   intermediary_type tmp_val = val;
    
    if constexpr(mantissa_delta >= 0) {
-    tmp >>= mantissa_delta;
+    tmp_val >>= mantissa_delta;
    }
    else {
-    tmp <<= -mantissa_delta;
+    tmp_val <<= -mantissa_delta;
    }
    
-   return other_type(tmp);
+   return other_type(tmp_val);
   }
   
 ////////////////////////////////////////////////////////////////////////////////
