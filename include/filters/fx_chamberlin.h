@@ -134,22 +134,22 @@ namespace lamb {
 
    s7q24s I(((s7q24s::type)I_.val) << 9);
     
-   printf("% 6.9lf, ", I.to_double())    ;
-   printf("% 6.9lf, ", F1.to_double())   ;        
-   printf("% 6.9lf, ", Q1.to_double())   ;
+   printf("% 6.9lf, ", double(I))    ;
+   printf("% 6.9lf, ", double(F1))   ;        
+   printf("% 6.9lf, ", double(Q1))   ;
    
-   L  = D1 + D0 * F1                 ;    printf("% 9.9lf, ",  L.to_double()) ;
-   H  = I - L - (D0 * Q1)            ;    printf("% 14.9lf, ", H.to_double()) ;
-   B  = (H * F1)  + D0               ;    printf("% 9.9lf, ",  B.to_double()) ;
-   N  = H  + L                       ;    printf("% 9.9lf, ",  N.to_double()) ;
-   D0 = B                            ;    printf("% 9.9lf, ",  D0.to_double());
-   D1 = L                            ;    printf("% 9.9lf,  ", D1.to_double());
+   L  = D1 + D0 * F1                 ;    printf("% 9.9lf, ",  double(L)) ;
+   H  = I - L - (D0 * Q1)            ;    printf("% 14.9lf, ", double(H)) ;
+   B  = (H * F1)  + D0               ;    printf("% 9.9lf, ",  double(B)) ;
+   N  = H  + L                       ;    printf("% 9.9lf, ",  double(N)) ;
+   D0 = B                            ;    printf("% 9.9lf, ",  double(D0));
+   D1 = L                            ;    printf("% 9.9lf,  ", double(D1));
 
-   printf("% 9.9lf, ",  L.to_double()) ;
+   printf("% 9.9lf, ",  double(L)) ;
 
    s0q15s r = s0q15s(L.val >> 11);
    
-   printf("% 9.9lf  ", r.to_double());
+   printf("% 9.9lf  ", double(r));
    
    return r;
   }

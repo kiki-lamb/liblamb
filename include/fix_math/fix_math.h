@@ -206,13 +206,14 @@ namespace lamb {
   operator signed long long   int() = delete;
 
   operator                  float() = delete;
-  operator                 double() = delete;
   
+  // v For some reason this cannot be const.
+  explicit
   constexpr
-  double to_double() const {
+  operator double ()  {
    return val / (ONE * 1.0);
   }
-
+  
 ///////////////////////////////////////////////////////////////////////////////
 
   static
