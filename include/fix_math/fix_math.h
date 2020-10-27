@@ -163,8 +163,11 @@ namespace lamb {
   explicit
   constexpr 
   operator fixed<characteristic, mantissa, saturate>() const {
+
    typedef fixed<characteristic, mantissa, saturate>
     other_type;
+
+   static_assert(! (SIGNED && (! other_type::SIGNED)), "sign mismatch");
 
    typedef
     typename integer_type<SIGNED, (size_fit_bytes(SIZE+other_type::SIZE))>::type::type
@@ -181,10 +184,6 @@ namespace lamb {
     tmp <<= -mantissa_delta;
    }
    
-   // printf("Delta is %d \n",   mantissa_delta);
-   // printf("Tmp is %d \n",     tmp);
-   // printf("Shifted is %d \n", tmp);
-
    return other_type(tmp);
   }
   
