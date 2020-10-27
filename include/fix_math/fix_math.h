@@ -166,7 +166,7 @@ namespace lamb {
     other_type;
 
    static_assert(
-    ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
+    ( ! ( ( SIGNED) && (! other_type::SIGNED) ) ),
     "Signedness mismatch!"
    );
 
