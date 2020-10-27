@@ -47,6 +47,23 @@ namespace lamb {
    typedef right_type type;
  };
  
+////////////////////////////////////////////////////////////////////////////////
+
+  template <uint8_t bits>
+  constexpr uint8_t best_fit() {
+   uint8_t div = bits / 8;
+   uint8_t rem = bits % 8;
+   uint8_t siz = div;
+
+   if (bits == 0) 
+    siz ++;
+    
+   while ((siz & (siz - 1)) != 0)
+    siz++;
+   
+   return siz;
+  }
+   
 //////////////////////////////////////////////////////////////////////////////// 
 
  public:
