@@ -16,9 +16,9 @@ namespace lamb {
  public:
   q15n16s Q0;
   q24n8s  F0;
+  q24n8s  F1;
 
   q15n16s Q1;
-  q24n8s  F1;
   q15n16s D0;
   q15n16s D1;
   q15n16s L;
