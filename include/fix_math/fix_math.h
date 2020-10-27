@@ -32,19 +32,19 @@ namespace lamb {
 
  private: 
 
-  template <bool use_left, typename left, typename right>
+  template <bool use_left_type, typename left_type, typename right_type>
   class type_if {};
   
-  template <typename left, typename right>
-  class type_if<true, left, right> {
+  template <typename left_type, typename right_type>
+  class type_if<true, left_type, right_type> {
   public:
-   typedef left type;
+   typedef left_type type;
   };
   
-  template <typename left, typename right>
-  class type_if<false, left, right> {
+  template <typename left_type, typename right_type>
+  class type_if<false, left_type, right_type> {
   public:
-   typedef right type;
+   typedef right_type type;
  };
  
 //////////////////////////////////////////////////////////////////////////////// 
@@ -63,6 +63,14 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
   
+  typedef
+  type_if<
+   SIGNED,
+   signed_int<SIZE>,
+   unsigned_int<SIZE>
+   > integer_traits;
+  
+
   typedef
   typename type_if<
    SIGNED,
