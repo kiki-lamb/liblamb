@@ -14,23 +14,23 @@ namespace lamb {
  public:
 
  public:
-  q24n8s  F0;
-  q8n24s  F1;
+  u24q8s  F0;
+  u8q24s  F1;
 
-  q16n16s Q0; 
-  q2n30s  Q1;
+  u16q16s Q0; 
+  u2q30s  Q1;
 
-  q7n24s L;
-  q7n24s H;
-  q7n24s B;
-  q7n24s N;
+  s7q24s  L;
+  s7q24s  H;
+  s7q24s  B;
+  s7q24s  N;
 
-  q7n24s D0;
-  q7n24s D1;
+  s7q24s  D0;
+  s7q24s  D1;
 
-  q24n8s FS;
+  u24q8s  FS;
    
-  static constexpr q8n24s PI2 = q8n24s::from_double(2*M_PI);
+  static constexpr u8q24s PI2 = u8q24s::from_double(2*M_PI);
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -57,15 +57,15 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
-  q24n8s::type f() {
+  u24q8s::type f() {
    return F0.characteristic();
   }
 
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
-  void f(q24n8s::type const & x) {
-   f(q24n8s(x & 0xffffff, 0));
+  void f(u24q8s::type const & x) {
+   f(u24q8s(x & 0xffffff, 0));
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -73,9 +73,9 @@ namespace lamb {
  private:
   
   constexpr
-  void f(q24n8s const & x) {
+  void f(u24q8s const & x) {
    F0  = x;
-   F1  = q8n24s((F0 / FS).val << 16);
+   F1  = u8q24s((F0 / FS).val << 16);
    F1 *= PI2;
   }
 
@@ -84,7 +84,7 @@ namespace lamb {
  public:
   
   constexpr
-  q16n16s q() {
+  u16q16s q() {
    return Q0;
   }
 
@@ -92,15 +92,15 @@ namespace lamb {
 
   constexpr
   void q(double const & x) {
-   q(q16n16s::from_double(x >= 0.5 ? x : 0.5));
+   q(u16q16s::from_double(x >= 0.5 ? x : 0.5));
    }
 
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
-  void q(q16n16s const & x) {
+  void q(u16q16s const & x) {
    Q0.val = x.val;
-   Q1 = q2n30s(1,0) / Q0;
+   Q1 = u2q30s(1,0) / Q0;
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -116,14 +116,14 @@ namespace lamb {
 
   constexpr
   void fs(uint32_t const & x) {
-   FS = q24n8s(x, 0);
+   FS = u24q8s(x, 0);
    f(F0);
   }
 
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
-  q0n15s process(q0n15s I_) {
+  s0q15s process(s0q15s I_) {
 
 //  L = D1 + F1 * D0
 //  H = I - L - Q1*D0
@@ -132,7 +132,7 @@ namespace lamb {
 //  D0 = B
 //  D1 = L
 
-   q7n24s I(((q7n24s::type)I_.val) << 9);
+   s7q24s I(((s7q24s::type)I_.val) << 9);
     
    printf("% 6.9lf, ", double(I))    ;
    printf("% 6.9lf, ", double(F1))   ;        
@@ -147,7 +147,7 @@ namespace lamb {
 
    printf("% 9.9lf, ",  double(L)) ;
 
-   q0n15s r = q0n15s(L.val >> 11);
+   s0q15s r = s0q15s(L.val >> 11);
    
    printf("% 9.9lf  ", double(r));
    

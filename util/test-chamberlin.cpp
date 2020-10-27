@@ -25,7 +25,6 @@ int main() {
   
   fx_cf.q(0.5);
   
-
   printf("Af,        I,            FF1,          Q1,           L,              H,            B,            N,            D1,           D2,        L,   R  \n");
 
   for (double qix = 1.0; qix < 20.0; qix += 3.0) {
@@ -45,8 +44,8 @@ int main() {
       
       printf("%lf, ", acc / 65536.0);
 
-        auto y = fx_cf.process(q0n15s(acc >= 32768 ? q0n15::MIN : q0n15::MAX));
-      
+      auto y = fx_cf.process(s0q15(acc >= 32768 ? s0q15::MIN : s0q15::MAX));
+       
       printf("\n");
      }
     }
