@@ -46,7 +46,24 @@ namespace lamb {
   public:
    typedef right_type type;
  };
-    
+
+////////////////////////////////////////////////////////////////////////////////
+
+  template <bool signedness, uint8_t size>
+  class integer_type {};
+  
+  template <uint8_t size>
+  class integer_type<true, size> {
+  public:
+   typedef signed_int<size> type;
+  };
+  
+  template <uint8_t size>
+  class integer_type<false, size> {
+  public:
+   typedef unsigned_int<size> type;
+  };  
+
 //////////////////////////////////////////////////////////////////////////////// 
 
  public:
@@ -60,22 +77,6 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////////////
-
-
-  template <bool signedness, uint8_t size>
-  class integer_type {};
-  
-  template <uint8_t size>
-  class integer_type<true, size> {
-   typedef typename signed_int<size>::type type;
-  };
-  
-  template <uint8_t size>
-  class integer_type<false, size> {
-   typedef typename unsigned_int<size>::type type;
-  };
-  
   typedef
   fixed<CHARACTERISTIC, MANTISSA, SATURATE>
   self_type;
@@ -90,11 +91,7 @@ namespace lamb {
 
   typedef
   typename
-  type_if<
-   SIGNED,
-   signed_int<SIZE>,
-   unsigned_int<SIZE>
-   >::type
+  integer_type<SIGNED, SIZE>::type
   integer_traits;
    
   typedef
@@ -182,7 +179,7 @@ namespace lamb {
     other_type;
 
    typedef
-    typename integer_type<SIGNED, (size_fit_bytes(SIZE+other_type::SIZE))>::type
+    typename integer_type<SIGNED, (size_fit_bytes(SIZE+other_type::SIZE))>::type::type
     intermediary_type;
 
    const int8_t mantissa_delta = MANTISSA - mantissa;
