@@ -24,7 +24,7 @@ namespace lamb {
  template <
   uint8_t characteristic_,
   uint8_t mantissa_,
-  bool saturate_ = false
+  bool    saturate_ = false
   >
  class fixed {
 
@@ -109,9 +109,9 @@ namespace lamb {
   static constexpr type    MIN = integer_traits::MIN;
   static constexpr type    ONE = CHARACTERISTIC == 0 ? MAX : (1 << MANTISSA) - 1;
   
-  template <bool sat>
+  template <bool saturate>
   using
-  compatible_type = fixed<CHARACTERISTIC, MANTISSA, sat>;
+  compatible_type = fixed<CHARACTERISTIC, MANTISSA, saturate>;
 
   typedef
   compatible_type<(! SATURATE)>
@@ -216,88 +216,88 @@ namespace lamb {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  template <bool sat>
+  template <bool saturate>
   constexpr
   bool
   operator ^ (
-   compatible_type<sat> const & other
+   compatible_type<saturate> const & other
   ) const {
     return self_type(val ^ other.val);
   }  
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  template <bool sat>
+  template <bool saturate>
   constexpr
   bool
   operator == (
-   compatible_type<sat> const & other
+   compatible_type<saturate> const & other
   ) const {
    return val == other.val;
   }    
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  template <bool sat>
+  template <bool saturate>
   constexpr
   bool
   operator != (
-   compatible_type<sat> const & other
+   compatible_type<saturate> const & other
   ) const {
    return val != other.val;
   }    
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  template <bool sat>
+  template <bool saturate>
   constexpr
   bool
   operator > (
-   compatible_type<sat> const & other
+   compatible_type<saturate> const & other
   ) const {
    return val > other.val;
   }    
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  template <bool sat>
+  template <bool saturate>
   constexpr
   bool
   operator < (
-   compatible_type<sat> const & other
+   compatible_type<saturate> const & other
   ) const {
    return val < other.val;
   }    
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  template <bool sat>
+  template <bool saturate>
   constexpr
   bool
   operator >= (
-   compatible_type<sat> const & other
+   compatible_type<saturate> const & other
   ) const {
    return val >= other.val;
   }    
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  template <bool sat>
+  template <bool saturate>
   constexpr
   bool
   operator <= (
-   compatible_type<sat> const & other
+   compatible_type<saturate> const & other
   ) const {
    return val <= other.val;
   }    
 
 ///////////////////////////////////////////////////////////////////////////////
 
-  template <bool sat>
+  template <bool saturate>
   constexpr
   self_type
   operator + (
-   compatible_type<sat> const & other
+   compatible_type<saturate> const & other
   ) const {
    type          old        = val;
    big_type      big_tmp    = old;
@@ -309,11 +309,11 @@ namespace lamb {
    return self_type(small_tmp);
   }    
 
-  template <bool sat>
+  template <bool saturate>
   constexpr
   self_type &
   operator += (
-   compatible_type<sat> const & other
+   compatible_type<saturate> const & other
   ) {
    val = ((*this) + other).val;
 
@@ -322,11 +322,11 @@ namespace lamb {
 
   ///////////////////////////////////////////////////////////////////////////////
 
-  template <bool sat>
+  template <bool saturate>
   constexpr
   self_type
   operator - (
-   compatible_type<sat> const & other
+   compatible_type<saturate> const & other
   ) const {
    type          old        = val;
    big_type      big_tmp    = old;
@@ -338,11 +338,11 @@ namespace lamb {
    return self_type(small_tmp);
   }    
 
-  template <bool sat>
+  template <bool saturate>
   constexpr
   self_type &
   operator -= (
-   compatible_type<sat> const & other
+   compatible_type<saturate> const & other
   ) {
    self_type tmp = (*this) - other;
   
@@ -387,11 +387,11 @@ namespace lamb {
    return self_type(small_tmp);
   }
 
-  template <uint8_t other_charac, uint8_t other_mantissa, bool saturate__>
+  template <uint8_t other_charac, uint8_t other_mantissa, bool saturate>
   constexpr
   self_type & 
   operator *= (
-   fixed<other_charac,other_mantissa, saturate__> const & other
+   fixed<other_charac,other_mantissa, saturate> const & other
   ) {
    val = ((*this) * other).val;
 
@@ -507,7 +507,6 @@ namespace lamb {
   
  }; // template fixed
  
-
 //////////////////////////////////////////////////////////////////////////////
 // Typedefs
 //////////////////////////////////////////////////////////////////////////////
