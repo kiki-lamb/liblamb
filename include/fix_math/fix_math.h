@@ -163,7 +163,8 @@ namespace lamb {
   explicit
   constexpr 
   operator fixed<characteristic, mantissa, saturate>() const {
-
+   printf("CONV...\n");
+   
    typedef fixed<characteristic, mantissa, saturate>
     other_type;
 
@@ -172,6 +173,12 @@ namespace lamb {
     "Signedness mismatch!"
    );
 
+   printf(
+    "%s to %s \n",
+    (SIGNED ? "Signed" : "Unsigned"),
+    (other_type::SIGNED ? "signed" : "unsigned")
+   );
+   
    typedef
     typename integer_type<SIGNED, (size_fit_bytes(SIZE+other_type::SIZE))>::type::type
     intermediary_type;
