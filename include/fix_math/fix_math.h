@@ -94,9 +94,6 @@ namespace lamb {
    MAX :
    (((type)1) << MANTISSA) - 1;  
 
-  static constexpr big_type TRUE_ONE =
-   (((big_type)1) << MANTISSA);
-
 //////////////////////////////////////////////////////////////////////////////
 
   type                     val;  
