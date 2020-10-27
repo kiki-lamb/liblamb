@@ -189,6 +189,7 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
+  explicit
   operator double() const {
    return val / (ONE * 1.0);
   }
@@ -515,7 +516,6 @@ namespace lamb {
   
 // Overflow-able types ////////////////////////////////////////////////////////
  
-
  // 8 bit
  
  typedef fixed<  0,  7, false > q0n7;
@@ -546,46 +546,70 @@ namespace lamb {
  typedef fixed<  1, 30, false > q1n30;
  typedef fixed<  2, 30, false > q2n30;
 
- typedef fixed<  3, 28, true  > q3n28;
- typedef fixed<  4, 28, true  > q4n28;
+ typedef fixed<  3, 28, false > q3n28;
+ typedef fixed<  4, 28, false > q4n28;
 
- typedef fixed<  5, 26, true  > q5n26;
- typedef fixed<  6, 26, true  > q6n26;
+ typedef fixed<  5, 26, false > q5n26;
+ typedef fixed<  6, 26, false > q6n26;
  
- typedef fixed<  7, 24, true  > q7n24;
- typedef fixed<  8, 24, true  > q8n24;
+ typedef fixed<  7, 24, false > q7n24;
+ typedef fixed<  8, 24, false > q8n24;
  
  typedef fixed< 15, 16, false > q15n16;
  typedef fixed< 16, 16, false > q16n16;
  
- typedef fixed< 23,  8, true  > q23n8;
- typedef fixed< 24,  8, true  > q24n8;
- 
+ typedef fixed< 23,  8, false > q23n8;
+ typedef fixed< 24,  8, false > q24n8; 
 
+ 
 // Saturating types ///////////////////////////////////////////////////////////
   
- typedef fixed<  0,  7, true  > q0n7s;
- typedef fixed<  0,  8, true  > q0n8s;
 
- typedef fixed<  0, 15, true  > q0n15s;
- typedef fixed<  0, 16, true  > q0n16s;
- typedef fixed<  1, 14, true  > q1n14s;
- typedef fixed<  2, 14, true  > q2n14s;
+ // 8 bit
+ 
+ typedef fixed<  0,  7, false > q0n7s;
+ typedef fixed<  0,  8, false > q0n8s;
+
+ // 16 bit
+ 
+ typedef fixed<  0, 15, false > q0n15s;
+ typedef fixed<  0, 16, false > q0n16s;
+
+ typedef fixed<  1, 14, false > q1n14s;
+ typedef fixed<  2, 14, false > q2n14s;
+
+ typedef fixed<  3, 12, false > q3n12s;
+ typedef fixed<  4, 12, false > q4n12s;
+
+ typedef fixed<  5, 10, false > q5n10s;
+ typedef fixed<  6, 10, false > q6n10s;
+
+ typedef fixed<  7,  8, false > q7n8s;
+ typedef fixed<  8,  8, false > q8n8s;
+
+ // 32 bit
  
  typedef fixed<  0, 31, true  > q0n31s;
- typedef fixed<  0, 32, true  > q0n32s; 
+ typedef fixed<  0, 32, true  > q0n32s;
+ 
  typedef fixed<  1, 30, true  > q1n30s;
  typedef fixed<  2, 30, true  > q2n30s;
- typedef fixed<  2, 30, true  > q2n30s;
- typedef fixed<  7,  8, true  > q7n8s;
+
+ typedef fixed<  3, 28, true  > q3n28s;
+ typedef fixed<  4, 28, true  > q4n28s;
+
+ typedef fixed<  5, 26, true  > q5n26s;
+ typedef fixed<  6, 26, true  > q6n26s;
+ 
  typedef fixed<  7, 24, true  > q7n24s;
- typedef fixed<  8,  8, true  > q8n8s;
  typedef fixed<  8, 24, true  > q8n24s;
+ 
  typedef fixed< 15, 16, true  > q15n16s;
- typedef fixed< 16, 16, true  > q16n16s; 
+ typedef fixed< 16, 16, true  > q16n16s;
+ 
  typedef fixed< 23,  8, true  > q23n8s;
  typedef fixed< 24,  8, true  > q24n8s;
- 
+
 ///////////////////////////////////////////////////////////////////////////////
 
 } // namespace lamb

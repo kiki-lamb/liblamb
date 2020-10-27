@@ -17,8 +17,8 @@ namespace lamb {
   q24n8s  F0;
   q8n24s  F1;
 
-  q16n16s Q0; // remove sign
-  q15n16s Q1; // remove sign
+  q16n16s Q0; 
+  q2n30s  Q1;
 
   q15n16s D0;
   q15n16s D1;
@@ -27,7 +27,7 @@ namespace lamb {
   q15n16s B;
   q15n16s N;
 
-  q24n8 FS;
+  q24n8s FS;
    
   static constexpr q8n24s PI2 = q8n24s::from_double(2*M_PI);
 
@@ -37,27 +37,12 @@ namespace lamb {
   
   constexpr
   fx_chamberlin() :
-    Q1(0), Q0(1, 0), F1(0), D0(0), D1(0), L(0), H(0), B(0), N(0),
+   Q1(0), Q0(1, 0), F1(0), D0(0), D1(0), L(0), H(0), B(0), N(0),
     F0(1000, 0), FS(44100, 0) {
     
     f(F0);
-    q(F1);
+    q(Q0);
    }
-
-////////////////////////////////////////////////////////////////////////////////
-
-  constexpr
-  uint32_t fs() {
-   return FS.characteristic();
-  }
-
-////////////////////////////////////////////////////////////////////////////////
-
-  constexpr
-  void fs(uint32_t const & x) {
-   FS = q24n8s(x, 0);
-   f(F0);
-  }
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -78,6 +63,13 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
+  void f(q24n8s const & x) {
+   f(x.val);
+  }
+
+////////////////////////////////////////////////////////////////////////////////
+
+  constexpr
   q16n16s q() {
    return Q0;
   }
@@ -86,15 +78,31 @@ namespace lamb {
 
   constexpr
   void q(double const & x) {
-   q(q15n16s::from_double(x));
+   q(q16n16s::from_double(x));
    }
 
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
-  void q(q15n16s const & x) {
+  void q(q16n16s const & x) {
    Q0.val = x.val;
-   Q1 = q15n16s(1,0) / Q0;
+   Q1 = q2n30s(1,0) / Q0;
+  }
+
+
+////////////////////////////////////////////////////////////////////////////////
+  
+  constexpr
+  uint32_t fs() {
+   return FS.characteristic();
+  }
+
+////////////////////////////////////////////////////////////////////////////////
+
+  constexpr
+  void fs(uint32_t const & x) {
+   FS = q24n8s(x, 0);
+   f(F0);
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -118,7 +126,7 @@ namespace lamb {
 
     
     L  = D1 + D0 * F1                ;    printf("% 9.9lf, ",  double(L)) ;
-    H  = I - L - (Q1*D0)              ;    printf("% 14.9lf, ", double(H)) ;
+    H  = I - L - (D0 * Q1)           ;    printf("% 14.9lf, ", double(H)) ;
     B  = (H * F1)  + D0              ;    printf("% 9.9lf, ",  double(B)) ;
     N  = H  + L                       ;    printf("% 9.9lf, ",  double(N)) ;
     D0 = B                            ;    printf("% 9.9lf, ",  double(D0));
