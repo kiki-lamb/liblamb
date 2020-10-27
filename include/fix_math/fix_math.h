@@ -150,13 +150,7 @@ namespace lamb {
   type mask() {
    type m = 0;
 
-   ((big_type)(1 << MANTISSA)) - 1;
-    
-   for (uint8_t ix = 0; ix < MANTISSA; ix++) {
-    m |= 1 << ix;
-   }
-   
-   return m;
+   return ((big_type)(1 << MANTISSA)) - 1;
   }
 
 ////////////////////////////////////////////////////////////////////////////////
