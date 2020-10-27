@@ -51,15 +51,11 @@ namespace lamb {
 
  public:
 
-  static const bool    SATURATE       = saturate_;
-  static const uint8_t CHARACTERISTIC = characteristic_;
-  static const uint8_t MANTISSA       = mantissa_;
-  static const bool    SIGNED         = ((CHARACTERISTIC + MANTISSA ) % 2) == 1;
-  static const size_t  SIZE           = (
-   CHARACTERISTIC +
-   MANTISSA +
-   (SIGNED ? 1 : 0)
-  ) / 8;
+  static constexpr bool    SATURATE       = saturate_;
+  static constexpr uint8_t CHARACTERISTIC = characteristic_;
+  static constexpr uint8_t MANTISSA       = mantissa_;
+  static constexpr bool    SIGNED         = ((CHARACTERISTIC + MANTISSA ) % 2) == 1;
+  static constexpr uint8_t SIZE           = at_least_bits<(CHARACTERISTIC + MANTISSA)>;
 
 ////////////////////////////////////////////////////////////////////////////////
   
