@@ -23,7 +23,7 @@ int main() {
   
   fx_cf.f(5000);
   
-  fx_cf.q(fx_chamberlin::sqint::ONE >> 1);
+  fx_cf.q(0.5);
   
 
   printf("Af,        I,    FF1,    Q1,        L,              H,         B,         N,         D1,        D2 \n");
