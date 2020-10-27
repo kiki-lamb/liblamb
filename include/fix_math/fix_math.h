@@ -88,13 +88,13 @@ namespace lamb {
 
   typedef
   typename
-  integer_traits::type
-  type;
+  big_integer_traits::type
+  big_type;    
 
   typedef
   typename
-  big_integer_traits::type
-  big_type;    
+  integer_traits::type
+  type;
 
   static constexpr type    MAX = integer_traits::MAX;    
   static constexpr type    MIN = integer_traits::MIN;
