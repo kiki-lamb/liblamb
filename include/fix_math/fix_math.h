@@ -150,11 +150,13 @@ namespace lamb {
   explicit
   constexpr
   fixed(
-   type const & characteristic__,
-   type const & mantissa__
+   type const & characteristic,
+   type const & mantissa
   ) :
-   val((characteristic__ * ONE) + mantissa__),
+   val((characteristic * ONE) + mantissa),
    overflow(false) {}
+
+////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////
 
