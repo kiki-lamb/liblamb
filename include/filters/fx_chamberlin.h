@@ -20,12 +20,13 @@ namespace lamb {
   q16n16s Q0; 
   q2n30s  Q1;
 
-  q15n16s D0;
-  q15n16s D1;
   q15n16s L;
   q15n16s H;
   q15n16s B;
   q15n16s N;
+
+  q15n16s D0;
+  q15n16s D1;
 
   q24n8s FS;
    
@@ -37,8 +38,17 @@ namespace lamb {
   
   constexpr
   fx_chamberlin() :
-   Q1(0), Q0(1, 0), F1(0), D0(0), D1(0), L(0), H(0), B(0), N(0),
-    F0(1000, 0), FS(44100, 0) {
+   F0(1000, 0),
+   F1(0), 
+   Q0(1, 0),
+   Q1(0),
+   L(0),
+   H(0),
+   B(0),
+   N(0),
+   D0(0),
+   D1(0),
+   FS(44100, 0) {
     
     f(F0);
     q(Q0);
@@ -47,28 +57,32 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
-  q24n8s f() {
-   return F0;
+  q24n8s::type f() {
+   return F0.characteristic();
   }
 
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
   void f(q24n8s::type const & x) {
-   F0  = q24n8s(x, 0);
+   f(q24n8s(x & 0xffffff, 0));
+  }
+
+////////////////////////////////////////////////////////////////////////////////
+
+ private:
+  
+  constexpr
+  void f(q24n8s const & x) {
+   F0  = x;
    F1  = q8n24s((F0 / FS).val << 16);
    F1 *= PI2;
   }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  constexpr
-  void f(q24n8s const & x) {
-   f(x.val);
-  }
-
-////////////////////////////////////////////////////////////////////////////////
-
+ public:
+  
   constexpr
   q16n16s q() {
    return Q0;
@@ -78,7 +92,7 @@ namespace lamb {
 
   constexpr
   void q(double const & x) {
-   q(q16n16s::from_double(x));
+   q(q16n16s::from_double(x >= 0.5 ? x : 0.5));
    }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -89,9 +103,10 @@ namespace lamb {
    Q1 = q2n30s(1,0) / Q0;
   }
 
-
 ////////////////////////////////////////////////////////////////////////////////
   
+ public:
+
   constexpr
   uint32_t fs() {
    return FS.characteristic();
@@ -120,14 +135,12 @@ namespace lamb {
     q15n16s I(I_.val << 1)            ;
     
     printf("% 6.9lf, ", double(I))    ;
-    printf("% 6.9lf, ", double(F1))  ;        
+    printf("% 6.9lf, ", double(F1))   ;        
     printf("% 6.9lf, ", double(Q1))   ;
-
-
     
-    L  = D1 + D0 * F1                ;    printf("% 9.9lf, ",  double(L)) ;
-    H  = I - L - (D0 * Q1)           ;    printf("% 14.9lf, ", double(H)) ;
-    B  = (H * F1)  + D0              ;    printf("% 9.9lf, ",  double(B)) ;
+    L  = D1 + D0 * F1                 ;    printf("% 9.9lf, ",  double(L)) ;
+    H  = I - L - (D0 * Q1)            ;    printf("% 14.9lf, ", double(H)) ;
+    B  = (H * F1)  + D0               ;    printf("% 9.9lf, ",  double(B)) ;
     N  = H  + L                       ;    printf("% 9.9lf, ",  double(N)) ;
     D0 = B                            ;    printf("% 9.9lf, ",  double(D0));
     D1 = L                            ;    printf("% 9.9lf  ",  double(D1));
