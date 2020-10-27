@@ -332,6 +332,22 @@ int main() {
 
   printf("\n");
  }
+ {
+  s0q7  x0(0, 128);      printf("s0q7:   % 05.05lf % 12d % 12lld % 12lld \n", double(x0), x0.val,  s0q7::TRUE_ONE,  s0q7::ONE);
+  s0q15 x1 = s0q15(x0);  printf("s0q15:  % 05.05lf % 12d % 12lld % 12lld \n", double(x1), x1.val, s0q15::TRUE_ONE, s0q15::ONE);
+  s0q31 x2 = s0q31(x1);  printf("s0q31:  % 05.05lf % 12d % 12lld % 12lld \n", double(x2), x2.val, s0q31::TRUE_ONE, s0q31::ONE);
+  s0q15 x3 = s0q15(x2);  printf("s0q15:  % 05.05lf % 12d % 12lld % 12lld \n", double(x3), x3.val, s0q15::TRUE_ONE, s0q15::ONE);
+  s0q7  x4 = s0q7(x3);   printf("s0q7:   % 05.05lf % 12d % 12lld % 12lld \n", double(x4), x4.val,  s0q7::TRUE_ONE,  s0q7::ONE);
+
+  printf("\n");
+ }
+ {
+  s7q8   x0(1, 0);         printf("s7q8:   % 05.05lf % 12d % 12lld % 12lld \n", double(x0), x0.val,   s7q8::TRUE_ONE,   s7q8::ONE);
+  s15q16 x1 = s15q16(x0);  printf("s15q16: % 05.05lf % 12d % 12lld % 12lld \n", double(x1), x1.val, s15q16::TRUE_ONE, s15q16::ONE);
+  s7q8   x2 = s7q8(x1);    printf("s7q8:   % 05.05lf % 12d % 12lld % 12lld \n", double(x2), x2.val,   s7q8::TRUE_ONE,   s7q8::ONE);
+
+  printf("\n");
+ }
  
  // u0q16 x3 = u0q16(x2);  printf("u0q16: % 05.05lf %u \n", double(x3), x3.val);
  // u0q8  x4 = u0q16(x3);  printf("u0q8:  % 05.05lf %u \n", double(x4), x4.val);
