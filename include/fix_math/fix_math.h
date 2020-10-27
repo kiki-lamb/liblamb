@@ -66,30 +66,21 @@ namespace lamb {
   typedef
   typename
   type_if<
-   (SIZE < 8),
-   fixed<(CHARACTERISTIC << 1), (MANTISSA << 1), SATURATE>,
-   self_type
-   >::type
-  larger_type;
-  
-  // typedef
-  // typename
-  // type_if<
-  //  (SIZE > 1),
-  //  fixed<(CHARACTERISTIC >> 1), (MANTISSA >> 1), SATURATE>,
-  //  self_type
-  //  >::type
-  // smaller_type;
-  
-  typedef
-  typename
-  type_if<
    SIGNED,
    signed_int<SIZE>,
    unsigned_int<SIZE>
    >::type
   integer_traits;
    
+  typedef
+  typename
+  type_if<
+   (SIZE < 8),
+   fixed<(CHARACTERISTIC << 1), (MANTISSA << 1), SATURATE>,
+   self_type
+   >::type
+  larger_type;
+  
   typedef
   typename
   larger_type::integer_traits
@@ -518,9 +509,10 @@ namespace lamb {
 // 8 bits
 ////////////////////////////////////////////////////////////////////////////////
  /*  7 */ typedef fixed<  0,  7, false > s0q7;
- /*  7 */ typedef fixed<  0,  7, false > s0q7s;
+ /*  7 */ typedef fixed<  0,  7, true  > s0q7s;
  /*  8 */ typedef fixed<  0,  8, false > u0q8;
- /*  8 */ typedef fixed<  0,  8, false > u0q8s;
+ /*  8 */ typedef fixed<  0,  8, true  > u0q8s;
+ //-----------------------------------------------------------------------------
  
 ////////////////////////////////////////////////////////////////////////////////
 // 16 bits
@@ -560,11 +552,8 @@ namespace lamb {
  /*  6 */ typedef fixed<  6, 10, false > u6q10;
  /*  6 */ typedef fixed<  6, 10, true  > u6q10s;
  //-----------------------------------------------------------------------------
- /*  7 */ typedef fixed<  7,  9, false > u7q9;
- /*  7 */ typedef fixed<  7,  9, true  > u7q9s; 
  /*  7 */ typedef fixed<  7,  8, false > s7q8;
  /*  7 */ typedef fixed<  7,  8, true  > s7q8s;
- //-----------------------------------------------------------------------------
  /*  8 */ typedef fixed<  8,  8, false > u8q8;
  /*  8 */ typedef fixed<  8,  8, true  > u8q8s;
  //-----------------------------------------------------------------------------
