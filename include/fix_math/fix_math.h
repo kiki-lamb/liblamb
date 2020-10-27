@@ -103,19 +103,61 @@ namespace lamb {
   static constexpr type    MIN = integer_traits::MIN;
   static constexpr type    ONE = CHARACTERISTIC == 0 ? MAX : (((big_type)1) << MANTISSA) - 1;
 
+///////////////////////////////////////////////////////////////////////////////
+
+ private:
+  
+  template <bool sat>
+  class adjacent_types {
+  public:
+   typedef
+   fixed<(CHARACTERISTIC << 1), (MANTISSA << 1), sat>
+   larger_type;
+
+   typedef
+   fixed<(CHARACTERISTIC >> 1), (MANTISSA >> 1), sat>
+   smaller_type;
+  };
+  
+ public:
+
+  typedef typename adjacent_types<SATURATE>::larger_type larger_type;
+  typedef typename adjacent_types<SATURATE>::smaller_type smaller_type;
+  
 ////////////////////////////////////////////////////////////////////////////////
 
-  type val;
+  operator
+  larger_type () const {
+   return larger_type(
+    val << 1
+   );
+  }
+
+  operator
+  smaller_type () const {
+   return smaller_type(
+    val >> 1
+   );
+  }
+
+  operator
+  sat_cast_type () const {
+   return sat_cast_type(val);
+  }
   
-  mutable
-  bool overflow;  
+////////////////////////////////////////////////////////////////////////////////
+
+  type         val;  
+  mutable bool overflow;  
 
 ////////////////////////////////////////////////////////////////////////////////
   
   static constexpr
   type mask() {
    type m = 0;
-   
+
+   ((big_type)(1 << MANTISSA)) - 1;
+    
    for (uint8_t ix = 0; ix < MANTISSA; ix++) {
     m |= 1 << ix;
    }
@@ -132,12 +174,7 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   type characteristic() const {    // return smaller type?
-   if (CHARACTERISTIC == 0) {
-    return 0;
-   }
-   else {
-    return (val & (~mask())) >> MANTISSA;
-   }
+   return CHARACTERISTIC == 0 ? 0 : (val & (~mask())) >> MANTISSA;
   }     
   
 ////////////////////////////////////////////////////////////////////////////////
@@ -173,12 +210,7 @@ namespace lamb {
 
   bool
   operator ~ () const {
-   if (SIGNED) {
-    return self_type(val * -1);
-   }
-   else {
-    return self_type(~val);
-   }
+   return SIGNED ? self_type(val * -1) :  self_type(~val);
   }    
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -251,48 +283,6 @@ namespace lamb {
    return val <= other.val;
   }    
 
-///////////////////////////////////////////////////////////////////////////////
-
- private:
-  
-  template <bool sat>
-  class adjacent_types {
-  public:
-   typedef
-   fixed<(CHARACTERISTIC << 1), (MANTISSA << 1), sat>
-   larger_type;
-
-   typedef
-   fixed<(CHARACTERISTIC >> 1), (MANTISSA >> 1), sat>
-   smaller_type;
-  };
-  
- public:
-
-  typedef typename adjacent_types<SATURATE>::larger_type larger_type;
-  typedef typename adjacent_types<SATURATE>::smaller_type smaller_type;
-  
-////////////////////////////////////////////////////////////////////////////////
-
-  operator
-  larger_type () const {
-   return larger_type(
-    val << 1
-   );
-  }
-
-  operator
-  smaller_type () const {
-   return smaller_type(
-    val >> 1
-   );
-  }
-
-  operator
-  sat_cast_type () const {
-   return sat_cast_type(val);
-  }
-  
 ///////////////////////////////////////////////////////////////////////////////
 
   template <bool sat>
