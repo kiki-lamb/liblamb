@@ -87,11 +87,13 @@ namespace lamb {
    SIGNED,
    signed_int<SIZE>,
    unsigned_int<SIZE>
-   >::type integer_traits;
+   >::type
+  integer_traits;
  
   typedef
   typename
-  larger_type::integer_traits big_integer_traits;
+  larger_type::integer_traits
+  big_integer_traits;
   
   typedef
   typename
@@ -104,11 +106,12 @@ namespace lamb {
   big_type;
     
   template <bool sat>
-  using compatible_type = fixed<CHARACTERISTIC, MANTISSA, sat>;
+  using
+  compatible_type = fixed<CHARACTERISTIC, MANTISSA, sat>;
 
   typedef
   compatible_type<(! SATURATE)>
-   sat_cast_type;
+  sat_cast_type;
   
 ////////////////////////////////////////////////////////////////////////////////
   
