@@ -83,12 +83,7 @@ namespace lamb {
   
   typedef
   typename
-  larger_type::integer_traits
-  big_integer_traits;
-
-  typedef
-  typename
-  big_integer_traits::type
+  larger_type::integer_traits::type
   big_type;    
 
   typedef
