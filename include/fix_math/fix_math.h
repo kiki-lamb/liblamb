@@ -397,11 +397,12 @@ namespace lamb {
     fixed<other_charac, other_mantissa, other_saturate>
     other_type;
     
-   typedef typename
+   typedef
+    typename
     type_if<
-     (sizeof(other_type) > sizeof(self_type)),
-    typename other_type::big_type,
-    big_type
+     SIGNED,
+    typename signed_int<(size_fit_bytes(SIZE+other_type::SIZE))>::type,
+    typename unsigned_int<(size_fit_bytes(SIZE+other_type::SIZE))>::type
     >::type intermediary_type;
 
    static_assert(
