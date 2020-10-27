@@ -515,24 +515,49 @@ namespace lamb {
   
 // Overflow-able types ////////////////////////////////////////////////////////
  
+
+ // 8 bit
+ 
  typedef fixed<  0,  7, false > q0n7;
  typedef fixed<  0,  8, false > q0n8;
+
+ // 16 bit
  
  typedef fixed<  0, 15, false > q0n15;
  typedef fixed<  0, 16, false > q0n16;
+
  typedef fixed<  1, 14, false > q1n14;
  typedef fixed<  2, 14, false > q2n14;
+
+ typedef fixed<  3, 12, false > q3n12;
+ typedef fixed<  4, 12, false > q4n12;
+
+ typedef fixed<  5, 10, false > q5n10;
+ typedef fixed<  6, 10, false > q6n10;
+
  typedef fixed<  7,  8, false > q7n8;
  typedef fixed<  8,  8, false > q8n8;
+
+ // 32 bit
  
  typedef fixed<  0, 31, false > q0n31;
  typedef fixed<  0, 32, false > q0n32;
+ 
  typedef fixed<  1, 30, false > q1n30;
  typedef fixed<  2, 30, false > q2n30;
+
+ typedef fixed<  3, 28, true  > q3n28;
+ typedef fixed<  4, 28, true  > q4n28;
+
+ typedef fixed<  5, 26, true  > q5n26;
+ typedef fixed<  6, 26, true  > q6n26;
+ 
  typedef fixed<  7, 24, true  > q7n24;
  typedef fixed<  8, 24, true  > q8n24;
+ 
  typedef fixed< 15, 16, false > q15n16;
  typedef fixed< 16, 16, false > q16n16;
+ 
  typedef fixed< 23,  8, true  > q23n8;
  typedef fixed< 24,  8, true  > q24n8;
  
