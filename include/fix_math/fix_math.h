@@ -72,20 +72,17 @@ namespace lamb {
    >::type
   integer_traits;
    
+  static constexpr uint8_t LARGER_SIZE = SIZE < 8 ? SIZE << 1 : SIZE;
+
   typedef
   typename
   type_if<
-   (SIZE < 8),
-   fixed<(CHARACTERISTIC << 1), (MANTISSA << 1), SATURATE>,
-   self_type
+   SIGNED,
+   typename signed_int<LARGER_SIZE>::type,
+   typename unsigned_int<LARGER_SIZE>::type
    >::type
-  larger_type;
+  big_type;
   
-  typedef
-  typename
-  larger_type::integer_traits::type
-  big_type;    
-
   typedef
   typename
   integer_traits::type
