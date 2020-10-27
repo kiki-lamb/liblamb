@@ -15,10 +15,10 @@ namespace lamb {
 
  public:
   q15n16s Q0;
-  q0n32s  F0;
+  q24n8s  F0;
 
   q15n16s Q1;
-  q15n16s F1;
+  q24n8s  F1;
   q15n16s D0;
   q15n16s D1;
   q15n16s L;
@@ -28,7 +28,7 @@ namespace lamb {
 
   q24n8 FS;
    
-  static constexpr q15n16s PI2 = q15n16s::from_double(2*M_PI);
+  static constexpr q8n24s PI2 = q8n24s::from_double(2*M_PI);
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -37,7 +37,7 @@ namespace lamb {
   constexpr
   fx_chamberlin() :
     Q1(0), Q0(1, 0), F1(0), D0(0), D1(0), L(0), H(0), B(0), N(0),
-    F0(1000), FS(44100, 0) {
+    F0(1000, 0), FS(44100, 0) {
     
     f(F0);
     q(F1);
@@ -61,16 +61,16 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
-  q0n32s f() {
+  q24n8s f() {
    return F0;
   }
 
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
-  void f(q0n32s::type const & x) {
-   F0.val = x;
-   F1 = PI2 * (F0 / q0n32s(FS));    
+  void f(q24n8s::type const & x) {
+   F0 = q24n8s(x, 0);
+   F1 = (F0 / FS) * PI2;
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -112,10 +112,12 @@ namespace lamb {
     printf("% 6.9lf, ", double(I))    ;
     printf("% 6.9lf, ", double(F1))  ;        
     printf("% 6.9lf, ", double(Q1))   ;
+
+
     
-    L  = D1 + F1 * D0                ;    printf("% 9.9lf, ",  double(L)) ;
+    L  = D1 + D0 * F1                ;    printf("% 9.9lf, ",  double(L)) ;
     H  = I - L - (Q1*D0)              ;    printf("% 14.9lf, ", double(H)) ;
-    B  = (F1 * H)  + D0              ;    printf("% 9.9lf, ",  double(B)) ;
+    B  = (H * F1)  + D0              ;    printf("% 9.9lf, ",  double(B)) ;
     N  = H  + L                       ;    printf("% 9.9lf, ",  double(N)) ;
     D0 = B                            ;    printf("% 9.9lf, ",  double(D0));
     D1 = L                            ;    printf("% 9.9lf  ",  double(D1));
