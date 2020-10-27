@@ -26,7 +26,7 @@ int main() {
   fx_cf.q(0.5);
   
 
-  printf("Af,        I,            FF1,          Q1,           L,              H,            B,            N,            D1,           D2  \n");
+  printf("Af,        I,            FF1,          Q1,           L,              H,            B,            N,            D1,           D2,        L,   R  \n");
 
   for (double qix = 1.0; qix < 20.0; qix += 3.0) {
    fx_cf.q(qix);
