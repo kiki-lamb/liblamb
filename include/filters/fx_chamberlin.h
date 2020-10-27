@@ -26,7 +26,7 @@ namespace lamb {
   q15n16s B;
   q15n16s N;
 
-  uint32_t FS;
+  q24n8 FS;
    
   static constexpr q15n16s PI2 = q15n16s::from_double(2*M_PI);
 
@@ -37,7 +37,7 @@ namespace lamb {
   constexpr
   fx_chamberlin() :
     Q1(0), Q0(1, 0), F1(0), D0(0), D1(0), L(0), H(0), B(0), N(0),
-    F0(1000), FS(44100) {
+    F0(1000), FS(44100, 0) {
     
     f(F0);
     q(F1);
@@ -47,14 +47,14 @@ namespace lamb {
 
   constexpr
   uint32_t fs() {
-   return FS;
+   return FS.characteristic();
   }
 
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
   void fs(uint32_t const & x) {
-   FS = x;
+   FS = q24n8s(x, 0);
    f(F0);
   }
 

@@ -530,6 +530,9 @@ namespace lamb {
  typedef fixed<  7, 24, true  > q7n24;
  typedef fixed<  8, 24, true  > q8n24;
 
+ typedef fixed< 23,  8, true  > q23n8;
+ typedef fixed< 24,  8, true  > q24n8;
+
  typedef fixed<  0,  7, false > q0n7;
  typedef fixed<  7,  8, false > q7n8;
  typedef fixed<  0, 15, false > q0n15;
@@ -554,7 +557,10 @@ namespace lamb {
 
  typedef fixed<  7, 24, true  > q7n24s;
  typedef fixed<  8, 24, true  > q8n24s;
- 
+
+ typedef fixed< 23,  8, true  > q23n8s;
+ typedef fixed< 24,  8, true  > q24n8s;
+
  typedef fixed<  0,  7, true  > q0n7s;
  typedef fixed<  7,  8, true  > q7n8s;
  typedef fixed<  0, 15, true  > q0n15s;
