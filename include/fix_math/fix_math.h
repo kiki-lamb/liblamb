@@ -131,9 +131,6 @@ namespace lamb {
   
 ////////////////////////////////////////////////////////////////////////////////
 
-  explicit constexpr fixed(fixed const & f) = default;
-  explicit constexpr fixed(fixed & f) = default;
-  
   explicit
   constexpr
   fixed(

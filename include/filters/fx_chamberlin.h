@@ -88,7 +88,7 @@ namespace lamb {
   
   constexpr
   u16q16s q() const {
-   return u16q16(Q0);
+   return Q0;
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -179,7 +179,7 @@ namespace lamb {
    
    printf("% 9.9lf  ", double(r));
 
-   return s0q15s(r);
+   return r;
   }
   
 ////////////////////////////////////////////////////////////////////////////////
@@ -191,3 +191,4 @@ namespace lamb {
 }
 
 #endif /* LAMB_FX_CHAMBERLIN_H_ */
+
