@@ -123,6 +123,31 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
+  s0q15s l() const {
+   return s0q15s(L >> 4);   
+  }
+
+
+  constexpr
+  s0q15s h() const {
+   return s0q15s(H >> 4);   
+  }
+
+
+  constexpr
+  s0q15s b() const {
+   return s0q15s(B >> 4);   
+  }
+
+
+  constexpr
+  s0q15s n() const {
+   return s0q15s(N >> 4);   
+  }
+
+////////////////////////////////////////////////////////////////////////////////
+
+  constexpr
   s0q15s process(s0q15s I_) {
 
 //  L = F1 * D0*D1
