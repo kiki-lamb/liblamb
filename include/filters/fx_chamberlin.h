@@ -36,7 +36,7 @@ namespace lamb {
   output_type     D0;
   output_type     D1;
   //----------------------------------------------------------------------------
-  typedef fixed<30, 2, true> fs_type;
+  typedef u30q2s  fs_type;
   fs_type         FS;
   //----------------------------------------------------------------------------
   static constexpr
