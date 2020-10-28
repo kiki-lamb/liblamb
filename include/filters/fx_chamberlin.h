@@ -13,11 +13,13 @@ namespace lamb {
 
  public:
   //----------------------------------------------------------------------------
-  typedef u32q0s  f0_type;
-  f0_type         F0;
-  //----------------------------------------------------------------------------  
-  typedef u0q32s  f1_type;
-  f1_type         F1;
+  typedef u17q15s hz_type;
+  static constexpr
+  hz_type         PI2 = hz_type::from_double(2*M_PI);
+  //----------------------------------------------------------------------------
+  hz_type         FS;
+  hz_type         F0;
+  hz_type         F1;
   //----------------------------------------------------------------------------
   typedef u16q16s q0_type;
   q0_type         Q0; 
@@ -36,12 +38,6 @@ namespace lamb {
   output_type     D0;
   output_type     D1;
   //----------------------------------------------------------------------------
-  typedef u17q15s fs_type;
-  fs_type         FS;
-  //----------------------------------------------------------------------------
-  static constexpr
-  f1_type         PI2 = f1_type::from_double(2*M_PI);
-  //----------------------------------------------------------------------------
   
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -49,6 +45,7 @@ namespace lamb {
   
   constexpr
   fx_chamberlin() :
+   FS(44100, 0),
    F0(1000, 0),
    F1(0), 
    Q0(1, 0),
@@ -58,8 +55,7 @@ namespace lamb {
    B(0),
    N(0),
    D0(0),
-   D1(0),
-   FS(44100, 0) {    
+   D1(0) {
     f(F0);
     q(Q0);
    }
@@ -67,15 +63,15 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
-  f0_type::type f() {
+  hz_type::type f() {
    return F0.characteristic();
   }
 
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
-  void f(f0_type::type const & x) {
-   f(f0_type(x & 0xffffff, 0));
+  void f(hz_type::type const & x) {
+   f(hz_type(x & 0xffffff, 0));
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -83,12 +79,12 @@ namespace lamb {
  private:
   
   constexpr
-  void f(f0_type const & x) {
+  void f(hz_type const & x) {
    F0  = x;
 
-   f1_type tmp = f1_type(F0 / FS);
+   hz_type tmp = hz_type(F0 / FS);
    
-   F1  = f1_type(tmp);
+   F1  = hz_type(tmp);
    F1 *= PI2;
   }
 
@@ -131,7 +127,7 @@ namespace lamb {
 
   constexpr
   void fs(uint32_t const & x) {
-   FS = fs_type(x, 0);
+   FS = hz_type(x, 0);
    f(F0);
   }
 
