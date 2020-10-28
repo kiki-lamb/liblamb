@@ -96,13 +96,13 @@ namespace lamb {
 
 //////////////////////////////////////////////////////////////////////////////
 
-  type                     val;  
+  type                     value;  
 
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
   operator sat_cast_type () const {
-   return sat_cast_type(val);
+   return sat_cast_type(value);
   }
   
 ////////////////////////////////////////////////////////////////////////////////
@@ -119,14 +119,14 @@ namespace lamb {
 
   constexpr
   type mantissa() const { // return smaller type?
-   return val & mask();
+   return value & mask();
   }
   
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
   type characteristic() const {    // return smaller type?
-   return CHARACTERISTIC == 0 ? 0 : (val & (~mask())) >> MANTISSA;
+   return CHARACTERISTIC == 0 ? 0 : (value & (~mask())) >> MANTISSA;
   }     
   
 ////////////////////////////////////////////////////////////////////////////////
@@ -136,7 +136,7 @@ namespace lamb {
   fixed(
    type const & tmp_
   ) :
-   val(tmp_) {}
+   value(tmp_) {}
 
   explicit
   constexpr
@@ -144,7 +144,7 @@ namespace lamb {
    type const & characteristic,
    type const & mantissa
   ) :
-   val((characteristic * ONE) + mantissa) {}
+   value((characteristic * ONE) + mantissa) {}
 
 ////////////////////////////////////////////////////////////////////////////////
   
@@ -163,33 +163,39 @@ namespace lamb {
    constexpr int8_t  mantissa_delta = MANTISSA - mantissa;
    
    if constexpr(from_signed) {
-    if (val < 0) {
+    if (value < 0) {
      return other_type(0);
     }
    }
    
-   intermediary_type tmp_val = val;
+   intermediary_type tmp_value = value;
    
    if constexpr(mantissa_delta >= 0) {
-    tmp_val >>= mantissa_delta;
+    tmp_value >>= mantissa_delta;
    }
    else {
-    tmp_val <<= -mantissa_delta;
+    tmp_value <<= -mantissa_delta;
    }
    
-   return other_type(tmp_val);
+   return other_type(tmp_value);
   }
-  
+
 ////////////////////////////////////////////////////////////////////////////////
 
-  explicit operator type() = delete;
+  constexpr explicit
+  operator type() const {
+   return value;
+  }
+  
+
+////////////////////////////////////////////////////////////////////////////////
 
   constexpr
   explicit
   operator double() const {
    constexpr double one = ONE * 1.0;
    
-   return val / one;
+   return value / one;
   }
    
 ///////////////////////////////////////////////////////////////////////////////
@@ -213,10 +219,10 @@ namespace lamb {
   bool
   operator ~ () const {
    if constexpr(SIGNED) {
-    return self_type(val * -1);
+    return self_type(value * -1);
    }
    else {
-    return self_type(~val);
+    return self_type(~value);
    }
   }    
 
@@ -228,7 +234,7 @@ namespace lamb {
   operator ^ (
    compatible_type<saturate> const & other
   ) const {
-    return self_type(val ^ other.val);
+    return self_type(value ^ other.value);
   }  
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -239,7 +245,7 @@ namespace lamb {
   operator == (
    compatible_type<saturate> const & other
   ) const {
-   return val == other.val;
+   return value == other.value;
   }    
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -250,7 +256,7 @@ namespace lamb {
   operator != (
    compatible_type<saturate> const & other
   ) const {
-   return val != other.val;
+   return value != other.value;
   }    
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -261,7 +267,7 @@ namespace lamb {
   operator > (
    compatible_type<saturate> const & other
   ) const {
-   return val > other.val;
+   return value > other.value;
   }    
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -272,7 +278,7 @@ namespace lamb {
   operator < (
    compatible_type<saturate> const & other
   ) const {
-   return val < other.val;
+   return value < other.value;
   }    
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -283,7 +289,7 @@ namespace lamb {
   operator >= (
    compatible_type<saturate> const & other
   ) const {
-   return val >= other.val;
+   return value >= other.value;
   }    
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -294,7 +300,7 @@ namespace lamb {
   operator <= (
    compatible_type<saturate> const & other
   ) const {
-   return val <= other.val;
+   return value <= other.value;
   }    
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -304,7 +310,7 @@ namespace lamb {
   operator >> (
    uint8_t const & shift
   ) const {
-   return self_type(val >> shift);  
+   return self_type(value >> shift);  
   }    
 
   constexpr
@@ -312,7 +318,7 @@ namespace lamb {
   operator >>= (
    uint8_t const & shift
   ) {
-   val = self_type(*this >> shift).val;
+   value = self_type(*this >> shift).value;
    
    return *this;
   }    
@@ -323,7 +329,7 @@ namespace lamb {
   operator << (
    uint8_t const & shift
   ) const {
-   return self_type(val << shift);  
+   return self_type(value << shift);  
   }    
 
   constexpr
@@ -331,7 +337,7 @@ namespace lamb {
   operator <<= (
    uint8_t const & shift
   ) {
-   val = self_type(*this << shift).val;
+   value = self_type(*this << shift).value;
    
    return *this;
   }    
@@ -344,9 +350,9 @@ namespace lamb {
   operator + (
    compatible_type<saturate> const & other
   ) const {
-   type          old        = val;
+   type          old        = value;
    big_type      big_tmp    = old;
-   big_tmp                 += other.val;
+   big_tmp                 += other.value;
    type          small_tmp  = big_tmp;
    
    return self_type(small_tmp);
@@ -360,7 +366,7 @@ namespace lamb {
   operator += (
    compatible_type<saturate> const & other
   ) {
-   val = (*this + other).val;
+   value = (*this + other).value;
 
    return *this;
   }
@@ -373,9 +379,9 @@ namespace lamb {
   operator - (
    compatible_type<saturate> const & other
   ) const {
-   type          old        = val;
+   type          old        = value;
    big_type      big_tmp    = old;
-   big_tmp                 -= other.val;
+   big_tmp                 -= other.value;
    type          small_tmp  = big_tmp;
    
    return self_type(small_tmp);
@@ -387,7 +393,7 @@ namespace lamb {
   operator -= (
    compatible_type<saturate> const & other
   ) {
-   val = (*this - other).val;
+   value = (*this - other).value;
 
    return *this;
   }
@@ -415,9 +421,9 @@ namespace lamb {
     "Signedness mismatch!"
    );
 
-   type              old(val);      
-   intermediary_type big_tmp     = val;
-   big_tmp                      *= other.val;
+   type              old(value);      
+   intermediary_type big_tmp     = value;
+   big_tmp                      *= other.value;
    big_tmp                     >>= other_mantissa;     
    type              small_tmp   = big_tmp;
 
@@ -430,8 +436,8 @@ namespace lamb {
     );
     printf(
      "MUL % 13lu * % 13lu = % 13lu \n",
-     val,
-     other.val,
+     value,
+     other.value,
      small_tmp
     );   
    }
@@ -445,7 +451,7 @@ namespace lamb {
   operator *= (
    fixed<other_charac,other_mantissa, saturate> const & other
   ) {
-   val = (*this * other).val;
+   value = (*this * other).value;
 
    return *this;
   }
@@ -473,9 +479,9 @@ namespace lamb {
     "Signedness mismatch!"
    );
 
-   intermediary_type big_tmp     = val;
+   intermediary_type big_tmp     = value;
    big_tmp                     <<= other_mantissa;
-   big_tmp                      /= other.val;
+   big_tmp                      /= other.value;
    type              small_tmp   = big_tmp;
 
    if (false) {
@@ -498,8 +504,8 @@ namespace lamb {
     printf(" big %13llu  after shift %2u \n", (big_tmp << other_mantissa), other_mantissa);
     printf(
      " div % 13ld / % 13ld = % 13ld \n",
-     val,
-     other.val,
+     value,
+     other.value,
      small_tmp
     );
    }
@@ -513,7 +519,7 @@ namespace lamb {
   operator /= (
    fixed<other_charac,other_mantissa, saturate__> const & other
   ) {   
-   val = (*this / other).val;
+   value = (*this / other).value;
 
    return *this;
   }

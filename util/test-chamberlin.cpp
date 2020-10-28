@@ -50,7 +50,7 @@ int main() {
      for(size_t pix = 0; pix < (65534L / fdiv); pix ++) {
       acc += fdiv;
 
-      auto y = fx_cf.process(s0q15(acc >= 32768 ? s0q15::MIN : s0q15::MAX));
+      auto y = fx_cf.process(acc >= 32768 ? s0q15::MIN : s0q15::MAX);
        
       printf("\n");
      }
