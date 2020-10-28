@@ -81,11 +81,10 @@ namespace lamb {
   constexpr
   void f(hz_type const & x) {
    F0  = x;
-
-   hz_type tmp = hz_type(F0 / FS);
-   
-   F1  = hz_type(tmp);
+   F1  = F0 / FS;
    F1 *= PI2;
+   printf("PI2:      % 05.05lf \n", double(PI2));
+   printf("POST MUL: % 05.05lf \n", double(F1));
   }
 
 ////////////////////////////////////////////////////////////////////////////////

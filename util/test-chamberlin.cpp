@@ -18,16 +18,18 @@ void pprint_bits_32(uint32_t t0) {
 
 int main() {
  {
-  u17q15s f0(1000, 0);
-  u17q15s fs(44100, 0);  
-  u17q15s x = f0 / fs;
-  
-  printf("R: % 05.05lf \n", double(x));
-
-  fflush(stdout);
-
-  return 0;
-  
+  if (false) {
+   u17q15s f0(1000, 0);
+   u17q15s fs(44100, 0);  
+   u17q15s x = f0 / fs;
+   
+   printf("R: % 05.05lf \n", double(x));
+   
+   fflush(stdout);
+   
+   return 0;
+  }
+   
   fx_chamberlin fx_cf;
   uint16_t      acc(0);
   
