@@ -485,7 +485,7 @@ namespace lamb {
    big_tmp                      /= other.val;
    type              small_tmp   = big_tmp;
 
-   if (true) {
+   if (false) {
     printf(
      "DIV % 10u.% 2u / % 10u.% 2u = % 10u.% 2u \n",
      CHARACTERISTIC,
