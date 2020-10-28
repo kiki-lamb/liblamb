@@ -161,7 +161,7 @@ namespace lamb {
 //  D1 = L
 
    s7q24s I(I_);
-    
+   
    printf("% 6.9lf, ", double(I))    ;
    printf("% 6.9lf, ", double(F1))   ;        
    printf("% 6.9lf, ", double(Q1))   ;
@@ -175,7 +175,10 @@ namespace lamb {
 
    printf("% 9.9lf, ",  double(L)) ;
 
-   s0q15s r   = s0q15s(L >> 1);
+   auto x(L);
+   x >>= 1;
+   
+   s0q15s r   = s0q15s(x);
    
    printf("% 9.9lf  ", double(r));
 

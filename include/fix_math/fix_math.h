@@ -162,7 +162,7 @@ namespace lamb {
    constexpr bool    to_signed      = other_type::SIGNED && (! SIGNED);
    constexpr bool    both_signed    = other_type::SIGNED && SIGNED;
    constexpr bool    from_signed    = SIGNED     && (! other_type::SIGNED);
-   constexpr int8_t  sign_shift     = to_signed ? 1 : both_signed? 0 : 0;
+   constexpr int8_t  sign_shift     = SIGNED? 0 : to_signed ? 0 : both_signed? 0 : 0;
    constexpr int8_t  mantissa_delta = MANTISSA - mantissa + sign_shift;
    
    if constexpr(from_signed) {
