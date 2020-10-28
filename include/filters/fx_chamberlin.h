@@ -175,17 +175,17 @@ namespace lamb {
 
   constexpr
   output_type process(input_type I_) {
-   output_type I(I_)                 ;  
+   output_type I(I_)                ;  
 
-   printf("% 6.9lf, ", double(F1))   ;        
-   printf("% 6.9lf, ", double(Q1))   ;
+   printf("% 6.9lf, ", double(F1))  ;        
+   printf("% 6.9lf, ", double(Q1))  ;
    
-   L  = D1      + D0 * F1            ;    printf("% 9.9lf, ",  double(L)) ;
-   H  = I  - L  - D0 * Q1            ;    printf("% 14.9lf, ", double(H)) ;
-   B  = D0      + H  * F1            ;    printf("% 9.9lf, ",  double(B)) ;
-   N  = H       + L                  ;    printf("% 9.9lf, ",  double(N)) ;
-   D0 = B                            ;    printf("% 9.9lf, ",  double(D0));
-   D1 = L                            ;    printf("% 9.9lf,  ", double(D1));
+   L  = D1     + D0 * F1            ;    printf("% 9.9lf, ",  double(L)) ;
+   H  = I  - L - D0 * Q1            ;    printf("% 14.9lf, ", double(H)) ;
+   B  = D0     + H  * F1            ;    printf("% 9.9lf, ",  double(B)) ;
+   N  = H      + L                  ;    printf("% 9.9lf, ",  double(N)) ;
+   D0 = B                           ;    printf("% 9.9lf, ",  double(D0));
+   D1 = L                           ;    printf("% 9.9lf,  ", double(D1));
 
    return L;
   }
