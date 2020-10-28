@@ -12,34 +12,35 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
  public:
-  
   //----------------------------------------------------------------------------
-  typedef s2q29s
-  output_type;
+  typedef u24q8s  f0_type;
+  f0_type         F0;
+  //----------------------------------------------------------------------------  
+  typedef u8q24s  f1_type;
+  f1_type         F1;
   //----------------------------------------------------------------------------
-  typedef fixed<30, 2, true>
-  fs_type;
+  typedef u16q16s q0_type;
+  q0_type         Q0; 
   //----------------------------------------------------------------------------
-  u24q8s         F0;
-  u8q24s         F1;
+  typedef u2q30s  q1_type;
+  q1_type         Q1;
   //----------------------------------------------------------------------------
-  u16q16s        Q0; 
-  u2q30s         Q1;
+  typedef s2q29s  output_type;
+  output_type     L;
+  output_type     H;
+  output_type     B;
+  output_type     N;
   //----------------------------------------------------------------------------
-  output_type    L;
-  output_type    H;
-  output_type    B;
-  output_type    N;
+  output_type     D0;
+  output_type     D1;
   //----------------------------------------------------------------------------
-  output_type    D0;
-  output_type    D1;
-  //----------------------------------------------------------------------------
-  fs_type        FS;
+  typedef fixed<30, 2, true> fs_type;
+  fs_type         FS;
   //----------------------------------------------------------------------------
   static constexpr
-  uint8_t        OUT_SHIFT = 1;
+  uint8_t         OUT_SHIFT = 1;
   static constexpr
-  u8q24s         PI2 = u8q24s::from_double(2*M_PI);
+  f1_type         PI2 = f1_type::from_double(2*M_PI);
   //----------------------------------------------------------------------------
   
 ////////////////////////////////////////////////////////////////////////////////
@@ -67,15 +68,15 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
-  u24q8s::type f() {
+  f0_type::type f() {
    return F0.characteristic();
   }
 
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
-  void f(u24q8s::type const & x) {
-   f(u24q8s(x & 0xffffff, 0));
+  void f(f0_type::type const & x) {
+   f(f0_type(x & 0xffffff, 0));
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -83,12 +84,12 @@ namespace lamb {
  private:
   
   constexpr
-  void f(u24q8s const & x) {
+  void f(f0_type const & x) {
    F0  = x;
 
-   u24q8s tmp = F0 / FS;
+   f0_type tmp = F0 / FS;
    
-   F1  = u8q24s(tmp);
+   F1  = f1_type(tmp);
    F1 *= PI2;
   }
 
@@ -97,7 +98,7 @@ namespace lamb {
  public:
   
   constexpr
-  u16q16s q() const {
+  q0_type q() const {
    return Q0;
   }
 
@@ -105,14 +106,14 @@ namespace lamb {
 
   constexpr
   void q(double const & x) {
-   q(u16q16s::from_double(x >= 0.5 ? x : 0.5));
+   q(q0_type::from_double(x >= 0.5 ? x : 0.5));
    }
 
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
-  void q(u16q16s const & x) {
-   constexpr u2q30s one(1,0);
+  void q(q0_type const & x) {
+   constexpr q1_type one(1,0);
    
    Q0.val = x.val;
    Q1 = one / Q0;
