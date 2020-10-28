@@ -207,9 +207,9 @@ namespace lamb {
   from_double(
    double const & tmp
   ) {
-   int           divisor = tmp;
-   double        modulus = tmp - divisor;
-   type          ipart   = ONE * divisor + int(ONE * modulus);
+   int               divisor = tmp;
+   double            modulus = tmp - divisor;
+   type              ipart   = ONE * divisor + int(ONE * modulus);
    
    return self_type(ipart);
   }
@@ -354,10 +354,10 @@ namespace lamb {
   operator + (
    compatible_type<saturate> const & other
   ) const {
-   type          old        = value;
-   big_type      big_tmp    = old;
-   big_tmp                 += other.value;
-   type          small_tmp  = big_tmp;
+   type              old        = value;
+   big_type          big_tmp    = old;
+   big_tmp                     += other.value;
+   type              small_tmp  = big_tmp;
    
    return self_type(small_tmp);
   }    
@@ -383,10 +383,10 @@ namespace lamb {
   operator - (
    compatible_type<saturate> const & other
   ) const {
-   type          old        = value;
-   big_type      big_tmp    = old;
-   big_tmp                 -= other.value;
-   type          small_tmp  = big_tmp;
+   type              old        = value;
+   big_type          big_tmp    = old;
+   big_tmp                     -= other.value;
+   type              small_tmp  = big_tmp;
    
    return self_type(small_tmp);
   }    
