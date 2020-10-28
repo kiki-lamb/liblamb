@@ -125,7 +125,7 @@ namespace lamb {
   constexpr
   s0q15s process(s0q15s I_) {
 
-//  L = D1 + F1 * D0
+//  L = F1 * D0*D1
 //  H = I - L - Q1*D0
 //  B = F1 * H + D0
 //  N = H + L
@@ -138,16 +138,17 @@ namespace lamb {
    printf("% 6.9lf, ", double(F1))   ;        
    printf("% 6.9lf, ", double(Q1))   ;
    
-   L  = D1 + D0 * F1                 ;    printf("% 9.9lf, ",  double(L)) ;
-   H  = I - L - (D0 * Q1)            ;    printf("% 14.9lf, ", double(H)) ;
-   B  = (H * F1)  + D0               ;    printf("% 9.9lf, ",  double(B)) ;
-   N  = H  + L                       ;    printf("% 9.9lf, ",  double(N)) ;
+   L  = D1      + D0 * F1            ;    printf("% 9.9lf, ",  double(L)) ;
+   H  = I  - L  - D0 * Q1            ;    printf("% 14.9lf, ", double(H)) ;
+   B  = D0      + H  * F1            ;    printf("% 9.9lf, ",  double(B)) ;
+   N  = H       + L                  ;    printf("% 9.9lf, ",  double(N)) ;
    D0 = B                            ;    printf("% 9.9lf, ",  double(D0));
    D1 = L                            ;    printf("% 9.9lf,  ", double(D1));
 
    printf("% 9.9lf, ",  double(L)) ;
 
-   s0q15s r = s0q15s(L.val >> 11);
+//   s0q15s r = s0q15s(L.val >> 11);
+   s0q15s r = s0q15s(L);
    
    printf("% 9.9lf  ", double(r));
    
