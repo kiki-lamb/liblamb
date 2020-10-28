@@ -75,7 +75,7 @@ namespace lamb {
   constexpr
   void f(u24q8s const & x) {
    F0  = x;
-   F1  = u8q24s((F0 / FS).val << 16);
+   F1  = u8q24s(F0 / FS);
    F1 *= PI2;
   }
 
