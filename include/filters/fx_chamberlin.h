@@ -176,7 +176,7 @@ namespace lamb {
    printf("% 9.9lf, ",  double(L)) ;
 
    auto x(L);
-   x >>= 1;
+   x >>= 2;
    
    s0q15s r   = s0q15s(x);
    
