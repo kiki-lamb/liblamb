@@ -297,6 +297,45 @@ namespace lamb {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+  constexpr
+  self_type
+  operator >> (
+   uint8_t const & shift
+  ) const {
+   return self_type(val >> shift);  
+  }    
+
+  constexpr
+  self_type
+  operator >>= (
+   uint8_t const & shift
+  ) {
+   val = self_type(*this >> shift).val;
+   
+   return *this;
+  }    
+///////////////////////////////////////////////////////////////////////////////
+
+  constexpr
+  self_type
+  operator << (
+   uint8_t const & shift
+  ) const {
+   return self_type(val << shift);  
+  }    
+
+  constexpr
+  self_type
+  operator <<= (
+   uint8_t const & shift
+  ) {
+   val = self_type(*this << shift).val;
+   
+   return *this;
+  }    
+
+///////////////////////////////////////////////////////////////////////////////
+
   template <bool saturate>
   constexpr
   self_type
@@ -311,6 +350,8 @@ namespace lamb {
    return self_type(small_tmp);
   }    
 
+////////////////////////////////////////////////////////////////////////////////
+  
   template <bool saturate>
   constexpr
   self_type &
@@ -567,13 +608,12 @@ namespace lamb {
  /*    */ typedef fixed< 16,  0, true  > u16q0s;
  /*    */ typedef fixed< 15,  0, false > s15q0;
  /*    */ typedef fixed< 15,  0, true  > s15q0s;
-  //-----------------------------------------------------------------------------
+  //----------------------------------------------------------------------------
  /*    */ typedef fixed< 32,  0, false > u32q0;
  /*    */ typedef fixed< 32,  0, true  > u32q0s;
  /*    */ typedef fixed< 31,  0, false > s32q0;
  /*    */ typedef fixed< 31,  0, true  > s32q0s;
  //-----------------------------------------------------------------------------
- 
 
  //-----------------------------------------------------------------------------
  
