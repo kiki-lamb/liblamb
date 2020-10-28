@@ -462,6 +462,20 @@ namespace lamb {
    big_tmp                      /= other.val;
    type              small_tmp   = big_tmp;
    
+   printf(
+    "Div % 13lu / % 13lu = % 13lu \n",
+    val,
+    other.val,
+    small_tmp
+   );
+
+   printf(
+    "Div % 13.05lf / % 13.05lf = % 13.05lf \n",
+    double(*this),
+    double(other),
+    double(self_type(small_tmp))
+   );
+   
    return self_type(small_tmp);
   }
 
