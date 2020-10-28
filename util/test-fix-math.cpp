@@ -277,10 +277,7 @@ int main() {
   u0q8  x2 = u0q8(x1);    printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x2), x2.val,  u0q8::ONE);
 
   printf("\n");
- }
-
- return 0;
- 
+ } 
  {
   u0q8   x0(0, 128);      printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x0), x0.val,  u0q8::ONE);
   u8q8   x1 = u8q8(x0);   printf("u8q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x1), x1.val,  u8q8::ONE);
@@ -314,5 +311,14 @@ int main() {
   s7q8   x2 = s7q8(x1);    printf("s7q8:   % 05.05lf % 12d  % 12lld \n", double(x2), x2.val,   s7q8::ONE);
 
   printf("\n");
- } 
+ }
+
+ {
+  s7q24s x(s7q24s::from_double(0.666));    printf("X: % 12ld % 12.10lf \n", x.val, double(x));
+  s0q15s y(x);                             printf("Y: % 12ld % 12.10lf \n", y.val, double(y));
+ }
+ {
+  s7q24s x(s7q24s::from_double(-0.40));    printf("X: % 12ld % 12.10lf \n", x.val, double(x));
+  s0q15s y(x);                             printf("Y: % 12d % 12.10lf \n", y.val, double(y));
+ }
 }
