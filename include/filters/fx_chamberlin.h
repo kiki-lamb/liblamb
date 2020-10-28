@@ -12,21 +12,25 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
  public:
+  typedef s2q29s output_type;
+//  typedef u32q0s fs_type;
+  typedef u24q8s fs_type;
+  
   u24q8s  F0;
   u8q24s  F1;
 
   u16q16s Q0; 
   u2q30s  Q1;
 
-  s7q24s  L;
-  s7q24s  H;
-  s7q24s  B;
-  s7q24s  N;
+  output_type  L;
+  output_type  H;
+  output_type  B;
+  output_type  N;
 
-  s7q24s  D0;
-  s7q24s  D1;
+  output_type  D0;
+  output_type  D1;
 
-  u24q8s  FS;
+  fs_type  FS;
 
   static constexpr uint8_t OUT_SHIFT = 1;
   static constexpr u8q24s  PI2 = u8q24s::from_double(2*M_PI);
@@ -118,7 +122,7 @@ namespace lamb {
 
   constexpr
   void fs(uint32_t const & x) {
-   FS = u24q8s(x, 0);
+   FS = fs_type(x, 0);
    f(F0);
   }
 
@@ -150,7 +154,7 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
-  s0q15s process(s0q15s I_) {
+  output_type process(s0q15s I_) {
 
 //  L = F1 * D0*D1
 //  H = I - L - Q1*D0
@@ -159,7 +163,7 @@ namespace lamb {
 //  D0 = B
 //  D1 = L
 
-   s7q24s I(I_);
+   output_type I(I_);
    
    printf("% 6.9lf, ", double(I))    ;
    printf("% 6.9lf, ", double(F1))   ;        
@@ -172,16 +176,16 @@ namespace lamb {
    D0 = B                            ;    printf("% 9.9lf, ",  double(D0));
    D1 = L                            ;    printf("% 9.9lf,  ", double(D1));
 
-   printf("% 9.9lf, ",  double(L)) ;
+   printf("% 9.9lf ",  double(L)) ;
 
-   auto x(L);
-   x >>= OUT_SHIFT;
+   return L;
    
-   s0q15s r   = s0q15s(x);
+//   auto x(L);
+//   x >>= OUT_SHIFT;
    
-   printf("% 9.9lf  ", double(r));
-
-   return r;
+//   s0q15s r   = s0q15s(x);
+//   
+//   printf("% 9.9lf  ", double(r));
   }
   
 ////////////////////////////////////////////////////////////////////////////////
