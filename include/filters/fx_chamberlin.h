@@ -157,7 +157,7 @@ namespace lamb {
 //  D0 = B
 //  D1 = L
 
-   s7q24s I(((s7q24s::type)I_.val) << 9);
+   s7q24s I(I_);
     
    printf("% 6.9lf, ", double(I))    ;
    printf("% 6.9lf, ", double(F1))   ;        
@@ -172,7 +172,7 @@ namespace lamb {
 
    printf("% 9.9lf, ",  double(L)) ;
 
-   s0q15s r   = s0q15s(L >> 3);
+   s0q15s r   = s0q15s(L);
    
    printf("% 9.9lf  ", double(r));
    

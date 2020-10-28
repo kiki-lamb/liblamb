@@ -32,7 +32,7 @@ int main() {
 
    const size_t fix_incr = 80;
    
-   for (size_t fix = 5000 + 20; fix > 160; fix -= fix_incr) {
+   for (size_t fix = 4000 + 20; fix > 160; fix -= fix_incr) {
     acc          = 0;    
     fx_cf.f(fix);
         
