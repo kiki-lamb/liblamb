@@ -159,9 +159,10 @@ namespace lamb {
     typename integer_type<SIGNED, (size_fit_bytes(SIZE+other_type::SIZE))>::traits::type
     intermediary_type;
 
-   constexpr bool    to_signed      = (! SIGNED) && other_type::SIGNED;
+   constexpr bool    to_signed      = other_type::SIGNED && (! SIGNED);
+   constexpr bool    both_signed    = other_type::SIGNED && SIGNED;
    constexpr bool    from_signed    = SIGNED     && (! other_type::SIGNED);
-   constexpr uint8_t sign_shift     = to_signed ? 1 : 0;
+   constexpr int8_t  sign_shift     = to_signed ? 1 : both_signed? 0 : 0;
    constexpr int8_t  mantissa_delta = MANTISSA - mantissa + sign_shift;
    
    if constexpr(from_signed) {
