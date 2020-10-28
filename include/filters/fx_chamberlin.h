@@ -139,26 +139,26 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
   
   constexpr
-  internal_type l() const {
-   return internal_type(L);
+  external_type l() const {
+   return externalize(L);
   }
 
 
   constexpr
-  internal_type h() const {
-   return internal_type(H);
+  external_type h() const {
+   return externalize(H);
   }
 
 
   constexpr
-  internal_type b() const {
-   return internal_type(B);
+  external_type b() const {
+   return externalize(B);
   }
 
 
   constexpr
-  internal_type n() const {
-   return internal_type(N);
+  external_type n() const {
+   return externalize(N);
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -188,7 +188,14 @@ namespace lamb {
 
    printf("% 9.9lf, ", double(L));
 
-   external_type ret(L>> 2);
+   return externalize(L);
+  }
+
+////////////////////////////////////////////////////////////////////////////////
+
+  static constexpr
+  external_type externalize(internal_type const & intern) {
+   external_type ret(intern >> 2);
    
    printf("% 9.9lf  ", double(ret));
 
