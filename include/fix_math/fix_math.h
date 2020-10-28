@@ -182,12 +182,14 @@ namespace lamb {
   
 ////////////////////////////////////////////////////////////////////////////////
 
-//  explicit operator type() = default;
+  explicit operator type() = delete;
 
   constexpr
   explicit
   operator double() const {
-    return val / (ONE * 1.0);
+   constexpr double one = ONE * 1.0;
+   
+   return val / one;
   }
    
 ///////////////////////////////////////////////////////////////////////////////
