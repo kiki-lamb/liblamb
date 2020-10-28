@@ -527,166 +527,175 @@ namespace lamb {
  //-----------------------------------------------------------------------------
  // 8 bits
  //-----------------------------------------------------------------------------
- /*  7 */ typedef fixed<  0,  7, false > s0q7;
- /*  7 */ typedef fixed<  0,  7, true  > s0q7s;
- /*  8 */ typedef fixed<  0,  8, false > u0q8;
- /*  8 */ typedef fixed<  0,  8, true  > u0q8s;
+ typedef fixed<  0,  7, false > s0q7;
+ typedef fixed<  0,  7, true  > s0q7s;
  //-----------------------------------------------------------------------------
+ typedef fixed<  0,  8, false > u0q8;
+ typedef fixed<  0,  8, true  > u0q8s;
+
  
  //-----------------------------------------------------------------------------
  // 16 bits
  //-----------------------------------------------------------------------------
- /*  0 */ typedef fixed<  0, 15, false > s0q15;
- /*  0 */ typedef fixed<  0, 15, true  > s0q15s;
- /*  0 */ typedef fixed<  0, 16, false > u0q16;
- /*  0 */ typedef fixed<  0, 16, true  > u0q16s;
+ typedef fixed<  0, 16, false > u0q16;
+ typedef fixed<  0, 16, true  > u0q16s;
  //-----------------------------------------------------------------------------
- /*  1 */ typedef fixed<  1, 14, false > s1q14;
- /*  1 */ typedef fixed<  1, 14, true  > s1q14s;
- /*  1 */ typedef fixed<  1, 15, false > u1q15;
- /*  1 */ typedef fixed<  1, 15, true  > u1q15s;
+ typedef fixed<  0, 15, false > s0q15;
+ typedef fixed<  0, 15, true  > s0q15s;
+ typedef fixed<  1, 15, false > u1q15;
+ typedef fixed<  1, 15, true  > u1q15s;
  //-----------------------------------------------------------------------------
- /*  2 */ typedef fixed<  2, 13, false > s2q13;
- /*  2 */ typedef fixed<  2, 13, true  > s2q13s;
- /*  2 */ typedef fixed<  2, 14, false > u2q14;
- /*  2 */ typedef fixed<  2, 14, true  > u2q14s;
+ typedef fixed<  1, 14, false > s1q14;
+ typedef fixed<  1, 14, true  > s1q14s;
+ typedef fixed<  2, 14, false > u2q14;
+ typedef fixed<  2, 14, true  > u2q14s;
  //-----------------------------------------------------------------------------
- /*  3 */ typedef fixed<  3, 12, false > s3q12;
- /*  3 */ typedef fixed<  3, 12, true  > s3q12s;
- /*  3 */ typedef fixed<  3, 13, false > u3q13;
- /*  3 */ typedef fixed<  3, 13, true  > u3q13s;
+ typedef fixed<  2, 13, false > s2q13;
+ typedef fixed<  2, 13, true  > s2q13s;
+ typedef fixed<  3, 13, false > u3q13;
+ typedef fixed<  3, 13, true  > u3q13s;
  //-----------------------------------------------------------------------------
- /*  4 */ typedef fixed<  4, 11, false > s4q11;
- /*  4 */ typedef fixed<  4, 11, true  > s4q11s;
- /*  4 */ typedef fixed<  4, 12, false > u4q12;
- /*  4 */ typedef fixed<  4, 12, true  > u4q12s;
+ typedef fixed<  3, 12, false > s3q12;
+ typedef fixed<  3, 12, true  > s3q12s;
+ typedef fixed<  4, 12, false > u4q12;
+ typedef fixed<  4, 12, true  > u4q12s;
  //-----------------------------------------------------------------------------
- /*  5 */ typedef fixed<  5, 10, false > s5q10;
- /*  5 */ typedef fixed<  5, 10, true  > s5q10s;
- /*  5 */ typedef fixed<  5, 11, false > u5q11;
- /*  5 */ typedef fixed<  5, 11, true  > u5q11s;
+ typedef fixed<  4, 11, false > s4q11;
+ typedef fixed<  4, 11, true  > s4q11s;
+ typedef fixed<  5, 11, false > u5q11;
+ typedef fixed<  5, 11, true  > u5q11s;
  //-----------------------------------------------------------------------------
- /*  6 */ typedef fixed<  6,  9, false > s6q9;
- /*  6 */ typedef fixed<  6,  9, true  > s6q9s;
- /*  6 */ typedef fixed<  6, 10, false > u6q10;
- /*  6 */ typedef fixed<  6, 10, true  > u6q10s;
+ typedef fixed<  5, 10, false > s5q10;
+ typedef fixed<  5, 10, true  > s5q10s;
+ typedef fixed<  6, 10, false > u6q10;
+ typedef fixed<  6, 10, true  > u6q10s;
  //-----------------------------------------------------------------------------
- /*  7 */ typedef fixed<  7,  8, false > s7q8;
- /*  7 */ typedef fixed<  7,  8, true  > s7q8s;
- /*  8 */ typedef fixed<  8,  8, false > u8q8;
- /*  8 */ typedef fixed<  8,  8, true  > u8q8s;
+ typedef fixed<  6,  9, false > s6q9;
+ typedef fixed<  6,  9, true  > s6q9s;
+ typedef fixed<  7,  9, false > u7q9;
+ typedef fixed<  7,  9, true  > u7q9s;
+ //-----------------------------------------------------------------------------
+ typedef fixed<  7,  8, false > s7q8;
+ typedef fixed<  7,  8, true  > s7q8s;
+ typedef fixed<  8,  8, false > u8q8;
+ typedef fixed<  8,  8, true  > u8q8s;
  //-----------------------------------------------------------------------------
 
- //-----------------------------------------------------------------------------
+ ////-----------------------------------------------------------------------------
  // 32 bits
  //-----------------------------------------------------------------------------
- /*  0 */ typedef fixed<  0, 32, false > u0q32;
- /*  0 */ typedef fixed<  0, 32, true  > u0q32s;
- //-----------------------------------------------------------------------------
- /*  0 */ typedef fixed<  0, 31, false > s0q31;
- /*  0 */ typedef fixed<  0, 31, true  > s0q31s;
- /*  1 */ typedef fixed<  1, 31, false > u1q31;
- /*  1 */ typedef fixed<  1, 31, true  > u1q31s;
- //-----------------------------------------------------------------------------
- /*  1 */ typedef fixed<  1, 30, false > s1q30;
- /*  1 */ typedef fixed<  1, 30, true  > s1q30s;
- /*  2 */ typedef fixed<  2, 30, false > u2q30;
- /*  2 */ typedef fixed<  2, 30, true  > u2q30s;
- //-----------------------------------------------------------------------------
- /*  2 */ typedef fixed<  2, 29, false > s2q29;
- /*  2 */ typedef fixed<  2, 29, true  > s2q29s;
- /*  3 */ typedef fixed<  3, 29, false > u3q29;
- /*  3 */ typedef fixed<  3, 29, true  > u3q29s;
- //-----------------------------------------------------------------------------
- /*  3 */ typedef fixed<  3, 28, false > s3q28;
- /*  3 */ typedef fixed<  3, 28, true  > s3q28s;
- /*  4 */ typedef fixed<  4, 28, false > u4q28;
- /*  4 */ typedef fixed<  4, 28, true  > u4q28s;
- //-----------------------------------------------------------------------------
- /*  4 */ typedef fixed<  4, 27, false > u4q27;
- /*  4 */ typedef fixed<  4, 27, true  > u4q27s;
- /*  5 */ typedef fixed<  5, 27, false > s5q27;
- /*  5 */ typedef fixed<  5, 27, true  > s5q27s;
- //-----------------------------------------------------------------------------
- /*  5 */ typedef fixed<  5, 26, false > s5q26;
- /*  5 */ typedef fixed<  5, 26, true  > s5q26s;
- /*  6 */ typedef fixed<  6, 26, false > u6q26;
- /*  6 */ typedef fixed<  6, 26, true  > u6q26s;
- //-----------------------------------------------------------------------------
- /*  7 */ typedef fixed<  7, 25, false > s7q25;
- /*  7 */ typedef fixed<  7, 25, true  > s7q25s;
- /*  8 */ typedef fixed<  8, 25, false > u8q25;
- /*  8 */ typedef fixed<  8, 25, true  > u8q25s;
- //-----------------------------------------------------------------------------
- /*  7 */ typedef fixed<  7, 24, false > s7q24;
- /*  7 */ typedef fixed<  7, 24, true  > s7q24s;
- /*  8 */ typedef fixed<  8, 24, false > u8q24;
- /*  8 */ typedef fixed<  8, 24, true  > u8q24s;
- //-----------------------------------------------------------------------------
- /*  7 */ typedef fixed< 11, 20, false > s11q20;
- /*  7 */ typedef fixed< 11, 20, true  > s11q20s;
- /*  8 */ typedef fixed< 12, 20, false > u12q20;
- /*  8 */ typedef fixed< 12, 20, true  > u12q20s;
- //-----------------------------------------------------------------------------
- /* 15 */ typedef fixed< 15, 16, false > s15q16;
- /* 15 */ typedef fixed< 15, 16, true  > s15q16s;
- /* 16 */ typedef fixed< 16, 16, false > u16q16;
- /* 16 */ typedef fixed< 16, 16, true  > u16q16s;
- //-----------------------------------------------------------------------------
- /* 15 */ typedef fixed< 16, 15, false > s16q15;
- /* 15 */ typedef fixed< 16, 15, true  > s16q15s;
- /* 16 */ typedef fixed< 17, 15, false > u17q15;
- /* 16 */ typedef fixed< 17, 15, true  > u17q15s;
- //-----------------------------------------------------------------------------
- /* 15 */ typedef fixed< 19, 12, false > s19q12;
- /* 15 */ typedef fixed< 19, 12, true  > s19q12s;
- /* 16 */ typedef fixed< 20, 12, false > u20q12;
- /* 16 */ typedef fixed< 20, 12, true  > u20q12s;
- //-----------------------------------------------------------------------------
- /* 15 */ typedef fixed< 21, 10, false > s32q10;
- /* 15 */ typedef fixed< 21, 10, true  > s32q10s;
- /* 16 */ typedef fixed< 22, 10, false > u22q10;
- /* 16 */ typedef fixed< 22, 10, true  > u22q10s;
- //-----------------------------------------------------------------------------
- /* 23 */ typedef fixed< 23,  8, false > s23q8;
- /* 23 */ typedef fixed< 23,  8, true  > s23q8s;
- /* 24 */ typedef fixed< 24,  8, false > u24q8;
- /* 24 */ typedef fixed< 24,  8, true  > u24q8s;
- //-----------------------------------------------------------------------------
- /* 23 */ typedef fixed< 23,  8, false > s23q8;
- /* 23 */ typedef fixed< 23,  8, true  > s23q8s;
- /* 24 */ typedef fixed< 24,  8, false > u24q8;
- /* 24 */ typedef fixed< 24,  8, true  > u24q8s;
- //-----------------------------------------------------------------------------
- /* 23 */ typedef fixed< 27,  4, false > s27q4;
- /* 23 */ typedef fixed< 27,  4, true  > s27q4s;
- /* 24 */ typedef fixed< 28,  4, false > u28q4;
- /* 24 */ typedef fixed< 28,  4, true  > u28q4s;
- //-----------------------------------------------------------------------------
- /* 23 */ typedef fixed< 29,  2, false > s29q2;
- /* 23 */ typedef fixed< 29,  2, true  > s29q2s;
- /* 24 */ typedef fixed< 30,  2, false > u30q2;
- /* 24 */ typedef fixed< 30,  2, true  > u30q2s;
- //-----------------------------------------------------------------------------
-
-////////////////////////////////////////////////////////////////////////////////
-// integrals for convenients in math operations.
-//////////////////////////////////////////////////////////////////////////////// 
- /*    */ typedef fixed<  8,  0, false > u8q0;
- /*    */ typedef fixed<  8,  0, true  > u8q0s;
- /*    */ typedef fixed<  7,  0, false > s7q0;
- /*    */ typedef fixed<  7,  0, true  > s7q0s;
- //-----------------------------------------------------------------------------
- /*    */ typedef fixed< 16,  0, false > u16q0;
- /*    */ typedef fixed< 16,  0, true  > u16q0s;
- /*    */ typedef fixed< 15,  0, false > s15q0;
- /*    */ typedef fixed< 15,  0, true  > s15q0s;
+ typedef fixed<  0, 32, false > u0q32;
+ typedef fixed<  0, 32, true  > u0q32s;
  //----------------------------------------------------------------------------
- /*    */ typedef fixed< 32,  0, false > u32q0;
- /*    */ typedef fixed< 32,  0, true  > u32q0s;
- /*    */ typedef fixed< 31,  0, false > s32q0;
- /*    */ typedef fixed< 31,  0, true  > s32q0s;
- //-----------------------------------------------------------------------------
+ typedef fixed<  0, 31, false > s0q31;
+ typedef fixed<  0, 31, true  > s0q31s;
+ typedef fixed<  1, 31, false > u1q31;
+ typedef fixed<  1, 31, true  > u1q31s;
+ //----------------------------------------------------------------------------
+ typedef fixed<  1, 30, false > s1q30;
+ typedef fixed<  1, 30, true  > s1q30s;
+ typedef fixed<  2, 30, false > u2q30;
+ typedef fixed<  2, 30, true  > u2q30s;
+ //----------------------------------------------------------------------------
+ typedef fixed<  2, 29, false > s2q29;
+ typedef fixed<  2, 29, true  > s2q29s;
+ typedef fixed<  3, 29, false > u3q29;
+ typedef fixed<  3, 29, true  > u3q29s;
+ //----------------------------------------------------------------------------
+ typedef fixed<  3, 28, false > s3q28;
+ typedef fixed<  3, 28, true  > s3q28s;
+ typedef fixed<  4, 28, false > u4q28;
+ typedef fixed<  4, 28, true  > u4q28s;
+ //----------------------------------------------------------------------------
+ typedef fixed<  4, 27, false > u4q27;
+ typedef fixed<  4, 27, true  > u4q27s;
+ typedef fixed<  5, 27, false > s5q27;
+ typedef fixed<  5, 27, true  > s5q27s;
+ //----------------------------------------------------------------------------
+ typedef fixed<  5, 26, false > s5q26;
+ typedef fixed<  5, 26, true  > s5q26s;
+ typedef fixed<  6, 26, false > u6q26;
+ typedef fixed<  6, 26, true  > u6q26s;
+ //----------------------------------------------------------------------------
+ typedef fixed<  7, 25, false > s7q25;
+ typedef fixed<  7, 25, true  > s7q25s;
+ typedef fixed<  8, 25, false > u8q25;
+ typedef fixed<  8, 25, true  > u8q25s;
+ //----------------------------------------------------------------------------
+ typedef fixed<  7, 24, false > s7q24;
+ typedef fixed<  7, 24, true  > s7q24s;
+ typedef fixed<  8, 24, false > u8q24;
+ typedef fixed<  8, 24, true  > u8q24s;
+ //----------------------------------------------------------------------------
+ typedef fixed< 11, 20, false > s11q20;
+ typedef fixed< 11, 20, true  > s11q20s;
+ typedef fixed< 12, 20, false > u12q20;
+ typedef fixed< 12, 20, true  > u12q20s;
+ //----------------------------------------------------------------------------
+ typedef fixed< 15, 16, false > s15q16;
+ typedef fixed< 15, 16, true  > s15q16s;
+ typedef fixed< 16, 16, false > u16q16;
+ typedef fixed< 16, 16, true  > u16q16s;
+ //----------------------------------------------------------------------------
+ typedef fixed< 16, 15, false > s16q15;
+ typedef fixed< 16, 15, true  > s16q15s;
+ typedef fixed< 17, 15, false > u17q15;
+ typedef fixed< 17, 15, true  > u17q15s;
+ //----------------------------------------------------------------------------
+ typedef fixed< 19, 12, false > s19q12;
+ typedef fixed< 19, 12, true  > s19q12s;
+ typedef fixed< 20, 12, false > u20q12;
+ typedef fixed< 20, 12, true  > u20q12s;
+ //----------------------------------------------------------------------------
+ typedef fixed< 21, 10, false > s32q10;
+ typedef fixed< 21, 10, true  > s32q10s;
+ typedef fixed< 22, 10, false > u22q10;
+ typedef fixed< 22, 10, true  > u22q10s;
+ //----------------------------------------------------------------------------
+ typedef fixed< 23,  8, false > s23q8;
+ typedef fixed< 23,  8, true  > s23q8s;
+ typedef fixed< 24,  8, false > u24q8;
+ typedef fixed< 24,  8, true  > u24q8s;
+ //----------------------------------------------------------------------------
+ typedef fixed< 23,  8, false > s23q8;
+ typedef fixed< 23,  8, true  > s23q8s;
+ typedef fixed< 24,  8, false > u24q8;
+ typedef fixed< 24,  8, true  > u24q8s;
+ //----------------------------------------------------------------------------
+ typedef fixed< 27,  4, false > s27q4;
+ typedef fixed< 27,  4, true  > s27q4s;
+ typedef fixed< 28,  4, false > u28q4;
+ typedef fixed< 28,  4, true  > u28q4s;
+ //----------------------------------------------------------------------------
+ typedef fixed< 29,  2, false > s29q2;
+ typedef fixed< 29,  2, true  > s29q2s;
+ typedef fixed< 30,  2, false > u30q2;
+ typedef fixed< 30,  2, true  > u30q2s;
+ //----------------------------------------------------------------------------
+ typedef fixed< 30,  1, false > s30q1;
+ typedef fixed< 30,  1, true  > s30q21;
+ typedef fixed< 31,  1, false > u31q1;
+ typedef fixed< 31,  1, true  > u31q21;
+ //----------------------------------------------------------------------------
+
+ //----------------------------------------------------------------------------
+ // integrals for convenience in math operations.
+ //----------------------------------------------------------------------------
+ typedef fixed<  8,  0, false > u8q0;
+ typedef fixed<  8,  0, true  > u8q0s;
+ typedef fixed<  7,  0, false > s7q0;
+ typedef fixed<  7,  0, true  > s7q0s;
+ //----------------------------------------------------------------------------
+ typedef fixed< 16,  0, false > u16q0;
+ typedef fixed< 16,  0, true  > u16q0s;
+ typedef fixed< 15,  0, false > s15q0;
+ typedef fixed< 15,  0, true  > s15q0s;
+ //----------------------------------------------------------------------------
+ typedef fixed< 32,  0, false > u32q0;
+ typedef fixed< 32,  0, true  > u32q0s;
+ typedef fixed< 31,  0, false > s32q0;
+ typedef fixed< 31,  0, true  > s32q0s;
+ //----------------------------------------------------------------------------
  
 ///////////////////////////////////////////////////////////////////////////////
 
