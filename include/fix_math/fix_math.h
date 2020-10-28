@@ -418,6 +418,19 @@ namespace lamb {
    big_tmp                      *= other.val;
    big_tmp                     >>= other_mantissa;     
    type              small_tmp   = big_tmp;
+
+   printf(
+    "MUL % 13.05lf * % 13.05lf = % 13.05lf \n",
+    double(*this),
+    double(other),
+    double(self_type(small_tmp))
+   );
+   printf(
+    "MUL % 13lu * % 13lu = % 13lu \n",
+    val,
+    other.val,
+    small_tmp
+   );   
    
    return self_type(small_tmp);
   }
@@ -463,19 +476,18 @@ namespace lamb {
    type              small_tmp   = big_tmp;
    
    printf(
-    "Div % 13lu / % 13lu = % 13lu \n",
+    "DIV % 13.05lf / % 13.05lf = % 13.05lf \n",
+    double(*this),
+    double(other),
+    double(self_type(small_tmp))
+   );
+   printf(
+    "DIV % 13lu / % 13lu = % 13lu \n",
     val,
     other.val,
     small_tmp
    );
 
-   printf(
-    "Div % 13.05lf / % 13.05lf = % 13.05lf \n",
-    double(*this),
-    double(other),
-    double(self_type(small_tmp))
-   );
-   
    return self_type(small_tmp);
   }
 

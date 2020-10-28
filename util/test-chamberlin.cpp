@@ -33,10 +33,6 @@ int main() {
   fx_chamberlin fx_cf;
   uint16_t      acc(0);
   
-  fx_cf.f(5000);
-  
-  fx_cf.q(0.5);
-  
   printf("FF1,          Q1,           L,              H,            B,            N,            D1,           D2  \n");
 
   for (double qix = 1.0; qix < 20.0; qix += 3.0) {
