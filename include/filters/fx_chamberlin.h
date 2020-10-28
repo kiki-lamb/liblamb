@@ -80,12 +80,13 @@ namespace lamb {
   
   constexpr
   void f(hz_type const & x) {
-   printf("FRQ:      % 05.05lf \n", double(x));
+   // printf("\nFRQ:% 13.05lf \n", double(x));
    F0  = x;
    F1  = F0 / FS;
-   printf("PI2:      % 05.05lf \n", double(PI2));
+   // printf("PI2:% 13.05lf \n", double(PI2));
    F1 *= PI2;
-   printf("POST MUL: % 05.05lf \n", double(F1));
+   // printf("PML:% 13.05lf \n", double(F1));
+   // printf("\n");
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -108,10 +109,14 @@ namespace lamb {
 
   constexpr
   void q(q0_type const & x) {
+   // printf("\nQ:  % 13.05lf \n", double(x));
+
    constexpr q1_type one(1,0);
    
    Q0.val = x.val;
    Q1 = one / Q0;
+
+   // printf("\n");
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -179,7 +184,7 @@ namespace lamb {
    B  = D0     + H  * F1            ;    printf("% 9.9lf, ",  double(B)) ;
    N  = H      + L                  ;    printf("% 9.9lf, ",  double(N)) ;
    D0 = B                           ;    printf("% 9.9lf, ",  double(D0));
-   D1 = L                           ;    printf("% 9.9lf,  ", double(D1));
+   D1 = L                           ;    printf("% 9.9lf  ", double(D1));
 
    return L;
   }
