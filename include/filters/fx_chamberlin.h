@@ -25,6 +25,8 @@ namespace lamb {
   typedef u2q30s  q1_type;
   q1_type         Q1;
   //----------------------------------------------------------------------------
+  typedef s0q15s  input_type;
+  //----------------------------------------------------------------------------
   typedef s2q29s  output_type;
   output_type     L;
   output_type     H;
@@ -59,8 +61,7 @@ namespace lamb {
    N(0),
    D0(0),
    D1(0),
-   FS(44100, 0) {
-    
+   FS(44100, 0) {    
     f(F0);
     q(Q0);
    }
@@ -139,32 +140,32 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
   
   constexpr
-  s0q15s l() const {
-   return s0q15s(L >> OUT_SHIFT);   
+  output_type l() const {
+   return output_type(L >> OUT_SHIFT);   
   }
 
 
   constexpr
-  s0q15s h() const {
-   return s0q15s(H >> OUT_SHIFT);   
+  output_type h() const {
+   return output_type(H >> OUT_SHIFT);   
   }
 
 
   constexpr
-  s0q15s b() const {
-   return s0q15s(B >> OUT_SHIFT);   
+  output_type b() const {
+   return output_type(B >> OUT_SHIFT);   
   }
 
 
   constexpr
-  s0q15s n() const {
-   return s0q15s(N >> OUT_SHIFT);   
+  output_type n() const {
+   return output_type(N >> OUT_SHIFT);   
   }
 
 ////////////////////////////////////////////////////////////////////////////////
 
   constexpr
-  output_type process(s0q15s I_) {
+  output_type process(input_type I_) {
 
 //  L = F1 * D0*D1
 //  H = I - L - Q1*D0
@@ -186,13 +187,6 @@ namespace lamb {
    D1 = L                            ;    printf("% 9.9lf,  ", double(D1));
 
    return L;
-   
-//   auto x(L);
-//   x >>= OUT_SHIFT;
-   
-//   s0q15s r   = s0q15s(x);
-//   
-//   printf("% 9.9lf  ", double(r));
   }
   
 ////////////////////////////////////////////////////////////////////////////////
