@@ -12,8 +12,6 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
 
  public:
-
- public:
   u24q8s  F0;
   u8q24s  F1;
 
@@ -29,8 +27,9 @@ namespace lamb {
   s7q24s  D1;
 
   u24q8s  FS;
-   
-  static constexpr u8q24s PI2 = u8q24s::from_double(2*M_PI);
+
+  static constexpr uint8_t OUT_SHIFT = 1;
+  static constexpr u8q24s  PI2 = u8q24s::from_double(2*M_PI);
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -124,28 +123,28 @@ namespace lamb {
   }
 
 ////////////////////////////////////////////////////////////////////////////////
-
+  
   constexpr
   s0q15s l() const {
-   return s0q15s(L >> 1);   
+   return s0q15s(L >> OUT_SHIFT);   
   }
 
 
   constexpr
   s0q15s h() const {
-   return s0q15s(H >> 1);   
+   return s0q15s(H >> OUT_SHIFT);   
   }
 
 
   constexpr
   s0q15s b() const {
-   return s0q15s(B >> 1);   
+   return s0q15s(B >> OUT_SHIFT);   
   }
 
 
   constexpr
   s0q15s n() const {
-   return s0q15s(N >> 1);   
+   return s0q15s(N >> OUT_SHIFT);   
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -176,7 +175,7 @@ namespace lamb {
    printf("% 9.9lf, ",  double(L)) ;
 
    auto x(L);
-   x >>= 2;
+   x >>= OUT_SHIFT;
    
    s0q15s r   = s0q15s(x);
    
