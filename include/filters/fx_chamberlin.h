@@ -75,7 +75,10 @@ namespace lamb {
   constexpr
   void f(u24q8s const & x) {
    F0  = x;
-   F1  = u8q24s(F0 / FS);
+
+   u24q8s tmp = F0 / FS;
+   
+   F1  = u8q24s(tmp);
    F1 *= PI2;
   }
 
@@ -84,8 +87,8 @@ namespace lamb {
  public:
   
   constexpr
-  u16q16s q() {
-   return Q0;
+  u16q16s q() const {
+   return u16q16(Q0);
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -124,25 +127,25 @@ namespace lamb {
 
   constexpr
   s0q15s l() const {
-   return s0q15s(L >> 4);   
+   return s0q15s(L >> 1);   
   }
 
 
   constexpr
   s0q15s h() const {
-   return s0q15s(H >> 4);   
+   return s0q15s(H >> 1);   
   }
 
 
   constexpr
   s0q15s b() const {
-   return s0q15s(B >> 4);   
+   return s0q15s(B >> 1);   
   }
 
 
   constexpr
   s0q15s n() const {
-   return s0q15s(N >> 4);   
+   return s0q15s(N >> 1);   
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -176,7 +179,7 @@ namespace lamb {
    
    printf("% 9.9lf  ", double(r));
 
-   return r;
+   return s0q15s(r);
   }
   
 ////////////////////////////////////////////////////////////////////////////////

@@ -131,6 +131,9 @@ namespace lamb {
   
 ////////////////////////////////////////////////////////////////////////////////
 
+  explicit constexpr fixed(fixed const & f) = default;
+  explicit constexpr fixed(fixed & f) = default;
+  
   explicit
   constexpr
   fixed(
@@ -185,12 +188,14 @@ namespace lamb {
   
 ////////////////////////////////////////////////////////////////////////////////
 
+//  explicit operator type() = default;
+
   constexpr
   explicit
   operator double() const {
     return val / (ONE * 1.0);
   }
-
+   
 ///////////////////////////////////////////////////////////////////////////////
 
   static
