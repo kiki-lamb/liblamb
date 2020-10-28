@@ -27,16 +27,16 @@ namespace lamb {
   typedef u2q30s  q1_type;
   q1_type         Q1;
   //----------------------------------------------------------------------------
-  typedef s0q15s  input_type;
+  typedef s0q15s  external_type;
   //----------------------------------------------------------------------------
-  typedef s2q29s  output_type;
-  output_type     L;
-  output_type     H;
-  output_type     B;
-  output_type     N;
+  typedef s2q29s  internal_type;
+  internal_type   L;
+  internal_type   H;
+  internal_type   B;
+  internal_type   N;
   //----------------------------------------------------------------------------
-  output_type     D0;
-  output_type     D1;
+  internal_type   D0;
+  internal_type   D1;
   //----------------------------------------------------------------------------
   
 ////////////////////////////////////////////////////////////////////////////////
@@ -139,26 +139,26 @@ namespace lamb {
 ////////////////////////////////////////////////////////////////////////////////
   
   constexpr
-  output_type l() const {
-   return output_type(L);
+  internal_type l() const {
+   return internal_type(L);
   }
 
 
   constexpr
-  output_type h() const {
-   return output_type(H);
+  internal_type h() const {
+   return internal_type(H);
   }
 
 
   constexpr
-  output_type b() const {
-   return output_type(B);
+  internal_type b() const {
+   return internal_type(B);
   }
 
 
   constexpr
-  output_type n() const {
-   return output_type(N);
+  internal_type n() const {
+   return internal_type(N);
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -173,20 +173,26 @@ namespace lamb {
   //----------------------------------------------------------------------------
 
   constexpr
-  output_type process(input_type I_) {
-   output_type I(I_)                ;  
+  external_type process(external_type I_) {
+   internal_type I(I_)                ;  
 
    printf("% 6.9lf, ", double(F1))  ;        
    printf("% 6.9lf, ", double(Q1))  ;
    
-   L  = D1     + D0 * F1            ;    printf("% 9.9lf, ",  double(L)) ;
-   H  = I  - L - D0 * Q1            ;    printf("% 14.9lf, ", double(H)) ;
-   B  = D0     + H  * F1            ;    printf("% 9.9lf, ",  double(B)) ;
-   N  = H      + L                  ;    printf("% 9.9lf, ",  double(N)) ;
-   D0 = B                           ;    printf("% 9.9lf, ",  double(D0));
-   D1 = L                           ;    printf("% 9.9lf  ", double(D1));
+   L  = D1     + D0 * F1            ;    printf("% 9.9lf, ", double(L)) ;
+   H  = I  - L - D0 * Q1            ;    printf("% 9.9lf, ", double(H)) ;
+   B  = D0     + H  * F1            ;    printf("% 9.9lf, ", double(B)) ;
+   N  = H      + L                  ;    printf("% 9.9lf, ", double(N)) ;
+   D0 = B                           ;    printf("% 9.9lf, ", double(D0));
+   D1 = L                           ;    printf("% 9.9lf, ", double(D1));
 
-   return L;
+   printf("% 9.9lf, ", double(L));
+
+   external_type ret(L>> 2);
+   
+   printf("% 9.9lf  ", double(ret));
+
+   return ret;
   }
   
 ////////////////////////////////////////////////////////////////////////////////
