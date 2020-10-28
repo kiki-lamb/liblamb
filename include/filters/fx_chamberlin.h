@@ -40,8 +40,6 @@ namespace lamb {
   fs_type         FS;
   //----------------------------------------------------------------------------
   static constexpr
-  uint8_t         OUT_SHIFT = 1;
-  static constexpr
   f1_type         PI2 = f1_type::from_double(2*M_PI);
   //----------------------------------------------------------------------------
   
@@ -141,25 +139,25 @@ namespace lamb {
   
   constexpr
   output_type l() const {
-   return output_type(L >> OUT_SHIFT);   
+   return output_type(L);
   }
 
 
   constexpr
   output_type h() const {
-   return output_type(H >> OUT_SHIFT);   
+   return output_type(H);
   }
 
 
   constexpr
   output_type b() const {
-   return output_type(B >> OUT_SHIFT);   
+   return output_type(B);
   }
 
 
   constexpr
   output_type n() const {
-   return output_type(N >> OUT_SHIFT);   
+   return output_type(N);
   }
 
 ////////////////////////////////////////////////////////////////////////////////
