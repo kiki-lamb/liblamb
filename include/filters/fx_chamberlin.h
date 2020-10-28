@@ -175,9 +175,8 @@ namespace lamb {
 
   constexpr
   output_type process(input_type I_) {
+   output_type I(I_)                 ;  
 
-   output_type I(I_);
-   
    printf("% 6.9lf, ", double(F1))   ;        
    printf("% 6.9lf, ", double(Q1))   ;
    
