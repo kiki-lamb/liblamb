@@ -471,21 +471,31 @@ namespace lamb {
     "Signedness mismatch!"
    );
 
-   type              old(val);       
    intermediary_type big_tmp     = val;
    big_tmp                     <<= other_mantissa;
    big_tmp                      /= other.val;
    type              small_tmp   = big_tmp;
 
-   if (false) {
+   if (true) {
     printf(
-     "DIV % 13.05lf / % 13.05lf = % 13.05lf \n",
-     double(*this),
-     double(other),
-    double(self_type(small_tmp))
+     "\nDIV  % 10u.%2u / % 10u.%2u = % 10u.%2u using a %u bit temporary\n",
+     CHARACTERISTIC,
+     MANTISSA,
+     other_charac,
+     other_mantissa,
+     CHARACTERISTIC,
+     MANTISSA,
+     (sizeof(intermediary_type) << 3)
     );
     printf(
-     "DIV % 13lu / % 13lu = % 13lu \n",
+     " div % 13.05lf / % 13.05lf = % 13.05lf \n",
+     double(*this),
+     double(other),
+     double(self_type(small_tmp))
+    );
+    printf(" big %13llu  after shift %2u \n", (big_tmp << other_mantissa), other_mantissa);
+    printf(
+     " div % 13ld / % 13ld = % 13ld \n",
      val,
      other.val,
      small_tmp
