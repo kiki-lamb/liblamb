@@ -18,10 +18,10 @@ void pprint_bits_32(uint32_t t0) {
 
 int main() {
  {
-  printf("Start.");
+  printf("Start.\n");
   
   u24q8s f0(1000, 0);
-  u30q2s fs(44100, 0);  
+  u16q16s fs(44100, 0);  
   u24q8s x = f0 / fs;
   
   printf("R: % 05.05lf \n", double(x));
