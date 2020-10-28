@@ -306,7 +306,7 @@ namespace lamb {
   }    
 
   constexpr
-  self_type
+  self_type &
   operator >>= (
    uint8_t const & shift
   ) {
@@ -325,7 +325,7 @@ namespace lamb {
   }    
 
   constexpr
-  self_type
+  self_type &
   operator <<= (
    uint8_t const & shift
   ) {
