@@ -1,3 +1,4 @@
+
 #ifndef LAMB_FIX_MATH_H
 #define LAMB_FIX_MATH_H
 
@@ -420,15 +421,6 @@ namespace lamb {
 
    if (false) {
     printf(
-     "MUL % 10u.% 2u * % 10u.% 2u = % 10u.% 2u \n",
-     CHARACTERISTIC,
-     MANTISSA,
-     other_charac,
-     other_mantissa,
-     CHARACTERISTIC,
-     MANTISSA     
-    );
-    printf(
      "MUL % 13.05lf * % 13.05lf = % 13.05lf \n",
      double(*this),
      double(other),
@@ -486,15 +478,6 @@ namespace lamb {
    type              small_tmp   = big_tmp;
 
    if (false) {
-    printf(
-     "DIV % 10u.% 2u / % 10u.% 2u = % 10u.% 2u \n",
-     CHARACTERISTIC,
-     MANTISSA,
-     other_charac,
-     other_mantissa,
-     CHARACTERISTIC,
-     MANTISSA     
-    );
     printf(
      "DIV % 13.05lf / % 13.05lf = % 13.05lf \n",
      double(*this),
