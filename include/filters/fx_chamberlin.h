@@ -13,10 +13,10 @@ namespace lamb {
 
  public:
   //----------------------------------------------------------------------------
-  typedef u24q8s  f0_type;
+  typedef u32q0s  f0_type;
   f0_type         F0;
   //----------------------------------------------------------------------------  
-  typedef u8q24s  f1_type;
+  typedef u0q32s  f1_type;
   f1_type         F1;
   //----------------------------------------------------------------------------
   typedef u16q16s q0_type;
@@ -36,7 +36,7 @@ namespace lamb {
   output_type     D0;
   output_type     D1;
   //----------------------------------------------------------------------------
-  typedef u30q2s  fs_type;
+  typedef u17q15s fs_type;
   fs_type         FS;
   //----------------------------------------------------------------------------
   static constexpr
@@ -86,7 +86,7 @@ namespace lamb {
   void f(f0_type const & x) {
    F0  = x;
 
-   f0_type tmp = F0 / FS;
+   f1_type tmp = f1_type(F0 / FS);
    
    F1  = f1_type(tmp);
    F1 *= PI2;
