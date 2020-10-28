@@ -595,6 +595,11 @@ namespace lamb {
  /* 24 */ typedef fixed< 24,  8, false > u24q8;
  /* 24 */ typedef fixed< 24,  8, true  > u24q8s;
  //-----------------------------------------------------------------------------
+ /* 23 */ typedef fixed< 27,  4, false > s27q4;
+ /* 23 */ typedef fixed< 27,  4, true  > s27q4s;
+ /* 24 */ typedef fixed< 28,  4, false > u28q4;
+ /* 24 */ typedef fixed< 28,  4, true  > u28q4s;
+ //-----------------------------------------------------------------------------
 
 ////////////////////////////////////////////////////////////////////////////////
 // integrals for convenients in math operations.
@@ -608,7 +613,7 @@ namespace lamb {
  /*    */ typedef fixed< 16,  0, true  > u16q0s;
  /*    */ typedef fixed< 15,  0, false > s15q0;
  /*    */ typedef fixed< 15,  0, true  > s15q0s;
-  //----------------------------------------------------------------------------
+ //----------------------------------------------------------------------------
  /*    */ typedef fixed< 32,  0, false > u32q0;
  /*    */ typedef fixed< 32,  0, true  > u32q0s;
  /*    */ typedef fixed< 31,  0, false > s32q0;

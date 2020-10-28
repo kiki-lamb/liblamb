@@ -14,7 +14,7 @@ namespace lamb {
  public:
   typedef s2q29s output_type;
 //  typedef u32q0s fs_type;
-  typedef u24q8s fs_type;
+  typedef u28q4s fs_type;
   
   u24q8s  F0;
   u8q24s  F1;
@@ -165,7 +165,6 @@ namespace lamb {
 
    output_type I(I_);
    
-   printf("% 6.9lf, ", double(I))    ;
    printf("% 6.9lf, ", double(F1))   ;        
    printf("% 6.9lf, ", double(Q1))   ;
    
@@ -175,8 +174,6 @@ namespace lamb {
    N  = H       + L                  ;    printf("% 9.9lf, ",  double(N)) ;
    D0 = B                            ;    printf("% 9.9lf, ",  double(D0));
    D1 = L                            ;    printf("% 9.9lf,  ", double(D1));
-
-   printf("% 9.9lf ",  double(L)) ;
 
    return L;
    
