@@ -132,10 +132,39 @@ namespace lamb {
    return CHARACTERISTIC == 0 ? 0 : (value & (~mask())) >> MANTISSA;
   }     
 
+  void print_bits_32(uint32_t const & t0) {
+   {
+    for(uint32_t mask = 0x80000000; mask; mask >>= 1) {
+     if (mask & t0) {
+#ifdef LAMB_NO_ARDUINO
+      printf("1");
+#else
+      Serial.print('1'); Serial.flush();
+#endif
+     }
+     else {
+#ifdef LAMB_NO_ARDUINO
+      printf("0");
+#else
+      Serial.print('0'); Serial.flush();
+#endif
+     }
+    }
+   }
+  }
+
   constexpr
-  void characteristic(type const & x)  {    
+  void characteristic(type const & x)  {
+   printf("Before: ");
+   print_bits_32(value);
+   printf("\n");
+
    type tmp = value & mask();
    
+   printf("After:  ");
+   print_bits_32((x << MANTISSA) | tmp);
+   printf("\n");
+
    value = (x << MANTISSA) | tmp;
   }     
   

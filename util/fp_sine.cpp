@@ -36,8 +36,10 @@ out_type qsin(in_type const & x_)
  // printf("c: %5.5lf \n", double(c));
 
  x        -= half                                 ;
+ 
  x       <<= shift_2                              ;
- x       >>= shift_2                              ; 
+ x       >>= shift_2                              ;
+
  x.value   = x.value * x.value >> shift_3         ; // x=x^2 To Q14
  y         = B       - x        * C               ; 
  y         = quarter -      (x  * y >> 2)         ; // A - x^2*(B-x^2*C)
