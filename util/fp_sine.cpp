@@ -20,8 +20,8 @@ out_type qsin(in_type const & x_)
  
  constexpr int32_t shift_qcirc = 13;
  constexpr int32_t shift_out = 12;
- constexpr int32_t B  = (s17q14(2, 0) - s17q14::constants::pi / s17q14(4, 0)).value; // 19900;
- constexpr int32_t C  = 3516;
+ constexpr int32_t B  = (s17q14(2, 0) - s17q14::constants::pi / s17q14(4, 0)).value;
+ constexpr int32_t C  = (s17q14(1, 0) - s17q14::constants::pi / s17q14(4, 0)).value; 
  
  c  = x                 << (30 - shift_qcirc      );  // Semi-circle info into carry.
  x -= 1                 << (shift_qcirc           );  // sine -> cosine calc
