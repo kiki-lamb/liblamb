@@ -1,9 +1,14 @@
 #include "../include/lamb.h"
 
+////////////////////////////////////////////////////////////////////////////////
+
 using namespace lamb;
+
+////////////////////////////////////////////////////////////////////////////////
 
 // g++ -std=gnu++17 -DLAMB_NO_ARDUINO fp_sine.cpp && .\a.exe > a.csv && sigrok-cli -I csv:column_formats="*a" -i a.csv -o x.sr
 
+////////////////////////////////////////////////////////////////////////////////
 
 void pprint_bits_32(uint32_t const & t0) {
   {
@@ -32,7 +37,7 @@ void pprint_bits_32(uint32_t const & t0) {
 /// @return     Sine value (Q12)
 
 typedef s0q31   in_type;
-typedef s1q14   out_type;
+typedef s0q15   out_type;
 typedef s17q14  mid_type;
 
 out_type qsin(in_type const & x_)
@@ -48,7 +53,7 @@ out_type qsin(in_type const & x_)
  constexpr mid_type C       { one      - pi / mid_type(4, 0)       };
  //-----------------------------------------------------------------------------
  mid_type           x       { x_      << q_shift - 1               }; 
- mid_type           carry   { x       << mid_type::CHARACTERISTIC  };
+ mid_type           carry   { x       << q_shift                   };
  //-----------------------------------------------------------------------------
  x                          = x        - half                       ;
  x                          = x       << q_shift + 1                ;
@@ -93,7 +98,7 @@ int main() {
    min = last;
   }
 
- return 0;
+// return 0;
  printf("MAX: % 05.5lf %d \n", double(max), max.value); 
  printf("MIN: % 05.5lf %d \n", double(min), min.value);
 }
