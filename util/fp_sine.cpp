@@ -11,21 +11,23 @@ using namespace lamb;
 
 typedef s0q31   in_type;
 typedef s1q14   out_type;
+typedef s17q14   mid_type;
 
 out_type qsin(in_type const & x_)
 {
- s17q14 x(x_.value >> 1);
+ mid_type x(x_.value >> 1);
  
- constexpr int32_t shift_qcirc = 13;
- constexpr int32_t shift_out   = 12;
- constexpr s17q14  B           = s17q14(2, 0 ) - s17q14::constants::pi / s17q14(4, 0);
- constexpr s17q14  C           = s17q14(1, 0 ) - s17q14::constants::pi / s17q14(4, 0);
- constexpr s17q14  one         { 1,        0 };
- constexpr s17q14  half        ( one  >>   1 );
- constexpr s17q14  quarter     ( half >>   1 );
- constexpr uint8_t shift_1     = 30    - shift_qcirc;           // 17
- constexpr uint8_t shift_2     = 31    - shift_qcirc;           // 18
- constexpr uint8_t shift_3     = 2     * shift_qcirc - 14;      // 12
+ constexpr int32_t  shift_qcirc = 13;
+ constexpr int32_t  shift_out   = 12;
+ constexpr mid_type pi          = mid_type::constants::pi;
+ constexpr mid_type B           = mid_type(2, 0 ) - pi / mid_type(4, 0);
+ constexpr mid_type C           = mid_type(1, 0 ) - pi / mid_type(4, 0);
+ constexpr mid_type one         { 1,        0 };
+ constexpr mid_type half        ( one  >>   1 );
+ constexpr mid_type quarter     ( half >>   1 );
+ constexpr uint8_t  shift_1     = 30    - shift_qcirc;           // 17
+ constexpr uint8_t  shift_2     = 31    - shift_qcirc;           // 18
+ constexpr uint8_t  shift_3     = 2     * shift_qcirc - 14;      // 12
 
  s17q14 c   = x;
  c        <<= shift_1;
@@ -36,7 +38,9 @@ out_type qsin(in_type const & x_)
  x        <<= 2;
  s17q14 y   = B;
  y         -= x        * C;
- y          = quarter  -      (x  * y >> 2);
+ s17q14 tmp = x * y >> 2;
+ y          = quarter;
+ y         -= tmp;
  
  return out_type(c.value >= 0 ? y : -y);
 }
