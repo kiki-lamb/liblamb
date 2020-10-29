@@ -44,6 +44,8 @@ int main() {
   for (double qix = 1.0; qix < 20.0; qix += 3.0) {
    fx_cf.q(qix);
 
+   continue;
+   
    const size_t fix_incr = 80;
    
    for (size_t fix = 4000 + 20; fix > 2000; fix -= fix_incr) {
