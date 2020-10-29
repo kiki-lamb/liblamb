@@ -39,7 +39,7 @@ out_type qsin(in_type const & x_)
  x.value  = x.value           << shift_2                   ; // Mask with PI
  x.value  = x.value           >> shift_2                   ; 
  x.value  = x.value * x.value >> shift_3                   ; // x=x^2 To Q14
- y        = B - x  * C; // B - x^2 * C
+ y        = B       - x        * C                         ; 
  y.value  = (1 << shift_out)   - (x.value  * y.value >> 16); // A - x^2*(B-x^2*C)
  
  return out_type(c.value >= 0 ? y.value : -y.value);
