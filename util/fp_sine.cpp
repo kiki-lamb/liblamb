@@ -25,13 +25,13 @@ out_type qsin(in_type const & x_)
  constexpr s17q14  one         { 1, 0     };
  constexpr s17q14  half        ( one >> 1 );
 
- constexpr uint8_t shift_1     = 30 - shift_qcirc; // 17
- constexpr uint8_t shift_2     = 31 - shift_qcirc; // 18
- constexpr uint8_t shift_3     = 2  * shift_qcirc - 14;
+ constexpr uint8_t shift_1     = 30 - shift_qcirc;           // 17
+ constexpr uint8_t shift_2     = 31 - shift_qcirc;           // 18
+ constexpr uint8_t shift_3     = 2  * shift_qcirc - 14;      // 12
  
  c.value  = x.value           << shift_1                   ; // Semi-circle info into carry.
- x.value -= half.value;
- x.value  = x.value           << shift_2                   ;  // Mask with PI
+ x       -= half                                           ;
+ x.value  = x.value           << shift_2                   ; // Mask with PI
  x.value  = x.value           >> shift_2                   ; 
  x.value  = x.value * x.value >> shift_3                   ; // x=x^2 To Q14
  y.value  = B.value            - (x.value  * C.value >> 14); // B - x^2 * C
