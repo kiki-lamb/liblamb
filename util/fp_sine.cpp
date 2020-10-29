@@ -11,26 +11,26 @@ using namespace lamb;
 
 typedef s0q15 out_type;
 
-out_type qsin(s0q31 ph_ix_)
+out_type qsin(u0q16 const & ph_ix_)
 {
- int32_t ph_ix(ph_ix_);
+ int32_t ph_ix(ph_ix_.value);
  int32_t carry;
  int32_t x2, y;
  
  constexpr int32_t shift_quad  = 13;
  constexpr int32_t shift_out   = 12; 
- constexpr s17q14 B            = s17q14(2, 0) - (s17q14::constants::pi >> 2);
- constexpr s17q14 C            = s17q14(1, 0) - (s17q14::constants::pi >> 2);
+ constexpr s17q14  B           = s17q14(2, 0) - (s17q14::constants::pi >> 2);
+ constexpr s17q14  C           = s17q14(1, 0) - (s17q14::constants::pi >> 2);
 
- carry  = ph_ix           << (30     - shift_quad                );// Semi-circ carry.
+ carry  = ph_ix           << (30     - shift_quad                 );// Semi-circ carry.
 
  ph_ix -= s17q14(1, 0).value;                                      // sine -> cosine calc
 
- ph_ix  = ph_ix           << (31     - shift_quad                );// Mask with PI
- ph_ix  = ph_ix           >> (31     - shift_quad                );  
- ph_ix  = ph_ix            * (ph_ix >> 2         * shift_quad-14 );// x =x^2 To Q14
- y      = B.value          - (ph_ix  * C.value  >> 14            );// B - x^2 * C
- y      = (1 << shift_out) - (ph_ix  * y        >> 16            );// A - x^2 * (B-x^2 * C)
+ ph_ix  = ph_ix           << (31     - shift_quad                 );// Mask with PI
+ ph_ix  = ph_ix           >> (31     - shift_quad                 );  
+ ph_ix  = ph_ix            * (ph_ix >> 2 * shift_quad    - 14     );// x =x^2 To Q14
+ y      = B.value          - (ph_ix  * C.value   >> 14            );// B - x^2 * C
+ y      = (1 << shift_out) - (ph_ix  * y         >> 16            );// A - x^2 * (B-x^2 * C)
  
  if (carry < 0) {
   y = -y;
@@ -51,7 +51,7 @@ int main() {
   ix <= 32768;
   ix++
  ) {
-  last = qsin(s0q31(ix));
+  last = qsin(u0q16(ix));
 
   // printf("%d, % 05.5lf \n", last, last / 4096.0);
   printf("% 05.5lf \n", double(last));
