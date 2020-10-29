@@ -13,55 +13,100 @@ using namespace lamb;
 
 
 template <typename c>
-class parent;
+class mathematized;
 
 
-template <typename integer_>
-class child {
+template <typename value_type_>
+class thing {
 public:
- typedef integer_ integer;
- integer value;
+ typedef value_type_ value_type;
 
- inline child(integer const & v) : value(v) {}
+ value_type value;
+
+ explicit
+ thing(value_type const & v) : value(v) {}
+
+//  double  Direct.
+//       t  Direct.
+//       =  Direct.      
+// C     +  Direct.
+// C     -  Direct.
+// C     *  Direct.
+// C     /  Direct.
+// C     %  Direct.
+//      u~  Direct.
+//      <<  Direct.
+//      >>  Direct.
+//       =  Direct.
+//       >  Direct.
+//       <  Direct.
+//      ==  Direct.
+//      u-  *
+//      !=  ==
+//      >=  >,  ==
+//      <=  >,  ==
+// P    ++  +,  =
+// P    --  +,  =
+// P    +=  +,  =
+// P    -=  -,  =
+// P    /=  /,  =
+// P    %=  %,  =
+// P    *=  *,  =
+// P   <<=  <<, =
+// P   >>=  >>, =
+// C    u+  No.
+
+
+ thing        operator +  ()                      = delete;
+ thing        operator +  (thing   const & other) { return thing(value  + other.value); }
+ thing        operator -  (thing   const & other) { return thing(value  - other.value); }
+ thing        operator *  (thing   const & other) { return thing(value  * other.value); }
+ thing        operator /  (thing   const & other) { return thing(value  / other.value); }
+ thing        operator %  (thing   const & other) { return thing(value  % other.value); }
+ thing        operator >> (uint8_t const & shift) { return thing(value >> shift      ); }
+ thing        operator << (uint8_t const & shift) { return thing(value << shift      ); }
  
- inline child operator + (child const & other) {
-  child r(0);
-
-  r.value = value + other.value;
-
-  return r;
- }
 };
 
-template <typename c>
-class parent : public c {
+template <typename base>
+class mathematized : public base {
 public:
- inline parent(typename c::integer const & v) : c(v) {}
+ typedef typename base::value_type value_type;
+ explicit
+ mathematized             (value_type   const & v) : base(v) {}  
+ mathematized operator += (mathematized const & v) { this->value = (*this  + v   ).value; return *this; }
+ mathematized operator -= (mathematized const & v) { this->value = (*this  - v   ).value; return *this; }
+ mathematized operator ++ ()                       { this += 1;                                         }
+ mathematized operator -- ()                       { this -= 1;                                         }
+ mathematized operator *= (mathematized const & v) { this->value = (*this  * v   ).value; return *this; }
+ mathematized operator /= (mathematized const & v) { this->value = (*this  / v   ).value; return *this; }
+ mathematized operator %= (mathematized const & v) { this->value = (*this  % v   ).value; return *this; }
+ mathematized operator >> (uint8_t      const & v) { this->value = (*this >> v   ).value; return *this; }
+ mathematized operator << (uint8_t      const & v) { this->value = (*this << v   ).value; return *this; }
 
- parent operator += (parent const & v) {
-  c::value = ((*this) + v).value;
-  
-  return *this;
+ explicit
+ operator value_type() {
+  return *(value_type*)this;
  }
 
- operator c() {
-  return *((c*)this);
- }
- 
- operator c() const {
-  return *((c*)this);
+ explicit
+ operator value_type() const {
+  return *(value_type*)this;
  }
 };
 
 
 int main() {
- parent<child<uint8_t>> x(7);
- parent<child<uint8_t>> y(9);
+ typedef mathematized<thing<uint8_t>> t;
+ t x(7);
+ t y(9);
+ t z(8);
 
  
  printf("=> %u \n", (x + y).value);
 
  x += y;
+ x += z;
 
  printf("=> %u \n", x.value);
 }
