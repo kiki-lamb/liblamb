@@ -47,19 +47,21 @@ out_type qsin(in_type const & x_)
  constexpr mid_type B       { two      - pi / mid_type(4, 0) };
  constexpr mid_type C       { one      - pi / mid_type(4, 0) };
  //-----------------------------------------------------------------------------
- mid_type x                 { x_      << 16                  }; 
+ mid_type           x       { x_      << 16                  }; 
+ mid_type           carry   { x       << shift_1             };
  //-----------------------------------------------------------------------------
- mid_type           carry   = x       << shift_1;
- x                          = x        - half;
- x                          = x       << shift_2;
- x                          = x       >> shift_2;
- x                          = x        * x;
- x                          = x       << 2;
- mid_type           y       = x        * C;
- y                          = B        - y;
- x                          = x        * y;
- x                          = x       >> 2;
- y                          = quarter  - x;
+ x                          = x        - half                 ;
+ x                          = x       << shift_2              ;
+ x                          = x       >> shift_2              ;
+ x                          = x        * x                    ;
+ x                          = x       << 2                    ;
+  //-----------------------------------------------------------------------------
+ mid_type           y       { x        * C                   };
+ //-----------------------------------------------------------------------------
+ y                          = B        - y                    ;
+ x                          = x        * y                    ;
+ x                          = x       >> 2                    ;
+ y                          = quarter  - x                    ;
  //-----------------------------------------------------------------------------
  return out_type(carry.value >= 0 ? y : -y);
 }
