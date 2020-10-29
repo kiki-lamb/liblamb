@@ -185,7 +185,7 @@ namespace lamb {
    type const & characteristic,
    type const & mantissa
   ) :
-   value((characteristic * ONE) + mantissa) {}
+   value((characteristic * ONE) + (chaaracteristic < 0 ? - mantissa : mantissa) {}
 
   /////////////////////////////////////////////////////////////////////////////////////////
   
