@@ -27,7 +27,6 @@ out_type qsin(in_type const & x_)
  constexpr mid_type quarter     ( half >>   1 );
  constexpr uint8_t  shift_1     = 30    - shift_qcirc;           // 17
  constexpr uint8_t  shift_2     = 31    - shift_qcirc;           // 18
- constexpr uint8_t  shift_3     = 2     * shift_qcirc - 14;      // 12
 
  s17q14 c   = x;
  c        <<= shift_1;
