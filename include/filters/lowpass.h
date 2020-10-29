@@ -13,7 +13,7 @@ namespace lamb {
     typedef fixed<0, (
       sizeof(
         typename sample_type_traits<sample_t>::unmixed_type
-      ) << 3)>                                                   control_frac_t;
+      ) << 3), false>                                            control_frac_t;
 
     typedef typename control_frac_t::type                        control_t;
 

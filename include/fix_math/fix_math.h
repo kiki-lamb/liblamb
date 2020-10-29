@@ -16,16 +16,21 @@
 
 namespace lamb {
 
- /////////////////////////////////////////////////////////////////////////////////////////
- // Fixed
+/////////////////////////////////////////////////////////////////////////////////////////
+ // Fixed_Impl
  /////////////////////////////////////////////////////////////////////////////////////////
 
  template <
-  uint8_t characteristic_,
-  uint8_t mantissa_,
-  bool    saturate_ = false
+  uint8_t  characteristic_,
+  uint8_t  mantissa_,
+  bool     saturate_,
+  template <
+   uint8_t characteristic__,
+   uint8_t mantissa__,
+   bool    saturate__
+   > class parent_template
   >
- class fixed {
+ class fixed_impl {
 
  /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -60,15 +65,15 @@ namespace lamb {
   ////////////////////////////////////////////////////////////////////////////////////////
 
   typedef
-  fixed<CHARACTERISTIC, MANTISSA, SATURATE>
+  parent_template<CHARACTERISTIC, MANTISSA, SATURATE>
   self_type;
   
   template <bool saturate>
   using
-  compatible_type = fixed<CHARACTERISTIC, MANTISSA, saturate>;
+  compatible_type = parent_template<CHARACTERISTIC, MANTISSA, saturate>;
 
   typedef
-  compatible_type<(! SATURATE)>
+  parent_template<CHARACTERISTIC, MANTISSA, (! SATURATE)>
   sat_cast_type;
 
   typedef
@@ -181,7 +186,7 @@ namespace lamb {
 
   explicit
   constexpr
-  fixed(
+  fixed_impl(
    type const & tmp_
   ) :
    value(tmp_) {}
@@ -190,7 +195,7 @@ namespace lamb {
   
   explicit
   constexpr
-  fixed(
+  fixed_impl(
    type const & characteristic,
    type const & mantissa
   ) :
@@ -201,8 +206,8 @@ namespace lamb {
   template <uint8_t characteristic, uint8_t mantissa, bool saturate>
   explicit
   constexpr 
-  operator fixed<characteristic, mantissa, saturate>() const {
-   typedef fixed<characteristic, mantissa, saturate>
+  operator parent_template<characteristic, mantissa, saturate>() const {
+   typedef parent_template<characteristic, mantissa, saturate>
     other_type;
 
    constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
@@ -495,11 +500,11 @@ namespace lamb {
   constexpr
   self_type
   operator * (
-   fixed<other_characteristic, other_mantissa, other_saturate> const & other
+   parent_template<other_characteristic, other_mantissa, other_saturate> const & other
   ) const {
 
    typedef
-    fixed<other_characteristic, other_mantissa, other_saturate>
+    parent_template<other_characteristic, other_mantissa, other_saturate>
     other_type;
    
    typedef
@@ -542,11 +547,11 @@ namespace lamb {
   constexpr
   self_type & 
   operator *= (
-   fixed<other_characteristic,other_mantissa, saturate> const & other
+   parent_template<other_characteristic,other_mantissa, saturate> const & other
   ) {
    value = (*this * other).value;
 
-   return *this;
+   return *((self_type*)(this));
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -555,11 +560,11 @@ namespace lamb {
   constexpr
   self_type
   operator / (
-   fixed<other_characteristic,other_mantissa,other_saturate> const & other
+   parent_template<other_characteristic,other_mantissa,other_saturate> const & other
   ) const {
 
    typedef
-    fixed<other_characteristic, other_mantissa, other_saturate>
+    parent_template<other_characteristic, other_mantissa, other_saturate>
     other_type;
     
    typedef
@@ -621,7 +626,7 @@ namespace lamb {
   constexpr
   self_type & 
   operator /= (
-   fixed<other_characteristic, other_mantissa, saturate__> const & other
+   parent_template<other_characteristic, other_mantissa, saturate__> const & other
   ) {   
    value = (*this / other).value;
 
@@ -630,8 +635,43 @@ namespace lamb {
 
  /////////////////////////////////////////////////////////////////////////////////////////
 
- }; // template fixed
- 
+ }; // template fixed_impl
+
+
+ /////////////////////////////////////////////////////////////////////////////////////////
+ // fixe
+ /////////////////////////////////////////////////////////////////////////////////////////
+
+ template <
+  uint8_t characteristic_,
+  uint8_t mantissa_,
+  bool    saturate_
+  >
+ class fixed : public fixed_impl<characteristic_, mantissa_, saturate_, fixed> {
+
+  typedef fixed_impl<characteristic_, mantissa_, saturate_, fixed> base;
+  
+ public:
+  
+  explicit
+  constexpr
+  fixed(
+   typename base::type const & tmp_
+  ) : base(tmp_) {}
+
+  //--------------------------------------------------------------------------------------
+  
+  explicit
+  constexpr
+  fixed(
+   typename base::type const & characteristic,
+   typename base::type const & mantissa
+  ) : base(characteristic, mantissa) {}
+
+ /////////////////////////////////////////////////////////////////////////////////////////
+
+ }; // class fixed
+  
  /////////////////////////////////////////////////////////////////////////////////////////
  // Typedefs
  /////////////////////////////////////////////////////////////////////////////////////////
