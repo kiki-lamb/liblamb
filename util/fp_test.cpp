@@ -38,13 +38,11 @@ void pprint_bits_32(uint32_t const & t0) {
 // }
 
 int main() {
-// using namespace lamb::literals;
- 
  typedef u16q16 f0_type;
  typedef f0_type::type int_type;
  typedef unsigned_int<(sizeof(int_type))> traits;
 
- constexpr u2q30 one(u2q30::ONE);
+ constexpr u2q30 one(1.0_u2q30);
  
  for (int64_t ix = traits::MIN + 1; ix < traits::MAX-1; ix += 65536 << 4) {
   // printf(

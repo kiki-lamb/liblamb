@@ -679,11 +679,11 @@ namespace lamb {
  typedef fixed<  0,  8, false > u0q8;
  typedef fixed<  0,  8, true  > u0q8s;
  //---------------------------------------------------------------------------------------
- s0q7  operator ""_s0q7(long double x)    { return s0q7::from_double(x); }
- s0q7s operator ""_s0q7s(long double x)   { return s0q7s::from_double(x); }
+ constexpr s0q7  operator ""_s0q7(long double x)    { return s0q7::from_double(x); }
+ constexpr s0q7s operator ""_s0q7s(long double x)   { return s0q7s::from_double(x); }
  //---------------------------------------------------------------------------------------
- u0q8  operator ""_u0q8(long double x)    { return u0q8::from_double(x); }
- u0q8s operator ""_u0q8s(long double x)   { return u0q8s::from_double(x); }
+ constexpr u0q8  operator ""_u0q8(long double x)    { return u0q8::from_double(x); }
+ constexpr u0q8s operator ""_u0q8s(long double x)   { return u0q8s::from_double(x); }
  //---------------------------------------------------------------------------------------
  
  //---------------------------------------------------------------------------------------
@@ -732,48 +732,48 @@ namespace lamb {
  typedef fixed<  8,  8, false > u8q8;
  typedef fixed<  8,  8, true  > u8q8s;
  //---------------------------------------------------------------------------------------
- u0q16   operator ""_u0q16(long double x)   { return u0q16::from_double(x); }
- u0q16s  operator ""_u0q16s(long double x)  { return u0q16s::from_double(x); }
+ constexpr u0q16   operator ""_u0q16(long double x)   { return u0q16::from_double(x); }
+ constexpr u0q16s  operator ""_u0q16s(long double x)  { return u0q16s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s0q15   operator ""_s0q15(long double x)   { return s0q15::from_double(x); }
- s0q15s  operator ""_s0q15s(long double x)  { return s0q15s::from_double(x); }
- u1q15   operator ""_u1q15(long double x)   { return u1q15::from_double(x); }
- u1q15s  operator ""_u1q15s(long double x)  { return u1q15s::from_double(x); }
+ constexpr s0q15   operator ""_s0q15(long double x)   { return s0q15::from_double(x); }
+ constexpr s0q15s  operator ""_s0q15s(long double x)  { return s0q15s::from_double(x); }
+ constexpr u1q15   operator ""_u1q15(long double x)   { return u1q15::from_double(x); }
+ constexpr u1q15s  operator ""_u1q15s(long double x)  { return u1q15s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s1q14   operator ""_s1q14(long double x)   { return s1q14::from_double(x); }
- s1q14s  operator ""_s1q14s(long double x)  { return s1q14s::from_double(x); } 
- u2q14   operator ""_u2q14(long double x)   { return u2q14::from_double(x); }
- u2q14s  operator ""_u2q14s(long double x)  { return u2q14s::from_double(x); }
+ constexpr s1q14   operator ""_s1q14(long double x)   { return s1q14::from_double(x); }
+ constexpr s1q14s  operator ""_s1q14s(long double x)  { return s1q14s::from_double(x); } 
+ constexpr u2q14   operator ""_u2q14(long double x)   { return u2q14::from_double(x); }
+ constexpr u2q14s  operator ""_u2q14s(long double x)  { return u2q14s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s2q13   operator ""_s2q13(long double x)   { return s2q13::from_double(x); }
- s2q13s  operator ""_s2q13s(long double x)  { return s2q13s::from_double(x); }
- u3q13   operator ""_u3q13(long double x)   { return u3q13::from_double(x); }
- u3q13s  operator ""_u3q13s(long double x)  { return u3q13s::from_double(x); }
+ constexpr s2q13   operator ""_s2q13(long double x)   { return s2q13::from_double(x); }
+ constexpr s2q13s  operator ""_s2q13s(long double x)  { return s2q13s::from_double(x); }
+ constexpr u3q13   operator ""_u3q13(long double x)   { return u3q13::from_double(x); }
+ constexpr u3q13s  operator ""_u3q13s(long double x)  { return u3q13s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s3q12   operator ""_s3q12(long double x)   { return s3q12::from_double(x); }
- s3q12s  operator ""_s3q12s(long double x)  { return s3q12s::from_double(x); }
- u4q12   operator ""_u4q12(long double x)   { return u4q12::from_double(x); }
- u4q12s  operator ""_u4q12s(long double x)  { return u4q12s::from_double(x); }
+ constexpr s3q12   operator ""_s3q12(long double x)   { return s3q12::from_double(x); }
+ constexpr s3q12s  operator ""_s3q12s(long double x)  { return s3q12s::from_double(x); }
+ constexpr u4q12   operator ""_u4q12(long double x)   { return u4q12::from_double(x); }
+ constexpr u4q12s  operator ""_u4q12s(long double x)  { return u4q12s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s4q11   operator ""_s4q11(long double x)   { return s4q11::from_double(x); }
- s4q11s  operator ""_s4q11s(long double x)  { return s4q11s::from_double(x); }
- u5q11   operator ""_u5q11(long double x)   { return u5q11::from_double(x); }
- u5q11s  operator ""_u5q11s(long double x)  { return u5q11s::from_double(x); }
+ constexpr s4q11   operator ""_s4q11(long double x)   { return s4q11::from_double(x); }
+ constexpr s4q11s  operator ""_s4q11s(long double x)  { return s4q11s::from_double(x); }
+ constexpr u5q11   operator ""_u5q11(long double x)   { return u5q11::from_double(x); }
+ constexpr u5q11s  operator ""_u5q11s(long double x)  { return u5q11s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s5q10   operator ""_s5q10(long double x)   { return s5q10::from_double(x); }
- s5q10s  operator ""_s5q10s(long double x)  { return s5q10s::from_double(x); }
- u6q10   operator ""_u6q10(long double x)   { return u6q10::from_double(x); }
- u6q10s  operator ""_u6q10s(long double x)  { return u6q10s::from_double(x); }
+ constexpr s5q10   operator ""_s5q10(long double x)   { return s5q10::from_double(x); }
+ constexpr s5q10s  operator ""_s5q10s(long double x)  { return s5q10s::from_double(x); }
+ constexpr u6q10   operator ""_u6q10(long double x)   { return u6q10::from_double(x); }
+ constexpr u6q10s  operator ""_u6q10s(long double x)  { return u6q10s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s6q9    operator ""_s6q9(long double x)    { return s6q9::from_double(x); }
- s6q9s   operator ""_s6q9s(long double x)   { return s6q9s::from_double(x); }
- u7q9    operator ""_u7q9(long double x)    { return u7q9::from_double(x); }
- u7q9s   operator ""_u7q9s(long double x)   { return u7q9s::from_double(x); }
+ constexpr s6q9    operator ""_s6q9(long double x)    { return s6q9::from_double(x); }
+ constexpr s6q9s   operator ""_s6q9s(long double x)   { return s6q9s::from_double(x); }
+ constexpr u7q9    operator ""_u7q9(long double x)    { return u7q9::from_double(x); }
+ constexpr u7q9s   operator ""_u7q9s(long double x)   { return u7q9s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s7q8    operator ""_s7q8(long double x)    { return s7q8::from_double(x); }
- s7q8s   operator ""_s7q8s(long double x)   { return s7q8s::from_double(x); }
- u8q8    operator ""_u8q8(long double x)    { return u8q8::from_double(x); }
- u8q8s   operator ""_u8q8s(long double x)   { return u8q8s::from_double(x); }
+ constexpr s7q8    operator ""_s7q8(long double x)    { return s7q8::from_double(x); }
+ constexpr s7q8s   operator ""_s7q8s(long double x)   { return s7q8s::from_double(x); }
+ constexpr u8q8    operator ""_u8q8(long double x)    { return u8q8::from_double(x); }
+ constexpr u8q8s   operator ""_u8q8s(long double x)   { return u8q8s::from_double(x); }
  //---------------------------------------------------------------------------------------
  
  //---------------------------------------------------------------------------------------
@@ -877,98 +877,98 @@ namespace lamb {
  typedef fixed< 31,  1, false > u31q1;
  typedef fixed< 31,  1, true  > u31q21;
  //---------------------------------------------------------------------------------------
- u0q32    operator ""_u0q32(long double x)  { return u0q32::from_double(x); }
- u0q32s   operator ""_u0q32s(long double x) { return u0q32s::from_double(x); }
+ constexpr u0q32    operator ""_u0q32(long double x)  { return u0q32::from_double(x); }
+ constexpr u0q32s   operator ""_u0q32s(long double x) { return u0q32s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s0q31    operator ""_s0q31(long double x)  { return s0q31::from_double(x); }
- s0q31s   operator ""_s0q31s(long double x) { return s0q31s::from_double(x); }
- u1q31    operator ""_u1q31(long double x)  { return u1q31::from_double(x); }
- u1q31s   operator ""_u1q31s(long double x) { return u1q31s::from_double(x); }
+ constexpr s0q31    operator ""_s0q31(long double x)  { return s0q31::from_double(x); }
+ constexpr s0q31s   operator ""_s0q31s(long double x) { return s0q31s::from_double(x); }
+ constexpr u1q31    operator ""_u1q31(long double x)  { return u1q31::from_double(x); }
+ constexpr u1q31s   operator ""_u1q31s(long double x) { return u1q31s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s1q30    operator ""_s1q30(long double x)  { return s1q30::from_double(x); }
- s1q30s   operator ""_s1q30s(long double x) { return s1q30s::from_double(x); }
- u2q30    operator ""_u2q30(long double x)  { return u2q30::from_double(x); }
- u2q30s   operator ""_u2q30s(long double x) { return u2q30s::from_double(x); }
+ constexpr s1q30    operator ""_s1q30(long double x)  { return s1q30::from_double(x); }
+ constexpr s1q30s   operator ""_s1q30s(long double x) { return s1q30s::from_double(x); }
+ constexpr u2q30    operator ""_u2q30(long double x)  { return u2q30::from_double(x); }
+ constexpr u2q30s   operator ""_u2q30s(long double x) { return u2q30s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s2q29    operator ""_s2q29(long double x)  { return s2q29::from_double(x); }
- s2q29s   operator ""_s2q29s(long double x) { return s2q29s::from_double(x); }
- u3q29    operator ""_u3q29(long double x)  { return u3q29::from_double(x); }
- u3q29s   operator ""_u3q29s(long double x) { return u3q29s::from_double(x); }
+ constexpr s2q29    operator ""_s2q29(long double x)  { return s2q29::from_double(x); }
+ constexpr s2q29s   operator ""_s2q29s(long double x) { return s2q29s::from_double(x); }
+ constexpr u3q29    operator ""_u3q29(long double x)  { return u3q29::from_double(x); }
+ constexpr u3q29s   operator ""_u3q29s(long double x) { return u3q29s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s3q28    operator ""_s3q28(long double x)  { return s3q28::from_double(x); }
- s3q28s   operator ""_s3q28s(long double x) { return s3q28s::from_double(x); }
- u4q28    operator ""_u4q28(long double x)  { return u4q28::from_double(x); }
- u4q28s   operator ""_u4q28s(long double x) { return u4q28s::from_double(x); }
+ constexpr s3q28    operator ""_s3q28(long double x)  { return s3q28::from_double(x); }
+ constexpr s3q28s   operator ""_s3q28s(long double x) { return s3q28s::from_double(x); }
+ constexpr u4q28    operator ""_u4q28(long double x)  { return u4q28::from_double(x); }
+ constexpr u4q28s   operator ""_u4q28s(long double x) { return u4q28s::from_double(x); }
  //---------------------------------------------------------------------------------------
- u4q27    operator ""_u4q27(long double x)  { return u4q27::from_double(x); }
- u4q27s   operator ""_u4q27s(long double x) { return u4q27s::from_double(x); }
- s5q27    operator ""_s5q27(long double x)  { return s5q27::from_double(x); }
- s5q27s   operator ""_s5q27s(long double x) { return s5q27s::from_double(x); }
+ constexpr u4q27    operator ""_u4q27(long double x)  { return u4q27::from_double(x); }
+ constexpr u4q27s   operator ""_u4q27s(long double x) { return u4q27s::from_double(x); }
+ constexpr s5q27    operator ""_s5q27(long double x)  { return s5q27::from_double(x); }
+ constexpr s5q27s   operator ""_s5q27s(long double x) { return s5q27s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s5q26    operator ""_s5q26(long double x)  { return s5q26::from_double(x); }
- s5q26s   operator ""_s5q26s(long double x) { return s5q26s::from_double(x); }
- u6q26    operator ""_u6q26(long double x)  { return u6q26::from_double(x); }
- u6q26s   operator ""_u6q26s(long double x) { return u6q26s::from_double(x); }
+ constexpr s5q26    operator ""_s5q26(long double x)  { return s5q26::from_double(x); }
+ constexpr s5q26s   operator ""_s5q26s(long double x) { return s5q26s::from_double(x); }
+ constexpr u6q26    operator ""_u6q26(long double x)  { return u6q26::from_double(x); }
+ constexpr u6q26s   operator ""_u6q26s(long double x) { return u6q26s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s7q25    operator ""_s7q25(long double x)  { return s7q25::from_double(x); }
- s7q25s   operator ""_s7q25s(long double x) { return s7q25s::from_double(x); }
- u8q25    operator ""_u8q25(long double x)  { return u8q25::from_double(x); }
- u8q25s   operator ""_u8q25s(long double x) { return u8q25s::from_double(x); }
+ constexpr s7q25    operator ""_s7q25(long double x)  { return s7q25::from_double(x); }
+ constexpr s7q25s   operator ""_s7q25s(long double x) { return s7q25s::from_double(x); }
+ constexpr u8q25    operator ""_u8q25(long double x)  { return u8q25::from_double(x); }
+ constexpr u8q25s   operator ""_u8q25s(long double x) { return u8q25s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s7q24    operator ""_s7q24(long double x)  { return s7q24::from_double(x); }
- s7q24s   operator ""_s7q24s(long double x) { return s7q24s::from_double(x); }
- u8q24    operator ""_u8q24(long double x)  { return u8q24::from_double(x); }
- u8q24s   operator ""_u8q24s(long double x) { return u8q24s::from_double(x); }
+ constexpr s7q24    operator ""_s7q24(long double x)  { return s7q24::from_double(x); }
+ constexpr s7q24s   operator ""_s7q24s(long double x) { return s7q24s::from_double(x); }
+ constexpr u8q24    operator ""_u8q24(long double x)  { return u8q24::from_double(x); }
+ constexpr u8q24s   operator ""_u8q24s(long double x) { return u8q24s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s11q20   operator ""_s11q20(long double x)  { return s11q20::from_double(x); }
- s11q20s  operator ""_s11q20s(long double x) { return s11q20s::from_double(x); }
- u12q20   operator ""_u12q20(long double x)  { return u12q20::from_double(x); }
- u12q20s  operator ""_u12q20s(long double x) { return u12q20s::from_double(x); }
+ constexpr s11q20   operator ""_s11q20(long double x)  { return s11q20::from_double(x); }
+ constexpr s11q20s  operator ""_s11q20s(long double x) { return s11q20s::from_double(x); }
+ constexpr u12q20   operator ""_u12q20(long double x)  { return u12q20::from_double(x); }
+ constexpr u12q20s  operator ""_u12q20s(long double x) { return u12q20s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s15q16   operator ""_s15q16(long double x)  { return s15q16::from_double(x); }
- s15q16s  operator ""_s15q16s(long double x) { return s15q16s::from_double(x); }
- u16q16   operator ""_u16q16(long double x)  { return u16q16::from_double(x); }
- u16q16s  operator ""_u16q16s(long double x) { return u16q16s::from_double(x); }
+ constexpr s15q16   operator ""_s15q16(long double x)  { return s15q16::from_double(x); }
+ constexpr s15q16s  operator ""_s15q16s(long double x) { return s15q16s::from_double(x); }
+ constexpr u16q16   operator ""_u16q16(long double x)  { return u16q16::from_double(x); }
+ constexpr u16q16s  operator ""_u16q16s(long double x) { return u16q16s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s16q15   operator ""_s16q15(long double x)  { return s16q15::from_double(x); }
- s16q15s  operator ""_s16q15s(long double x) { return s16q15s::from_double(x); }
- u17q15   operator ""_u17q15(long double x)  { return u17q15::from_double(x); }
- u17q15s  operator ""_u17q15s(long double x) { return u17q15s::from_double(x); }
+ constexpr s16q15   operator ""_s16q15(long double x)  { return s16q15::from_double(x); }
+ constexpr s16q15s  operator ""_s16q15s(long double x) { return s16q15s::from_double(x); }
+ constexpr u17q15   operator ""_u17q15(long double x)  { return u17q15::from_double(x); }
+ constexpr u17q15s  operator ""_u17q15s(long double x) { return u17q15s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s17q14   operator ""_s17q14(long double x)  { return s17q14::from_double(x); }
- s17q14s  operator ""_s17q14s(long double x) { return s17q14s::from_double(x); }
- u18q14   operator ""_u18q14(long double x)  { return u18q14::from_double(x); }
- u18q14s  operator ""_u18q14s(long double x) { return u18q14s::from_double(x); }
+ constexpr s17q14   operator ""_s17q14(long double x)  { return s17q14::from_double(x); }
+ constexpr s17q14s  operator ""_s17q14s(long double x) { return s17q14s::from_double(x); }
+ constexpr u18q14   operator ""_u18q14(long double x)  { return u18q14::from_double(x); }
+ constexpr u18q14s  operator ""_u18q14s(long double x) { return u18q14s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s19q12   operator ""_s19q12(long double x)  { return s19q12::from_double(x); }
- s19q12s  operator ""_s19q12s(long double x) { return s19q12s::from_double(x); }
- u20q12   operator ""_u20q12(long double x)  { return u20q12::from_double(x); }
- u20q12s  operator ""_u20q12s(long double x) { return u20q12s::from_double(x); }
+ constexpr s19q12   operator ""_s19q12(long double x)  { return s19q12::from_double(x); }
+ constexpr s19q12s  operator ""_s19q12s(long double x) { return s19q12s::from_double(x); }
+ constexpr u20q12   operator ""_u20q12(long double x)  { return u20q12::from_double(x); }
+ constexpr u20q12s  operator ""_u20q12s(long double x) { return u20q12s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s32q10   operator ""_s32q10(long double x)  { return s32q10::from_double(x); }
- s32q10s  operator ""_s32q10s(long double x) { return s32q10s::from_double(x); }
- u22q10   operator ""_u22q10(long double x)  { return u22q10::from_double(x); }
- u22q10s  operator ""_u22q10s(long double x) { return u22q10s::from_double(x); }
+ constexpr s32q10   operator ""_s32q10(long double x)  { return s32q10::from_double(x); }
+ constexpr s32q10s  operator ""_s32q10s(long double x) { return s32q10s::from_double(x); }
+ constexpr u22q10   operator ""_u22q10(long double x)  { return u22q10::from_double(x); }
+ constexpr u22q10s  operator ""_u22q10s(long double x) { return u22q10s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s23q8    operator ""_s23q8(long double x)   { return s23q8::from_double(x); }
- s23q8s   operator ""_s23q8s(long double x)  { return s23q8s::from_double(x); }
- u24q8    operator ""_u24q8(long double x)   { return u24q8::from_double(x); }
- u24q8s   operator ""_u24q8s(long double x)  { return u24q8s::from_double(x); }
+ constexpr s23q8    operator ""_s23q8(long double x)   { return s23q8::from_double(x); }
+ constexpr s23q8s   operator ""_s23q8s(long double x)  { return s23q8s::from_double(x); }
+ constexpr u24q8    operator ""_u24q8(long double x)   { return u24q8::from_double(x); }
+ constexpr u24q8s   operator ""_u24q8s(long double x)  { return u24q8s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s27q4    operator ""_s27q4(long double x)   { return s27q4::from_double(x); }
- s27q4s   operator ""_s27q4s(long double x)  { return s27q4s::from_double(x); }
- u28q4    operator ""_u28q4(long double x)   { return u28q4::from_double(x); }
- u28q4s   operator ""_u28q4s(long double x)  { return u28q4s::from_double(x); }
+ constexpr s27q4    operator ""_s27q4(long double x)   { return s27q4::from_double(x); }
+ constexpr s27q4s   operator ""_s27q4s(long double x)  { return s27q4s::from_double(x); }
+ constexpr u28q4    operator ""_u28q4(long double x)   { return u28q4::from_double(x); }
+ constexpr u28q4s   operator ""_u28q4s(long double x)  { return u28q4s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s29q2    operator ""_s29q2(long double x)   { return s29q2::from_double(x); }
- s29q2s   operator ""_s29q2s(long double x)  { return s29q2s::from_double(x); }
- u30q2    operator ""_u30q2(long double x)   { return u30q2::from_double(x); }
- u30q2s   operator ""_u30q2s(long double x)  { return u30q2s::from_double(x); }
+ constexpr s29q2    operator ""_s29q2(long double x)   { return s29q2::from_double(x); }
+ constexpr s29q2s   operator ""_s29q2s(long double x)  { return s29q2s::from_double(x); }
+ constexpr u30q2    operator ""_u30q2(long double x)   { return u30q2::from_double(x); }
+ constexpr u30q2s   operator ""_u30q2s(long double x)  { return u30q2s::from_double(x); }
  //---------------------------------------------------------------------------------------
- s30q1    operator ""_s30q1(long double x)   { return s30q1::from_double(x); }
- s30q21   operator ""_s30q21(long double x)  { return s30q21::from_double(x); }
- u31q1    operator ""_u31q1(long double x)   { return u31q1::from_double(x); }
- u31q21   operator ""_u31q21(long double x)  { return u31q21::from_double(x); }
+ constexpr s30q1    operator ""_s30q1(long double x)   { return s30q1::from_double(x); }
+ constexpr s30q21   operator ""_s30q21(long double x)  { return s30q21::from_double(x); }
+ constexpr u31q1    operator ""_u31q1(long double x)   { return u31q1::from_double(x); }
+ constexpr u31q21   operator ""_u31q21(long double x)  { return u31q21::from_double(x); }
  //---------------------------------------------------------------------------------------
 
  //---------------------------------------------------------------------------------------
@@ -989,20 +989,20 @@ namespace lamb {
  typedef fixed< 31,  0, false > s31q0;
  typedef fixed< 31,  0, true  > s31q0s;
  //---------------------------------------------------------------------------------------
- u8q0    operator ""_u8q0(long double x)    { return u8q0::from_double(x); }
- u8q0s   operator ""_u8q0s(long double x)   { return u8q0s::from_double(x); }
- s7q0    operator ""_s7q0(long double x)    { return s7q0::from_double(x); }
- s7q0s   operator ""_s7q0s(long double x)   { return s7q0s::from_double(x); }
+ constexpr u8q0    operator ""_u8q0(long double x)    { return u8q0::from_double(x); }
+ constexpr u8q0s   operator ""_u8q0s(long double x)   { return u8q0s::from_double(x); }
+ constexpr s7q0    operator ""_s7q0(long double x)    { return s7q0::from_double(x); }
+ constexpr s7q0s   operator ""_s7q0s(long double x)   { return s7q0s::from_double(x); }
  //---------------------------------------------------------------------------------------
- u16q0   operator ""_u16q0(long double x)   { return u16q0::from_double(x); }
- u16q0s  operator ""_u16q0s(long double x)  { return u16q0s::from_double(x); }
- s15q0   operator ""_s15q0(long double x)   { return s15q0::from_double(x); }
- s15q0s  operator ""_s15q0s(long double x)  { return s15q0s::from_double(x); }
+ constexpr u16q0   operator ""_u16q0(long double x)   { return u16q0::from_double(x); }
+ constexpr u16q0s  operator ""_u16q0s(long double x)  { return u16q0s::from_double(x); }
+ constexpr s15q0   operator ""_s15q0(long double x)   { return s15q0::from_double(x); }
+ constexpr s15q0s  operator ""_s15q0s(long double x)  { return s15q0s::from_double(x); }
  //---------------------------------------------------------------------------------------
- u32q0   operator ""_u32q0(long double x)   { return u32q0::from_double(x); }
- u32q0s  operator ""_u32q0s(long double x)  { return u32q0s::from_double(x); }
- s31q0   operator ""_s31q0(long double x)   { return s31q0::from_double(x); }
- s31q0s  operator ""_s31q0s(long double x)  { return s31q0s::from_double(x); }
+ constexpr u32q0   operator ""_u32q0(long double x)   { return u32q0::from_double(x); }
+ constexpr u32q0s  operator ""_u32q0s(long double x)  { return u32q0s::from_double(x); }
+ constexpr s31q0   operator ""_s31q0(long double x)   { return s31q0::from_double(x); }
+ constexpr s31q0s  operator ""_s31q0s(long double x)  { return s31q0s::from_double(x); }
  //---------------------------------------------------------------------------------------
 
 //////////////////////////////////////////////////////////////////////////////////////////
