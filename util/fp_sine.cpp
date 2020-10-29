@@ -36,12 +36,11 @@ void pprint_bits_32(uint32_t const & t0) {
 /// @param x   angle (with 2^15 units/circle)
 /// @return     Sine value (Q12)
 
-typedef s0q31   in_type;
-typedef s0q15   out_type;
-typedef s17q14  mid_type;
-
-out_type qsin(in_type const & x_)
+template <typename out_type>
+out_type qsin(s0q31 const & x_)
 {
+ typedef   s17q14   mid_type;
+ //-----------------------------------------------------------------------------
  constexpr uint8_t  q_shift { mid_type::CHARACTERISTIC             };
  constexpr mid_type pi      { mid_type::constants::pi              };
  constexpr mid_type four    { 4,         0                         };
@@ -76,17 +75,19 @@ int main() {
 
 // for (uint8_t ix = 1; ix < 64; ix++)
 //  printf("%d: %u \n", ix, size_fit_bits(ix));
+
+ typedef s0q31 out_type;
  
  out_type  last(0);
  out_type  min(0);
  out_type  max(0);
  
  for (
-  int32_t ix = 0;
+  uint32_t ix = 0;
   ix < 65535;
   ix++
  ) {
-  last = qsin(s0q31(ix));
+  last = qsin<s0q31>(s0q31(ix));
 
   // printf("%d, % 05.5lf \n", last, last / 4096.0);
   printf("% 05.5lf \n", double(last));
@@ -98,7 +99,7 @@ int main() {
    min = last;
   }
 
-// return 0;
+ return 0;
  printf("MAX: % 05.5lf %d \n", double(max), max.value); 
  printf("MIN: % 05.5lf %d \n", double(min), min.value);
 }
