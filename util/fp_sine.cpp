@@ -37,31 +37,30 @@ typedef s17q14  mid_type;
 
 out_type qsin(in_type const & x_)
 {
- constexpr uint8_t  shift_1 { mid_type::CHARACTERISTIC       };
- constexpr uint8_t  shift_2 { mid_type::CHARACTERISTIC  + 1  };
- constexpr mid_type pi      { mid_type::constants::pi        };
- constexpr mid_type two     { 2,         0                   };
- constexpr mid_type one     { 1,         0                   };
- constexpr mid_type half    { one     >> 1                   };
- constexpr mid_type quarter { half    >> 1                   };
- constexpr mid_type B       { two      - pi / mid_type(4, 0) };
- constexpr mid_type C       { one      - pi / mid_type(4, 0) };
+ constexpr uint8_t  shift_2 { mid_type::CHARACTERISTIC  + 1        };
+ constexpr mid_type pi      { mid_type::constants::pi              };
+ constexpr mid_type two     { 2,         0                         };
+ constexpr mid_type one     { 1,         0                         };
+ constexpr mid_type half    { one     >> 1                         };
+ constexpr mid_type quarter { half    >> 1                         };
+ constexpr mid_type B       { two      - pi / mid_type(4, 0)       };
+ constexpr mid_type C       { one      - pi / mid_type(4, 0)       };
  //-----------------------------------------------------------------------------
- mid_type           x       { x_      << 16                  }; 
- mid_type           carry   { x       << shift_1             };
+ mid_type           x       { x_      << 16                        }; 
+ mid_type           carry   { x       << mid_type::CHARACTERISTIC  };
  //-----------------------------------------------------------------------------
- x                          = x        - half                 ;
- x                          = x       << shift_2              ;
- x                          = x       >> shift_2              ;
- x                          = x        * x                    ;
- x                          = x       << 2                    ;
+ x                          = x        - half                       ;
+ x                          = x       << shift_2                    ;
+ x                          = x       >> shift_2                    ;
+ x                          = x        * x                          ;
+ x                          = x       << 2                          ;
   //-----------------------------------------------------------------------------
- mid_type           y       { x        * C                   };
+ mid_type           y       { x        * C                         };
  //-----------------------------------------------------------------------------
- y                          = B        - y                    ;
- x                          = x        * y                    ;
- x                          = x       >> 2                    ;
- y                          = quarter  - x                    ;
+ y                          = B        - y                          ;
+ x                          = x        * y                          ;
+ x                          = x       >> 2                          ;
+ y                          = quarter  - x                         ;
  //-----------------------------------------------------------------------------
  return out_type(carry.value >= 0 ? y : -y);
 }
