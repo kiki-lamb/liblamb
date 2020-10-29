@@ -9,6 +9,9 @@
 #include <cmath>
 #endif
 
+#define __STDC_FORMAT_MACROS
+#include <inttypes.h>
+
 //////////////////////////////////////////////////////////////////////////////////////////
 
 namespace lamb {
@@ -70,7 +73,12 @@ namespace lamb {
 
   typedef
   typename
-  integer_type<SIGNED, SIZE>::traits::type
+  integer_type<SIGNED, SIZE>::traits
+  traits;
+
+  typedef
+  typename
+  traits::type
   type;
 
   typedef
@@ -586,9 +594,17 @@ namespace lamb {
      double(other),
      double(self_type(small_tmp))
     );
-    printf(" big %13llu  after shift %2u \n", (big_tmp << other_mantissa), other_mantissa);
     printf(
-     " div % 13ld / % 13ld = % 13ld \n",
+     " big %13lu << ",
+     ((intermediary_type)value)
+    );
+    printf("%lld ", ((intermediary_type)value) << other_mantissa);
+    printf(
+     " after shift %2u \n",
+     other_mantissa
+    );
+    printf(
+     " div % 13lu / % 13lu = % 13lu \n",
      value,
      other.value,
      small_tmp
