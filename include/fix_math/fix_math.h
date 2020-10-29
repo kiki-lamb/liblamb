@@ -431,6 +431,14 @@ namespace lamb {
 
   /////////////////////////////////////////////////////////////////////////////////////////
 
+  constexpr
+  self_type
+  operator - () const {
+   return self_type(value * -1);
+  }    
+
+  //--------------------------------------------------------------------------------------
+
   template <bool saturate>
   constexpr
   self_type

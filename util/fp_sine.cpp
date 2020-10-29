@@ -15,36 +15,27 @@ typedef s1q14   out_type;
 out_type qsin(in_type const & x_)
 {
  s17q14 x(x_.value >> 1);
- s17q14 c(0);
- s17q14 y(0);
  
  constexpr int32_t shift_qcirc = 13;
  constexpr int32_t shift_out   = 12;
- constexpr s17q14  B           = s17q14(2, 0) - s17q14::constants::pi / s17q14(4, 0);
- constexpr s17q14  C           = s17q14(1, 0) - s17q14::constants::pi / s17q14(4, 0);
- constexpr s17q14  one         { 1, 0      };
- constexpr s17q14  half        ( one  >> 1 );
- constexpr s17q14  quarter     ( half >> 1 );
- constexpr uint8_t shift_1     = 30 - shift_qcirc;           // 17
- constexpr uint8_t shift_2     = 31 - shift_qcirc;           // 18
- constexpr uint8_t shift_3     = 2  * shift_qcirc - 14;      // 12
+ constexpr s17q14  B           = s17q14(2, 0 ) - s17q14::constants::pi / s17q14(4, 0);
+ constexpr s17q14  C           = s17q14(1, 0 ) - s17q14::constants::pi / s17q14(4, 0);
+ constexpr s17q14  one         { 1,        0 };
+ constexpr s17q14  half        ( one  >>   1 );
+ constexpr s17q14  quarter     ( half >>   1 );
+ constexpr uint8_t shift_1     = 30    - shift_qcirc;           // 17
+ constexpr uint8_t shift_2     = 31    - shift_qcirc;           // 18
+ constexpr uint8_t shift_3     = 2     * shift_qcirc - 14;      // 12
 
- //printf("x: %5.5lf => ", double(x));
+ s17q14 c  = x       << shift_1            ;
+ x        -= half                          ;
+ x       <<= shift_2                       ;
+ x       >>= shift_2                       ;
+ x.value   = x.value  * x.value >> shift_3 ;
+ s17q14 y  = B        - x        * C       ;
+ y         = quarter  -      (x  * y >> 2) ;
  
- c.value  = x.value           << shift_1         ; // Semi-circle info into carry.
-
- // printf("c: %5.5lf \n", double(c));
-
- x        -= half                                 ;
- 
- x       <<= shift_2                              ;
- x       >>= shift_2                              ;
-
- x.value   = x.value * x.value >> shift_3         ; // x=x^2 To Q14
- y         = B       - x        * C               ; 
- y         = quarter -      (x  * y >> 2)         ; // A - x^2*(B-x^2*C)
- 
- return out_type(c.value >= 0 ? y.value : -y.value);
+ return out_type(c.value >= 0 ? y : -y);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
