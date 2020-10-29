@@ -41,33 +41,31 @@ out_type qsin(s0q31 const & x_)
 {
  typedef   s17q14   mid_type;
  //-----------------------------------------------------------------------------
- constexpr uint8_t  q_shift { mid_type::CHARACTERISTIC        };
- constexpr mid_type pi      { mid_type::constants::pi         };
- constexpr mid_type four    { 4,          0                   };
- constexpr mid_type two     { four     >> 1                   };
- constexpr mid_type one     { two      >> 1                   };
- constexpr mid_type half    { one      >> 1                   };
- constexpr mid_type quarter { half     >> 1                   };
- constexpr mid_type B       { two       - pi / mid_type(4, 0) };
- constexpr mid_type C       { one       - pi / mid_type(4, 0) };
+ constexpr uint8_t  q_shift { mid_type::CHARACTERISTIC         };
+ constexpr mid_type pi      { mid_type::constants::pi          };
+ constexpr mid_type two     { 2 , 0                            };
+ constexpr mid_type one     { two       >> 1                   };
+ constexpr mid_type half    { one       >> 1                   };
+ constexpr mid_type B       { two        - pi / mid_type(4, 0) };
+ constexpr mid_type C       { one        - pi / mid_type(4, 0) };
  //-----------------------------------------------------------------------------
- mid_type           x       { x_       << q_shift - 1         }; 
- mid_type           cry     { x        << q_shift             };
+ mid_type           x       { x_        << q_shift - 1         }; 
+ mid_type           cry     { x         << q_shift             };
  //-----------------------------------------------------------------------------
- x                          = x         - half                 ;
- x                          = x        << q_shift + 1          ;
- x                          = x        >> q_shift + 1          ;
- x                          = x         * x                    ;
- x                          = x        << 2                    ;
+ x                          = x          - half                 ;
+ x                          = x         << q_shift + 1          ;
+ x                          = x         >> q_shift + 1          ;
+ x                          = x          * x                    ;
+ x                          = x         << 2                    ;
   //----------------------------------------------------------------------------
- mid_type           y       { x         * C                   };
+ mid_type           y       { x          * C                   };
  //-----------------------------------------------------------------------------
- y                          = B         - y                    ;
- y                          = y         * x                    ;
- y                          = one       - y                    ;
- y                          = cry.value >= 0 ? y : -y          ;
+ y                          = B          - y                    ;
+ y                          = y          * x                    ;
+ y                          = one        - y                    ;
+ y                          = cry.value >= 0 ? y : -y           ;
  //-----------------------------------------------------------------------------
- return y;
+ return                       out_type(y)                       ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
