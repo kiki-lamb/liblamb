@@ -9,34 +9,29 @@ using namespace lamb;
 /// @param x   angle (with 2^15 units/circle)
 /// @return     Sine value (Q12)
 
-typedef s0q15 out_type;
+typedef s0q31   in_type;
+typedef s1q14   out_type;
 
-out_type qsin(u0q16 const & ph_ix_)
+out_type qsin(in_type const & x_)
 {
- int32_t ph_ix(ph_ix_.value >> 1);
- int32_t carry;
- int32_t x2, y;
+ int32_t x(x_.value >> 1);
+ int c, y;
+ constexpr int32_t qN = 13;
+ constexpr int32_t qA = 12;
+ constexpr int32_t B  = 19900;
+ constexpr int32_t C  = 3516;
  
- constexpr int32_t shift_quad  = 13;
- constexpr int32_t shift_out   = 12; 
- constexpr s17q14  B           = s17q14(2, 0) - (s17q14::constants::pi >> 2);
- constexpr s17q14  C           = s17q14(1, 0) - (s17q14::constants::pi >> 2);
-
- carry  = ph_ix           << (30     - shift_quad                 );// Semi-circ carry.
-
- ph_ix -= s17q14(1, 0).value;                                      // sine -> cosine calc
-
- ph_ix  = ph_ix           << (31     - shift_quad                 );// Mask with PI
- ph_ix  = ph_ix           >> (31     - shift_quad                 );  
- ph_ix  = ph_ix            * (ph_ix >> 2 * shift_quad    - 14     );// x =x^2 To Q14
- y      = B.value          - (ph_ix  * C.value   >> 14            );// B - x^2 * C
- y      = (1 << shift_out) - (ph_ix  * y         >> 16            );// A - x^2 * (B-x^2 * C)
+ c= x<<(30-qN);              // Semi-circle info into carry.
+ x -= 1<<qN;                 // sine -> cosine calc
  
- if (carry < 0) {
-  y = -y;
- }
+ x= x<<(31-qN);              // Mask with PI
+ x= x>>(31-qN);              // Note: SIGNED shift! (to qN)
+ x= x*x>>(2*qN-14);          // x=x^2 To Q14
+
+ y= B - (x*C>>14);           // B - x^2*C
+ y= (1<<qA)-(x*y>>16);       // A - x^2*(B-x^2*C)
  
- return out_type(y);
+ return out_type(c>=0 ? y : -y);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -51,7 +46,7 @@ int main() {
   ix < 65535;
   ix++
  ) {
-  last = qsin(u0q16(ix));
+  last = qsin(s0q31(ix));
 
   // printf("%d, % 05.5lf \n", last, last / 4096.0);
   printf("% 05.5lf \n", double(last));
@@ -63,17 +58,7 @@ int main() {
    min = last;
   }
 
- printf("MAX:  % 05.5lf %d \n", double(max), max.value); 
- printf("MIN:  % 05.5lf %d \n", double(min), min.value);
- printf("PI:   % 05.5lf %d \n", double(s17q14::constants::pi), s17q14::constants::pi.value);
- printf(
-  "PI/4: % 05.5lf %d \n",
-  double(s17q14::constants::pi >> 2),
-  (s17q14::constants::pi >> 2).value
- );
- printf(
-  "?:    % 05.5lf %d \n",
-  double(s17q14(3516)),
-  s17q14(3516)
- );
+ return 0;
+ printf("MAX: % 05.5lf %d \n", double(max), max.value); 
+ printf("MIN: % 05.5lf %d \n", double(min), min.value);
 }
