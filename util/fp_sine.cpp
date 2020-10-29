@@ -40,6 +40,7 @@ template <typename out_type>
 out_type qsin(s0q31 const & x_)
 {
  typedef   s17q14   mid_type;
+ 
  //-----------------------------------------------------------------------------
  constexpr uint8_t  q_shift { mid_type::CHARACTERISTIC         };
  constexpr mid_type pi      { mid_type::constants::pi          };
