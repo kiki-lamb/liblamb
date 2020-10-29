@@ -1,0 +1,30 @@
+        impl:
+double  Direct.
+     t  Direct.
+     =  Direct.      
+     +  Direct.
+     -  Direct.
+     *  Direct.
+     /  Direct.
+    u~  Direct.
+    <<  Direct.
+    >>  Direct.
+     =  Direct.
+     >  Direct.
+     <  Direct.
+    ==  Direct.
+     %  /
+    u+  No.
+    u-  *
+    !=  ==
+    >=  >,  ==
+    <=  >,  ==
+    ++  +,  =
+    --  +,  =
+    +=  +,  =
+    -=  -,  =
+    /=  /,  =
+    %=  %,  =
+    *=  *,  =
+   <<=  <<, =
+   >>=  >>, =
