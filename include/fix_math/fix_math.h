@@ -117,11 +117,26 @@ namespace lamb {
    return value & mask();
   }
   
+
+  constexpr
+  void mantissa(type const & x)  { 
+   type tmp = value & ~mask();
+   
+   value    = tmp | x;
+  }
+  
   /////////////////////////////////////////////////////////////////////////////////////////
 
   constexpr
   type characteristic() const {    // return smaller type?
    return CHARACTERISTIC == 0 ? 0 : (value & (~mask())) >> MANTISSA;
+  }     
+
+  constexpr
+  void characteristic(type const & x)  {    
+   type tmp = value & mask();
+   
+   value = (x << MANTISSA) | tmp;
   }     
   
   /////////////////////////////////////////////////////////////////////////////////////////
