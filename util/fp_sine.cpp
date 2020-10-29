@@ -14,9 +14,9 @@ typedef s1q14   out_type;
 
 out_type qsin(in_type const & x_)
 {
- int32_t x(x_.value >> 1);
- int32_t c;
- int32_t y;
+ s17q14 x(x_.value >> 1);
+ s17q14 c(0);
+ s17q14 y(0);
  
  constexpr int32_t shift_qcirc = 13;
  constexpr int32_t shift_out   = 12;
@@ -25,15 +25,15 @@ out_type qsin(in_type const & x_)
  constexpr s17q14  one         { 1, 0     };
  constexpr s17q14  half        ( one >> 1 );
  
- c  = x                 << (30 - shift_qcirc      );  // Semi-circle info into carry.
- x -= half.value;
- x  = x                 << (31 - shift_qcirc      );  // Mask with PI
- x  = x                 >> (31 - shift_qcirc      ); 
- x  = x * x             >> (2  * shift_qcirc  - 14);  // x=x^2 To Q14
- y  = B.value            - (x  * C.value     >> 14);  // B - x^2 * C
- y  = (1 << shift_out)   - (x  * y           >> 16);  // A - x^2*(B-x^2*C)
+ c.value  = x.value                 << (30 - shift_qcirc      );  // Semi-circle info into carry.
+ x.value -= half.value;
+ x.value  = x.value                 << (31 - shift_qcirc      );  // Mask with PI
+ x.value  = x.value                 >> (31 - shift_qcirc      ); 
+ x.value  = x.value * x.value             >> (2  * shift_qcirc  - 14);  // x=x^2 To Q14
+ y.value  = B.value            - (x.value  * C.value     >> 14);  // B - x^2 * C
+ y.value  = (1 << shift_out)   - (x.value  * y.value           >> 16);  // A - x^2*(B-x^2*C)
  
- return out_type(c>=0 ? y : -y);
+ return out_type(c.value >= 0 ? y.value : -y.value);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
