@@ -211,16 +211,17 @@ namespace lamb {
     }
    }
 
-   printf(
-    "CONV FROM %u.%u (%u) to %u.%u (%u) via %u byte intermediary\n",
-    CHARACTERISTIC, MANTISSA,
-    self_type::SIZE,
-    characteristic, mantissa,
-    other_type::SIZE,
-    INTERMED_SIZE
-   );
+   // printf(
+   //  "CONV FROM '%15ld' %u.%u (%u) to %u.%u (%u) via %u byte intermediary\n",
+   //  value,
+   //  CHARACTERISTIC, MANTISSA,
+   //  self_type::SIZE,
+   //  characteristic, mantissa,
+   //  other_type::SIZE,
+   //  INTERMED_SIZE
+   // );
 
-   printf("DELTA: %08d \n", mantissa_delta);
+   // printf("DELTA: %08d \n", mantissa_delta);
    
    intermediary_type tmp_value = value;
    

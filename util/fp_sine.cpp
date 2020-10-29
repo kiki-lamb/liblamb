@@ -37,22 +37,23 @@ typedef s17q14  mid_type;
 
 out_type qsin(in_type const & x_)
 {
- printf("Before: % 12d ");
- pprint_bits_32(x_.value);
- printf("\n");
+ // printf("Before: % 12d ");
+ // pprint_bits_32(x_.value);
+ // printf("\n");
  
- mid_type x(x_.value >> 1);
+ // mid_type x(x_.value); // >> 1);
 
- printf("Main:   % 12d ");
- pprint_bits_32(x.value);
- printf("\n");
+ // printf("Main:   % 12d ");
+ // pprint_bits_32(x.value);
+ // printf("\n");
  
- mid_type xx(x.value);
- xx >>= 1;
+ mid_type x(x_ << 16);
  
- printf("Alter:  % 12d ");
- pprint_bits_32(xx.value);
- printf("\n");
+ // printf("Alter:  % 12d ");
+ // pprint_bits_32(xx.value);
+ // printf("\n");
+
+ // x >>= 1;
  
  constexpr uint8_t  shift_1 = mid_type::CHARACTERISTIC;
  constexpr uint8_t  shift_2 = mid_type::CHARACTERISTIC  + 1;
