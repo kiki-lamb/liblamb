@@ -9,27 +9,28 @@ using namespace lamb;
 /// @param x   angle (with 2^15 units/circle)
 /// @return     Sine value (Q12)
 
-// typedef s3q12 out_type;
 typedef s0q15 out_type;
 
 out_type qsin(s0q31 ph_ix_)
 {
  int32_t ph_ix(ph_ix_);
- int32_t carry, x2, y;
+ int32_t carry;
+ int32_t x2, y;
  
- constexpr int32_t q_quad    = 13;
- constexpr int32_t q_out     = 12;
- 
- constexpr int32_t B         = (s17q14(2, 0) - (s17q14::constants::pi >> 2)).value;
- constexpr int32_t C         = (s17q14(1, 0) - (s17q14::constants::pi >> 2)).value;
+ constexpr int32_t shift_quad  = 13;
+ constexpr int32_t shift_out   = 12; 
+ constexpr s17q14 B            = s17q14(2, 0) - (s17q14::constants::pi >> 2);
+ constexpr s17q14 C            = s17q14(1, 0) - (s17q14::constants::pi >> 2);
 
- carry    = ph_ix       << (30     - q_quad          );  // Semi-circle info into carry.
- ph_ix   -= 1           << (q_quad                   );  // sine -> cosine calc
- ph_ix    = ph_ix       << (31     - q_quad          );  // Mask with PI
- ph_ix    = ph_ix       >> (31     - q_quad          );  // Note: SIGNED shift! (to q_quad)
- ph_ix    = ph_ix        * (ph_ix >> 2   * q_quad-14 );  // x =x^2 To Q14
- y        = B            - (ph_ix  * C  >> 14        );  // B - x^2 * C
- y        = (1 << q_out) - (ph_ix  * y  >> 16        );  // A - x^2 * (B-x^2 * C)
+ carry  = ph_ix           << (30     - shift_quad                );// Semi-circ carry.
+
+ ph_ix -= s17q14(1, 0).value;                                      // sine -> cosine calc
+
+ ph_ix  = ph_ix           << (31     - shift_quad                );// Mask with PI
+ ph_ix  = ph_ix           >> (31     - shift_quad                );  
+ ph_ix  = ph_ix            * (ph_ix >> 2         * shift_quad-14 );// x =x^2 To Q14
+ y      = B.value          - (ph_ix  * C.value  >> 14            );// B - x^2 * C
+ y      = (1 << shift_out) - (ph_ix  * y        >> 16            );// A - x^2 * (B-x^2 * C)
  
  if (carry < 0) {
   y = -y;
