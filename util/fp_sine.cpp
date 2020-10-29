@@ -41,31 +41,31 @@ out_type qsin(s0q31 const & x_)
 {
  typedef   s17q14   mid_type;
  //-----------------------------------------------------------------------------
- constexpr uint8_t  q_shift { mid_type::CHARACTERISTIC             };
- constexpr mid_type pi      { mid_type::constants::pi              };
- constexpr mid_type four    { 4,         0                         };
- constexpr mid_type two     { four    >> 1                         };
- constexpr mid_type one     { two     >> 1                         };
- constexpr mid_type half    { one     >> 1                         };
- constexpr mid_type quarter { half    >> 1                         };
- constexpr mid_type B       { two      - pi / mid_type(4, 0)       };
- constexpr mid_type C       { one      - pi / mid_type(4, 0)       };
+ constexpr uint8_t  q_shift { mid_type::CHARACTERISTIC        };
+ constexpr mid_type pi      { mid_type::constants::pi         };
+ constexpr mid_type four    { 4,          0                   };
+ constexpr mid_type two     { four     >> 1                   };
+ constexpr mid_type one     { two      >> 1                   };
+ constexpr mid_type half    { one      >> 1                   };
+ constexpr mid_type quarter { half     >> 1                   };
+ constexpr mid_type B       { two       - pi / mid_type(4, 0) };
+ constexpr mid_type C       { one       - pi / mid_type(4, 0) };
  //-----------------------------------------------------------------------------
- mid_type           x       { x_      << q_shift - 1               }; 
- mid_type           carry   { x       << q_shift                   };
+ mid_type           x       { x_       << q_shift - 1         }; 
+ mid_type           cry     { x        << q_shift             };
  //-----------------------------------------------------------------------------
- x                          = x        - half                       ;
- x                          = x       << q_shift + 1                ;
- x                          = x       >> q_shift + 1                ;
- x                          = x        * x                          ;
- x                          = x       << 2                          ;
-  //-----------------------------------------------------------------------------
- mid_type           y       { x        * C                         };
+ x                          = x         - half                 ;
+ x                          = x        << q_shift + 1          ;
+ x                          = x        >> q_shift + 1          ;
+ x                          = x         * x                    ;
+ x                          = x        << 2                    ;
+  //----------------------------------------------------------------------------
+ mid_type           y       { x         * C                   };
  //-----------------------------------------------------------------------------
- y                          = B        - y                          ;
- x                          = x        * y                          ;
- y                          = one      - x                          ;
- y                          = carry.value >= 0 ? y : -y             ;
+ y                          = B         - y                    ;
+ y                          = y         * x                    ;
+ y                          = one       - y                    ;
+ y                          = cry.value >= 0 ? y : -y          ;
  //-----------------------------------------------------------------------------
  return out_type(y);
 }
@@ -73,10 +73,6 @@ out_type qsin(s0q31 const & x_)
 ////////////////////////////////////////////////////////////////////////////////
 
 int main() {
-
-// for (uint8_t ix = 1; ix < 64; ix++)
-//  printf("%d: %u \n", ix, size_fit_bits(ix));
-
  typedef s0q31 out_type;
  
  out_type  last(0);
