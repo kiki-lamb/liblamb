@@ -77,6 +77,7 @@ public:
  mathematized operator += (mathematized const & v) { this->value = (*this  + v   ).value; return *this; }
  mathematized operator -= (mathematized const & v) { this->value = (*this  - v   ).value; return *this; }
  mathematized operator ++ ()                       { this += 1;                                         }
+ mathematized operator -  ()                       { this  * 1;                                         }
  mathematized operator -- ()                       { this -= 1;                                         }
  mathematized operator *= (mathematized const & v) { this->value = (*this  * v   ).value; return *this; }
  mathematized operator /= (mathematized const & v) { this->value = (*this  / v   ).value; return *this; }
