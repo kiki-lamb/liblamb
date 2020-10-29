@@ -16,15 +16,15 @@ out_type qsin(s0q31 ph_ix_)
 {
  int32_t ph_ix(ph_ix_);
  int32_t carry, x2, y;
- static const int32_t qN = 13, qA = 12, B = 19900, C = 3516;
+ static const int32_t q_quad = 13, q_out = 12, B = 19900, C = 3516;
 
- carry    = ph_ix     << (30     - qN          );  // Semi-circle info into carry.
- ph_ix   -= 1         << (qN                   );  // sine -> cosine calc
- ph_ix    = ph_ix     << (31     - qN          );  // Mask with PI
- ph_ix    = ph_ix     >> (31     - qN          );  // Note: SIGNED shift! (to qN)
- ph_ix    = ph_ix      * (ph_ix >> 2   * qN-14 );  // x =x^2 To Q14
- y        = B          - (ph_ix  * C  >> 14    );  // B - x^2 * C
- y        = (1 << qA)  - (ph_ix  * y  >> 16    );  // A - x^2 * (B-x^2 * C)
+ carry    = ph_ix       << (30     - q_quad          );  // Semi-circle info into carry.
+ ph_ix   -= 1           << (q_quad                   );  // sine -> cosine calc
+ ph_ix    = ph_ix       << (31     - q_quad          );  // Mask with PI
+ ph_ix    = ph_ix       >> (31     - q_quad          );  // Note: SIGNED shift! (to q_quad)
+ ph_ix    = ph_ix        * (ph_ix >> 2   * q_quad-14 );  // x =x^2 To Q14
+ y        = B            - (ph_ix  * C  >> 14        );  // B - x^2 * C
+ y        = (1 << q_out) - (ph_ix  * y  >> 16        );  // A - x^2 * (B-x^2 * C)
  
  if (carry < 0) {
   y = -y;
