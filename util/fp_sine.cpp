@@ -21,10 +21,12 @@ out_type qsin(in_type const & x_)
  constexpr int32_t shift_qcirc = 13;
  constexpr int32_t shift_out   = 12;
  constexpr s17q14  B           = s17q14(2, 0) - s17q14::constants::pi / s17q14(4, 0);
- constexpr s17q14  C           = s17q14(1, 0) - s17q14::constants::pi / s17q14(4, 0); 
+ constexpr s17q14  C           = s17q14(1, 0) - s17q14::constants::pi / s17q14(4, 0);
+ constexpr s17q14  one         { 1 << 13 };
+ 
  
  c  = x                 << (30 - shift_qcirc      );  // Semi-circle info into carry.
- x -= 1                 << (shift_qcirc           );  // sine -> cosine calc
+ x -= one.value;
  x  = x                 << (31 - shift_qcirc      );  // Mask with PI
  x  = x                 >> (31 - shift_qcirc      ); 
  x  = x * x             >> (2  * shift_qcirc  - 14);  // x=x^2 To Q14
