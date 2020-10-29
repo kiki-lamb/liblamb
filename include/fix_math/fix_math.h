@@ -247,53 +247,6 @@ namespace lamb {
    return other_type(tmp_value);
   }
 
-  /////////////////////////////////////////////////////////////////////////////////////////
-
-  constexpr explicit
-  operator type() const {
-   return value;
-  }
-  
-  ////////////////////////////////////////////////////////////////////////////////////////
-
-  constexpr
-  explicit
-  operator double() const {
-   constexpr double one = ONE.value * 1.0;
-   
-   return value / one;
-  }
-   
-  ////////////////////////////////////////////////////////////////////////////////////////
-
-  static
-  constexpr
-  self_type
-  from_double(
-   double const & tmp
-  ) {
-   int               divisor = tmp;
-   double            modulus = tmp - divisor;
-   type              ipart   = ONE.value * divisor + int(ONE.value * modulus);
-   
-   return self_type(ipart);
-  }
-
-  ////////////////////////////////////////////////////////////////////////////////////////
-
- private:
-
-  template <uint8_t c, uint8_t m>
-  class constants_helper {
-  public:
-   static_assert(c >= 2, "characteristic must be at least 2.");
-   static constexpr self_type pi = from_double(M_PI);
-  };
-
- public:
-  
-  typedef constants_helper<CHARACTERISTIC, MANTISSA> constants;
- 
   ////////////////////////////////////////////////////////////////////////////////////////
 
   constexpr
@@ -455,20 +408,20 @@ namespace lamb {
    big_tmp                     >>= other_mantissa;     
    type              small_tmp   = big_tmp;
 
-   if (false) {
-    printf(
-     "MUL % 13.05lf * % 13.05lf = % 13.05lf \n",
-     double(*this),
-     double(other),
-     double(self_type(small_tmp))
-    );
-    printf(
-     "MUL % 13lu * % 13lu = % 13lu \n",
-     value,
-     other.value,
-     small_tmp
-    );   
-   }
+   // if (false) {
+   //  printf(
+   //   "MUL % 13.05lf * % 13.05lf = % 13.05lf \n",
+   //   parent_template<fixed_impl>::double(*this),
+   //   parent_template<fixed_impl>::double(other),
+   //   parent_template<fixed_impl>::double(self_type(small_tmp))
+   //  );
+   //  printf(
+   //   "MUL % 13lu * % 13lu = % 13lu \n",
+   //   value,
+   //   other.value,
+   //   small_tmp
+   //  );   
+   // }
    
    return self_type(small_tmp);
   }
@@ -578,6 +531,7 @@ namespace lamb {
  class fixed : public impl {
 
   typedef impl base;
+  typedef fixed<impl> self_type;
   
  public:
   
@@ -663,6 +617,53 @@ namespace lamb {
    return impl::value <= other.value;
   }    
   
+  ////////////////////////////////////////////////////////////////////////////////////////
+
+  constexpr explicit
+  operator typename impl::type() const {
+   return impl::value;
+  }
+  
+  ////////////////////////////////////////////////////////////////////////////////////////
+
+  constexpr
+  explicit
+  operator double() const {
+   constexpr double one = impl::ONE.value * 1.0;
+   
+   return impl::value / one;
+  }
+   
+  ////////////////////////////////////////////////////////////////////////////////////////
+
+  static
+  constexpr
+  self_type
+  from_double(
+   double const & tmp
+  ) {
+   int                 divisor = tmp;
+   double              modulus = tmp - divisor;
+   typename impl::type ipart   = impl::ONE.value * divisor + int(impl::ONE.value * modulus);
+   
+   return self_type(ipart);
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////////////
+
+ private:
+
+  template <uint8_t c, uint8_t m>
+  class constants_helper {
+  public:
+   static_assert(c >= 2, "characteristic must be at least 2.");
+   static constexpr self_type pi = from_double(M_PI);
+  };
+
+ public:
+  
+  typedef constants_helper<impl::CHARACTERISTIC, impl::MANTISSA> constants;
+ 
  /////////////////////////////////////////////////////////////////////////////////////////
 
  }; // class fixed
