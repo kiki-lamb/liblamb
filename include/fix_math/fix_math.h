@@ -320,72 +320,6 @@ namespace lamb {
 
   ////////////////////////////////////////////////////////////////////////////////////////
 
-  template <bool saturate>
-  constexpr
-  bool
-  operator == (
-   compatible_type<saturate> const & other
-  ) const {
-   return value == other.value;
-  }    
-
-  ////////////////////////////////////////////////////////////////////////////////////////
-
-  template <bool saturate>
-  constexpr
-  bool
-  operator != (
-   compatible_type<saturate> const & other
-  ) const {
-   return value != other.value;
-  }    
-
-  ////////////////////////////////////////////////////////////////////////////////////////
-
-  template <bool saturate>
-  constexpr
-  bool
-  operator > (
-   compatible_type<saturate> const & other
-  ) const {
-   return value > other.value;
-  }    
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-
-  template <bool saturate>
-  constexpr
-  bool
-  operator < (
-   compatible_type<saturate> const & other
-  ) const {
-   return value < other.value;
-  }    
-
-  ////////////////////////////////////////////////////////////////////////////////////////
-
-  template <bool saturate>
-  constexpr
-  bool
-  operator >= (
-   compatible_type<saturate> const & other
-  ) const {
-   return value >= other.value;
-  }    
-
-  ////////////////////////////////////////////////////////////////////////////////////////
-
-  template <bool saturate>
-  constexpr
-  bool
-  operator <= (
-   compatible_type<saturate> const & other
-  ) const {
-   return value <= other.value;
-  }    
-
-  ////////////////////////////////////////////////////////////////////////////////////////
-
   constexpr
   self_type
   operator >> (
@@ -662,6 +596,73 @@ namespace lamb {
    typename base::type const & mantissa
   ) : base(characteristic, mantissa) {}
 
+
+  ////////////////////////////////////////////////////////////////////////////////////////
+
+  template <bool saturate>
+  constexpr
+  bool
+  operator == (
+   typename impl::template compatible_type<saturate> const & other
+  ) const {
+   return impl::value == other.value;
+  }    
+
+  ////////////////////////////////////////////////////////////////////////////////////////
+
+  template <bool saturate>
+  constexpr
+  bool
+  operator != (
+   typename impl::template compatible_type<saturate> const & other
+  ) const {
+   return impl::value != other.value;
+  }    
+
+  ////////////////////////////////////////////////////////////////////////////////////////
+
+  template <bool saturate>
+  constexpr
+  bool
+  operator > (
+   typename impl::template compatible_type<saturate> const & other
+  ) const {
+   return impl::value > other.value;
+  }    
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+
+  template <bool saturate>
+  constexpr
+  bool
+  operator < (
+   typename impl::template compatible_type<saturate> const & other
+  ) const {
+   return impl::value < other.value;
+  }    
+
+  ////////////////////////////////////////////////////////////////////////////////////////
+
+  template <bool saturate>
+  constexpr
+  bool
+  operator >= (
+   typename impl::template compatible_type<saturate> const & other
+  ) const {
+   return impl::value >= other.value;
+  }    
+
+  ////////////////////////////////////////////////////////////////////////////////////////
+
+  template <bool saturate>
+  constexpr
+  bool
+  operator <= (
+   typename impl::template compatible_type<saturate> const & other
+  ) const {
+   return impl::value <= other.value;
+  }    
+  
  /////////////////////////////////////////////////////////////////////////////////////////
 
  }; // class fixed
