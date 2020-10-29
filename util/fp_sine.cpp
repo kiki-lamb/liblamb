@@ -13,7 +13,7 @@ typedef s0q15 out_type;
 
 out_type qsin(u0q16 const & ph_ix_)
 {
- int32_t ph_ix(ph_ix_.value);
+ int32_t ph_ix(ph_ix_.value >> 1);
  int32_t carry;
  int32_t x2, y;
  
@@ -48,7 +48,7 @@ int main() {
  
  for (
   int32_t ix = 0;
-  ix <= 32768;
+  ix < 65535;
   ix++
  ) {
   last = qsin(u0q16(ix));
