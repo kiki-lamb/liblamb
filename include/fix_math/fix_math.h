@@ -329,20 +329,7 @@ namespace lamb {
    return self_type(small_tmp);
   }    
 
-  //------------------------------------------------------------------------------------
-  
-  template <bool saturate>
-  constexpr
-  self_type &
-  operator += (
-   compatible_type<saturate> const & other
-  ) {
-   value = (*this + other).value;
-
-   return *((self_type*)(this));
-  }
-
-  /////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////
 
   constexpr
   self_type
@@ -365,19 +352,6 @@ namespace lamb {
    
    return self_type(small_tmp);
   }    
-
-  //--------------------------------------------------------------------------------------
-
-  template <bool saturate>
-  constexpr
-  self_type &
-  operator -= (
-   compatible_type<saturate> const & other
-  ) {
-   value = (*this - other).value;
-
-   return *((self_type*)(this));
-  }
 
   ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -424,19 +398,6 @@ namespace lamb {
    // }
    
    return self_type(small_tmp);
-  }
-
-  //--------------------------------------------------------------------------------------
-  
-  template <uint8_t other_characteristic, uint8_t other_mantissa, bool saturate>
-  constexpr
-  self_type & 
-  operator *= (
-   parent_template<fixed_impl<other_characteristic,other_mantissa, saturate, parent_template>> const & other
-  ) {
-   value = (*this * other).value;
-
-   return *((self_type*)(this));
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -505,20 +466,7 @@ namespace lamb {
    return self_type(small_tmp);
   }
 
-  //--------------------------------------------------------------------------------------
-
-  template <uint8_t other_characteristic, uint8_t other_mantissa, bool saturate__>
-  constexpr
-  self_type & 
-  operator /= (
-   parent_template<fixed_impl<other_characteristic, other_mantissa, saturate__, parent_template>> const & other
-  ) {   
-   value = (*this / other).value;
-
-   return *((self_type*)(this));
-  }
-
- /////////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
 
  }; // template fixed_impl
 
@@ -666,6 +614,60 @@ namespace lamb {
  
  /////////////////////////////////////////////////////////////////////////////////////////
 
+
+  template <bool saturate>
+  constexpr
+  self_type &
+  operator -= (
+   typename impl::template compatible_type<saturate> const & other
+  ) {
+   impl::value = (*this - other).value;
+
+   return *(this);
+  }
+
+ /////////////////////////////////////////////////////////////////////////////////////////
+  
+  template <bool saturate>
+  constexpr
+  self_type &
+  operator += (
+   typename impl::template compatible_type<saturate> const & other
+  ) {
+   impl::value = (*this + other).value;
+
+   return *(this);
+  }
+
+ /////////////////////////////////////////////////////////////////////////////////////////
+
+  template <uint8_t other_characteristic, uint8_t other_mantissa, bool saturate>
+  constexpr
+  self_type & 
+  operator *= (
+   fixed<fixed_impl<other_characteristic,other_mantissa, saturate, fixed>> const & other
+  ) {
+   impl::value = (*this * other).value;
+
+   return *(this);
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+  
+ 
+  template <uint8_t other_characteristic, uint8_t other_mantissa, bool saturate__>
+  constexpr
+  self_type & 
+  operator /= (
+   fixed<fixed_impl<other_characteristic, other_mantissa, saturate__, fixed>> const & other
+  ) {   
+   impl::value = (*this / other).value;
+
+   return *(this);
+  }
+
+/////////////////////////////////////////////////////////////////////////////////////////
+  
  }; // class fixed
   
  /////////////////////////////////////////////////////////////////////////////////////////
