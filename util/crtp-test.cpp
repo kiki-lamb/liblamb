@@ -110,4 +110,11 @@ int main() {
  x += z;
 
  printf("=> %u \n", x.value);
+
+ if constexpr(integer_traits<uint16_t>::SIGNED) {
+  printf("YES\n");
+ }
+ else {
+  printf("NO\n");
+ }
 }
