@@ -81,6 +81,10 @@ out_type qsin(in_type const & x_)
 ////////////////////////////////////////////////////////////////////////////////
 
 int main() {
+
+// for (uint8_t ix = 1; ix < 64; ix++)
+//  printf("%d: %u \n", ix, size_fit_bits(ix));
+ 
  out_type  last(0);
  out_type  min(0);
  out_type  max(0);

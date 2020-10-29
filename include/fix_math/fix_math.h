@@ -213,8 +213,9 @@ namespace lamb {
 
    printf(
     "CONV FROM %u.%u (%u) to %u.%u (%u) via %u byte intermediary\n",
-    CHARACTERISTIC, MANTISSA, characteristic, mantissa,
-    size_fit_bits(CHARACTERISTIC+MANTISSA),
+    CHARACTERISTIC, MANTISSA,
+    self_type::SIZE,
+    characteristic, mantissa,
     other_type::SIZE,
     INTERMED_SIZE
    );
