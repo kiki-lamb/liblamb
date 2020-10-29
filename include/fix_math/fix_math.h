@@ -196,8 +196,10 @@ namespace lamb {
    typedef fixed<characteristic, mantissa, saturate>
     other_type;
 
+   constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
+   
    typedef
-    typename integer_type<SIGNED, (size_fit_bytes(SIZE+other_type::SIZE))>::traits::type
+    typename integer_type<SIGNED, INTERMED_SIZE>::traits::type
     intermediary_type;
 
    constexpr bool    from_signed    = SIGNED     && (! other_type::SIGNED);
@@ -208,6 +210,16 @@ namespace lamb {
      return other_type(0);
     }
    }
+
+   printf(
+    "CONV FROM %u.%u (%u) to %u.%u (%u) via %u byte intermediary\n",
+    CHARACTERISTIC, MANTISSA, characteristic, mantissa,
+    size_fit_bits(CHARACTERISTIC+MANTISSA),
+    other_type::SIZE,
+    INTERMED_SIZE
+   );
+
+   printf("DELTA: %08d \n", mantissa_delta);
    
    intermediary_type tmp_value = value;
    

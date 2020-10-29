@@ -4,6 +4,28 @@ using namespace lamb;
 
 // g++ -std=gnu++17 -DLAMB_NO_ARDUINO fp_sine.cpp && .\a.exe > a.csv && sigrok-cli -I csv:column_formats="*a" -i a.csv -o x.sr
 
+
+void pprint_bits_32(uint32_t const & t0) {
+  {
+    for(uint32_t mask = 0x80000000; mask; mask >>= 1) {
+      if (mask & t0) {
+#ifdef LAMB_NO_ARDUINO
+       printf("1");
+#else
+       Serial.print('1'); Serial.flush();
+#endif
+      }
+      else {
+#ifdef LAMB_NO_ARDUINO
+       printf("0");
+#else
+       Serial.print('0'); Serial.flush();
+#endif
+      }
+    }
+  }
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 /// @param x   angle (with 2^15 units/circle)
@@ -15,10 +37,25 @@ typedef s17q14  mid_type;
 
 out_type qsin(in_type const & x_)
 {
+ printf("Before: % 12d ");
+ pprint_bits_32(x_.value);
+ printf("\n");
+ 
  mid_type x(x_.value >> 1);
+
+ printf("Main:   % 12d ");
+ pprint_bits_32(x.value);
+ printf("\n");
+ 
+ mid_type xx(x.value);
+ xx >>= 1;
+ 
+ printf("Alter:  % 12d ");
+ pprint_bits_32(xx.value);
+ printf("\n");
  
  constexpr uint8_t  shift_1 = mid_type::CHARACTERISTIC;
- constexpr uint8_t  shift_2 = mid_type::CHARACTERISTIC + 1;
+ constexpr uint8_t  shift_2 = mid_type::CHARACTERISTIC  + 1;
  constexpr mid_type pi      = mid_type::constants::pi;
  constexpr mid_type two     { 2,         0                 };
  constexpr mid_type one     { 1,         0                 };
