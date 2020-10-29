@@ -589,13 +589,13 @@ namespace lamb {
      (sizeof(intermediary_type) << 3)
     );
     printf(
-     " div % 13.05lf / % 13.05lf = % 13.05lf \n",
+     " div % 16.05lf / % 16.05lf = % 16.05lf \n",
      double(*this),
      double(other),
      double(self_type(small_tmp))
     );
     printf(
-     " big %13lu << ",
+     " big %16lu << ",
      ((intermediary_type)value)
     );
     printf("%lld ", ((intermediary_type)value) << other_mantissa);
@@ -604,7 +604,7 @@ namespace lamb {
      other_mantissa
     );
     printf(
-     " div % 13lu / % 13lu = % 13lu \n",
+     " div % 16lu / % 16lu = % 16lu \n",
      value,
      other.value,
      small_tmp
