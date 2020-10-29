@@ -1,7 +1,6 @@
 #include "../include/lamb.h"
 
 using namespace lamb;
-using namespace std;
 
 // g++ -std=gnu++17 -DLAMB_NO_ARDUINO fp_sine.cpp && .\a.exe > a.csv && sigrok-cli -I csv:column_formats="*a" -i a.csv -o x.sr
 
@@ -10,7 +9,10 @@ using namespace std;
 /// @param x   angle (with 2^15 units/circle)
 /// @return     Sine value (Q12)
 
-s0q15 isin_S4(int32_t x)
+// typedef s3q12 out_type;
+typedef s0q15 out_type;
+
+out_type qsin(int32_t x)
 {
     int c, x2, y;
     static const int qN = 13, qA = 12, B = 19900, C = 3516;
@@ -27,24 +29,22 @@ s0q15 isin_S4(int32_t x)
      y = -y;
     }
 
-    static const uint8_t out_shift = 3;
-
-    return s0q15(y);
+    return out_type(y);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 int main() {
- s0q15 last(0);
- s0q15 min(0);
- s0q15 max(0);
+ out_type  last(0);
+ out_type  min(0);
+ out_type  max(0);
  
  for (
   int32_t ix = 0;
   ix <= 32768;
   ix++
  ) {
-  last = isin_S4(ix);
+  last = qsin(ix);
 
   // printf("%d, % 05.5lf \n", last, last / 4096.0);
   printf("% 05.5lf \n", double(last));
@@ -56,7 +56,6 @@ int main() {
    min = last;
   }
 
- printf("MAX: % 05.5lf \n", double(max));
- 
- printf("MIN: % 05.5lf \n", double(min));
+ printf("MAX: % 05.5lf %d \n", double(max), max.value); 
+ printf("MIN: % 05.5lf %d \n", double(min), min.value);
 }
