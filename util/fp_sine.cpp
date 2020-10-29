@@ -20,8 +20,13 @@ out_type qsin(s0q31 ph_ix_)
  constexpr int32_t q_quad    = 13;
  constexpr int32_t q_out     = 12;
  constexpr int32_t q_out_one = 1 << q_out;
- constexpr int32_t q_pi      = s17q14::constants::pi.value;
- constexpr int32_t B         = 19900; //((int32_t)(2 - (M_PI / 4))) << 14;
+
+ constexpr s17q14  q_pi      = s17q14::constants::pi;
+ constexpr int32_t q_pi_o_4  = (q_pi >> 2).value; 
+
+ constexpr int32_t q_2       = s17q14(2, 0).value;
+ 
+ constexpr int32_t B         = q_2 - q_pi_o_4; // 19900; //((int32_t)(2 - (M_PI / 4))) << 14;
  constexpr int32_t C         = 3516;
 
  carry    = ph_ix       << (30     - q_quad          );  // Semi-circle info into carry.
@@ -63,7 +68,12 @@ int main() {
    min = last;
   }
 
- printf("MAX: % 05.5lf %d \n", double(max), max.value); 
- printf("MIN: % 05.5lf %d \n", double(min), min.value);
- printf("PI:  % 05.5lf %d \n", double(s17q14::constants::pi), s17q14::constants::pi.value);
+ printf("MAX:  % 05.5lf %d \n", double(max), max.value); 
+ printf("MIN:  % 05.5lf %d \n", double(min), min.value);
+ printf("PI:   % 05.5lf %d \n", double(s17q14::constants::pi), s17q14::constants::pi.value);
+ printf(
+  "PI/4: % 05.5lf %d \n",
+  double(s17q14::constants::pi >> 2),
+  (s17q14::constants::pi >> 2).value
+ );
 }
