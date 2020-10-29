@@ -17,28 +17,27 @@ out_type qsin(in_type const & x_)
 {
  mid_type x(x_.value >> 1);
  
- constexpr int32_t  shift_qcirc = 13;
- constexpr int32_t  shift_out   = 12;
- constexpr mid_type pi          = mid_type::constants::pi;
- constexpr mid_type B           = mid_type(2, 0 ) - pi / mid_type(4, 0);
- constexpr mid_type C           = mid_type(1, 0 ) - pi / mid_type(4, 0);
+ constexpr mid_type two         { 2,        0 };
  constexpr mid_type one         { 1,        0 };
  constexpr mid_type half        ( one  >>   1 );
  constexpr mid_type quarter     ( half >>   1 );
- constexpr uint8_t  shift_1     = 30    - shift_qcirc;
- constexpr uint8_t  shift_2     = 31    - shift_qcirc;
+ constexpr uint8_t  shift_1     = mid_type::CHARACTERISTIC;
+ constexpr uint8_t  shift_2     = mid_type::CHARACTERISTIC + 1;
+ constexpr mid_type pi          = mid_type::constants::pi;
+ constexpr mid_type B           = two - pi / mid_type(4, 0);
+ constexpr mid_type C           = one - pi / mid_type(4, 0);
 
- mid_type c      = x       << shift_1;
- x               = x        - half;
- x               = x       << shift_2;
- x               = x       >> shift_2;
- x               = x        * x;
- x               = x       << 2;
- mid_type y      = x        * C;
- y               = B        - y;
- mid_type tmp1   = x        * y;
- tmp1            = tmp1    >> 2;
- y               = quarter  - tmp1;
+ mid_type c  = x       << shift_1;
+ x           = x        - half;
+ x           = x       << shift_2;
+ x           = x       >> shift_2;
+ x           = x        * x;
+ x           = x       << 2;
+ mid_type y  = x        * C;
+ y           = B        - y;
+ x           = x        * y;
+ x           = x       >> 2;
+ y           = quarter  - x;
  
  return out_type(c.value >= 0 ? y : -y);
 }
