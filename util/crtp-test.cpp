@@ -41,7 +41,7 @@ using namespace lamb;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename value_type_>
-class thing {
+class integer {
 //----------------------------------------------------------------------------------------------------------------------
 public:
  //---------------------------------------------------------------------------------------------------------------------
@@ -50,22 +50,23 @@ public:
  value_type value;
  //---------------------------------------------------------------------------------------------------------------------
  explicit
- thing(value_type const & v) : value(v) {}
+ integer(value_type const & v) : value(v) {}
  //---------------------------------------------------------------------------------------------------------------------
- /**/           operator     value_type()               const     = delete;
- thing          operator  +  ()                         const     = delete;
- thing          operator  ~  ()                         const     { return thing(       ~ value      ); }
- thing          operator  -  ()                         const     { return thing(       - value      ); }
- thing          operator >>  (uint8_t const & shift)    const     { return thing(value >> shift      ); }
- thing          operator <<  (uint8_t const & shift)    const     { return thing(value << shift      ); }
- thing          operator  +  (thing   const & other)    const     { return thing(value  + other.value); }
- thing          operator  -  (thing   const & other)    const     { return thing(value  - other.value); }
- thing          operator  *  (thing   const & other)    const     { return thing(value  * other.value); }
- thing          operator  /  (thing   const & other)    const     { return thing(value  / other.value); }
- thing          operator  %  (thing   const & other)    const     { return thing(value  % other.value); }
- bool           operator  <  (thing   const & other)    const     { return      (value  < other.value); }
- bool           operator  >  (thing   const & other)    const     { return      (value  > other.value); }
- bool           operator ==  (thing   const & other)    const     { return      (value == other.value); }
+ /**/           operator     value_type(           )    const   = delete;
+ //---------------------------------------------------------------------------------------------------------------------
+ integer          operator  +  ()                         const   = delete;
+ integer          operator  ~  ()                         const   { return integer(       ~ value      ); }
+ integer          operator  -  ()                         const   { return integer(       - value      ); }
+ integer          operator >>  (uint8_t const & shift)    const   { return integer(value >> shift      ); }
+ integer          operator <<  (uint8_t const & shift)    const   { return integer(value << shift      ); }
+ integer          operator  +  (integer   const & other)    const   { return integer(value  + other.value); }
+ integer          operator  -  (integer   const & other)    const   { return integer(value  - other.value); }
+ integer          operator  *  (integer   const & other)    const   { return integer(value  * other.value); }
+ integer          operator  /  (integer   const & other)    const   { return integer(value  / other.value); }
+ integer          operator  %  (integer   const & other)    const   { return integer(value  % other.value); }
+ bool           operator  <  (integer   const & other)    const   { return      (value  < other.value); }
+ bool           operator  >  (integer   const & other)    const   { return      (value  > other.value); }
+ bool           operator ==  (integer   const & other)    const   { return      (value == other.value); }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 };
 
@@ -78,9 +79,10 @@ public:
  typedef typename base::value_type value_type;
  //--------------------------------------------------------------------------------------------------------------------- 
  explicit
- mathematized                (value_type   const & v) : base(v) {                                                      }
+ mathematized                (value_type   const & v) : base(v) {}
  //----------------------------------------------------------------------------------------------------------------------
  explicit       operator     value_type(            )   const   { return this->value;                                ; }
+ //----------------------------------------------------------------------------------------------------------------------
  mathematized & operator  -- (                      )           { this        -= mathematized(1);        return *this; }
  mathematized & operator  ++ (                      )           { this        += mathematized(1);        return *this; }
  mathematized & operator >>= (uint8_t      const & v)           { this->value  = (*this    >> v ).value; return *this; }
@@ -98,7 +100,7 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int main() {
- typedef mathematized<thing<uint8_t>> t;
+ typedef mathematized<integer<uint8_t>> t;
  t x(7);
  t y(9);
  t z(8);
