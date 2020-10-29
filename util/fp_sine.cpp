@@ -22,11 +22,12 @@ out_type qsin(in_type const & x_)
  constexpr int32_t shift_out   = 12;
  constexpr s17q14  B           = s17q14(2, 0) - s17q14::constants::pi / s17q14(4, 0);
  constexpr s17q14  C           = s17q14(1, 0) - s17q14::constants::pi / s17q14(4, 0);
- constexpr s17q14  one         { 1 << 13 };
- 
+ constexpr s17q14  one         { 1, 0    };
+ constexpr s17q14  half        { 1 << 13 };
+ printf("Half = % 05.5lf \n", double(half));
  
  c  = x                 << (30 - shift_qcirc      );  // Semi-circle info into carry.
- x -= one.value;
+ x -= half.value;
  x  = x                 << (31 - shift_qcirc      );  // Mask with PI
  x  = x                 >> (31 - shift_qcirc      ); 
  x  = x * x             >> (2  * shift_qcirc  - 14);  // x=x^2 To Q14
