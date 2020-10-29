@@ -28,22 +28,17 @@ out_type qsin(in_type const & x_)
  constexpr uint8_t  shift_1     = 30    - shift_qcirc;
  constexpr uint8_t  shift_2     = 31    - shift_qcirc;
 
- mid_type c      = x;
- c             <<= shift_1;
- x              -= half;
- x             <<= shift_2;
- x             >>= shift_2;
- x              *= x;
- x             <<= 2;
- mid_type tmp0   = x;
- tmp0           *= C;
- mid_type y      = B;
- y              -= tmp0;
- mid_type tmp1   = x;
- tmp1           *= y;
- tmp1          >>= 2;
- y               = quarter;
- y              -= tmp1;
+ mid_type c      = x       << shift_1;
+ x               = x        - half;
+ x               = x       << shift_2;
+ x               = x       >> shift_2;
+ x               = x        * x;
+ x               = x       << 2;
+ mid_type y      = x        * C;
+ y               = B        - y;
+ mid_type tmp1   = x        * y;
+ tmp1            = tmp1    >> 2;
+ y               = quarter  - tmp1;
  
  return out_type(c.value >= 0 ? y : -y);
 }
