@@ -14,7 +14,6 @@ double  Direct.
      <  Direct.
     ==  Direct.
      %  /
-    u+  No.
     u-  *
     !=  ==
     >=  >,  ==
@@ -28,3 +27,4 @@ double  Direct.
     *=  *,  =
    <<=  <<, =
    >>=  >>, =
+    u+  No.
