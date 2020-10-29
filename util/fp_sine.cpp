@@ -11,7 +11,7 @@ using namespace lamb;
 
 typedef s0q31   in_type;
 typedef s1q14   out_type;
-typedef s17q14   mid_type;
+typedef s17q14  mid_type;
 
 out_type qsin(in_type const & x_)
 {
@@ -28,19 +28,22 @@ out_type qsin(in_type const & x_)
  constexpr uint8_t  shift_1     = 30    - shift_qcirc;
  constexpr uint8_t  shift_2     = 31    - shift_qcirc;
 
- s17q14 c     = x;
- c          <<= shift_1;
- x           -= half;
- x          <<= shift_2;
- x          >>= shift_2;
- x           *= x;
- x          <<= 2;
- s17q14 y     = B;
- y           -= x * C;
- s17q14 tmp   = x * y;
- tmp        >>= 2;
- y            = quarter;
- y           -= tmp;
+ mid_type c     = x;
+ c            <<= shift_1;
+ x             -= half;
+ x            <<= shift_2;
+ x            >>= shift_2;
+ x             *= x;
+ x            <<= 2;
+ mid_type y     = B;
+ mid_type tmp0  = x;
+ tmp0          *= C;
+ y             -= tmp0;
+ mid_type tmp1  = x;
+ tmp1          *= y;
+ tmp1         >>= 2;
+ y              = quarter;
+ y             -= tmp1;
  
  return out_type(c.value >= 0 ? y : -y);
 }
