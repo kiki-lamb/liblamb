@@ -88,14 +88,15 @@ namespace lamb {
 
   /////////////////////////////////////////////////////////////////////////////////////////
 
-  static constexpr type    MAX = integer_type<SIGNED, SIZE>::traits::MAX;
-  static constexpr type    MIN = integer_type<SIGNED, SIZE>::traits::MIN;
+  static constexpr self_type MAX = self_type(integer_type<SIGNED, SIZE>::traits::MAX);
+  static constexpr self_type MIN = self_type(integer_type<SIGNED, SIZE>::traits::MIN);
   
   static constexpr
-  type                     ONE =
+  self_type                  ONE = self_type(
    CHARACTERISTIC == 0 ?
-   MAX :
-   (((type)1) << MANTISSA) - 1;  
+   MAX.value :
+   (((type)1) << MANTISSA) - 1
+  );
 
   /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -193,7 +194,7 @@ namespace lamb {
    type const & characteristic,
    type const & mantissa
   ) :
-   value((characteristic * ONE) + (characteristic < 0 ? - mantissa : mantissa)) {}
+   value((characteristic * ONE.value) + (characteristic < 0 ? - mantissa : mantissa)) {}
 
   /////////////////////////////////////////////////////////////////////////////////////////
   
@@ -255,7 +256,7 @@ namespace lamb {
   constexpr
   explicit
   operator double() const {
-   constexpr double one = ONE * 1.0;
+   constexpr double one = ONE.value * 1.0;
    
    return value / one;
   }
@@ -270,7 +271,7 @@ namespace lamb {
   ) {
    int               divisor = tmp;
    double            modulus = tmp - divisor;
-   type              ipart   = ONE * divisor + int(ONE * modulus);
+   type              ipart   = ONE.value * divisor + int(ONE.value * modulus);
    
    return self_type(ipart);
   }

@@ -40,7 +40,9 @@ void pprint_bits_32(uint32_t const & t0) {
 namespace math {
  typedef   s17q14   mid_type;
 
- constexpr mid_type    operator ""_mid(long double x)    { return mid_type::from_double(x); }
+ constexpr mid_type operator ""_mid(long double const x) {
+  return mid_type::from_double(x);
+ }
  
  template <typename out_type>
  out_type qsin(s0q31 const & x_)
