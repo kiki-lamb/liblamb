@@ -12,24 +12,25 @@ using namespace lamb;
 // typedef s3q12 out_type;
 typedef s0q15 out_type;
 
-out_type qsin(int32_t x)
+out_type qsin(s0q31 ph_ix_)
 {
-    int c, x2, y;
-    static const int qN = 13, qA = 12, B = 19900, C = 3516;
+ int32_t ph_ix(ph_ix_);
+ int32_t c, x2, y;
+ static const int32_t qN = 13, qA = 12, B = 19900, C = 3516;
 
-    c  = x << (30 - qN);              // Semi-circle info into carry.
-    x -= 1 << qN;                     // sine -> cosine calc
-    x  = x << (31 - qN);              // Mask with PI
-    x  = x >> (31 - qN);              // Note: SIGNED shift! (to qN)
-    x  = x * x >> (2 * qN-14);        // x =x^2 To Q14
-    y  = B - (x * C >> 14);           // B - x^2 * C
-    y  = (1 << qA) - (x * y >> 16);   // A - x^2 * (B-x^2 * C)
-
-    if (c < 0) {
-     y = -y;
-    }
-
-    return out_type(y);
+ c        = ph_ix << (30 - qN);              // Semi-circle info into carry.
+ ph_ix   -= 1 << qN;                         // sine -> cosine calc
+ ph_ix    = ph_ix << (31 - qN);              // Mask with PI
+ ph_ix    = ph_ix >> (31 - qN);              // Note: SIGNED shift! (to qN)
+ ph_ix    = ph_ix * ph_ix >> (2 * qN-14);    // x =x^2 To Q14
+ y        = B - (ph_ix * C >> 14);           // B - x^2 * C
+ y        = (1 << qA) - (ph_ix * y >> 16);   // A - x^2 * (B-x^2 * C)
+ 
+ if (c < 0) {
+  y = -y;
+ }
+ 
+ return out_type(y);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -44,7 +45,7 @@ int main() {
   ix <= 32768;
   ix++
  ) {
-  last = qsin(ix);
+  last = qsin(s0q31(ix));
 
   // printf("%d, % 05.5lf \n", last, last / 4096.0);
   printf("% 05.5lf \n", double(last));
