@@ -566,9 +566,10 @@ namespace lamb {
    intermediary_type big_tmp     = value;
    big_tmp                     <<= other_mantissa;
    big_tmp                      /= other.value;
+   // big_tmp                      /= 666;.
    type              small_tmp   = big_tmp;
 
-   if (false) {
+   if (true) {
     printf(
      "\nDIV  % 10u.%2u / % 10u.%2u = % 10u.%2u using a %u bit temporary\n",
      CHARACTERISTIC,

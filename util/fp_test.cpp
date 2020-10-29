@@ -1,4 +1,5 @@
 #include "../include/lamb.h"
+#include <stdio.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -35,18 +36,17 @@ void pprint_bits_32(uint32_t const & t0) {
 
 int main() {
 
- typedef u16q16 type;
- typedef type::type int_type;
+ typedef u16q16 f0_type;
+ typedef f0_type::type int_type;
  typedef unsigned_int<(sizeof(int_type))> traits;
 
- constexpr u2q30 one(u2q30::ONE);
+ constexpr u1q31 one(u1q31::ONE);
  
- for (int64_t ix = traits::MIN; ix < traits::MAX-1; ix += 65536 << 2) {
-  type t(ix);
-
-  printf("% 5.5lf % 5.5lf % 5.5u \n", double(u16q16(ix)), double(one), one.value);
+ for (int64_t ix = traits::MIN + 1; ix < traits::MAX-1; ix += 65536 << 2) {
+  printf("% 5.5lf (%lu) / % 5.5lf (%lu) = % 5.5.lf \n", double(one), one.value, double(f0_type(ix)), f0_type(ix).value, one / f0_type(ix));
+  fflush(stdout);
   
-//  u2q30s q1 = one / t;
+//  s16q16s q1 = one / t;
   
 //  printf("% 12ld, % 12.4lf, % 12ld, % 12.4lf \n", t.value, double(t), q1.value, double(q1));
  }
