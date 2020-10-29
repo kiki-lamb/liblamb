@@ -6,6 +6,7 @@
 #ifdef LAMB_NO_ARDUINO
 #include <stdio.h>
 #include <stdlib.h>
+#include <cmath>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -52,7 +53,7 @@ namespace lamb {
   static constexpr bool    SIGNED         = ((CHARACTERISTIC + MANTISSA ) % 2) == 1;
   static constexpr uint8_t SIZE           = size_fit_bits(CHARACTERISTIC+MANTISSA);
   static constexpr uint8_t BIG_SIZE       = size_fit_bits((SIZE + 1) * 8);
-
+  
   ////////////////////////////////////////////////////////////////////////////////////////
 
   typedef
@@ -208,6 +209,21 @@ namespace lamb {
    return self_type(ipart);
   }
 
+  ////////////////////////////////////////////////////////////////////////////////////////
+
+ private:
+
+  template <uint8_t c, uint8_t m>
+  class constants_helper {
+  public:
+   static_assert(c >= 2, "characteristic must be at least 2.");
+   static constexpr self_type pi = from_double(M_PI);
+  };
+
+ public:
+  
+  typedef constants_helper<CHARACTERISTIC, MANTISSA> constants;
+ 
   /////////////////////////////////////////////////////////////////////////////////////////
 
   constexpr
@@ -653,6 +669,11 @@ namespace lamb {
  typedef fixed< 16, 15, true  > s16q15s;
  typedef fixed< 17, 15, false > u17q15;
  typedef fixed< 17, 15, true  > u17q15s;
+ //---------------------------------------------------------------------------------------
+ typedef fixed< 17, 14, false > s17q14;
+ typedef fixed< 17, 14, true  > s17q14s;
+ typedef fixed< 18, 14, false > u18q14;
+ typedef fixed< 18, 14, true  > u18q14s;
  //---------------------------------------------------------------------------------------
  typedef fixed< 19, 12, false > s19q12;
  typedef fixed< 19, 12, true  > s19q12s;

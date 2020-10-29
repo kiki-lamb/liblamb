@@ -16,7 +16,13 @@ out_type qsin(s0q31 ph_ix_)
 {
  int32_t ph_ix(ph_ix_);
  int32_t carry, x2, y;
- static const int32_t q_quad = 13, q_out = 12, B = 19900, C = 3516;
+ 
+ constexpr int32_t q_quad    = 13;
+ constexpr int32_t q_out     = 12;
+ constexpr int32_t q_out_one = 1 << q_out;
+ constexpr int32_t q_pi      = s17q14::constants::pi.value;
+ constexpr int32_t B         = 19900; //((int32_t)(2 - (M_PI / 4))) << 14;
+ constexpr int32_t C         = 3516;
 
  carry    = ph_ix       << (30     - q_quad          );  // Semi-circle info into carry.
  ph_ix   -= 1           << (q_quad                   );  // sine -> cosine calc
@@ -59,4 +65,5 @@ int main() {
 
  printf("MAX: % 05.5lf %d \n", double(max), max.value); 
  printf("MIN: % 05.5lf %d \n", double(min), min.value);
+ printf("PI:  % 05.5lf %d \n", double(s17q14::constants::pi), s17q14::constants::pi.value);
 }
