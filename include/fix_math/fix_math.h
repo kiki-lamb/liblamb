@@ -577,39 +577,39 @@ namespace lamb {
    // big_tmp                      /= 666;.
    type              small_tmp   = big_tmp;
 
-   if (true) {
-    printf(
-     "\nDIV  % 10u.%2u / % 10u.%2u = % 10u.%2u using a %u bit temporary\n",
-     CHARACTERISTIC,
-     MANTISSA,
-     other_characteristic,
-     other_mantissa,
-     CHARACTERISTIC,
-     MANTISSA,
-     (sizeof(intermediary_type) << 3)
-    );
-    printf(
-     " div % 16.05lf / % 16.05lf = % 16.05lf \n",
-     double(*this),
-     double(other),
-     double(self_type(small_tmp))
-    );
-    printf(
-     " big %16lu << ",
-     ((intermediary_type)value)
-    );
-    printf("%lld ", ((intermediary_type)value) << other_mantissa);
-    printf(
-     " after shift %2u \n",
-     other_mantissa
-    );
-    printf(
-     " div % 16lu / % 16lu = % 16lu \n",
-     value,
-     other.value,
-     small_tmp
-    );
-   }
+   // if (true) {
+   //  printf(
+   //   "\nDIV  % 10u.%2u / % 10u.%2u = % 10u.%2u using a %u bit temporary\n",
+   //   CHARACTERISTIC,
+   //   MANTISSA,
+   //   other_characteristic,
+   //   other_mantissa,
+   //   CHARACTERISTIC,
+   //   MANTISSA,
+   //   (sizeof(intermediary_type) << 3)
+   //  );
+   //  printf(
+   //   " div % 16.05lf / % 16.05lf = % 16.05lf \n",
+   //   double(*this),
+   //   double(other),
+   //   double(self_type(small_tmp))
+   //  );
+   //  printf(
+   //   " big %16lu << ",
+   //   ((intermediary_type)value)
+   //  );
+   //  printf("%lld ", ((intermediary_type)value) << other_mantissa);
+   //  printf(
+   //   " after shift %2u \n",
+   //   other_mantissa
+   //  );
+   //  printf(
+   //   " div % 16lu / % 16lu = % 16lu \n",
+   //   value,
+   //   other.value,
+   //   small_tmp
+   //  );
+   // }
    
    return self_type(small_tmp);
   }
