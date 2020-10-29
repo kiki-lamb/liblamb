@@ -28,13 +28,18 @@ out_type qsin(in_type const & x_)
  constexpr uint8_t shift_1     = 30 - shift_qcirc;           // 17
  constexpr uint8_t shift_2     = 31 - shift_qcirc;           // 18
  constexpr uint8_t shift_3     = 2  * shift_qcirc - 14;      // 12
+
+ //printf("x: %5.5lf => ", double(x));
  
  c.value  = x.value           << shift_1                   ; // Semi-circle info into carry.
+
+ // printf("c: %5.5lf \n", double(c));
+
  x       -= half                                           ;
  x.value  = x.value           << shift_2                   ; // Mask with PI
  x.value  = x.value           >> shift_2                   ; 
  x.value  = x.value * x.value >> shift_3                   ; // x=x^2 To Q14
- y.value  = B.value            - (x.value  * C.value >> 14); // B - x^2 * C
+ y        = B - x  * C; // B - x^2 * C
  y.value  = (1 << shift_out)   - (x.value  * y.value >> 16); // A - x^2*(B-x^2*C)
  
  return out_type(c.value >= 0 ? y.value : -y.value);
