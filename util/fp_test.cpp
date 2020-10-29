@@ -7,7 +7,7 @@ using namespace lamb;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// g++ -std=gnu++17 -DLAMB_NO_ARDUINO fp_sine.cpp && .\a.exe > a.csv && sigrok-cli -I csv:column_formats="*a" -i a.csv -o x.sr
+// g++ -std=gnu++17 -DLAMB_NO_ARDUINO fp_test.cpp && .\a.exe
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -33,9 +33,13 @@ void pprint_bits_32(uint32_t const & t0) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// s15q16 operator "" _qn(long double x) {
+//  return s15q16(x);
+// }
 
 int main() {
-
+// using namespace lamb::literals;
+ 
  typedef u16q16 f0_type;
  typedef f0_type::type int_type;
  typedef unsigned_int<(sizeof(int_type))> traits;
