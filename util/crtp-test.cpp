@@ -7,95 +7,95 @@ using namespace lamb;
 
 ////////////////////////////////////////////////////////////////////////////////
 
+// P double  Direct.
+// P      t  Direct.
+// _      =  Default.
+// P      ~  Direct.
+// P      +  Direct.
+// P      -  Direct.
+// P      *  Direct.
+// P      /  Direct.
+// P      %  Direct.
+// P     u~  Direct.
+// P     <<  Direct.
+// P     >>  Direct.
+// P      >  Direct.
+// P      <  Direct
+// P     ==  Direct.
+// P     u-  *
+// C     !=  ==
+// C     >=  >,  ==
+// C     <=  >,  ==
+// C     ++  +,  =
+// C     --  +,  =
+// C     +=  +,  =
+// C     -=  -,  =
+// C     /=  /,  =
+// C     %=  %,  =
+// C     *=  *,  =
+// C    <<=  <<, =
+// C    >>=  >>, =
+// P     u+  No.
+
 // g++ -std=gnu++17 -DLAMB_NO_ARDUINO fp_test.cpp && .\a.exe
 
-////////////////////////////////////////////////////////////////////////////////
-
-
-template <typename c>
-class mathematized;
-
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename value_type_>
 class thing {
+//----------------------------------------------------------------------------------------------------------------------
 public:
+ //---------------------------------------------------------------------------------------------------------------------
  typedef value_type_ value_type;
-
+ //---------------------------------------------------------------------------------------------------------------------
  value_type value;
-
+ //---------------------------------------------------------------------------------------------------------------------
  explicit
  thing(value_type const & v) : value(v) {}
-
-//  double  Direct.
-//       t  Direct.
-//       =  Direct.      
-// C     +  Direct.
-// C     -  Direct.
-// C     *  Direct.
-// C     /  Direct.
-// C     %  Direct.
-//      u~  Direct.
-//      <<  Direct.
-//      >>  Direct.
-//       =  Direct.
-//       >  Direct.
-//       <  Direct.
-//      ==  Direct.
-//      u-  *
-//      !=  ==
-//      >=  >,  ==
-//      <=  >,  ==
-// P    ++  +,  =
-// P    --  +,  =
-// P    +=  +,  =
-// P    -=  -,  =
-// P    /=  /,  =
-// P    %=  %,  =
-// P    *=  *,  =
-// P   <<=  <<, =
-// P   >>=  >>, =
-// C    u+  No.
-
-
- thing        operator +  ()                      = delete;
- thing        operator +  (thing   const & other) { return thing(value  + other.value); }
- thing        operator -  (thing   const & other) { return thing(value  - other.value); }
- thing        operator *  (thing   const & other) { return thing(value  * other.value); }
- thing        operator /  (thing   const & other) { return thing(value  / other.value); }
- thing        operator %  (thing   const & other) { return thing(value  % other.value); }
- thing        operator >> (uint8_t const & shift) { return thing(value >> shift      ); }
- thing        operator << (uint8_t const & shift) { return thing(value << shift      ); }
- 
+ //---------------------------------------------------------------------------------------------------------------------
+ /**/           operator     value_type()               const     = delete;
+ thing          operator  +  ()                         const     = delete;
+ thing          operator  ~  ()                         const     { return thing(       ~ value      ); }
+ thing          operator  -  ()                         const     { return thing(       - value      ); }
+ thing          operator >>  (uint8_t const & shift)    const     { return thing(value >> shift      ); }
+ thing          operator <<  (uint8_t const & shift)    const     { return thing(value << shift      ); }
+ thing          operator  +  (thing   const & other)    const     { return thing(value  + other.value); }
+ thing          operator  -  (thing   const & other)    const     { return thing(value  - other.value); }
+ thing          operator  *  (thing   const & other)    const     { return thing(value  * other.value); }
+ thing          operator  /  (thing   const & other)    const     { return thing(value  / other.value); }
+ thing          operator  %  (thing   const & other)    const     { return thing(value  % other.value); }
+ bool           operator  <  (thing   const & other)    const     { return      (value  < other.value); }
+ bool           operator  >  (thing   const & other)    const     { return      (value  > other.value); }
+ bool           operator ==  (thing   const & other)    const     { return      (value == other.value); }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 };
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename base>
 class mathematized : public base {
+//----------------------------------------------------------------------------------------------------------------------
 public:
+ //---------------------------------------------------------------------------------------------------------------------
  typedef typename base::value_type value_type;
+ //--------------------------------------------------------------------------------------------------------------------- 
  explicit
- mathematized             (value_type   const & v) : base(v) {}  
- mathematized operator += (mathematized const & v) { this->value = (*this  + v   ).value; return *this; }
- mathematized operator -= (mathematized const & v) { this->value = (*this  - v   ).value; return *this; }
- mathematized operator ++ ()                       { this += 1;                                         }
- mathematized operator -  ()                       { this  * 1;                                         }
- mathematized operator -- ()                       { this -= 1;                                         }
- mathematized operator *= (mathematized const & v) { this->value = (*this  * v   ).value; return *this; }
- mathematized operator /= (mathematized const & v) { this->value = (*this  / v   ).value; return *this; }
- mathematized operator %= (mathematized const & v) { this->value = (*this  % v   ).value; return *this; }
- mathematized operator >> (uint8_t      const & v) { this->value = (*this >> v   ).value; return *this; }
- mathematized operator << (uint8_t      const & v) { this->value = (*this << v   ).value; return *this; }
-
- explicit
- operator value_type() {
-  return *(value_type*)this;
- }
-
- explicit
- operator value_type() const {
-  return *(value_type*)this;
- }
+ mathematized                (value_type   const & v) : base(v) {                                                      }
+ //----------------------------------------------------------------------------------------------------------------------
+ explicit       operator     value_type(            )   const   { return this->value;                                ; }
+ mathematized & operator  -- (                      )           { this        -= mathematized(1);        return *this; }
+ mathematized & operator  ++ (                      )           { this        += mathematized(1);        return *this; }
+ mathematized & operator >>= (uint8_t      const & v)           { this->value  = (*this    >> v ).value; return *this; }
+ mathematized & operator <<= (uint8_t      const & v)           { this->value  = (*this    << v ).value; return *this; }
+ mathematized & operator  -= (mathematized const & v)           { this->value  = (*this     - v ).value; return *this; }
+ mathematized & operator  += (mathematized const & v)           { this->value  = (*this     + v ).value; return *this; }
+ mathematized & operator  *= (mathematized const & v)           { this->value  = (*this     * v ).value; return *this; }
+ mathematized & operator  /= (mathematized const & v)           { this->value  = (*this     / v ).value; return *this; }
+ mathematized & operator  %= (mathematized const & v)           { this->value  = (*this     % v ).value; return *this; }
+ bool           operator  <= (mathematized const & o)   const   { return         (*this    == o )     || (*this < o) ; }
+ bool           operator  >= (mathematized const & o)   const   { return         (*this    == o )     || (*this > o) ; }
+ bool           operator  != (mathematized const & o)   const   { return       ! (*this    == o )                    ; } 
+//----------------------------------------------------------------------------------------------------------------------
 };
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int main() {
  typedef mathematized<thing<uint8_t>> t;
