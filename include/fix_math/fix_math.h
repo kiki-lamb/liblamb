@@ -24,11 +24,7 @@ namespace lamb {
   uint8_t  characteristic_,
   uint8_t  mantissa_,
   bool     saturate_,
-  template <
-   uint8_t characteristic__,
-   uint8_t mantissa__,
-   bool    saturate__
-   > class parent_template
+  template <typename t> class parent_template
   >
  class fixed_impl {
 
@@ -65,15 +61,15 @@ namespace lamb {
   ////////////////////////////////////////////////////////////////////////////////////////
 
   typedef
-  parent_template<CHARACTERISTIC, MANTISSA, SATURATE>
+  parent_template<fixed_impl<CHARACTERISTIC, MANTISSA, SATURATE, parent_template>>
   self_type;
   
   template <bool saturate>
   using
-  compatible_type = parent_template<CHARACTERISTIC, MANTISSA, saturate>;
+  compatible_type = parent_template<fixed_impl<CHARACTERISTIC, MANTISSA, saturate, parent_template>>;
 
   typedef
-  parent_template<CHARACTERISTIC, MANTISSA, (! SATURATE)>
+  parent_template<fixed_impl<CHARACTERISTIC, MANTISSA, (! SATURATE), parent_template>>
   sat_cast_type;
 
   typedef
@@ -206,8 +202,10 @@ namespace lamb {
   template <uint8_t characteristic, uint8_t mantissa, bool saturate>
   explicit
   constexpr 
-  operator parent_template<characteristic, mantissa, saturate>() const {
-   typedef parent_template<characteristic, mantissa, saturate>
+  operator
+  parent_template<fixed_impl<characteristic, mantissa, saturate, parent_template>>() const {
+   typedef
+    parent_template<fixed_impl<characteristic, mantissa, saturate, parent_template>>
     other_type;
 
    constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
@@ -500,11 +498,11 @@ namespace lamb {
   constexpr
   self_type
   operator * (
-   parent_template<other_characteristic, other_mantissa, other_saturate> const & other
+   parent_template<fixed_impl<other_characteristic, other_mantissa, other_saturate, parent_template>> const & other
   ) const {
 
    typedef
-    parent_template<other_characteristic, other_mantissa, other_saturate>
+    parent_template<fixed_impl<other_characteristic, other_mantissa, other_saturate, parent_template>>
     other_type;
    
    typedef
@@ -547,7 +545,7 @@ namespace lamb {
   constexpr
   self_type & 
   operator *= (
-   parent_template<other_characteristic,other_mantissa, saturate> const & other
+   parent_template<fixed_impl<other_characteristic,other_mantissa, saturate, parent_template>> const & other
   ) {
    value = (*this * other).value;
 
@@ -560,11 +558,11 @@ namespace lamb {
   constexpr
   self_type
   operator / (
-   parent_template<other_characteristic,other_mantissa,other_saturate> const & other
+   parent_template<fixed_impl<other_characteristic, other_mantissa, other_saturate, parent_template>> const & other
   ) const {
 
    typedef
-    parent_template<other_characteristic, other_mantissa, other_saturate>
+    parent_template<fixed_impl<other_characteristic, other_mantissa, other_saturate, parent_template>>
     other_type;
     
    typedef
@@ -626,7 +624,7 @@ namespace lamb {
   constexpr
   self_type & 
   operator /= (
-   parent_template<other_characteristic, other_mantissa, saturate__> const & other
+   parent_template<fixed_impl<other_characteristic, other_mantissa, saturate__, parent_template>> const & other
   ) {   
    value = (*this / other).value;
 
@@ -642,14 +640,10 @@ namespace lamb {
  // fixed
  /////////////////////////////////////////////////////////////////////////////////////////
 
- template <
-  uint8_t characteristic_,
-  uint8_t mantissa_,
-  bool    saturate_
-  >
- class fixed : public fixed_impl<characteristic_, mantissa_, saturate_, fixed> {
+ template <typename impl>
+ class fixed : public impl {
 
-  typedef fixed_impl<characteristic_, mantissa_, saturate_, fixed> base;
+  typedef impl base;
   
  public:
   
@@ -679,11 +673,11 @@ namespace lamb {
  //---------------------------------------------------------------------------------------
  // 8 bits
  //---------------------------------------------------------------------------------------
- typedef fixed<  0,  7, false > s0q7;
- typedef fixed<  0,  7, true  > s0q7s;
+ typedef fixed<fixed_impl<  0,  7, false, fixed>> s0q7;
+ typedef fixed<fixed_impl<  0,  7, true , fixed>> s0q7s;
  //---------------------------------------------------------------------------------------
- typedef fixed<  0,  8, false > u0q8;
- typedef fixed<  0,  8, true  > u0q8s;
+ typedef fixed<fixed_impl<  0,  8, false, fixed>> u0q8;
+ typedef fixed<fixed_impl<  0,  8, true , fixed>> u0q8s;
  //---------------------------------------------------------------------------------------
  constexpr s0q7  operator ""_s0q7(long double x)    { return s0q7::from_double(x); }
  constexpr s0q7s operator ""_s0q7s(long double x)   { return s0q7s::from_double(x); }
@@ -695,48 +689,48 @@ namespace lamb {
  //---------------------------------------------------------------------------------------
  // 16 bits
  //---------------------------------------------------------------------------------------
- typedef fixed<  0, 16, false > u0q16;
- typedef fixed<  0, 16, true  > u0q16s;
+ typedef fixed<fixed_impl<  0, 16, false, fixed>> u0q16;
+ typedef fixed<fixed_impl<  0, 16, true , fixed>> u0q16s;
  //---------------------------------------------------------------------------------------
- typedef fixed<  0, 15, false > s0q15;
- typedef fixed<  0, 15, true  > s0q15s;
- typedef fixed<  1, 15, false > u1q15;
- typedef fixed<  1, 15, true  > u1q15s;
+ typedef fixed<fixed_impl<  0, 15, false, fixed>> s0q15;
+ typedef fixed<fixed_impl<  0, 15, true , fixed>> s0q15s;
+ typedef fixed<fixed_impl<  1, 15, false, fixed>> u1q15;
+ typedef fixed<fixed_impl<  1, 15, true , fixed>> u1q15s;
  //---------------------------------------------------------------------------------------
- typedef fixed<  1, 14, false > s1q14;
- typedef fixed<  1, 14, true  > s1q14s;
- typedef fixed<  2, 14, false > u2q14;
- typedef fixed<  2, 14, true  > u2q14s;
+ typedef fixed<fixed_impl<  1, 14, false, fixed>> s1q14;
+ typedef fixed<fixed_impl<  1, 14, true , fixed>> s1q14s;
+ typedef fixed<fixed_impl<  2, 14, false, fixed>> u2q14;
+ typedef fixed<fixed_impl<  2, 14, true , fixed>> u2q14s;
  //---------------------------------------------------------------------------------------
- typedef fixed<  2, 13, false > s2q13;
- typedef fixed<  2, 13, true  > s2q13s;
- typedef fixed<  3, 13, false > u3q13;
- typedef fixed<  3, 13, true  > u3q13s;
+ typedef fixed<fixed_impl<  2, 13, false, fixed>> s2q13;
+ typedef fixed<fixed_impl<  2, 13, true , fixed>> s2q13s;
+ typedef fixed<fixed_impl<  3, 13, false, fixed>> u3q13;
+ typedef fixed<fixed_impl<  3, 13, true , fixed>> u3q13s;
  //---------------------------------------------------------------------------------------
- typedef fixed<  3, 12, false > s3q12;
- typedef fixed<  3, 12, true  > s3q12s;
- typedef fixed<  4, 12, false > u4q12;
- typedef fixed<  4, 12, true  > u4q12s;
+ typedef fixed<fixed_impl<  3, 12, false, fixed>> s3q12;
+ typedef fixed<fixed_impl<  3, 12, true , fixed>> s3q12s;
+ typedef fixed<fixed_impl<  4, 12, false, fixed>> u4q12;
+ typedef fixed<fixed_impl<  4, 12, true , fixed>> u4q12s;
  //---------------------------------------------------------------------------------------
- typedef fixed<  4, 11, false > s4q11;
- typedef fixed<  4, 11, true  > s4q11s;
- typedef fixed<  5, 11, false > u5q11;
- typedef fixed<  5, 11, true  > u5q11s;
+ typedef fixed<fixed_impl<  4, 11, false, fixed>> s4q11;
+ typedef fixed<fixed_impl<  4, 11, true , fixed>> s4q11s;
+ typedef fixed<fixed_impl<  5, 11, false, fixed>> u5q11;
+ typedef fixed<fixed_impl<  5, 11, true , fixed>> u5q11s;
  //---------------------------------------------------------------------------------------
- typedef fixed<  5, 10, false > s5q10;
- typedef fixed<  5, 10, true  > s5q10s;
- typedef fixed<  6, 10, false > u6q10;
- typedef fixed<  6, 10, true  > u6q10s;
+ typedef fixed<fixed_impl<  5, 10, false, fixed>> s5q10;
+ typedef fixed<fixed_impl<  5, 10, true , fixed>> s5q10s;
+ typedef fixed<fixed_impl<  6, 10, false, fixed>> u6q10;
+ typedef fixed<fixed_impl<  6, 10, true , fixed>> u6q10s;
  //---------------------------------------------------------------------------------------
- typedef fixed<  6,  9, false > s6q9;
- typedef fixed<  6,  9, true  > s6q9s;
- typedef fixed<  7,  9, false > u7q9;
- typedef fixed<  7,  9, true  > u7q9s;
+ typedef fixed<fixed_impl<  6,  9, false, fixed>> s6q9;
+ typedef fixed<fixed_impl<  6,  9, true , fixed>> s6q9s;
+ typedef fixed<fixed_impl<  7,  9, false, fixed>> u7q9;
+ typedef fixed<fixed_impl<  7,  9, true , fixed>> u7q9s;
  //---------------------------------------------------------------------------------------
- typedef fixed<  7,  8, false > s7q8;
- typedef fixed<  7,  8, true  > s7q8s;
- typedef fixed<  8,  8, false > u8q8;
- typedef fixed<  8,  8, true  > u8q8s;
+ typedef fixed<fixed_impl<  7,  8, false, fixed>> s7q8;
+ typedef fixed<fixed_impl<  7,  8, true , fixed>> s7q8s;
+ typedef fixed<fixed_impl<  8,  8, false, fixed>> u8q8;
+ typedef fixed<fixed_impl<  8,  8, true , fixed>> u8q8s;
  //---------------------------------------------------------------------------------------
  constexpr u0q16   operator ""_u0q16(long double x)   { return u0q16::from_double(x); }
  constexpr u0q16s  operator ""_u0q16s(long double x)  { return u0q16s::from_double(x); }
@@ -785,103 +779,103 @@ namespace lamb {
  //---------------------------------------------------------------------------------------
  // 32 bits
  //---------------------------------------------------------------------------------------
- typedef fixed<  0, 32, false > u0q32;
- typedef fixed<  0, 32, true  > u0q32s;
+ typedef fixed<fixed_impl<  0, 32, false, fixed>> u0q32;
+ typedef fixed<fixed_impl<  0, 32, true , fixed>> u0q32s;
  //---------------------------------------------------------------------------------------
- typedef fixed<  0, 31, false > s0q31;
- typedef fixed<  0, 31, true  > s0q31s;
- typedef fixed<  1, 31, false > u1q31;
- typedef fixed<  1, 31, true  > u1q31s;
+ typedef fixed<fixed_impl<  0, 31, false, fixed>> s0q31;
+ typedef fixed<fixed_impl<  0, 31, true , fixed>> s0q31s;
+ typedef fixed<fixed_impl<  1, 31, false, fixed>> u1q31;
+ typedef fixed<fixed_impl<  1, 31, true , fixed>> u1q31s;
  //---------------------------------------------------------------------------------------
- typedef fixed<  1, 30, false > s1q30;
- typedef fixed<  1, 30, true  > s1q30s;
- typedef fixed<  2, 30, false > u2q30;
- typedef fixed<  2, 30, true  > u2q30s;
+ typedef fixed<fixed_impl<  1, 30, false, fixed>> s1q30;
+ typedef fixed<fixed_impl<  1, 30, true , fixed>> s1q30s;
+ typedef fixed<fixed_impl<  2, 30, false, fixed>> u2q30;
+ typedef fixed<fixed_impl<  2, 30, true , fixed>> u2q30s;
  //---------------------------------------------------------------------------------------
- typedef fixed<  2, 29, false > s2q29;
- typedef fixed<  2, 29, true  > s2q29s;
- typedef fixed<  3, 29, false > u3q29;
- typedef fixed<  3, 29, true  > u3q29s;
+ typedef fixed<fixed_impl<  2, 29, false, fixed>> s2q29;
+ typedef fixed<fixed_impl<  2, 29, true , fixed>> s2q29s;
+ typedef fixed<fixed_impl<  3, 29, false, fixed>> u3q29;
+ typedef fixed<fixed_impl<  3, 29, true , fixed>> u3q29s;
  //---------------------------------------------------------------------------------------
- typedef fixed<  3, 28, false > s3q28;
- typedef fixed<  3, 28, true  > s3q28s;
- typedef fixed<  4, 28, false > u4q28;
- typedef fixed<  4, 28, true  > u4q28s;
+ typedef fixed<fixed_impl<  3, 28, false, fixed>> s3q28;
+ typedef fixed<fixed_impl<  3, 28, true , fixed>> s3q28s;
+ typedef fixed<fixed_impl<  4, 28, false, fixed>> u4q28;
+ typedef fixed<fixed_impl<  4, 28, true , fixed>> u4q28s;
  //---------------------------------------------------------------------------------------
- typedef fixed<  4, 27, false > u4q27;
- typedef fixed<  4, 27, true  > u4q27s;
- typedef fixed<  5, 27, false > s5q27;
- typedef fixed<  5, 27, true  > s5q27s;
+ typedef fixed<fixed_impl<  4, 27, false, fixed>> u4q27;
+ typedef fixed<fixed_impl<  4, 27, true , fixed>> u4q27s;
+ typedef fixed<fixed_impl<  5, 27, false, fixed>> s5q27;
+ typedef fixed<fixed_impl<  5, 27, true , fixed>> s5q27s;
  //---------------------------------------------------------------------------------------
- typedef fixed<  5, 26, false > s5q26;
- typedef fixed<  5, 26, true  > s5q26s;
- typedef fixed<  6, 26, false > u6q26;
- typedef fixed<  6, 26, true  > u6q26s;
+ typedef fixed<fixed_impl<  5, 26, false, fixed>> s5q26;
+ typedef fixed<fixed_impl<  5, 26, true , fixed>> s5q26s;
+ typedef fixed<fixed_impl<  6, 26, false, fixed>> u6q26;
+ typedef fixed<fixed_impl<  6, 26, true , fixed>> u6q26s;
  //---------------------------------------------------------------------------------------
- typedef fixed<  7, 25, false > s7q25;
- typedef fixed<  7, 25, true  > s7q25s;
- typedef fixed<  8, 25, false > u8q25;
- typedef fixed<  8, 25, true  > u8q25s;
+ typedef fixed<fixed_impl<  7, 25, false, fixed>> s7q25;
+ typedef fixed<fixed_impl<  7, 25, true , fixed>> s7q25s;
+ typedef fixed<fixed_impl<  8, 25, false, fixed>> u8q25;
+ typedef fixed<fixed_impl<  8, 25, true , fixed>> u8q25s;
  //---------------------------------------------------------------------------------------
- typedef fixed<  7, 24, false > s7q24;
- typedef fixed<  7, 24, true  > s7q24s;
- typedef fixed<  8, 24, false > u8q24;
- typedef fixed<  8, 24, true  > u8q24s;
+ typedef fixed<fixed_impl<  7, 24, false, fixed>> s7q24;
+ typedef fixed<fixed_impl<  7, 24, true , fixed>> s7q24s;
+ typedef fixed<fixed_impl<  8, 24, false, fixed>> u8q24;
+ typedef fixed<fixed_impl<  8, 24, true , fixed>> u8q24s;
  //---------------------------------------------------------------------------------------
- typedef fixed< 11, 20, false > s11q20;
- typedef fixed< 11, 20, true  > s11q20s;
- typedef fixed< 12, 20, false > u12q20;
- typedef fixed< 12, 20, true  > u12q20s;
+ typedef fixed<fixed_impl< 11, 20, false, fixed>> s11q20;
+ typedef fixed<fixed_impl< 11, 20, true , fixed>> s11q20s;
+ typedef fixed<fixed_impl< 12, 20, false, fixed>> u12q20;
+ typedef fixed<fixed_impl< 12, 20, true , fixed>> u12q20s;
  //---------------------------------------------------------------------------------------
- typedef fixed< 15, 16, false > s15q16;
- typedef fixed< 15, 16, true  > s15q16s;
- typedef fixed< 16, 16, false > u16q16;
- typedef fixed< 16, 16, true  > u16q16s;
+ typedef fixed<fixed_impl< 15, 16, false, fixed>> s15q16;
+ typedef fixed<fixed_impl< 15, 16, true , fixed>> s15q16s;
+ typedef fixed<fixed_impl< 16, 16, false, fixed>> u16q16;
+ typedef fixed<fixed_impl< 16, 16, true , fixed>> u16q16s;
  //---------------------------------------------------------------------------------------
- typedef fixed< 16, 15, false > s16q15;
- typedef fixed< 16, 15, true  > s16q15s;
- typedef fixed< 17, 15, false > u17q15;
- typedef fixed< 17, 15, true  > u17q15s;
+ typedef fixed<fixed_impl< 16, 15, false, fixed>> s16q15;
+ typedef fixed<fixed_impl< 16, 15, true , fixed>> s16q15s;
+ typedef fixed<fixed_impl< 17, 15, false, fixed>> u17q15;
+ typedef fixed<fixed_impl< 17, 15, true , fixed>> u17q15s;
  //---------------------------------------------------------------------------------------
- typedef fixed< 17, 14, false > s17q14;
- typedef fixed< 17, 14, true  > s17q14s;
- typedef fixed< 18, 14, false > u18q14;
- typedef fixed< 18, 14, true  > u18q14s;
+ typedef fixed<fixed_impl< 17, 14, false, fixed>> s17q14;
+ typedef fixed<fixed_impl< 17, 14, true , fixed>> s17q14s;
+ typedef fixed<fixed_impl< 18, 14, false, fixed>> u18q14;
+ typedef fixed<fixed_impl< 18, 14, true , fixed>> u18q14s;
  //---------------------------------------------------------------------------------------
- typedef fixed< 19, 12, false > s19q12;
- typedef fixed< 19, 12, true  > s19q12s;
- typedef fixed< 20, 12, false > u20q12;
- typedef fixed< 20, 12, true  > u20q12s;
+ typedef fixed<fixed_impl< 19, 12, false, fixed>> s19q12;
+ typedef fixed<fixed_impl< 19, 12, true , fixed>> s19q12s;
+ typedef fixed<fixed_impl< 20, 12, false, fixed>> u20q12;
+ typedef fixed<fixed_impl< 20, 12, true , fixed>> u20q12s;
  //---------------------------------------------------------------------------------------
- typedef fixed< 21, 10, false > s32q10;
- typedef fixed< 21, 10, true  > s32q10s;
- typedef fixed< 22, 10, false > u22q10;
- typedef fixed< 22, 10, true  > u22q10s;
+ typedef fixed<fixed_impl< 21, 10, false, fixed>> s32q10;
+ typedef fixed<fixed_impl< 21, 10, true , fixed>> s32q10s;
+ typedef fixed<fixed_impl< 22, 10, false, fixed>> u22q10;
+ typedef fixed<fixed_impl< 22, 10, true , fixed>> u22q10s;
  //---------------------------------------------------------------------------------------
- typedef fixed< 23,  8, false > s23q8;
- typedef fixed< 23,  8, true  > s23q8s;
- typedef fixed< 24,  8, false > u24q8;
- typedef fixed< 24,  8, true  > u24q8s;
+ typedef fixed<fixed_impl< 23,  8, false, fixed>> s23q8;
+ typedef fixed<fixed_impl< 23,  8, true , fixed>> s23q8s;
+ typedef fixed<fixed_impl< 24,  8, false, fixed>> u24q8;
+ typedef fixed<fixed_impl< 24,  8, true , fixed>> u24q8s;
  //---------------------------------------------------------------------------------------
- typedef fixed< 23,  8, false > s23q8;
- typedef fixed< 23,  8, true  > s23q8s;
- typedef fixed< 24,  8, false > u24q8;
- typedef fixed< 24,  8, true  > u24q8s;
+ typedef fixed<fixed_impl< 23,  8, false, fixed>> s23q8;
+ typedef fixed<fixed_impl< 23,  8, true , fixed>> s23q8s;
+ typedef fixed<fixed_impl< 24,  8, false, fixed>> u24q8;
+ typedef fixed<fixed_impl< 24,  8, true , fixed>> u24q8s;
  //---------------------------------------------------------------------------------------
- typedef fixed< 27,  4, false > s27q4;
- typedef fixed< 27,  4, true  > s27q4s;
- typedef fixed< 28,  4, false > u28q4;
- typedef fixed< 28,  4, true  > u28q4s;
+ typedef fixed<fixed_impl< 27,  4, false, fixed>> s27q4;
+ typedef fixed<fixed_impl< 27,  4, true , fixed>> s27q4s;
+ typedef fixed<fixed_impl< 28,  4, false, fixed>> u28q4;
+ typedef fixed<fixed_impl< 28,  4, true , fixed>> u28q4s;
  //---------------------------------------------------------------------------------------
- typedef fixed< 29,  2, false > s29q2;
- typedef fixed< 29,  2, true  > s29q2s;
- typedef fixed< 30,  2, false > u30q2;
- typedef fixed< 30,  2, true  > u30q2s;
+ typedef fixed<fixed_impl< 29,  2, false, fixed>> s29q2;
+ typedef fixed<fixed_impl< 29,  2, true , fixed>> s29q2s;
+ typedef fixed<fixed_impl< 30,  2, false, fixed>> u30q2;
+ typedef fixed<fixed_impl< 30,  2, true , fixed>> u30q2s;
  //---------------------------------------------------------------------------------------
- typedef fixed< 30,  1, false > s30q1;
- typedef fixed< 30,  1, true  > s30q21;
- typedef fixed< 31,  1, false > u31q1;
- typedef fixed< 31,  1, true  > u31q21;
+ typedef fixed<fixed_impl< 30,  1, false, fixed>> s30q1;
+ typedef fixed<fixed_impl< 30,  1, true , fixed>> s30q21;
+ typedef fixed<fixed_impl< 31,  1, false, fixed>> u31q1;
+ typedef fixed<fixed_impl< 31,  1, true , fixed>> u31q21;
  //---------------------------------------------------------------------------------------
  constexpr u0q32    operator ""_u0q32(long double x)  { return u0q32::from_double(x); }
  constexpr u0q32s   operator ""_u0q32s(long double x) { return u0q32s::from_double(x); }
@@ -980,20 +974,20 @@ namespace lamb {
  //---------------------------------------------------------------------------------------
  // integrals for convenience in math operations.
  //---------------------------------------------------------------------------------------
- typedef fixed<  8,  0, false > u8q0;   
- typedef fixed<  8,  0, true  > u8q0s;
- typedef fixed<  7,  0, false > s7q0;
- typedef fixed<  7,  0, true  > s7q0s;
+ typedef fixed<fixed_impl<  8,  0, false, fixed>> u8q0;   
+ typedef fixed<fixed_impl<  8,  0, true , fixed>> u8q0s;
+ typedef fixed<fixed_impl<  7,  0, false, fixed>> s7q0;
+ typedef fixed<fixed_impl<  7,  0, true , fixed>> s7q0s;
  //---------------------------------------------------------------------------------------
- typedef fixed< 16,  0, false > u16q0;
- typedef fixed< 16,  0, true  > u16q0s;
- typedef fixed< 15,  0, false > s15q0;
- typedef fixed< 15,  0, true  > s15q0s;
+ typedef fixed<fixed_impl< 16,  0, false, fixed>> u16q0;
+ typedef fixed<fixed_impl< 16,  0, true , fixed>> u16q0s;
+ typedef fixed<fixed_impl< 15,  0, false, fixed>> s15q0;
+ typedef fixed<fixed_impl< 15,  0, true , fixed>> s15q0s;
  //---------------------------------------------------------------------------------------
- typedef fixed< 32,  0, false > u32q0;
- typedef fixed< 32,  0, true  > u32q0s;
- typedef fixed< 31,  0, false > s31q0;
- typedef fixed< 31,  0, true  > s31q0s;
+ typedef fixed<fixed_impl< 32,  0, false, fixed>> u32q0;
+ typedef fixed<fixed_impl< 32,  0, true , fixed>> u32q0s;
+ typedef fixed<fixed_impl< 31,  0, false, fixed>> s31q0;
+ typedef fixed<fixed_impl< 31,  0, true , fixed>> s31q0s;
  //---------------------------------------------------------------------------------------
  constexpr u8q0    operator ""_u8q0(long double x)    { return u8q0::from_double(x); }
  constexpr u8q0s   operator ""_u8q0s(long double x)   { return u8q0s::from_double(x); }

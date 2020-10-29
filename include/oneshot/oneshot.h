@@ -7,8 +7,8 @@ namespace lamb {
   template <
     typename value_t_,
     typename length_t_    = uint16_t,
-   typename phase_t_     = typename fixed<0, 8 * (sizeof(length_t_) + 2), false>::type,
-   typename amplitude_t_ = typename fixed<0, 8 * (sizeof(value_t_) >> 1), false>::type
+   typename phase_t_     = typename fixed<fixed_impl<0, 8 * (sizeof(length_t_) + 2), false, fixed>>::type,
+   typename amplitude_t_ = typename fixed<fixed_impl<0, 8 * (sizeof(value_t_) >> 1), false, fixed>>::type
       >
   class oneshot :
     public sample_source<value_t_>,
