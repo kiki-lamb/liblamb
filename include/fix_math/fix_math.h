@@ -32,52 +32,19 @@ namespace lamb {
  private:
   
   template <bool signedness, uint8_t size>
-  class integer_type {
-//   static_assert(size < 9, "too big");
-  };
-
-  //--------------------------------------------------------------------------------------
+  class integer_type {};
   
   template <uint8_t size>
   class integer_type<true, size> {
   public:
-//   static_assert(size < 9, "too big");
-   
-   typedef signed_int<(size < 9 ? size : 8)> traits;
+   typedef signed_int<(size > 8 ? 8 : size)> traits;
   };
   
-  //--------------------------------------------------------------------------------------
-
   template <uint8_t size>
   class integer_type<false, size> {
   public:
-//   static_assert(size < 9, "too big");
-
-   typedef unsigned_int<(size < 9 ? size : 8)> traits;
-  };
-
-  //--------------------------------------------------------------------------------------
-  
-  template<bool B, class T = void>
-  struct enable_if {};
-  
-  template<class T>
-  struct enable_if<true, T> { typedef T type; };
-
-  //--------------------------------------------------------------------------------------
-
-  template <bool use_left, typename left, typename right>
-  class type_if {};
-
-  template <typename left, typename right>
-  class type_if<true, left, right> {
-   typedef left type;
-  };
-
-  template <typename left, typename right>
-  class type_if<false, left, right> {
-   typedef right type;
-  };
+   typedef unsigned_int<(size > 8 ? 8 : size)> traits;
+  };  
 
  /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -121,32 +88,16 @@ namespace lamb {
 
   /////////////////////////////////////////////////////////////////////////////////////////
 
-  static constexpr type    MAX = integer_type<SIGNED, SIZE>::traits::MAX;
-  static constexpr type    MIN = integer_type<SIGNED, SIZE>::traits::MIN;  
-  static constexpr
-  type                     ONE =
-   CHARACTERISTIC == 0 ?
-   MAX :
-   (((type)1) << MANTISSA) - 1;  
-
-  ////////////////////////////////////////////////////////////////////////////////////////
-
- private:
-
-//  template <uint8_t c, uint8_t m>
-  class constants_helper {
-  public:
-   
-   static constexpr self_type pi() {
-    static_assert(CHARACTERISTIC >= 2, "characteristic must be at least 2.");
-    self_type::from_double(M_PI);
-   }
-  };
-
- public:
+  static constexpr self_type MAX = self_type(integer_type<SIGNED, SIZE>::traits::MAX);
+  static constexpr self_type MIN = self_type(integer_type<SIGNED, SIZE>::traits::MIN);
   
-  typedef constants_helper constants;
- 
+  static constexpr
+  self_type                  ONE = self_type(
+   CHARACTERISTIC == 0 ?
+   MAX.value :
+   (((type)1) << MANTISSA) - 1
+  );
+
   /////////////////////////////////////////////////////////////////////////////////////////
 
   type                     value;  
@@ -243,7 +194,7 @@ namespace lamb {
    type const & characteristic,
    type const & mantissa
   ) :
-   value((characteristic * ONE) + (characteristic < 0 ? - mantissa : mantissa)) {}
+   value((characteristic * ONE.value) + (characteristic < 0 ? - mantissa : mantissa)) {}
 
   /////////////////////////////////////////////////////////////////////////////////////////
   
@@ -305,7 +256,7 @@ namespace lamb {
   constexpr
   explicit
   operator double() const {
-   constexpr double one = ONE * 1.0;
+   constexpr double one = ONE.value * 1.0;
    
    return value / one;
   }
@@ -320,11 +271,26 @@ namespace lamb {
   ) {
    int               divisor = tmp;
    double            modulus = tmp - divisor;
-   type              ipart   = ONE * divisor + int(ONE * modulus);
+   type              ipart   = ONE.value * divisor + int(ONE.value * modulus);
    
    return self_type(ipart);
   }
 
+  ////////////////////////////////////////////////////////////////////////////////////////
+
+ private:
+
+  template <uint8_t c, uint8_t m>
+  class constants_helper {
+  public:
+   static_assert(c >= 2, "characteristic must be at least 2.");
+   static constexpr self_type pi = from_double(M_PI);
+  };
+
+ public:
+  
+  typedef constants_helper<CHARACTERISTIC, MANTISSA> constants;
+ 
   ////////////////////////////////////////////////////////////////////////////////////////
 
   constexpr
@@ -663,7 +629,7 @@ namespace lamb {
   }
 
  /////////////////////////////////////////////////////////////////////////////////////////
-
+
  }; // template fixed
  
  /////////////////////////////////////////////////////////////////////////////////////////
@@ -1004,7 +970,7 @@ namespace lamb {
  constexpr s31q0   operator ""_s31q0(long double x)   { return s31q0::from_double(x); }
  constexpr s31q0s  operator ""_s31q0s(long double x)  { return s31q0s::from_double(x); }
  //---------------------------------------------------------------------------------------
-
+ 
 //////////////////////////////////////////////////////////////////////////////////////////
 
 } // namespace lamb

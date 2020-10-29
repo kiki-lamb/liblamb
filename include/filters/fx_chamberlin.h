@@ -123,12 +123,10 @@ namespace lamb {
   
   constexpr
   void q(q0_type::type const & x) {
-   constexpr q1_type one(1, 0);
-
    Q0.value = x;
-   Q1 = one / Q0;
+   Q1       = q1_type::ONE / Q0;
 
-   printf("% 12ld, % 12ld \n", double(q0_type(x)), double(Q0));
+//   printf("% 12ld, % 12ld \n", double(q0_type(x)), double(Q0));
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -185,10 +183,10 @@ namespace lamb {
   // D1 = L
   //----------------------------------------------------------------------------
 
-  constexpr
-  external_type::type process(external_type::type I_) {
-   return process(external_type(I_)).value;
-  }
+  // constexpr
+  // external_type::type process(external_type::type I_) {
+  //  return process(external_type(I_)).value;
+  // }
 
   //----------------------------------------------------------------------------
 

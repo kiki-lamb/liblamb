@@ -24,17 +24,17 @@ void pprint_bits_32(uint32_t t0) {
 
 int main() {
  {
-  if (false) {
-   u17q15s f0(1000, 0);
-   u17q15s fs(44100, 0);  
-   u17q15s x = f0 / fs;
+  // if (false) {
+  //  u17q15s f0(1000  , 0 );
+  //  u17q15s fs(44100 , 0 );  
+  //  u17q15s x (f0    / fs);
    
-   printf("R: % 05.05lf \n", double(x));
+  //  printf("R: % 05.05lf \n", double(x));
    
-   fflush(stdout);
+  //  fflush(stdout);
    
-   return 0;
-  }
+  //  return 0;
+  // }
    
   fx_chamberlin fx_cf;
   uint16_t      acc(0);
@@ -43,8 +43,6 @@ int main() {
 
   for (double qix = 1.0; qix < 20.0; qix += 3.0) {
    fx_cf.q(qix);
-
-   continue;
    
    const size_t fix_incr = 80;
    

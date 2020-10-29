@@ -36,39 +36,46 @@ void pprint_bits_32(uint32_t const & t0) {
 /// @param x   angle (with 2^15 units/circle)
 /// @return     Sine value (Q12)
 
-template <typename out_type>
-out_type qsin(s0q31 const & x_)
-{
- typedef   s17q14   mid_type;
- 
- //-----------------------------------------------------------------------------
- constexpr uint8_t  q_shift { mid_type::CHARACTERISTIC         };
- constexpr mid_type pi      { mid_type::constants::pi          };
- constexpr mid_type two     { 2 , 0                            };
- constexpr mid_type one     { two       >> 1                   };
- constexpr mid_type half    { one       >> 1                   };
- constexpr mid_type B       { two        - pi / mid_type(4, 0) };
- constexpr mid_type C       { one        - pi / mid_type(4, 0) };
- //-----------------------------------------------------------------------------
- mid_type           x       { x_        << q_shift - 1         }; 
- mid_type           cry     { x         << q_shift             };
- //-----------------------------------------------------------------------------
- x                          = x          - half                 ;    //  -=
- x                          = x         << q_shift + 1          ;    // <<=
- x                          = x         >> q_shift + 1          ;    //  *=
- x                          = x          * x                    ;    //  *=
- x                          = x         << 2                    ;    // <<=
-  //----------------------------------------------------------------------------
- mid_type           y       { x          * C                   };
- //-----------------------------------------------------------------------------
- y                          = B          - y                    ;
- y                          = y          * x                    ;    //  *=
- y                          = one        - y                    ;
- y                          = cry.value >= 0 ? y : -y           ;
- //-----------------------------------------------------------------------------
- return                       out_type(y)                       ;
-}
 
+namespace math {
+ typedef   s17q14   mid_type;
+
+ constexpr mid_type operator ""_mid(long double const x) {
+  return mid_type::from_double(x);
+ }
+ 
+ template <typename out_type>
+ out_type qsin(s0q31 const & x_)
+  {
+   //-----------------------------------------------------------------------------
+   constexpr uint8_t  q_shift { mid_type::CHARACTERISTIC         };
+   constexpr mid_type pi      { mid_type::constants::pi          };
+   constexpr mid_type two     { 2.0_mid                          };
+   constexpr mid_type one     { 1.0_mid                          };
+   constexpr mid_type half    { 0.5_mid                          };
+   constexpr mid_type B       { two        - pi / 4.0_mid        };
+   constexpr mid_type C       { one        - pi / 4.0_mid        };
+   //-----------------------------------------------------------------------------
+   mid_type           x       { x_        << q_shift - 1         }; 
+   mid_type           cry     { x         << q_shift             };
+   //-----------------------------------------------------------------------------
+   x                          = x          - half                 ;    //  -=
+   x                          = x         << q_shift + 1          ;    // <<=
+   x                          = x         >> q_shift + 1          ;    //  *=
+   x                          = x          * x                    ;    //  *=
+   x                          = x         << 2                    ;    // <<=
+   //----------------------------------------------------------------------------
+   mid_type           y       { x          * C                   };
+   //-----------------------------------------------------------------------------
+   y                          = B          - y                    ;
+   y                          = y          * x                    ;    //  *=
+   y                          = one        - y                    ;
+   y                          = cry.value >= 0 ? y : -y           ;
+   //-----------------------------------------------------------------------------
+   return                       out_type(y)                       ;
+  }
+};
+ 
 ////////////////////////////////////////////////////////////////////////////////
 
 int main() {
@@ -83,7 +90,7 @@ int main() {
   ix < 65535;
   ix++
  ) {
-  last = qsin<s0q31>(s0q31(ix));
+  last = math::qsin<s0q31>(s0q31(ix));
 
   // printf("%d, % 05.5lf \n", last, last / 4096.0);
   printf("% 05.5lf \n", double(last));
