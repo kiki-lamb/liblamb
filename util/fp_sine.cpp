@@ -27,14 +27,16 @@ out_type qsin(in_type const & x_)
  constexpr uint8_t shift_2     = 31    - shift_qcirc;           // 18
  constexpr uint8_t shift_3     = 2     * shift_qcirc - 14;      // 12
 
- s17q14 c   = x       << shift_1            ;
- x         -= half                          ;
- x        <<= shift_2                       ;
- x        >>= shift_2                       ;
+ s17q14 c   = x;
+ c        <<= shift_1;
+ x         -= half;
+ x        <<= shift_2;
+ x        >>= shift_2;
  x         *= x;
  x        <<= 2;
- s17q14 y   = B        - x        * C       ;
- y          = quarter  -      (x  * y >> 2) ;
+ s17q14 y   = B;
+ y         -= x        * C;
+ y          = quarter  -      (x  * y >> 2);
  
  return out_type(c.value >= 0 ? y : -y);
 }
