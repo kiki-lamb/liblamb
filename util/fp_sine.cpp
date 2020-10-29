@@ -22,8 +22,9 @@ out_type qsin(in_type const & x_)
  constexpr int32_t shift_out   = 12;
  constexpr s17q14  B           = s17q14(2, 0) - s17q14::constants::pi / s17q14(4, 0);
  constexpr s17q14  C           = s17q14(1, 0) - s17q14::constants::pi / s17q14(4, 0);
- constexpr s17q14  one         { 1, 0     };
- constexpr s17q14  half        ( one >> 1 );
+ constexpr s17q14  one         { 1, 0      };
+ constexpr s17q14  half        ( one  >> 1 );
+ constexpr s17q14  quarter     ( half >> 1 );
 
  constexpr uint8_t shift_1     = 30 - shift_qcirc;           // 17
  constexpr uint8_t shift_2     = 31 - shift_qcirc;           // 18
@@ -40,7 +41,7 @@ out_type qsin(in_type const & x_)
  x.value  = x.value           >> shift_2                   ; 
  x.value  = x.value * x.value >> shift_3                   ; // x=x^2 To Q14
  y        = B       - x        * C                         ; 
- y.value  = (1 << shift_out)   - (x.value  * y.value >> 16); // A - x^2*(B-x^2*C)
+ y.value  = quarter.value   - (x.value  * y.value >> 16); // A - x^2*(B-x^2*C)
  
  return out_type(c.value >= 0 ? y.value : -y.value);
 }
