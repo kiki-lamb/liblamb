@@ -45,10 +45,10 @@ namespace lamb {
 
   constexpr
   fx_chamberlin() :
-   FS(44100, 0),
-   F0(1000, 0),
+   FS({44100, 0}),
+   F0({1000, 0}),
    F1(0), 
-   Q0(1, 0),
+   Q0({1, 0}),
    Q1(0),
    L(0),
    H(0),
@@ -75,7 +75,7 @@ namespace lamb {
 
   constexpr
   hz_type::value_type f() {
-   return F0.characteristic();
+   return (F0 >> hz_type::FRAC).value;
   }
   
   //----------------------------------------------------------------------------
@@ -133,7 +133,7 @@ namespace lamb {
   
   constexpr
   uint32_t fs() {
-   return FS.characteristic();
+   return (FS >> hz_type::FRAC).value;
   }
 
   //----------------------------------------------------------------------------

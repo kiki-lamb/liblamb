@@ -48,15 +48,24 @@ namespace math {
  out_type qsin(s0q31 const & x_)
   {
    //-----------------------------------------------------------------------------
-   constexpr uint8_t  q_shift { mid_type::CHARACTERISTIC         };
-   constexpr mid_type pi      { mid_type::constants::pi          };
+   constexpr uint8_t  q_shift { mid_type::FRAC                   };
+   constexpr mid_type pi      { mid_type::PI                     };
    constexpr mid_type two     { 2.0_mid                          };
    constexpr mid_type one     { 1.0_mid                          };
    constexpr mid_type half    { 0.5_mid                          };
    constexpr mid_type B       { two        - pi / 4.0_mid        };
    constexpr mid_type C       { one        - pi / 4.0_mid        };
+
+   // printf("q_shift: %10u  \n",   double(q_shift) );
+   // printf("pi     : %05.5lf \n", double(pi)      );
+   // printf("two    : %05.5lf \n", double(two)     );     
+   // printf("one    : %05.5lf \n", double(one)     );
+   // printf("half   : %05.5lf \n", double(half)    );
+   // printf("B      : %05.5lf \n", double(B)       );
+   // printf("C      : %05.5lf \n", double(C)       );
+   
    //-----------------------------------------------------------------------------
-   mid_type           x       { x_        << q_shift - 1         }; 
+   mid_type           x       { x_        << q_shift - 2         }; 
    mid_type           cry     { x         << q_shift             };
    //-----------------------------------------------------------------------------
    x                          = x          - half                 ;    //  -=
@@ -86,8 +95,10 @@ int main() {
  out_type  max(0);
  
  for (
-  uint32_t ix = 0;
-  ix < 65535;
+  uint64_t ix = 0;
+  ix < (65536 << 4)
+
+   ;
   ix++
  ) {
   last = math::qsin<s0q31>(s0q31(ix));
