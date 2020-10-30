@@ -21,9 +21,9 @@ public:
  
  value_type value;
 
- static constexpr bool has_constructable_type = true;
+ static constexpr bool has_constructible_type = true;
  
- struct constructable_type {
+ struct constructible_type {
   value_type x;
   value_type y;
  };
@@ -32,16 +32,28 @@ public:
  base(value_type const & v) : value(v) {}
 
  explicit 
- base(constructable_type const & c) : value(c.x + c.y) {}
+ base(constructible_type const & c) : value(c.x + c.y) {}
  
 };
+//////////////////////////////////////////////////////////////////////////////////////////
 
+template <typename base_t>
+class derived: public base_t {
+public:
+ typedef base_t base;
 
+ explicit derived(typename base::value_type const & v) : base(v) {}
+
+ derived(
+  typename base::constructible_type const & obj
+ ) : base(obj) {}
+ 
+};
 //////////////////////////////////////////////////////////////////////////////////////////
  
 int main() {
 
- base b({8, 4});
+ derived<base> b({8, 4});
 
  printf("b: %u \n", b.value);
  
