@@ -45,10 +45,10 @@ namespace lamb {
 
   constexpr
   fx_chamberlin() :
-   FS({44100, 0}),
-   F0({1000, 0}),
+   FS(44100, 0),
+   F0(1000, 0),
    F1(0), 
-   Q0({1, 0}),
+   Q0(1, 0),
    Q1(0),
    L(0),
    H(0),
@@ -82,7 +82,7 @@ namespace lamb {
   
   constexpr
   void f(hz_type::value_type const & x) {
-   f(hz_type({x & 0xffffff, 0}));
+   f(hz_type(x & 0xffffff, 0));
   }
 
   //----------------------------------------------------------------------------
@@ -140,7 +140,7 @@ namespace lamb {
 
   constexpr
   void fs(uint32_t const & x) {
-   FS = hz_type({x, 0});
+   FS = hz_type(x, 0);
    f(F0);
   }
 

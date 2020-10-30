@@ -88,7 +88,7 @@ bool compare_floats(float x, float y, uint8_t precis) {
  {                                                                      \
   fix_t a(fix_t::from_double(x));                                       \
   fix_t b(y);                                                           \
-  fix_t c(typename fix_t::pair(z0, z1));                                         \
+  fix_t c(z0, z1);                                                      \
                                                                         \
   TEST_FLEQ("lf", x, double(a), fprecis);                               \
   TEST_FLEQ("lf", x, double(b), fprecis);                               \
@@ -143,7 +143,7 @@ bool compare_floats(float x, float y, uint8_t precis) {
    TEST_FLEQ(fmt, 2*M_PI, unfix_pi, pi_precis);                         \
   }                                                                     \
                                                                         \
-  if (((fix_t::WHOLE+fix_t::MANTISSA1) % 2) == 1) {             \
+  if (((fix_t::WHOLE+fix_t::FRAC) % 2) == 1) {             \
    snprintf(buff0, 32, "% 05.10lf", -M_PI);                             \
    buff0[pi_precis+3] = 0;                                              \
    printf("-M_PI      : %s\n", buff0);                                  \
@@ -185,8 +185,8 @@ void test_fix_math_type(size_t & out_successes, size_t & out_errors) {
  printf("Test converted 0.5...\n");
  TEST_CONVERSIONS(
   0.5,
-  fix_t::ONE >> 1,
-  0, fix_t::ONE >> 1,
+  fix_t::ONE.value >> 1,
+  0, fix_t::ONE.value >> 1,
   f_precis
  );
 
@@ -195,18 +195,18 @@ void test_fix_math_type(size_t & out_successes, size_t & out_errors) {
   printf("Test converted 2.0...\n");
   TEST_CONVERSIONS(
    2.0,
-   fix_t::ONE << 1,
-   0, 1 << (fix_t::MANTISSA + 1),
+   fix_t::ONE.value << 1,
+   0, 1 << (fix_t::FRAC + 1),
    f_precis
   );
  }
 
- if ((fix_t::MANTISSA % 2) == 1) {
+ if ((fix_t::FRAC % 2) == 1) {
   printf("Test converted -1.0...\n");
   TEST_CONVERSIONS(
    -1.0,
-   fix_t::ONE * -1,
-   unsigned_int<(sizeof(typename fix_t::type))>::MAX, 0,
+   fix_t::ONE.value * -1,
+   unsigned_int<(sizeof(typename fix_t::value_type))>::MAX, 0,
    f_precis
   );
  }
@@ -262,7 +262,7 @@ int main() {
  printf("\n\nTOTAL PASSED: %u / %u \n\n", successes, successes + errors);
 
  {
-  u0q8  x0({0, 128});       printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x0), x0.value,  u0q8::ONE);
+  u0q8  x0(0, 128);       printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x0), x0.value,  u0q8::ONE);
   u0q16 x1 = u0q16(x0);   printf("u0q16:  % 05.05lf % 12u % 12llu % 12llu \n", double(x1), x1.value, u0q16::ONE);
   u0q32 x2 = u0q32(x1);   printf("u0q32:  % 05.05lf % 12u % 12llu % 12llu \n", double(x2), x2.value, u0q32::ONE);
   u0q16 x3 = u0q16(x2);   printf("u0q16:  % 05.05lf % 12u % 12llu % 12llu \n", double(x3), x3.value, u0q16::ONE);
@@ -271,7 +271,7 @@ int main() {
   printf("\n");
  }
  {
-  u0q8  x0({0, 128});       printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x0), x0.value,  u0q8::ONE);
+  u0q8  x0(0, 128);       printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x0), x0.value,  u0q8::ONE);
   s7q8  x1 = s7q8(x0);    printf("s7q8:   % 05.05lf % 12d  % 12lld \n",        double(x1), x1.value,  s7q8::ONE);
   x1.value   = -128;        printf("s7q8:   % 05.05lf % 12d  % 12lld \n",        double(x1), x1.value,  s7q8::ONE);  
   u0q8  x2 = u0q8(x1);    printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x2), x2.value,  u0q8::ONE);
@@ -279,7 +279,7 @@ int main() {
   printf("\n");
  } 
  {
-  u0q8   x0({0, 128});      printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x0), x0.value,  u0q8::ONE);
+  u0q8   x0(0, 128);      printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x0), x0.value,  u0q8::ONE);
   u8q8   x1 = u8q8(x0);   printf("u8q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x1), x1.value,  u8q8::ONE);
   u16q16 x2 = u16q16(x1); printf("u16q16: % 05.05lf % 12u % 12llu % 12llu \n", double(x2), x2.value,u16q16::ONE);
   u24q8  x3 = u24q8(x2);  printf("u24q8:  % 05.05lf % 12u % 12llu % 12llu \n", double(x3), x3.value, u0q32::ONE);
@@ -290,14 +290,14 @@ int main() {
   printf("\n");
  }
  {
-  u8q8   x0({1, 0});         printf("u8q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x0), x0.value,    u8q8::ONE);
+  u8q8   x0(1, 0);         printf("u8q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x0), x0.value,    u8q8::ONE);
   u16q16 x1 = u16q16(x0);  printf("u16q16: % 05.05lf % 12u % 12llu % 12llu \n", double(x1), x1.value,  u16q16::ONE);
   u8q8   x2 = u8q8(x1);    printf("u8q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x2), x2.value,    u8q8::ONE);
 
   printf("\n");
  }
  {
-  s0q7  x0({0, 128u});        printf("s0q7:   % 05.05lf % 12d  % 12lld \n", double(x0), x0.value,   s0q7::ONE);
+  s0q7  x0(0, 128u);        printf("s0q7:   % 05.05lf % 12d  % 12lld \n", double(x0), x0.value,   s0q7::ONE);
   s0q15 x1 = s0q15(x0);    printf("s0q15:  % 05.05lf % 12d  % 12lld \n", double(x1), x1.value,  s0q15::ONE);
   s0q31 x2 = s0q31(x1);    printf("s0q31:  % 05.05lf % 12d  % 12lld \n", double(x2), x2.value,  s0q31::ONE);
   s0q15 x3 = s0q15(x2);    printf("s0q15:  % 05.05lf % 12d  % 12lld \n", double(x3), x3.value,  s0q15::ONE);
@@ -306,7 +306,7 @@ int main() {
   printf("\n");
  }
  {
-  s7q8   x0({1, 0});         printf("s7q8:   % 05.05lf % 12d  % 12lld \n", double(x0), x0.value,   s7q8::ONE);
+  s7q8   x0(1, 0);         printf("s7q8:   % 05.05lf % 12d  % 12lld \n", double(x0), x0.value,   s7q8::ONE);
   s15q16 x1 = s15q16(x0);  printf("s15q16: % 05.05lf % 12d  % 12lld \n", double(x1), x1.value, s15q16::ONE);
   s7q8   x2 = s7q8(x1);    printf("s7q8:   % 05.05lf % 12d  % 12lld \n", double(x2), x2.value,   s7q8::ONE);
 
