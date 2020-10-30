@@ -74,14 +74,14 @@ namespace lamb {
   //////////////////////////////////////////////////////////////////////////////
 
   constexpr
-  hz_type::type f() {
-   return F0.characteristic();
+  hz_type::value_type f() {
+   return F0.value; // .characteristic();
   }
   
   //----------------------------------------------------------------------------
   
   constexpr
-  void f(hz_type::type const & x) {
+  void f(hz_type::value_type const & x) {
    f(hz_type(x & 0xffffff, 0));
   }
 
@@ -122,7 +122,7 @@ namespace lamb {
   //----------------------------------------------------------------------------
   
   constexpr
-  void q(q0_type::type const & x) {
+  void q(q0_type::value_type const & x) {
    Q0.value = x;
    Q1       = q1_type::ONE / Q0;
 
@@ -133,7 +133,7 @@ namespace lamb {
   
   constexpr
   uint32_t fs() {
-   return FS.characteristic();
+   return FS.value; // characteristic();
   }
 
   //----------------------------------------------------------------------------
