@@ -70,10 +70,12 @@ int main() {
 
  derived<base> x0({1, 2});
  derived<base> x1(4);
+ derived<base> x2(x1);
  
  printf("x0: %u \n", x0.value);
  printf("x1: %u \n", x1.value);
-
- derived<simple> x2(5);
  printf("x2: %u \n", x2.value);
+
+ derived<simple> x3(5);
+ printf("x3: %u \n", x3.value);
 }
