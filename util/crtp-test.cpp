@@ -51,10 +51,9 @@ int main() {
 
  printf("=> % 5.6lf \n", double(x / y));
 
- if constexpr(integer_traits<uint16_t>::SIGNED) {
-  printf("YES\n");
- }
- else {
-  printf("NO\n");
- }
+// t z({0,128});
+
+ q<8,8> zz ({1, 128});
+  
+ printf("=> % 5.5lf \n", double(zz));
 }

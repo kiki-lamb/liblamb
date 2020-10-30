@@ -109,7 +109,9 @@ public:
  
  explicit constexpr
  q(constructable_type const & cons) :
-  value(value_type(cons.whole * ONE + (cons.whole < 0 ? - cons.frac : cons.frac))) {}
+  value(value_type(cons.whole * ONE.value + (cons.whole < 0 ? - cons.frac : cons.frac))) {
+  printf("val: %u \n", value);
+ }
  
  /////////////////////////////////////////////////////////////////////////////////////////
   
