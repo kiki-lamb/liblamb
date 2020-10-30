@@ -3,6 +3,10 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
+// g++ -DLAMB_NO_ARDUINO crtp-test.cpp && .\a.exe
+
+////////////////////////////////////////////////////////////////////////////////
+
 using namespace lamb;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -37,8 +41,7 @@ using namespace lamb;
 // C    >>=  >>, =
 // P     u+  No.
 
-// g++ -std=gnu++17 -DLAMB_NO_ARDUINO fp_test.cpp && .\a.exe
-
+////////////////////////////////////////////////////////////////////////////////
 
 int main() {
  typedef mathematized<q<15, 16>> t;
@@ -48,10 +51,13 @@ int main() {
 
  printf("=> % 5.6lf \n", double(x / y));
 
- if constexpr(integer_traits<uint16_t>::SIGNED) {
-  printf("YES\n");
- }
- else {
-  printf("NO\n");
- }
+// t z({0,128});
+
+ q<8,8> zz ({1, 128});
+  
+ printf("=> % 5.5lf \n", double(zz));
+
+ mathematized<q<8,8>> yy ({1, 128});
+  
+ printf("=> % 5.5lf \n", double(yy));
 }

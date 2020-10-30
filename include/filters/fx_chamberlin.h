@@ -64,7 +64,7 @@ namespace lamb {
 
   static inline constexpr
   external_type externalize(internal_type const & intern) {
-   external_type ret(intern >> 2);
+   external_type ret((external_type)(intern >> 2));
    
    printf("% 9.9lf  ", double(ret));
 
@@ -75,14 +75,14 @@ namespace lamb {
 
   constexpr
   hz_type::value_type f() {
-   return (F0 >> hz_type::FRAC).value;
+   return F0.value; // .characteristic();
   }
   
   //----------------------------------------------------------------------------
   
   constexpr
   void f(hz_type::value_type const & x) {
-   f(hz_type(x & 0xffffff, 0));
+   f(hz_type({x & 0xffffff, 0}));
   }
 
   //----------------------------------------------------------------------------
@@ -133,14 +133,14 @@ namespace lamb {
   
   constexpr
   uint32_t fs() {
-   return (FS >> hz_type::FRAC).value;
+   return FS.value; // characteristic();
   }
 
   //----------------------------------------------------------------------------
 
   constexpr
   void fs(uint32_t const & x) {
-   FS = hz_type(x, 0);
+   FS = hz_type({x, 0});
    f(F0);
   }
 
@@ -218,4 +218,5 @@ namespace lamb {
 }
 
 #endif /* LAMB_FX_CHAMBERLIN_H_ */
+
 
