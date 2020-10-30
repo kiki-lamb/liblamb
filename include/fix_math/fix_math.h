@@ -93,10 +93,12 @@ public:
 
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- struct constructible_type {
+ struct pair {
   value_type whole;
   value_type frac;
  };
+
+ typedef pair constructible_type;
  
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -111,14 +113,12 @@ public:
  
  explicit constexpr
  q(constructible_type const & cons) :
-  value(value_type(cons.whole * ONE.value + (cons.whole < 0 ? - cons.frac : cons.frac))) {
-  printf("val: %u \n", value);
- }
+  value(value_type(cons.whole * ONE.value + (cons.whole < 0 ? - cons.frac : cons.frac))) {}
  
  /////////////////////////////////////////////////////////////////////////////////////////
   
   template <uint8_t whole, uint8_t frac>
-  explicit constexpr 
+  /* NOT explicit */ constexpr 
   operator q<whole, frac>() const {
 
    typedef
