@@ -3,6 +3,13 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
+template <typename t>
+struct has_constructible_type {
+ static constexpr bool value = false;
+};
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
 class base {
 public:
  typedef uint8_t value_type;
@@ -19,6 +26,13 @@ public:
  base(value_type const & v) : value(v) {}
 
  base(constructible_type const & c) : value(c.x + c.y) {} 
+};
+
+//----------------------------------------------------------------------------------------
+
+template <>
+struct has_constructible_type<base> {
+ static constexpr bool value = true;
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -45,7 +59,7 @@ public:
 // derived (typename U::constructible_type obj) : base(obj) {}
  
 
- template <typename base_ = base, bool enabled = base_::has_constructible_type>
+ template <typename base_ = base, bool enabled = has_constructible_type<base_>::value>
  derived (typename base_::constructible_type obj) : base(obj) {}
 
  derived (typename base::value_type val) : base(val) {}
