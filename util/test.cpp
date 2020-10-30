@@ -45,8 +45,8 @@ public:
 // derived (typename U::cons obj) : base(obj) {}
  
 
- template <typename U = base, bool enabled = U::has_cons>
- derived (typename U::cons obj) : base(obj) {}
+ template <typename base_ = base, bool enabled = base_::has_cons>
+ derived (typename base_::cons obj) : base(obj) {}
 
  derived (typename base::value_type val) : base(val) {}
 };
