@@ -21,20 +21,18 @@ public:
  
  value_type value;
 
- static constexpr bool has_constructible_type = true;
+ static constexpr bool has_cons = true;
  
- struct constructible_type {
+ struct cons {
   value_type x;
   value_type y;
  };
 
- explicit
  base(value_type const & v) : value(v) {}
 
- explicit 
- base(constructible_type const & c) : value(c.x + c.y) {}
- 
+ base(cons const & c) : value(c.x + c.y) {} 
 };
+
 //////////////////////////////////////////////////////////////////////////////////////////
 
 template <typename base_t>
@@ -42,20 +40,22 @@ class derived: public base_t {
 public:
  typedef base_t base;
 
- explicit derived(typename base::value_type const & v) : base(v) {}
-
- derived(
-  typename base::constructible_type const & obj
- ) : base(obj) {}
+// template <typename U = base, bool enabled = U::has_cons>
+// derived (typename U::cons obj) : base(obj) {}
  
+
+ template <typename U = base, bool enabled = U::has_cons>
+ derived (typename U::cons obj) : base(obj) {}
+
+ derived (typename base::value_type val) : base(val) {}
 };
 //////////////////////////////////////////////////////////////////////////////////////////
  
 int main() {
 
- derived<base> b({8, 4});
-
- printf("b: %u \n", b.value);
+ derived<base> x0({1, 2});
+ derived<base> x1(4);
  
- printf("Done.\n");
+ printf("x0: %u \n", x0.value);
+ printf("x1: %u \n", x1.value);
 }
