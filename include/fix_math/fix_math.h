@@ -16,495 +16,797 @@
 
 namespace lamb {
 
- /////////////////////////////////////////////////////////////////////////////////////////
- // Fixed
- /////////////////////////////////////////////////////////////////////////////////////////
+//  /////////////////////////////////////////////////////////////////////////////////////////
+//  // Fixed
+//  /////////////////////////////////////////////////////////////////////////////////////////
 
- template <
-  uint8_t characteristic_,
-  uint8_t mantissa_,
-  bool    saturate_ = false
-  >
- class fixed {
+//  template <
+//   uint8_t characteristic_,
+//   uint8_t mantissa_,
+//   bool    saturate_ = false
+//   >
+//  class fixed {
 
- /////////////////////////////////////////////////////////////////////////////////////////
+//  /////////////////////////////////////////////////////////////////////////////////////////
 
- private:
+//  private:
   
-  template <bool signedness, uint8_t size>
-  class integer_type {};
+//   template <bool signedness, uint8_t size>
+//   class integer_type {};
   
-  template <uint8_t size>
-  class integer_type<true, size> {
-  public:
-   typedef signed_int<(size > 8 ? 8 : size)> traits;
-  };
+//   template <uint8_t size>
+//   class integer_type<true, size> {
+//   public:
+//    typedef signed_int<(size > 8 ? 8 : size)> traits;
+//   };
   
-  template <uint8_t size>
-  class integer_type<false, size> {
-  public:
-   typedef unsigned_int<(size > 8 ? 8 : size)> traits;
-  };  
+//   template <uint8_t size>
+//   class integer_type<false, size> {
+//   public:
+//    typedef unsigned_int<(size > 8 ? 8 : size)> traits;
+//   };  
 
- /////////////////////////////////////////////////////////////////////////////////////////
+//  /////////////////////////////////////////////////////////////////////////////////////////
 
- public:
+//  public:
 
-  static constexpr bool    SATURATE       = saturate_;
-  static constexpr uint8_t CHARACTERISTIC = characteristic_;
-  static constexpr uint8_t MANTISSA       = mantissa_;
-  static constexpr bool    SIGNED         = ((CHARACTERISTIC + MANTISSA ) % 2) == 1;
-  static constexpr uint8_t SIZE           = size_fit_bits(CHARACTERISTIC+MANTISSA);
-  static constexpr uint8_t BIG_SIZE       = size_fit_bits((SIZE + 1) * 8);
+//   static constexpr bool    SATURATE       = saturate_;
+//   static constexpr uint8_t CHARACTERISTIC = characteristic_;
+//   static constexpr uint8_t MANTISSA       = mantissa_;
+//   static constexpr bool    SIGNED         = ((CHARACTERISTIC + MANTISSA ) % 2) == 1;
+//   static constexpr uint8_t SIZE           = size_fit_bits(CHARACTERISTIC+MANTISSA);
+//   static constexpr uint8_t BIG_SIZE       = size_fit_bits((SIZE + 1) * 8);
   
-  ////////////////////////////////////////////////////////////////////////////////////////
+//   ////////////////////////////////////////////////////////////////////////////////////////
 
-  typedef
-  fixed<CHARACTERISTIC, MANTISSA, SATURATE>
-  self_type;
+//   typedef
+//   fixed<CHARACTERISTIC, MANTISSA, SATURATE>
+//   self_type;
   
-  template <bool saturate>
-  using
-  compatible_type = fixed<CHARACTERISTIC, MANTISSA, saturate>;
+//   template <bool saturate>
+//   using
+//   compatible_type = fixed<CHARACTERISTIC, MANTISSA, saturate>;
 
-  typedef
-  compatible_type<(! SATURATE)>
-  sat_cast_type;
+//   typedef
+//   compatible_type<(! SATURATE)>
+//   sat_cast_type;
 
-  typedef
-  typename
-  integer_type<SIGNED, SIZE>::traits
-  traits;
+//   typedef
+//   typename
+//   integer_type<SIGNED, SIZE>::traits
+//   traits;
 
-  typedef
-  typename
-  traits::type
-  type;
+//   typedef
+//   typename
+//   traits::type
+//   type;
 
-  typedef
-  typename
-  integer_type<SIGNED, BIG_SIZE>::traits::type
-  big_type;
+//   typedef
+//   typename
+//   integer_type<SIGNED, BIG_SIZE>::traits::type
+//   big_type;
 
-  /////////////////////////////////////////////////////////////////////////////////////////
+//   /////////////////////////////////////////////////////////////////////////////////////////
 
-  static constexpr self_type MAX = self_type(integer_type<SIGNED, SIZE>::traits::MAX);
-  static constexpr self_type MIN = self_type(integer_type<SIGNED, SIZE>::traits::MIN);
+//   static constexpr self_type MAX = self_type(integer_type<SIGNED, SIZE>::traits::MAX);
+//   static constexpr self_type MIN = self_type(integer_type<SIGNED, SIZE>::traits::MIN);
   
-  static constexpr
-  self_type                  ONE = self_type(
-   CHARACTERISTIC == 0 ?
+//   static constexpr
+//   self_type                  ONE = self_type(
+//    CHARACTERISTIC == 0 ?
+//    MAX.value :
+//    (((type)1) << MANTISSA) - 1
+//   );
+
+//   /////////////////////////////////////////////////////////////////////////////////////////
+
+//   type                     value;  
+
+//   /////////////////////////////////////////////////////////////////////////////////////////
+
+//   constexpr
+//   operator sat_cast_type () const {
+//    return sat_cast_type(value);
+//   }
+  
+//   /////////////////////////////////////////////////////////////////////////////////////////
+  
+//   static
+//   constexpr
+//   type mask() {
+//    type m = 0;
+
+//    return (1ll << MANTISSA) - 1;
+//   }
+
+//   /////////////////////////////////////////////////////////////////////////////////////////
+
+//   constexpr
+//   type mantissa() const { // return smaller type?
+//    return value & mask();
+//   }
+  
+
+//   constexpr
+//   void mantissa(type const & x)  { 
+//    type tmp = value & ~mask();
+   
+//    value    = tmp | x;
+//   }
+  
+//   /////////////////////////////////////////////////////////////////////////////////////////
+
+//   constexpr
+//   type characteristic() const {    // return smaller type?
+//    return CHARACTERISTIC == 0 ? 0 : (value & (~mask())) >> MANTISSA;
+//   }     
+
+//   void print_bits_32(uint32_t const & t0) {
+//    {
+//     for(uint32_t mask = 0x80000000; mask; mask >>= 1) {
+//      if (mask & t0) {
+// #ifdef LAMB_NO_ARDUINO
+//       printf("1");
+// #else
+//       Serial.print('1'); Serial.flush();
+// #endif
+//      }
+//      else {
+// #ifdef LAMB_NO_ARDUINO
+//       printf("0");
+// #else
+//       Serial.print('0'); Serial.flush();
+// #endif
+//      }
+//     }
+//    }
+//   }
+
+//   constexpr
+//   void characteristic(type const & x)  {
+//    printf("Before: ");
+//    print_bits_32(value);
+//    printf("\n");
+
+//    type tmp = value & mask();
+   
+//    printf("After:  ");
+//    print_bits_32((x << MANTISSA) | tmp);
+//    printf("\n");
+
+//    value = (x << MANTISSA) | tmp;
+//   }     
+  
+//   /////////////////////////////////////////////////////////////////////////////////////////
+
+//   explicit
+//   constexpr
+//   fixed(
+//    type const & tmp_
+//   ) :
+//    value(tmp_) {}
+
+//   //--------------------------------------------------------------------------------------
+  
+//   explicit
+//   constexpr
+//   fixed(
+//    type const & characteristic,
+//    type const & mantissa
+//   ) :
+//    value((characteristic * ONE.value) + (characteristic < 0 ? - mantissa : mantissa)) {}
+
+//   /////////////////////////////////////////////////////////////////////////////////////////
+  
+//   template <uint8_t characteristic, uint8_t mantissa, bool saturate>
+//   explicit
+//   constexpr 
+//   operator fixed<characteristic, mantissa, saturate>() const {
+//    typedef fixed<characteristic, mantissa, saturate>
+//     other_type;
+
+//    constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
+   
+//    typedef
+//     typename integer_type<SIGNED, INTERMED_SIZE>::traits::type
+//     intermediary_type;
+
+//    constexpr bool    from_signed    = SIGNED     && (! other_type::SIGNED);
+//    constexpr int8_t  mantissa_delta = MANTISSA - mantissa;
+   
+//    if constexpr(from_signed) {
+//     if (value < 0) {
+//      return other_type(0);
+//     }
+//    }
+
+//    // printf(
+//    //  "CONV FROM '%15ld' %u.%u (%u) to %u.%u (%u) via %u byte intermediary\n",
+//    //  value,
+//    //  CHARACTERISTIC, MANTISSA,
+//    //  self_type::SIZE,
+//    //  characteristic, mantissa,
+//    //  other_type::SIZE,
+//    //  INTERMED_SIZE
+//    // );
+
+//    // printf("DELTA: %08d \n", mantissa_delta);
+   
+//    intermediary_type tmp_value = value;
+   
+//    if constexpr(mantissa_delta >= 0) {
+//     tmp_value >>= mantissa_delta;
+//    }
+//    else {
+//     tmp_value <<= -mantissa_delta;
+//    }
+   
+//    return other_type(tmp_value);
+//   }
+
+//   /////////////////////////////////////////////////////////////////////////////////////////
+
+//   constexpr explicit
+//   operator type() const {
+//    return value;
+//   }
+  
+//   ////////////////////////////////////////////////////////////////////////////////////////
+
+//   constexpr
+//   explicit
+//   operator double() const {
+//    constexpr double one = ONE.value * 1.0;
+   
+//    return value / one;
+//   }
+   
+//   ////////////////////////////////////////////////////////////////////////////////////////
+
+//   static
+//   constexpr
+//   self_type
+//   from_double(
+//    double const & tmp
+//   ) {
+//    int               divisor = tmp;
+//    double            modulus = tmp - divisor;
+//    type              ipart   = ONE.value * divisor + int(ONE.value * modulus);
+   
+//    return self_type(ipart);
+//   }
+
+//   ////////////////////////////////////////////////////////////////////////////////////////
+
+//  private:
+
+//   template <uint8_t c, uint8_t m>
+//   class constants_helper {
+//   public:
+//    static_assert(c >= 2, "characteristic must be at least 2.");
+//    static constexpr self_type pi = from_double(M_PI);
+//   };
+
+//  public:
+  
+//   typedef constants_helper<CHARACTERISTIC, MANTISSA> constants;
+ 
+//   ////////////////////////////////////////////////////////////////////////////////////////
+
+//   constexpr
+//   bool
+//   operator ~ () const {
+//    if constexpr(SIGNED) {
+//     return self_type(value * -1);
+//    }
+//    else {
+//     return self_type(~value);
+//    }
+//   }    
+
+//   ////////////////////////////////////////////////////////////////////////////////////////
+
+//   template <bool saturate>
+//   constexpr
+//   bool
+//   operator ^ (
+//    compatible_type<saturate> const & other
+//   ) const {
+//     return self_type(value ^ other.value);
+//   }  
+
+//   ////////////////////////////////////////////////////////////////////////////////////////
+
+//   template <bool saturate>
+//   constexpr
+//   bool
+//   operator == (
+//    compatible_type<saturate> const & other
+//   ) const {
+//    return value == other.value;
+//   }    
+
+//   ////////////////////////////////////////////////////////////////////////////////////////
+
+//   template <bool saturate>
+//   constexpr
+//   bool
+//   operator != (
+//    compatible_type<saturate> const & other
+//   ) const {
+//    return value != other.value;
+//   }    
+
+//   ////////////////////////////////////////////////////////////////////////////////////////
+
+//   template <bool saturate>
+//   constexpr
+//   bool
+//   operator > (
+//    compatible_type<saturate> const & other
+//   ) const {
+//    return value > other.value;
+//   }    
+
+//   /////////////////////////////////////////////////////////////////////////////////////////
+
+//   template <bool saturate>
+//   constexpr
+//   bool
+//   operator < (
+//    compatible_type<saturate> const & other
+//   ) const {
+//    return value < other.value;
+//   }    
+
+//   ////////////////////////////////////////////////////////////////////////////////////////
+
+//   template <bool saturate>
+//   constexpr
+//   bool
+//   operator >= (
+//    compatible_type<saturate> const & other
+//   ) const {
+//    return value >= other.value;
+//   }    
+
+//   ////////////////////////////////////////////////////////////////////////////////////////
+
+//   template <bool saturate>
+//   constexpr
+//   bool
+//   operator <= (
+//    compatible_type<saturate> const & other
+//   ) const {
+//    return value <= other.value;
+//   }    
+
+//   ////////////////////////////////////////////////////////////////////////////////////////
+
+//   constexpr
+//   self_type
+//   operator >> (
+//    uint8_t const & shift
+//   ) const {
+//    return self_type(value >> shift);  
+//   }    
+
+//   constexpr
+//   self_type &
+//   operator >>= (
+//    uint8_t const & shift
+//   ) {
+//    value = self_type(*this >> shift).value;
+   
+//    return *this;
+//   }    
+
+//   ////////////////////////////////////////////////////////////////////////////////////////
+
+//   constexpr
+//   self_type
+//   operator << (
+//    uint8_t const & shift
+//   ) const {
+//    return self_type(value << shift);  
+//   }    
+
+//   //--------------------------------------------------------------------------------------
+  
+//   constexpr
+//   self_type &
+//   operator <<= (
+//    uint8_t const & shift
+//   ) {
+//    value = self_type(*this << shift).value;
+   
+//    return *this;
+//   }    
+
+//   ////////////////////////////////////////////////////////////////////////////////////////
+
+//   template <bool saturate>
+//   constexpr
+//   self_type
+//   operator + (
+//    compatible_type<saturate> const & other
+//   ) const {
+//    type              old        = value;
+//    big_type          big_tmp    = old;
+//    big_tmp                     += other.value;
+//    type              small_tmp  = big_tmp;
+   
+//    return self_type(small_tmp);
+//   }    
+
+//   //------------------------------------------------------------------------------------
+  
+//   template <bool saturate>
+//   constexpr
+//   self_type &
+//   operator += (
+//    compatible_type<saturate> const & other
+//   ) {
+//    value = (*this + other).value;
+
+//    return *this;
+//   }
+
+//   /////////////////////////////////////////////////////////////////////////////////////////
+
+//   constexpr
+//   self_type
+//   operator - () const {
+//    return self_type(value * -1);
+//   }    
+
+//   //--------------------------------------------------------------------------------------
+
+//   template <bool saturate>
+//   constexpr
+//   self_type
+//   operator - (
+//    compatible_type<saturate> const & other
+//   ) const {
+//    type              old        = value;
+//    big_type          big_tmp    = old;
+//    big_tmp                     -= other.value;
+//    type              small_tmp  = big_tmp;
+   
+//    return self_type(small_tmp);
+//   }    
+
+//   //--------------------------------------------------------------------------------------
+
+//   template <bool saturate>
+//   constexpr
+//   self_type &
+//   operator -= (
+//    compatible_type<saturate> const & other
+//   ) {
+//    value = (*this - other).value;
+
+//    return *this;
+//   }
+
+//   ////////////////////////////////////////////////////////////////////////////////////////
+
+//   template <uint8_t other_characteristic, uint8_t other_mantissa, bool other_saturate>
+//   constexpr
+//   self_type
+//   operator * (
+//    fixed<other_characteristic, other_mantissa, other_saturate> const & other
+//   ) const {
+
+//    typedef
+//     fixed<other_characteristic, other_mantissa, other_saturate>
+//     other_type;
+   
+//    typedef
+//     typename
+//     integer_type<SIGNED, (size_fit_bytes(SIZE+other_type::SIZE))>::traits::type
+//     intermediary_type;
+
+//    static_assert(
+//     ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
+//     "Signedness mismatch!"
+//    );
+
+//    type              old(value);      
+//    intermediary_type big_tmp     = value;
+//    big_tmp                      *= other.value;
+//    big_tmp                     >>= other_mantissa;     
+//    type              small_tmp   = big_tmp;
+
+//    if (false) {
+//     printf(
+//      "MUL % 13.05lf * % 13.05lf = % 13.05lf \n",
+//      double(*this),
+//      double(other),
+//      double(self_type(small_tmp))
+//     );
+//     printf(
+//      "MUL % 13lu * % 13lu = % 13lu \n",
+//      value,
+//      other.value,
+//      small_tmp
+//     );   
+//    }
+   
+//    return self_type(small_tmp);
+//   }
+
+//   //--------------------------------------------------------------------------------------
+  
+//   template <uint8_t other_characteristic, uint8_t other_mantissa, bool saturate>
+//   constexpr
+//   self_type & 
+//   operator *= (
+//    fixed<other_characteristic,other_mantissa, saturate> const & other
+//   ) {
+//    value = (*this * other).value;
+
+//    return *this;
+//   }
+
+//   /////////////////////////////////////////////////////////////////////////////////////////
+  
+//   template <uint8_t other_characteristic, uint8_t other_mantissa, bool other_saturate>
+//   constexpr
+//   self_type
+//   operator / (
+//    fixed<other_characteristic,other_mantissa,other_saturate> const & other
+//   ) const {
+
+//    typedef
+//     fixed<other_characteristic, other_mantissa, other_saturate>
+//     other_type;
+    
+//    typedef
+//     typename
+//     integer_type<SIGNED, (size_fit_bytes(SIZE+other_type::SIZE))>::traits::type
+//     intermediary_type;
+
+//    static_assert(
+//     ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
+//     "Signedness mismatch!"
+//    );
+
+//    intermediary_type big_tmp     = value;
+//    big_tmp                     <<= other_mantissa;
+//    big_tmp                      /= other.value;
+//    // big_tmp                      /= 666;.
+//    type              small_tmp   = big_tmp;
+
+//    // if (true) {
+//    //  printf(
+//    //   "\nDIV  % 10u.%2u / % 10u.%2u = % 10u.%2u using a %u bit temporary\n",
+//    //   CHARACTERISTIC,
+//    //   MANTISSA,
+//    //   other_characteristic,
+//    //   other_mantissa,
+//    //   CHARACTERISTIC,
+//    //   MANTISSA,
+//    //   (sizeof(intermediary_type) << 3)
+//    //  );
+//    //  printf(
+//    //   " div % 16.05lf / % 16.05lf = % 16.05lf \n",
+//    //   double(*this),
+//    //   double(other),
+//    //   double(self_type(small_tmp))
+//    //  );
+//    //  printf(
+//    //   " big %16lu << ",
+//    //   ((intermediary_type)value)
+//    //  );
+//    //  printf("%lld ", ((intermediary_type)value) << other_mantissa);
+//    //  printf(
+//    //   " after shift %2u \n",
+//    //   other_mantissa
+//    //  );
+//    //  printf(
+//    //   " div % 16lu / % 16lu = % 16lu \n",
+//    //   value,
+//    //   other.value,
+//    //   small_tmp
+//    //  );
+//    // }
+   
+//    return self_type(small_tmp);
+//   }
+
+//   //--------------------------------------------------------------------------------------
+
+//   template <uint8_t other_characteristic, uint8_t other_mantissa, bool saturate__>
+//   constexpr
+//   self_type & 
+//   operator /= (
+//    fixed<other_characteristic, other_mantissa, saturate__> const & other
+//   ) {   
+//    value = (*this / other).value;
+
+//    return *this;
+//   }
+
+//  /////////////////////////////////////////////////////////////////////////////////////////
+
+//  }; // template fixed
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+template <typename value_type_>
+class integer {
+//----------------------------------------------------------------------------------------------------------------------
+public:
+ //---------------------------------------------------------------------------------------------------------------------
+ typedef integer_traits<value_type_> traits;
+ typedef typename traits::type   value_type;
+ //---------------------------------------------------------------------------------------------------------------------
+ value_type value;
+ //---------------------------------------------------------------------------------------------------------------------
+ explicit constexpr
+ integer(value_type const & v) : value(v) {}
+ //---------------------------------------------------------------------------------------------------------------------
+ /**/           operator     value_type(           )    const   = delete;
+ //---------------------------------------------------------------------------------------------------------------------
+ integer        operator  +  ()                         const   = delete;
+ integer        operator  ~  ()                         const   { return integer(       ~ value      );                }
+ integer        operator  -  ()                         const   { return integer(       - value      );                }
+ //---------------------------------------------------------------------------------------------------------------------
+ integer        operator >>  (uint8_t const & shift)    const   { return integer(value >> shift      );                }
+ integer        operator <<  (uint8_t const & shift)    const   { return integer(value << shift      );                }
+ integer        operator  ^  (integer const & other)    const   { return integer(value  ^ other.value);                }
+ integer        operator  +  (integer const & other)    const   { return integer(value  + other.value);                }
+ integer        operator  -  (integer const & other)    const   { return integer(value  - other.value);                }
+ integer        operator  *  (integer const & other)    const   { return integer(value  * other.value);                }
+ integer        operator  /  (integer const & other)    const   { return integer(value  / other.value);                }
+ integer        operator  %  (integer const & other)    const   { return integer(value  % other.value);                }
+ integer &      operator %=  (integer const & other)            { this->value  = (*this % other.value); return *this;  }
+  //---------------------------------------------------------------------------------------------------------------------
+ bool           operator  <  (integer const & other)    const   { return        (value  < other.value);                }
+ bool           operator  >  (integer const & other)    const   { return        (value  > other.value);                }
+ bool           operator ==  (integer const & other)    const   { return        (value == other.value);                }
+ //---------------------------------------------------------------------------------------------------------------------
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+template <uint8_t whole_, uint8_t frac_>
+class q {
+//----------------------------------------------------------------------------------------------------------------------
+public:
+ //---------------------------------------------------------------------------------------------------------------------
+
+ static constexpr uint8_t WHOLE       = whole_;
+ static constexpr uint8_t FRAC        = frac_;
+ static constexpr uint8_t SIZE        = size_fit_bits(WHOLE + FRAC);
+ static constexpr uint8_t BIG_SIZE    = size_fit_bits((SIZE + 1) << 3);
+ static constexpr bool    SIGNED      = ((WHOLE + FRAC ) % 2) == 1;
+
+ //---------------------------------------------------------------------------------------------------------------------
+
+ typedef find_integer<SIGNED, SIZE>     traits;
+ typedef typename traits::type          value_type;
+
+ //---------------------------------------------------------------------------------------------------------------------
+
+ typedef find_integer<SIGNED, BIG_SIZE> big_traits;
+ typedef typename traits::type          big_value_type;
+
+ //---------------------------------------------------------------------------------------------------------------------
+
+ static constexpr q       MAX         = q(traits::MAX);
+ static constexpr q       MIN         = q(traits::MIN);
+ static constexpr q       ONE         = q(  
+   WHOLE == 0 ?
    MAX.value :
-   (((type)1) << MANTISSA) - 1
+   (((value_type)1) << FRAC) // - 1 ?
   );
 
-  /////////////////////////////////////////////////////////////////////////////////////////
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  type                     value;  
+ value_type value;
 
-  /////////////////////////////////////////////////////////////////////////////////////////
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  constexpr
-  operator sat_cast_type () const {
-   return sat_cast_type(value);
-  }
+ explicit constexpr
+ q(value_type const & v) : value(v) {}
+
+//---------------------------------------------------------------------------------------------------------------------
+ 
+ explicit constexpr
+ q(value_type const & w, value_type const & f) :
+  value(value_type(WHOLE * ONE + (WHOLE < 0 ? - FRAC : FRAC))) {}
+ 
+ /////////////////////////////////////////////////////////////////////////////////////////
   
-  /////////////////////////////////////////////////////////////////////////////////////////
-  
-  static
-  constexpr
-  type mask() {
-   type m = 0;
+  template <uint8_t whole, uint8_t frac>
+  explicit constexpr 
+  operator q<whole, frac>() const {
 
-   return (1ll << MANTISSA) - 1;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-
-  constexpr
-  type mantissa() const { // return smaller type?
-   return value & mask();
-  }
-  
-
-  constexpr
-  void mantissa(type const & x)  { 
-   type tmp = value & ~mask();
-   
-   value    = tmp | x;
-  }
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-
-  constexpr
-  type characteristic() const {    // return smaller type?
-   return CHARACTERISTIC == 0 ? 0 : (value & (~mask())) >> MANTISSA;
-  }     
-
-  void print_bits_32(uint32_t const & t0) {
-   {
-    for(uint32_t mask = 0x80000000; mask; mask >>= 1) {
-     if (mask & t0) {
-#ifdef LAMB_NO_ARDUINO
-      printf("1");
-#else
-      Serial.print('1'); Serial.flush();
-#endif
-     }
-     else {
-#ifdef LAMB_NO_ARDUINO
-      printf("0");
-#else
-      Serial.print('0'); Serial.flush();
-#endif
-     }
-    }
-   }
-  }
-
-  constexpr
-  void characteristic(type const & x)  {
-   printf("Before: ");
-   print_bits_32(value);
-   printf("\n");
-
-   type tmp = value & mask();
-   
-   printf("After:  ");
-   print_bits_32((x << MANTISSA) | tmp);
-   printf("\n");
-
-   value = (x << MANTISSA) | tmp;
-  }     
-  
-  /////////////////////////////////////////////////////////////////////////////////////////
-
-  explicit
-  constexpr
-  fixed(
-   type const & tmp_
-  ) :
-   value(tmp_) {}
-
-  //--------------------------------------------------------------------------------------
-  
-  explicit
-  constexpr
-  fixed(
-   type const & characteristic,
-   type const & mantissa
-  ) :
-   value((characteristic * ONE.value) + (characteristic < 0 ? - mantissa : mantissa)) {}
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  
-  template <uint8_t characteristic, uint8_t mantissa, bool saturate>
-  explicit
-  constexpr 
-  operator fixed<characteristic, mantissa, saturate>() const {
-   typedef fixed<characteristic, mantissa, saturate>
+   typedef
+    q<whole, frac>
     other_type;
 
    constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
-   
-   typedef
-    typename integer_type<SIGNED, INTERMED_SIZE>::traits::type
+
+   typedef typename
+    find_integer<SIGNED, INTERMED_SIZE>::traits::type
     intermediary_type;
 
-   constexpr bool    from_signed    = SIGNED     && (! other_type::SIGNED);
-   constexpr int8_t  mantissa_delta = MANTISSA - mantissa;
+   constexpr bool    FROM_SIGNED   = SIGNED && ! other_type::SIGNED;
+   constexpr int8_t  FRAC_DELTA    = FRAC - frac;
    
-   if constexpr(from_signed) {
+   if constexpr(FROM_SIGNED) {
     if (value < 0) {
      return other_type(0);
     }
    }
 
-   // printf(
-   //  "CONV FROM '%15ld' %u.%u (%u) to %u.%u (%u) via %u byte intermediary\n",
-   //  value,
-   //  CHARACTERISTIC, MANTISSA,
-   //  self_type::SIZE,
-   //  characteristic, mantissa,
-   //  other_type::SIZE,
-   //  INTERMED_SIZE
-   // );
-
-   // printf("DELTA: %08d \n", mantissa_delta);
+   other_type ret(value);
    
-   intermediary_type tmp_value = value;
-   
-   if constexpr(mantissa_delta >= 0) {
-    tmp_value >>= mantissa_delta;
+   if constexpr(FRAC_DELTA >= 0) {
+    ret.value >>= FRAC_DELTA;
    }
-   else {
-    tmp_value <<= -mantissa_delta;
+   else if constexpr(FRAC_DELTA <= 0) {
+    ret.value <<= -FRAC_DELTA;
    }
    
-   return other_type(tmp_value);
+   return ret;
   }
 
-  /////////////////////////////////////////////////////////////////////////////////////////
-
-  constexpr explicit
-  operator type() const {
-   return value;
-  }
-  
-  ////////////////////////////////////////////////////////////////////////////////////////
-
-  constexpr
-  explicit
-  operator double() const {
-   constexpr double one = ONE.value * 1.0;
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ 
+ explicit constexpr 
+ operator double() const {
+  constexpr double one = ONE.value * 1.0;
    
-   return value / one;
-  }
-   
-  ////////////////////////////////////////////////////////////////////////////////////////
+  return value / one;
+ }
 
-  static
-  constexpr
-  self_type
-  from_double(
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  static constexpr
+  q from_double(
    double const & tmp
   ) {
-   int               divisor = tmp;
-   double            modulus = tmp - divisor;
-   type              ipart   = ONE.value * divisor + int(ONE.value * modulus);
+   int        divisor = tmp;
+   double     modulus = tmp - divisor;
+   value_type ipart   = ONE.value * divisor + int(ONE.value * modulus);
    
-   return self_type(ipart);
+   return q(ipart);
   }
 
-  ////////////////////////////////////////////////////////////////////////////////////////
-
- private:
-
-  template <uint8_t c, uint8_t m>
-  class constants_helper {
-  public:
-   static_assert(c >= 2, "characteristic must be at least 2.");
-   static constexpr self_type pi = from_double(M_PI);
-  };
-
- public:
-  
-  typedef constants_helper<CHARACTERISTIC, MANTISSA> constants;
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  
-  ////////////////////////////////////////////////////////////////////////////////////////
+ static constexpr q       PI          = WHOLE >= 2 ? from_double(M_PI) : q(0);
+
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   constexpr
-  bool
-  operator ~ () const {
-   if constexpr(SIGNED) {
-    return self_type(value * -1);
-   }
-   else {
-    return self_type(~value);
-   }
-  }    
-
-  ////////////////////////////////////////////////////////////////////////////////////////
-
-  template <bool saturate>
-  constexpr
-  bool
-  operator ^ (
-   compatible_type<saturate> const & other
+  q operator ^ (
+   q const & other
   ) const {
-    return self_type(value ^ other.value);
+   return value ^ other.value;
   }  
 
-  ////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  template <bool saturate>
+  template <uint8_t other_whole, uint8_t other_frac>
   constexpr
-  bool
-  operator == (
-   compatible_type<saturate> const & other
-  ) const {
-   return value == other.value;
-  }    
-
-  ////////////////////////////////////////////////////////////////////////////////////////
-
-  template <bool saturate>
-  constexpr
-  bool
-  operator != (
-   compatible_type<saturate> const & other
-  ) const {
-   return value != other.value;
-  }    
-
-  ////////////////////////////////////////////////////////////////////////////////////////
-
-  template <bool saturate>
-  constexpr
-  bool
-  operator > (
-   compatible_type<saturate> const & other
-  ) const {
-   return value > other.value;
-  }    
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-
-  template <bool saturate>
-  constexpr
-  bool
-  operator < (
-   compatible_type<saturate> const & other
-  ) const {
-   return value < other.value;
-  }    
-
-  ////////////////////////////////////////////////////////////////////////////////////////
-
-  template <bool saturate>
-  constexpr
-  bool
-  operator >= (
-   compatible_type<saturate> const & other
-  ) const {
-   return value >= other.value;
-  }    
-
-  ////////////////////////////////////////////////////////////////////////////////////////
-
-  template <bool saturate>
-  constexpr
-  bool
-  operator <= (
-   compatible_type<saturate> const & other
-  ) const {
-   return value <= other.value;
-  }    
-
-  ////////////////////////////////////////////////////////////////////////////////////////
-
-  constexpr
-  self_type
-  operator >> (
-   uint8_t const & shift
-  ) const {
-   return self_type(value >> shift);  
-  }    
-
-  constexpr
-  self_type &
-  operator >>= (
-   uint8_t const & shift
-  ) {
-   value = self_type(*this >> shift).value;
-   
-   return *this;
-  }    
-
-  ////////////////////////////////////////////////////////////////////////////////////////
-
-  constexpr
-  self_type
-  operator << (
-   uint8_t const & shift
-  ) const {
-   return self_type(value << shift);  
-  }    
-
-  //--------------------------------------------------------------------------------------
-  
-  constexpr
-  self_type &
-  operator <<= (
-   uint8_t const & shift
-  ) {
-   value = self_type(*this << shift).value;
-   
-   return *this;
-  }    
-
-  ////////////////////////////////////////////////////////////////////////////////////////
-
-  template <bool saturate>
-  constexpr
-  self_type
-  operator + (
-   compatible_type<saturate> const & other
-  ) const {
-   type              old        = value;
-   big_type          big_tmp    = old;
-   big_tmp                     += other.value;
-   type              small_tmp  = big_tmp;
-   
-   return self_type(small_tmp);
-  }    
-
-  //------------------------------------------------------------------------------------
-  
-  template <bool saturate>
-  constexpr
-  self_type &
-  operator += (
-   compatible_type<saturate> const & other
-  ) {
-   value = (*this + other).value;
-
-   return *this;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-
-  constexpr
-  self_type
-  operator - () const {
-   return self_type(value * -1);
-  }    
-
-  //--------------------------------------------------------------------------------------
-
-  template <bool saturate>
-  constexpr
-  self_type
-  operator - (
-   compatible_type<saturate> const & other
-  ) const {
-   type              old        = value;
-   big_type          big_tmp    = old;
-   big_tmp                     -= other.value;
-   type              small_tmp  = big_tmp;
-   
-   return self_type(small_tmp);
-  }    
-
-  //--------------------------------------------------------------------------------------
-
-  template <bool saturate>
-  constexpr
-  self_type &
-  operator -= (
-   compatible_type<saturate> const & other
-  ) {
-   value = (*this - other).value;
-
-   return *this;
-  }
-
-  ////////////////////////////////////////////////////////////////////////////////////////
-
-  template <uint8_t other_characteristic, uint8_t other_mantissa, bool other_saturate>
-  constexpr
-  self_type
-  operator * (
-   fixed<other_characteristic, other_mantissa, other_saturate> const & other
+  q operator * (
+   q<other_whole, other_frac> const & other
   ) const {
 
    typedef
-    fixed<other_characteristic, other_mantissa, other_saturate>
+    q<other_whole, other_frac>
     other_type;
-   
-   typedef
-    typename
-    integer_type<SIGNED, (size_fit_bytes(SIZE+other_type::SIZE))>::traits::type
+
+   constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
+      
+   typedef typename
+    find_integer<SIGNED, INTERMED_SIZE>::type
     intermediary_type;
 
    static_assert(
@@ -512,125 +814,148 @@ namespace lamb {
     "Signedness mismatch!"
    );
 
-   type              old(value);      
    intermediary_type big_tmp     = value;
    big_tmp                      *= other.value;
-   big_tmp                     >>= other_mantissa;     
-   type              small_tmp   = big_tmp;
+   big_tmp                     >>= other_frac;
 
-   if (false) {
-    printf(
-     "MUL % 13.05lf * % 13.05lf = % 13.05lf \n",
-     double(*this),
-     double(other),
-     double(self_type(small_tmp))
-    );
-    printf(
-     "MUL % 13lu * % 13lu = % 13lu \n",
-     value,
-     other.value,
-     small_tmp
-    );   
-   }
-   
-   return self_type(small_tmp);
-  }
-
-  //--------------------------------------------------------------------------------------
-  
-  template <uint8_t other_characteristic, uint8_t other_mantissa, bool saturate>
-  constexpr
-  self_type & 
-  operator *= (
-   fixed<other_characteristic,other_mantissa, saturate> const & other
-  ) {
-   value = (*this * other).value;
-
-   return *this;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////////////////
-  
-  template <uint8_t other_characteristic, uint8_t other_mantissa, bool other_saturate>
-  constexpr
-  self_type
-  operator / (
-   fixed<other_characteristic,other_mantissa,other_saturate> const & other
-  ) const {
-
-   typedef
-    fixed<other_characteristic, other_mantissa, other_saturate>
-    other_type;
-    
-   typedef
-    typename
-    integer_type<SIGNED, (size_fit_bytes(SIZE+other_type::SIZE))>::traits::type
-    intermediary_type;
-
-   static_assert(
-    ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
-    "Signedness mismatch!"
-   );
-
-   intermediary_type big_tmp     = value;
-   big_tmp                     <<= other_mantissa;
-   big_tmp                      /= other.value;
-   // big_tmp                      /= 666;.
-   type              small_tmp   = big_tmp;
-
-   // if (true) {
+   // if (false) {
    //  printf(
-   //   "\nDIV  % 10u.%2u / % 10u.%2u = % 10u.%2u using a %u bit temporary\n",
-   //   CHARACTERISTIC,
-   //   MANTISSA,
-   //   other_characteristic,
-   //   other_mantissa,
-   //   CHARACTERISTIC,
-   //   MANTISSA,
-   //   (sizeof(intermediary_type) << 3)
-   //  );
-   //  printf(
-   //   " div % 16.05lf / % 16.05lf = % 16.05lf \n",
+   //   "MUL % 13.05lf * % 13.05lf = % 13.05lf \n",
    //   double(*this),
    //   double(other),
-   //   double(self_type(small_tmp))
+   //   double(q(small_tmp))
    //  );
    //  printf(
-   //   " big %16lu << ",
-   //   ((intermediary_type)value)
-   //  );
-   //  printf("%lld ", ((intermediary_type)value) << other_mantissa);
-   //  printf(
-   //   " after shift %2u \n",
-   //   other_mantissa
-   //  );
-   //  printf(
-   //   " div % 16lu / % 16lu = % 16lu \n",
+   //   "MUL % 13lu * % 13lu = % 13lu \n",
    //   value,
    //   other.value,
    //   small_tmp
-   //  );
+   //  );   
    // }
    
-   return self_type(small_tmp);
+   return q((value_type)big_tmp);
   }
 
-  //--------------------------------------------------------------------------------------
-
-  template <uint8_t other_characteristic, uint8_t other_mantissa, bool saturate__>
+   /////////////////////////////////////////////////////////////////////////////////////////
+  
+  template <uint8_t other_whole, uint8_t other_frac>
   constexpr
-  self_type & 
-  operator /= (
-   fixed<other_characteristic, other_mantissa, saturate__> const & other
-  ) {   
-   value = (*this / other).value;
+  q
+  operator / (
+   q<other_whole, other_frac> const & other
+  ) const {
 
-   return *this;
+   typedef
+    q<other_whole, other_frac>
+    other_type;
+    
+   constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
+      
+   typedef typename
+    find_integer<SIGNED, INTERMED_SIZE>::type
+    intermediary_type;
+
+   static_assert(
+    ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
+    "Signedness mismatch!"
+   );
+
+   intermediary_type big_tmp   = value;
+   big_tmp                   <<= other_frac;
+   big_tmp                    /= other.value;
+   value_type small_tmp        = big_tmp;
+   
+   if (true) {
+    printf(
+     "\nDIV  % 10u.%2u / % 10u.%2u = % 10u.%2u using a %u bit temporary\n",
+     WHOLE,
+     FRAC,
+     other_whole,
+     other_frac,
+     WHOLE,
+     FRAC,
+     (sizeof(intermediary_type) << 3)
+    );
+    printf(
+     " div % 16.05lf / % 16.05lf = % 16.05lf \n",
+     double(*this),
+     double(other),
+     double(q(small_tmp))
+    );
+    printf(
+     " big %16lu << ",
+     ((intermediary_type)value)
+    );
+    printf("%lld ", ((intermediary_type)value) << other_frac);
+    printf(
+     " after shift %2u \n",
+     other_frac
+    );
+    printf(
+     " div % 16lu / % 16lu = % 16lu \n",
+     value,
+     other.value,
+     small_tmp
+    );
+   }
+   
+   return q((value_type)big_tmp);
   }
 
- /////////////////////////////////////////////////////////////////////////////////////////
+ 
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ q              operator  +  ()                         const   = delete;
+ q              operator  ~  ()                         const   { return       q(       ~ value      ); }
+ q              operator  -  ()                         const   { return       q(       - value      ); }
+ //---------------------------------------------------------------------------------------------------------------------
+ q              operator >>  (uint8_t const & shift)    const   { return       q(value >> shift      ); }
+ q              operator <<  (uint8_t const & shift)    const   { return       q(value << shift      ); }
+ q              operator  +  (q       const & other)    const   { return       q(value  + other.value); }
+ q              operator  -  (q       const & other)    const   { return       q(value  - other.value); }
+ //---------------------------------------------------------------------------------------------------------------------
+ bool           operator  <  (q       const & other)    const   { return        (value  < other.value); }
+ bool           operator  >  (q       const & other)    const   { return        (value  > other.value); }
+ bool           operator ==  (q       const & other)    const   { return        (value == other.value); }
+ //---------------------------------------------------------------------------------------------------------------------
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- }; // template fixed
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+template <typename base>
+class mathematized :  public base {
+//----------------------------------------------------------------------------------------------------------------------
+public:
+ //---------------------------------------------------------------------------------------------------------------------
+ typedef typename            base::value_type value_type;
+ //--------------------------------------------------------------------------------------------------------------------- 
+ explicit constexpr
+ mathematized                (value_type   const & v) : base(v) {}
+ //----------------------------------------------------------------------------------------------------------------------
+ constexpr
+ mathematized                (base         const & v) : base(v) {}
+ //----------------------------------------------------------------------------------------------------------------------
+ explicit       operator     value_type(            )   const   { return this->value;                                ; }
+ //----------------------------------------------------------------------------------------------------------------------
+ mathematized & operator  -- (                      )           { this        -= mathematized(1);        return *this; }
+ mathematized & operator  ++ (                      )           { this        += mathematized(1);        return *this; }
+  //---------------------------------------------------------------------------------------------------------------------
+ mathematized & operator >>= (uint8_t      const & v)           { this->value  = (*this    >> v ).value; return *this; }
+ mathematized & operator <<= (uint8_t      const & v)           { this->value  = (*this    << v ).value; return *this; }
+  //---------------------------------------------------------------------------------------------------------------------
+ mathematized & operator  -= (mathematized const & v)           { this->value  = (*this     - v ).value; return *this; }
+ mathematized & operator  += (mathematized const & v)           { this->value  = (*this     + v ).value; return *this; }
+ mathematized & operator  *= (mathematized const & v)           { this->value  = (*this     * v ).value; return *this; }
+ mathematized & operator  /= (mathematized const & v)           { this->value  = (*this     / v ).value; return *this; }
+  //---------------------------------------------------------------------------------------------------------------------
+ bool           operator  <= (mathematized const & o)   const   { return         (*this    == o )     || (*this < o) ; }
+ bool           operator  >= (mathematized const & o)   const   { return         (*this    == o )     || (*this > o) ; }
+ bool           operator  != (mathematized const & o)   const   { return       ! (*this    == o )                    ; } 
+//----------------------------------------------------------------------------------------------------------------------
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ template <uint8_t w, uint8_t f, bool nothing = false>
+ using fixed = mathematized<q<w, f>>;
  
  /////////////////////////////////////////////////////////////////////////////////////////
  // Typedefs
@@ -978,7 +1303,7 @@ namespace lamb {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 /* Local Variables:  */
-/* fill-column: 100  */
+/* fill-column: 130  */
 /* End:              */
 
 #endif
