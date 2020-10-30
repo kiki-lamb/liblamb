@@ -3,18 +3,6 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-template <bool, class T = void> 
-struct enable_if 
-{};
-
-template <class T> 
-struct enable_if<true, T> 
-{ 
- typedef T type; 
-};
-
-//////////////////////////////////////////////////////////////////////////////////////////
-
 class base {
 public:
  typedef uint8_t value_type;
@@ -31,6 +19,19 @@ public:
  base(value_type const & v) : value(v) {}
 
  base(cons const & c) : value(c.x + c.y) {} 
+};
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+class simple {
+public:
+ typedef uint8_t value_type;
+ 
+ value_type value;
+
+ static constexpr bool has_cons = false;
+ 
+ simple(value_type const & v) : value(v) {}
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -58,4 +59,7 @@ int main() {
  
  printf("x0: %u \n", x0.value);
  printf("x1: %u \n", x1.value);
+
+ derived<simple> x2(5);
+ printf("x2: %u \n", x2.value);
 }
