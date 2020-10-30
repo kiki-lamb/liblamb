@@ -327,6 +327,7 @@ public:
  typedef typename            base::value_type value_type;
  //---------------------------------------------------------------------------------------------------------------------
  template <typename base_ = base, bool enabled = base_::has_constructible_type>
+ explicit constexpr
  mathematized (typename base_::constructible_type const & x) : base(x) {}
   //---------------------------------------------------------------------------------------------------------------------
  explicit constexpr
