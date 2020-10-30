@@ -6,6 +6,7 @@
 template <typename t>
 struct has_constructible_type {
  static constexpr bool value = false;
+ typedef void type;
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -33,6 +34,7 @@ public:
 template <>
 struct has_constructible_type<base> {
  static constexpr bool value = true;
+ typedef base::constructible_type type;
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -60,7 +62,7 @@ public:
  
 
  template <typename base_ = base, bool enabled = has_constructible_type<base_>::value>
- derived (typename base_::constructible_type obj) : base(obj) {}
+ derived (typename has_constructible_type<base_>::type obj) : base(obj) {}
 
  derived (typename base::value_type val) : base(val) {}
 };
