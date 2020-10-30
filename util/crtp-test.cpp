@@ -15,7 +15,7 @@ using namespace lamb;
 // P      -  Direct.
 // P      *  Direct.
 // P      /  Direct.
-// P      %  Direct.
+// -      %  No.
 // P     u~  Direct.
 // P     <<  Direct.
 // P     >>  Direct.
@@ -31,7 +31,7 @@ using namespace lamb;
 // C     +=  +,  =
 // C     -=  -,  =
 // C     /=  /,  =
-// C     %=  %,  =
+// -     %=  %,  =
 // C     *=  *,  =
 // C    <<=  <<, =
 // C    >>=  >>, =
@@ -56,20 +56,22 @@ public:
  /**/           operator     value_type(           )    const   = delete;
  //---------------------------------------------------------------------------------------------------------------------
  integer        operator  +  ()                         const   = delete;
- integer        operator  ~  ()                         const   { return integer(       ~ value      ); }
- integer        operator  -  ()                         const   { return integer(       - value      ); }
+ integer        operator  ~  ()                         const   { return integer(       ~ value      );                }
+ integer        operator  -  ()                         const   { return integer(       - value      );                }
  //---------------------------------------------------------------------------------------------------------------------
- integer        operator >>  (uint8_t const & shift)    const   { return integer(value >> shift      ); }
- integer        operator <<  (uint8_t const & shift)    const   { return integer(value << shift      ); }
- integer        operator  +  (integer const & other)    const   { return integer(value  + other.value); }
- integer        operator  -  (integer const & other)    const   { return integer(value  - other.value); }
- integer        operator  *  (integer const & other)    const   { return integer(value  * other.value); }
- integer        operator  /  (integer const & other)    const   { return integer(value  / other.value); }
-// integer        operator  %  (integer const & other)    const   { return integer(value  % other.value); }
- //---------------------------------------------------------------------------------------------------------------------
- bool           operator  <  (integer const & other)    const   { return        (value  < other.value); }
- bool           operator  >  (integer const & other)    const   { return        (value  > other.value); }
- bool           operator ==  (integer const & other)    const   { return        (value == other.value); }
+ integer        operator >>  (uint8_t const & shift)    const   { return integer(value >> shift      );                }
+ integer        operator <<  (uint8_t const & shift)    const   { return integer(value << shift      );                }
+ integer        operator  ^  (integer const & other)    const   { return integer(value  ^ other.value);                }
+ integer        operator  +  (integer const & other)    const   { return integer(value  + other.value);                }
+ integer        operator  -  (integer const & other)    const   { return integer(value  - other.value);                }
+ integer        operator  *  (integer const & other)    const   { return integer(value  * other.value);                }
+ integer        operator  /  (integer const & other)    const   { return integer(value  / other.value);                }
+ integer        operator  %  (integer const & other)    const   { return integer(value  % other.value);                }
+ integer &      operator %=  (integer const & other)            { this->value  = (*this % other.value); return *this;  }
+  //---------------------------------------------------------------------------------------------------------------------
+ bool           operator  <  (integer const & other)    const   { return        (value  < other.value);                }
+ bool           operator  >  (integer const & other)    const   { return        (value  > other.value);                }
+ bool           operator ==  (integer const & other)    const   { return        (value == other.value);                }
  //---------------------------------------------------------------------------------------------------------------------
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -108,7 +110,7 @@ public:
    (((value_type)1) << FRAC) // - 1 ?
   );
 
- //---------------------------------------------------------------------------------------------------------------------
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
  value_type value;
 
@@ -153,7 +155,7 @@ public:
    if constexpr(FRAC_DELTA >= 0) {
     ret.value >>= FRAC_DELTA;
    }
-   else {
+   else if constexpr(FRAC_DELTA <= 0) {
     ret.value <<= -FRAC_DELTA;
    }
    
@@ -188,13 +190,6 @@ public:
 
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- // constexpr
- // q operator ~ () const {
- //    return q(~value);
- // }    
-
- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
   constexpr
   q operator ^ (
    q const & other
@@ -203,70 +198,6 @@ public:
   }  
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  // constexpr
-  // bool
-  // operator == (
-  //  q const & other
-  // ) const {
-  //  return value == other.value;
-  // }
-
- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
- // constexpr
- // bool operator > (
- //  q const & other
- // ) const {
- //  return value > other.value;
- // }    
-
- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
- // constexpr
- // bool operator < (
- //  q const & other
- // ) const {
- //  return value < other.value;
- // }    
-
- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
- // constexpr
- // q operator >> (
- //  uint8_t const & shift
- // ) const {
- //  return q(value >> shift);  
- // }    
-
- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- 
- // constexpr
- // q operator << (
- //  uint8_t const & shift
- // ) const {
- //  return q(value <<shift);  
- // }    
-
- ////////////////////////////////////////////////////////////////////////////////////////
-
- // constexpr
- // q operator + (
- //  q const & other
- // ) const {
- //  return q(value + other.val);
- // }    
-
- ////////////////////////////////////////////////////////////////////////////////////////
-
- // constexpr
- // q operator - (
- //  q const & other
- // ) const {
- //  return q(value - other.val);
- // }    
-
- ////////////////////////////////////////////////////////////////////////////////////////
 
   template <uint8_t other_whole, uint8_t other_frac>
   constexpr
@@ -388,9 +319,9 @@ public:
  q              operator <<  (uint8_t const & shift)    const   { return       q(value << shift      ); }
  q              operator  +  (q       const & other)    const   { return       q(value  + other.value); }
  q              operator  -  (q       const & other)    const   { return       q(value  - other.value); }
-// q              operator  *  (q       const & other)    const   { return       q(value  * other.value); }
-// q              operator  /  (q       const & other)    const   { return       q(value  / other.value); }
-// q              operator  %  (q       const & other)    const   { return       q(value  % other.value); }
+// q            operator  *  (q       const & other)    const   { return       q(value  * other.value); }
+// q            operator  /  (q       const & other)    const   { return       q(value  / other.value); }
+// q            operator  %  (q       const & other)    const   { return       q(value  % other.value); }
  //---------------------------------------------------------------------------------------------------------------------
  bool           operator  <  (q       const & other)    const   { return        (value  < other.value); }
  bool           operator  >  (q       const & other)    const   { return        (value  > other.value); }
@@ -423,7 +354,6 @@ public:
  mathematized & operator  += (mathematized const & v)           { this->value  = (*this     + v ).value; return *this; }
  mathematized & operator  *= (mathematized const & v)           { this->value  = (*this     * v ).value; return *this; }
  mathematized & operator  /= (mathematized const & v)           { this->value  = (*this     / v ).value; return *this; }
-// mathematized & operator  %= (mathematized const & v)           { this->value  = (*this     % v ).value; return *this; }
   //---------------------------------------------------------------------------------------------------------------------
  bool           operator  <= (mathematized const & o)   const   { return         (*this    == o )     || (*this < o) ; }
  bool           operator  >= (mathematized const & o)   const   { return         (*this    == o )     || (*this > o) ; }
