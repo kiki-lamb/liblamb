@@ -182,16 +182,25 @@ namespace lamb {
   
 ////////////////////////////////////////////////////////////////////////////////
 
- template <typename t> class integer_traits                                    {};
- template <>           class integer_traits<uint8_t > : public unsigned_int<1> {};
- template <>           class integer_traits<uint16_t> : public unsigned_int<2> {};
- template <>           class integer_traits<uint32_t> : public unsigned_int<4> {};
- template <>           class integer_traits<uint64_t> : public unsigned_int<8> {};
- template <>           class integer_traits<int8_t  > : public signed_int<1>   {};
- template <>           class integer_traits<int16_t > : public signed_int<2>   {};
- template <>           class integer_traits<int32_t > : public signed_int<4>   {};
- template <>           class integer_traits<int64_t > : public signed_int<8>   {};
+ template <typename t> class integer_traits                                     {};
+ template <>           class integer_traits<uint8_t > : public unsigned_int<1>  {};
+ template <>           class integer_traits<uint16_t> : public unsigned_int<2>  {};
+ template <>           class integer_traits<uint32_t> : public unsigned_int<4>  {};
+ template <>           class integer_traits<uint64_t> : public unsigned_int<8>  {};
+ template <>           class integer_traits<int8_t  > : public signed_int<1>    {};
+ template <>           class integer_traits<int16_t > : public signed_int<2>    {};
+ template <>           class integer_traits<int32_t > : public signed_int<4>    {};
+ template <>           class integer_traits<int64_t > : public signed_int<8>    {};
 
+ template <bool signedness, uint8_t size> class find_integer                        {};
+ template <>           class find_integer<true,  1  > : public signed_int<1>    {};
+ template <>           class find_integer<true,  2  > : public signed_int<2>    {};
+ template <>           class find_integer<true,  4  > : public signed_int<4>    {};
+ template <>           class find_integer<true,  8  > : public signed_int<8>    {};
+ template <>           class find_integer<false, 1  > : public unsigned_int<1>  {};
+ template <>           class find_integer<false, 2  > : public unsigned_int<2>  {};
+ template <>           class find_integer<false, 4  > : public unsigned_int<4>  {};
+ template <>           class find_integer<false, 8  > : public unsigned_int<8>  {};
 }
 
 ////////////////////////////////////////////////////////////////////////////////

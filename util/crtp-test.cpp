@@ -76,6 +76,60 @@ public:
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+template <uint8_t whole, uint8_t frac>
+class q {
+//----------------------------------------------------------------------------------------------------------------------
+public:
+ //---------------------------------------------------------------------------------------------------------------------
+ static constexpr uint8_t WHOLE       = whole;
+ static constexpr uint8_t FRAC        = frac;
+ static constexpr uint8_t SIZE        = size_fit_bits(whole + frac);
+ static constexpr uint8_t BIG_SIZE    = size_fit_bits((SIZE + 1) << 3);
+ static constexpr bool    SIGNED      = ((WHOLE + FRAC ) % 2) == 1;
+ //---------------------------------------------------------------------------------------------------------------------
+ typedef find_integer<SIGNED, SIZE>     traits;
+ typedef typename traits::type          value_type;
+ //---------------------------------------------------------------------------------------------------------------------
+ typedef find_integer<SIGNED, BIG_SIZE> big_traits;
+ typedef typename traits::type          big_value_type;
+ //---------------------------------------------------------------------------------------------------------------------
+ static constexpr q       MAX         = q(traits::MAX);
+ static constexpr q       MIN         = q(traits::MIN);
+ static constexpr q       ONE         = q(  
+   WHOLE == 0 ?
+   MAX.value :
+   (((value_type)1) << FRAC) // - 1 ?
+  );
+
+ //---------------------------------------------------------------------------------------------------------------------
+ value_type value;
+ //---------------------------------------------------------------------------------------------------------------------
+ explicit
+ q(value_type const & v) : value(v) {}
+ //---------------------------------------------------------------------------------------------------------------------
+ /**/           operator     value_type(           )    const   = delete;
+ //---------------------------------------------------------------------------------------------------------------------
+ q              operator  +  ()                         const   = delete;
+ q              operator  ~  ()                         const   { return       q(       ~ value      ); }
+ q              operator  -  ()                         const   { return       q(       - value      ); }
+ //---------------------------------------------------------------------------------------------------------------------
+ q              operator >>  (uint8_t const & shift)    const   { return       q(value >> shift      ); }
+ q              operator <<  (uint8_t const & shift)    const   { return       q(value << shift      ); }
+ q              operator  +  (q       const & other)    const   { return       q(value  + other.value); }
+ q              operator  -  (q       const & other)    const   { return       q(value  - other.value); }
+ q              operator  *  (q       const & other)    const   { return       q(value  * other.value); }
+ q              operator  /  (q       const & other)    const   { return       q(value  / other.value); }
+ q              operator  %  (q       const & other)    const   { return       q(value  % other.value); }
+ //---------------------------------------------------------------------------------------------------------------------
+ bool           operator  <  (q       const & other)    const   { return        (value  < other.value); }
+ bool           operator  >  (q       const & other)    const   { return        (value  > other.value); }
+ bool           operator ==  (q       const & other)    const   { return        (value == other.value); }
+ //---------------------------------------------------------------------------------------------------------------------
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename base>
 class mathematized :  public base {
 //----------------------------------------------------------------------------------------------------------------------
@@ -114,12 +168,12 @@ int main() {
  t y(9);
  t z(8);
 
- printf("=> %lf \n", (x + y).value);
+ printf("=> %d \n", (x + y).value);
 
  x += y;
  x += z;
 
- printf("=> %lf \n", x.value);
+ printf("=> %d \n", x.value);
 
  if constexpr(integer_traits<uint16_t>::SIGNED) {
   printf("YES\n");
