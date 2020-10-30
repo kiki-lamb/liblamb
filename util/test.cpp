@@ -9,16 +9,16 @@ public:
  
  value_type value;
 
- static constexpr bool has_cons = true;
+ static constexpr bool has_constructible_type = true;
  
- struct cons {
+ struct constructible_type {
   value_type x;
   value_type y;
  };
 
  base(value_type const & v) : value(v) {}
 
- base(cons const & c) : value(c.x + c.y) {} 
+ base(constructible_type const & c) : value(c.x + c.y) {} 
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@ public:
  
  value_type value;
 
- static constexpr bool has_cons = false;
+ static constexpr bool has_constructible_type = false;
  
  simple(value_type const & v) : value(v) {}
 };
@@ -41,12 +41,12 @@ class derived: public base_t {
 public:
  typedef base_t base;
 
-// template <typename U = base, bool enabled = U::has_cons>
-// derived (typename U::cons obj) : base(obj) {}
+// template <typename U = base, bool enabled = U::has_constructible_type>
+// derived (typename U::constructible_type obj) : base(obj) {}
  
 
- template <typename base_ = base, bool enabled = base_::has_cons>
- derived (typename base_::cons obj) : base(obj) {}
+ template <typename base_ = base, bool enabled = base_::has_constructible_type>
+ derived (typename base_::constructible_type obj) : base(obj) {}
 
  derived (typename base::value_type val) : base(val) {}
 };
