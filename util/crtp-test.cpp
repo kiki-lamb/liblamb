@@ -65,7 +65,7 @@ public:
  integer        operator  -  (integer const & other)    const   { return integer(value  - other.value); }
  integer        operator  *  (integer const & other)    const   { return integer(value  * other.value); }
  integer        operator  /  (integer const & other)    const   { return integer(value  / other.value); }
- integer        operator  %  (integer const & other)    const   { return integer(value  % other.value); }
+// integer        operator  %  (integer const & other)    const   { return integer(value  % other.value); }
  //---------------------------------------------------------------------------------------------------------------------
  bool           operator  <  (integer const & other)    const   { return        (value  < other.value); }
  bool           operator  >  (integer const & other)    const   { return        (value  > other.value); }
@@ -159,6 +159,223 @@ public:
    
    return ret;
   }
+
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ 
+ explicit constexpr 
+ operator double() const {
+  constexpr double one = ONE.value * 1.0;
+   
+  return value / one;
+ }
+
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  static constexpr
+  q from_double(
+   double const & tmp
+  ) {
+   int        divisor = tmp;
+   double     modulus = tmp - divisor;
+   value_type ipart   = ONE.value * divisor + int(ONE.value * modulus);
+   
+   return q(ipart);
+  }
+
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ 
+ static constexpr q       PI          = WHOLE <= 2 ? from_double(M_PI) : 0;
+
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ // constexpr
+ // q operator ~ () const {
+ //    return q(~value);
+ // }    
+
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  constexpr
+  q operator ^ (
+   q const & other
+  ) const {
+   return value ^ other.value;
+  }  
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  // constexpr
+  // bool
+  // operator == (
+  //  q const & other
+  // ) const {
+  //  return value == other.value;
+  // }
+
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ // constexpr
+ // bool operator > (
+ //  q const & other
+ // ) const {
+ //  return value > other.value;
+ // }    
+
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ // constexpr
+ // bool operator < (
+ //  q const & other
+ // ) const {
+ //  return value < other.value;
+ // }    
+
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ // constexpr
+ // q operator >> (
+ //  uint8_t const & shift
+ // ) const {
+ //  return q(value >> shift);  
+ // }    
+
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ 
+ // constexpr
+ // q operator << (
+ //  uint8_t const & shift
+ // ) const {
+ //  return q(value <<shift);  
+ // }    
+
+ ////////////////////////////////////////////////////////////////////////////////////////
+
+ // constexpr
+ // q operator + (
+ //  q const & other
+ // ) const {
+ //  return q(value + other.val);
+ // }    
+
+ ////////////////////////////////////////////////////////////////////////////////////////
+
+ // constexpr
+ // q operator - (
+ //  q const & other
+ // ) const {
+ //  return q(value - other.val);
+ // }    
+
+ ////////////////////////////////////////////////////////////////////////////////////////
+
+  template <uint8_t other_whole, uint8_t other_frac>
+  constexpr
+  q operator * (
+   q<other_whole, other_frac> const & other
+  ) const {
+
+   typedef
+    q<other_whole, other_frac>
+    other_type;
+
+   constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
+      
+   typedef typename
+    find_integer<SIGNED, INTERMED_SIZE>::traits::type
+    intermediary_type;
+
+   static_assert(
+    ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
+    "Signedness mismatch!"
+   );
+
+   intermediary_type big_tmp     = value;
+   big_tmp                      *= other.value;
+   big_tmp                     >>= other_type::FRAC;
+
+   // if (false) {
+   //  printf(
+   //   "MUL % 13.05lf * % 13.05lf = % 13.05lf \n",
+   //   double(*this),
+   //   double(other),
+   //   double(q(small_tmp))
+   //  );
+   //  printf(
+   //   "MUL % 13lu * % 13lu = % 13lu \n",
+   //   value,
+   //   other.value,
+   //   small_tmp
+   //  );   
+   // }
+   
+   return q((value_type)big_tmp);
+  }
+
+   /////////////////////////////////////////////////////////////////////////////////////////
+  
+  template <uint8_t other_whole, uint8_t other_frac>
+  constexpr
+  q
+  operator / (
+   fixed<other_whole, other_frac> const & other
+  ) const {
+
+   typedef
+    fixed<other_whole, other_frac>
+    other_type;
+    
+   constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
+      
+   typedef typename
+    find_integer<SIGNED, INTERMED_SIZE>::traits::type
+    intermediary_type;
+
+   static_assert(
+    ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
+    "Signedness mismatch!"
+   );
+
+   intermediary_type big_tmp     = value;
+   big_tmp                     <<= other_type::FRAC;
+   big_tmp                      /= other.value;
+
+   // if (true) {
+   //  printf(
+   //   "\nDIV  % 10u.%2u / % 10u.%2u = % 10u.%2u using a %u bit temporary\n",
+   //   WHOLE,
+   //   MANTISSA,
+   //   other_characteristic,
+   //   other_mantissa,
+   //   CHARACTERISTIC,
+   //   MANTISSA,
+   //   (sizeof(intermediary_type) << 3)
+   //  );
+   //  printf(
+   //   " div % 16.05lf / % 16.05lf = % 16.05lf \n",
+   //   double(*this),
+   //   double(other),
+   //   double(q(small_tmp))
+   //  );
+   //  printf(
+   //   " big %16lu << ",
+   //   ((intermediary_type)value)
+   //  );
+   //  printf("%lld ", ((intermediary_type)value) << other_mantissa);
+   //  printf(
+   //   " after shift %2u \n",
+   //   other_mantissa
+   //  );
+   //  printf(
+   //   " div % 16lu / % 16lu = % 16lu \n",
+   //   value,
+   //   other.value,
+   //   small_tmp
+   //  );
+   // }
+   
+   return q((value_type)big_tmp);
+  }
+
  
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  /**/           operator     value_type(           )    const   = delete;
@@ -171,9 +388,9 @@ public:
  q              operator <<  (uint8_t const & shift)    const   { return       q(value << shift      ); }
  q              operator  +  (q       const & other)    const   { return       q(value  + other.value); }
  q              operator  -  (q       const & other)    const   { return       q(value  - other.value); }
- q              operator  *  (q       const & other)    const   { return       q(value  * other.value); }
- q              operator  /  (q       const & other)    const   { return       q(value  / other.value); }
- q              operator  %  (q       const & other)    const   { return       q(value  % other.value); }
+// q              operator  *  (q       const & other)    const   { return       q(value  * other.value); }
+// q              operator  /  (q       const & other)    const   { return       q(value  / other.value); }
+// q              operator  %  (q       const & other)    const   { return       q(value  % other.value); }
  //---------------------------------------------------------------------------------------------------------------------
  bool           operator  <  (q       const & other)    const   { return        (value  < other.value); }
  bool           operator  >  (q       const & other)    const   { return        (value  > other.value); }
@@ -206,7 +423,7 @@ public:
  mathematized & operator  += (mathematized const & v)           { this->value  = (*this     + v ).value; return *this; }
  mathematized & operator  *= (mathematized const & v)           { this->value  = (*this     * v ).value; return *this; }
  mathematized & operator  /= (mathematized const & v)           { this->value  = (*this     / v ).value; return *this; }
- mathematized & operator  %= (mathematized const & v)           { this->value  = (*this     % v ).value; return *this; }
+// mathematized & operator  %= (mathematized const & v)           { this->value  = (*this     % v ).value; return *this; }
   //---------------------------------------------------------------------------------------------------------------------
  bool           operator  <= (mathematized const & o)   const   { return         (*this    == o )     || (*this < o) ; }
  bool           operator  >= (mathematized const & o)   const   { return         (*this    == o )     || (*this > o) ; }
