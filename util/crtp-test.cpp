@@ -56,4 +56,8 @@ int main() {
  q<8,8> zz ({1, 128});
   
  printf("=> % 5.5lf \n", double(zz));
+
+ mathematized<q<8,8>> yy ({1, 128});
+  
+ printf("=> % 5.5lf \n", double(yy));
 }

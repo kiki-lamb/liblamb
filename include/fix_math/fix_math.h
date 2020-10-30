@@ -340,11 +340,10 @@ private:
 
 public:
  
- template <class T>
+ template <typename enable_if<base::has_constructable_type, typename base::constructable_type>::type>
  constexpr
- mathematized                (
-  T const & obj,
-   enable_if<base::has_constructable_type> * dummy = nullptr
+ mathematized(
+  typename base::constructable_type const & obj
  ) :
   base(obj) {}
  
