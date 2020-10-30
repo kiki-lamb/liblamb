@@ -76,23 +76,30 @@ public:
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <uint8_t whole, uint8_t frac>
+template <uint8_t whole_, uint8_t frac_>
 class q {
 //----------------------------------------------------------------------------------------------------------------------
 public:
  //---------------------------------------------------------------------------------------------------------------------
- static constexpr uint8_t WHOLE       = whole;
- static constexpr uint8_t FRAC        = frac;
- static constexpr uint8_t SIZE        = size_fit_bits(whole + frac);
+
+ static constexpr uint8_t WHOLE       = whole_;
+ static constexpr uint8_t FRAC        = frac_;
+ static constexpr uint8_t SIZE        = size_fit_bits(WHOLE + FRAC);
  static constexpr uint8_t BIG_SIZE    = size_fit_bits((SIZE + 1) << 3);
  static constexpr bool    SIGNED      = ((WHOLE + FRAC ) % 2) == 1;
+
  //---------------------------------------------------------------------------------------------------------------------
+
  typedef find_integer<SIGNED, SIZE>     traits;
  typedef typename traits::type          value_type;
+
  //---------------------------------------------------------------------------------------------------------------------
+
  typedef find_integer<SIGNED, BIG_SIZE> big_traits;
  typedef typename traits::type          big_value_type;
+
  //---------------------------------------------------------------------------------------------------------------------
+
  static constexpr q       MAX         = q(traits::MAX);
  static constexpr q       MIN         = q(traits::MIN);
  static constexpr q       ONE         = q(  
@@ -102,11 +109,58 @@ public:
   );
 
  //---------------------------------------------------------------------------------------------------------------------
+
  value_type value;
- //---------------------------------------------------------------------------------------------------------------------
+
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
  explicit
  q(value_type const & v) : value(v) {}
- //---------------------------------------------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------------------------------------------
+ 
+ explicit
+ q(value_type const & w, value_type const & f) :
+  value(value_type(WHOLE * ONE + (WHOLE < 0 ? - FRAC : FRAC))) {}
+ 
+ /////////////////////////////////////////////////////////////////////////////////////////
+  
+  template <uint8_t whole, uint8_t frac>
+  explicit constexpr 
+  operator q<whole, frac>() const {
+
+   typedef
+    q<whole, frac>
+    other_type;
+
+   constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
+
+   typedef typename
+    find_integer<SIGNED, INTERMED_SIZE>::traits::type
+    intermediary_type;
+
+   constexpr bool    FROM_SIGNED   = SIGNED && ! other_type::SIGNED;
+   constexpr int8_t  FRAC_DELTA    = FRAC - frac;
+   
+   if constexpr(FROM_SIGNED) {
+    if (value < 0) {
+     return other_type(0);
+    }
+   }
+
+   other_type ret(value);
+   
+   if constexpr(FRAC_DELTA >= 0) {
+    ret.value >>= FRAC_DELTA;
+   }
+   else {
+    ret.value <<= -FRAC_DELTA;
+   }
+   
+   return ret;
+  }
+ 
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  /**/           operator     value_type(           )    const   = delete;
  //---------------------------------------------------------------------------------------------------------------------
  q              operator  +  ()                         const   = delete;
