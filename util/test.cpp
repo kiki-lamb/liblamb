@@ -17,8 +17,6 @@ public:
  
  value_type value;
 
- static constexpr bool has_constructible_type = true;
- 
  struct constructible_type {
   value_type x;
   value_type y;
