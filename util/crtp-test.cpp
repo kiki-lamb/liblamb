@@ -50,7 +50,7 @@ public:
  //---------------------------------------------------------------------------------------------------------------------
  value_type value;
  //---------------------------------------------------------------------------------------------------------------------
- explicit
+ explicit constexpr
  integer(value_type const & v) : value(v) {}
  //---------------------------------------------------------------------------------------------------------------------
  /**/           operator     value_type(           )    const   = delete;
@@ -116,12 +116,12 @@ public:
 
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- explicit
+ explicit constexpr
  q(value_type const & v) : value(v) {}
 
 //---------------------------------------------------------------------------------------------------------------------
  
- explicit
+ explicit constexpr
  q(value_type const & w, value_type const & f) :
   value(value_type(WHOLE * ONE + (WHOLE < 0 ? - FRAC : FRAC))) {}
  
@@ -186,7 +186,7 @@ public:
 
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  
- static constexpr q       PI          = WHOLE <= 2 ? from_double(M_PI) : 0;
+ static constexpr q       PI          = WHOLE >= 2 ? from_double(M_PI) : q(0);
 
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -212,7 +212,7 @@ public:
    constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
       
    typedef typename
-    find_integer<SIGNED, INTERMED_SIZE>::traits::type
+    find_integer<SIGNED, INTERMED_SIZE>::type
     intermediary_type;
 
    static_assert(
@@ -222,7 +222,7 @@ public:
 
    intermediary_type big_tmp     = value;
    big_tmp                      *= other.value;
-   big_tmp                     >>= other_type::FRAC;
+   big_tmp                     >>= other_frac;
 
    // if (false) {
    //  printf(
@@ -248,7 +248,7 @@ public:
   constexpr
   q
   operator / (
-   fixed<other_whole, other_frac> const & other
+   q<other_whole, other_frac> const & other
   ) const {
 
    typedef
@@ -258,7 +258,7 @@ public:
    constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
       
    typedef typename
-    find_integer<SIGNED, INTERMED_SIZE>::traits::type
+    find_integer<SIGNED, INTERMED_SIZE>::type
     intermediary_type;
 
    static_assert(
@@ -266,51 +266,50 @@ public:
     "Signedness mismatch!"
    );
 
-   intermediary_type big_tmp     = value;
-   big_tmp                     <<= other_type::FRAC;
-   big_tmp                      /= other.value;
-
-   // if (true) {
-   //  printf(
-   //   "\nDIV  % 10u.%2u / % 10u.%2u = % 10u.%2u using a %u bit temporary\n",
-   //   WHOLE,
-   //   MANTISSA,
-   //   other_characteristic,
-   //   other_mantissa,
-   //   CHARACTERISTIC,
-   //   MANTISSA,
-   //   (sizeof(intermediary_type) << 3)
-   //  );
-   //  printf(
-   //   " div % 16.05lf / % 16.05lf = % 16.05lf \n",
-   //   double(*this),
-   //   double(other),
-   //   double(q(small_tmp))
-   //  );
-   //  printf(
-   //   " big %16lu << ",
-   //   ((intermediary_type)value)
-   //  );
-   //  printf("%lld ", ((intermediary_type)value) << other_mantissa);
-   //  printf(
-   //   " after shift %2u \n",
-   //   other_mantissa
-   //  );
-   //  printf(
-   //   " div % 16lu / % 16lu = % 16lu \n",
-   //   value,
-   //   other.value,
-   //   small_tmp
-   //  );
-   // }
+   intermediary_type big_tmp   = value;
+   big_tmp                   <<= other_frac;
+   big_tmp                    /= other.value;
+   value_type small_tmp        = big_tmp;
+   
+   if (true) {
+    printf(
+     "\nDIV  % 10u.%2u / % 10u.%2u = % 10u.%2u using a %u bit temporary\n",
+     WHOLE,
+     FRAC,
+     other_whole,
+     other_frac,
+     WHOLE,
+     FRAC,
+     (sizeof(intermediary_type) << 3)
+    );
+    printf(
+     " div % 16.05lf / % 16.05lf = % 16.05lf \n",
+     double(*this),
+     double(other),
+     double(q(small_tmp))
+    );
+    printf(
+     " big %16lu << ",
+     ((intermediary_type)value)
+    );
+    printf("%lld ", ((intermediary_type)value) << other_frac);
+    printf(
+     " after shift %2u \n",
+     other_frac
+    );
+    printf(
+     " div % 16lu / % 16lu = % 16lu \n",
+     value,
+     other.value,
+     small_tmp
+    );
+   }
    
    return q((value_type)big_tmp);
   }
 
  
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- /**/           operator     value_type(           )    const   = delete;
- //---------------------------------------------------------------------------------------------------------------------
  q              operator  +  ()                         const   = delete;
  q              operator  ~  ()                         const   { return       q(       ~ value      ); }
  q              operator  -  ()                         const   { return       q(       - value      ); }
@@ -319,9 +318,6 @@ public:
  q              operator <<  (uint8_t const & shift)    const   { return       q(value << shift      ); }
  q              operator  +  (q       const & other)    const   { return       q(value  + other.value); }
  q              operator  -  (q       const & other)    const   { return       q(value  - other.value); }
-// q            operator  *  (q       const & other)    const   { return       q(value  * other.value); }
-// q            operator  /  (q       const & other)    const   { return       q(value  / other.value); }
-// q            operator  %  (q       const & other)    const   { return       q(value  % other.value); }
  //---------------------------------------------------------------------------------------------------------------------
  bool           operator  <  (q       const & other)    const   { return        (value  < other.value); }
  bool           operator  >  (q       const & other)    const   { return        (value  > other.value); }
@@ -339,8 +335,11 @@ public:
  //---------------------------------------------------------------------------------------------------------------------
  typedef typename            base::value_type value_type;
  //--------------------------------------------------------------------------------------------------------------------- 
- explicit
+ explicit constexpr
  mathematized                (value_type   const & v) : base(v) {}
+ //----------------------------------------------------------------------------------------------------------------------
+ explicit constexpr
+ mathematized                (base         const & v) : base(v) {}
  //----------------------------------------------------------------------------------------------------------------------
  explicit       operator     value_type(            )   const   { return this->value;                                ; }
  //----------------------------------------------------------------------------------------------------------------------
@@ -363,18 +362,12 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int main() {
- typedef mathematized<integer<uint8_t>> t;
+ typedef mathematized<q<15, 16>> t;
 
- t x(7);
- t y(9);
- t z(8);
+ t x(t::PI);
+ t y(t::from_double(0.5));
 
- printf("=> %d \n", (x + y).value);
-
- x += y;
- x += z;
-
- printf("=> %d \n", x.value);
+ printf("=> % 5.6lf \n", double(x / y));
 
  if constexpr(integer_traits<uint16_t>::SIGNED) {
   printf("YES\n");
