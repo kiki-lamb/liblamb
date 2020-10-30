@@ -16,44 +16,6 @@
 
 namespace lamb {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename value_type_>
-class integer {
-//----------------------------------------------------------------------------------------------------------------------
-public:
- //---------------------------------------------------------------------------------------------------------------------
- static constexpr bool has_constructible_type = false;
-//---------------------------------------------------------------------------------------------------------------------
- typedef integer_traits<value_type_> traits;
- typedef typename traits::type   value_type;
- //---------------------------------------------------------------------------------------------------------------------
- value_type value;
- //---------------------------------------------------------------------------------------------------------------------
- explicit constexpr
- integer(value_type const & v) : value(v) {}
- //---------------------------------------------------------------------------------------------------------------------
- /**/           operator     value_type(           )    const   = delete;
- //---------------------------------------------------------------------------------------------------------------------
- constexpr integer        operator  +  ()                         const   = delete;
- constexpr integer        operator  ~  ()                         const   { return integer(       ~ value      );                }
- constexpr integer        operator  -  ()                         const   { return integer(       - value      );                }
- //---------------------------------------------------------------------------------------------------------------------
- constexpr integer        operator >>  (uint8_t const & shift)    const   { return integer(value >> shift      );                }
- constexpr integer        operator <<  (uint8_t const & shift)    const   { return integer(value << shift      );                }
- constexpr integer        operator  ^  (integer const & other)    const   { return integer(value  ^ other.value);                }
- constexpr integer        operator  +  (integer const & other)    const   { return integer(value  + other.value);                }
- constexpr integer        operator  -  (integer const & other)    const   { return integer(value  - other.value);                }
- constexpr integer        operator  *  (integer const & other)    const   { return integer(value  * other.value);                }
- constexpr integer        operator  /  (integer const & other)    const   { return integer(value  / other.value);                }
- constexpr integer        operator  %  (integer const & other)    const   { return integer(value  % other.value);                }
- constexpr integer &      operator %=  (integer const & other)            { this->value  = (*this % other.value); return *this;  }
-  //---------------------------------------------------------------------------------------------------------------------
- constexpr bool           operator  <  (integer const & other)    const   { return        (value  < other.value);                }
- constexpr bool           operator  >  (integer const & other)    const   { return        (value  > other.value);                }
- constexpr bool           operator ==  (integer const & other)    const   { return        (value == other.value);                }
- //---------------------------------------------------------------------------------------------------------------------
-};
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -299,65 +261,40 @@ public:
   }
 
  
- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- constexpr q              operator  +  ()                         const   = delete;
- constexpr q              operator  ~  ()                         const   { return       q(       ~ value      ); }
- constexpr q              operator  -  ()                         const   { return       q(       - value      ); }
- //---------------------------------------------------------------------------------------------------------------------
- constexpr q              operator >>  (uint8_t const & shift)    const   { return       q(value >> shift      ); }
- constexpr q              operator <<  (uint8_t const & shift)    const   { return       q(value << shift      ); }
- constexpr q              operator  +  (q       const & other)    const   { return       q(value  + other.value); }
- constexpr q              operator  -  (q       const & other)    const   { return       q(value  - other.value); }
- //---------------------------------------------------------------------------------------------------------------------
- constexpr bool           operator  <  (q       const & other)    const   { return        (value  < other.value); }
- constexpr bool           operator  >  (q       const & other)    const   { return        (value  > other.value); }
- constexpr bool           operator ==  (q       const & other)    const   { return        (value == other.value); }
- //---------------------------------------------------------------------------------------------------------------------
-};
-//----------------------------------------------------------------------------------------
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename base>
-class mathematized :  public base {
-//----------------------------------------------------------------------------------------------------------------------
-public:
- //---------------------------------------------------------------------------------------------------------------------
- typedef typename            base::value_type value_type;
- //---------------------------------------------------------------------------------------------------------------------
- template <typename base_ = base, bool enabled = base_::has_constructible_type>
- explicit constexpr
- mathematized (typename base_::constructible_type const & x) : base(x) {}
+ ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ constexpr q              operator  +  ()                      const = delete;
+ constexpr q              operator  ~  ()                      const { return                  q(       ~ value)      ; }
+ constexpr q              operator  -  ()                      const { return                  q(       - value)      ; }
+ //----------------------------------------------------------------------------------------------------------------------
+ constexpr q              operator >>  (uint8_t const & shift) const { return                  q(value >> shift)      ; }
+ constexpr q              operator <<  (uint8_t const & shift) const { return                  q(value << shift)      ; }
+ constexpr q              operator  +  (q       const & other) const { return                  q(value  + other.value); }
+ constexpr q              operator  -  (q       const & other) const { return                  q(value  - other.value); }
+ //----------------------------------------------------------------------------------------------------------------------
+ constexpr bool           operator  <  (q       const & other) const { return                   (value  < other.value); }
+ constexpr bool           operator  >  (q       const & other) const { return                   (value  > other.value); }
+ constexpr bool           operator ==  (q       const & other) const { return                   (value == other.value); }
+ ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ constexpr q            & operator  -- (                     )       { this        -=               q(1); return *this; }
+ constexpr q            & operator  ++ (                     )       { this        +=               q(1); return *this; }
   //---------------------------------------------------------------------------------------------------------------------
- explicit constexpr
- mathematized                (value_type   const & v) : base(v) {}
- //----------------------------------------------------------------------------------------------------------------------
- constexpr
- mathematized                (base         const & v) : base(v) {}
- //----------------------------------------------------------------------------------------------------------------------
- explicit       operator     value_type(            )   const   { return this->value;                                ; }
- //----------------------------------------------------------------------------------------------------------------------------
- constexpr mathematized & operator  -- (                      )        { this        -= mathematized(1);        return *this; }
- constexpr mathematized & operator  ++ (                      )        { this        += mathematized(1);        return *this; }
-  //---------------------------------------------------------------------------------------------------------------------------
- constexpr mathematized & operator >>= (uint8_t      const & v)        { this->value  = (*this    >> v ).value; return *this; }
- constexpr mathematized & operator <<= (uint8_t      const & v)        { this->value  = (*this    << v ).value; return *this; }
-  //---------------------------------------------------------------------------------------------------------------------------
- constexpr mathematized & operator  -= (mathematized const & v)        { this->value  = (*this     - v ).value; return *this; }
- constexpr mathematized & operator  += (mathematized const & v)        { this->value  = (*this     + v ).value; return *this; }
- constexpr mathematized & operator  *= (mathematized const & v)        { this->value  = (*this     * v ).value; return *this; }
- constexpr mathematized & operator  /= (mathematized const & v)        { this->value  = (*this     / v ).value; return *this; }
-  //---------------------------------------------------------------------------------------------------------------------------
- constexpr bool           operator  <= (mathematized const & o)  const { return         (*this    == o )     || (*this < o) ; }
- constexpr bool           operator  >= (mathematized const & o)  const { return         (*this    == o )     || (*this > o) ; }
- constexpr bool           operator  != (mathematized const & o)  const { return       ! (*this    == o )                    ; } 
-//-----------------------------------------------------------------------------------------------------------------------------
+ constexpr q            & operator >>= (uint8_t const &     v)       { this->value  = (*this>> v ).value; return *this; }
+ constexpr q            & operator <<= (uint8_t const &     v)       { this->value  = (*this<< v ).value; return *this; }
+  //---------------------------------------------------------------------------------------------------------------------
+ constexpr q            & operator  -= (q       const &     v)       { this->value  = (*this - v ).value; return *this; }
+ constexpr q            & operator  += (q       const &     v)       { this->value  = (*this + v ).value; return *this; }
+ constexpr q            & operator  *= (q       const &     v)       { this->value  = (*this * v ).value; return *this; }
+ constexpr q            & operator  /= (q       const &     v)       { this->value  = (*this / v ).value; return *this; }
+  //---------------------------------------------------------------------------------------------------------------------
+ constexpr bool           operator  <= (q       const &     o) const { return         (*this    == o ) || (*this < o) ; }
+ constexpr bool           operator  >= (q       const &     o) const { return         (*this    == o ) || (*this > o) ; }
+ constexpr bool           operator  != (q       const &     o) const { return       ! (*this    == o )                ; }
+//---------------------------------------------------------------------------------------------------------------------------
 };
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
  template <uint8_t w, uint8_t f, bool nothing = false>
- using fixed = mathematized<q<w, f>>;
+ using fixed = q<w, f>;
  
  /////////////////////////////////////////////////////////////////////////////////////////
  // Typedefs
@@ -705,7 +642,7 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////
 
 /* Local Variables:  */
-/* fill-column: 130  */
+/* fill-column: 140  */
 /* End:              */
 
 #endif
