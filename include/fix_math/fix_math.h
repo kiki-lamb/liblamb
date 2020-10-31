@@ -68,31 +68,15 @@ public:
   template <uint8_t whole, uint8_t frac>
   constexpr 
   operator q<whole, frac>() const {
-
-   typedef
-    q<whole, frac>
-    other_type;
-
-   constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
-
-//   printf("Convert % 2d.% 2d to % 2d.% 2d via % 0d byte type. \n", WHOLE, FRAC, whole, frac, INTERMED_SIZE);
-   
-   typedef typename
-    find_integer<SIGNED, INTERMED_SIZE>::type
-    intermediary_type;
-
-   constexpr bool    FROM_SIGNED   = SIGNED && ! other_type::SIGNED;
-   constexpr int8_t  FRAC_DELTA    = FRAC - frac;
-
-//   printf("Shift by % 2d \n", FRAC_DELTA);
-   
-   if constexpr(FROM_SIGNED) {
+    
+   if constexpr(SIGNED && ! other_type::SIGNED) {
     if (value < 0) {
-     return other_type(0);
+     return q(0);
     }
-   }
+   }   
+   constexpr int8_t FRAC_DELTA = FRAC - frac;
 
-   other_type ret(value);
+   q<whole, frac>   ret(value);
    
    if constexpr(FRAC_DELTA >= 0) {
     ret.value >>= FRAC_DELTA;
@@ -101,8 +85,6 @@ public:
     ret.value <<= -FRAC_DELTA;
    }
    
-//   printf("Final value: % 8ld \n", ret.value);
-
    return ret;
   }
 
