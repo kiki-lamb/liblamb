@@ -59,7 +59,7 @@ namespace math {
    printf("% 8d, ", x_);
       
    //--------------------------------------------------------------
-   mid_type           x       { x_        << q_shift - 2         }; printf("% 8d, ", x);  
+   mid_type           x       { x_.value >> 1                    }; printf("% 8d, ", x);  
    mid_type           cry     { x         << q_shift             }; printf("% 8d, ", cry);
    //--------------------------------------------------------------                      
    x                          = x          - half                 ; printf("% 13d, ", x);  
@@ -89,7 +89,7 @@ int main() {
  out_type  max(0);
  
  for (
-  uint32_t ix = 0;
+  uint64_t ix = 0;
   ix < 65536;
   ix++
  ) {
