@@ -9,7 +9,6 @@
 #include <cmath>
 #endif
 
-#define __STDC_FORMAT_MACROS
 #include <inttypes.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -51,8 +50,6 @@ namespace lamb {
  typedef find_integer<SIGNED, BIG_SIZE> big_traits;
  typedef typename big_traits::type      big_value_type;
 
-// static big_value_type big_tmp;
-  
 //----------------------------------------------------------------------------------------------------------------------
 
 private:
@@ -71,11 +68,15 @@ private:
  
 public:
  
-  static constexpr q              MAX      = q(traits::MAX);
-  static constexpr q              MIN      = q(traits::MIN);
-  static constexpr big_value_type TRUE_ONE = ((big_value_type)1) << FRAC;
-  static constexpr value_type     MASK     = (((big_value_type)1) << FRAC << WHOLE) - 1;
-  static constexpr q              ONE      = q(  
+  static constexpr big_value_type TRUE_ONE    = ((big_value_type)1) << FRAC;
+  static constexpr q              MAX         = q(traits::MAX);
+  static constexpr q              MIN         = q(traits::MIN);
+  static constexpr value_type     MASK        = (((big_value_type)1) << FRAC << WHOLE) - 1;
+  static constexpr value_type     DATA_MASK   = (((big_value_type)1) << FRAC << WHOLE) - 1;
+  static constexpr value_type     FRAC_MASK   = TRUE_ONE - 1;
+  static constexpr value_type     WHOLE_MASK  = DATA_MASK ^ FRAC_MASK;
+  
+  static constexpr q              ONE        = q(  
    WHOLE == 0 ?
    MAX.value :
    (((value_type)1) << FRAC)
@@ -184,8 +185,6 @@ public:
     "Signedness mismatch!"
    );
 
-   /* big_value_type */
-   
    shared<big_value_type>::value   = value;
    shared<big_value_type>::value  *= other.value;
    shared<big_value_type>::value >>= other_frac;
@@ -204,63 +203,20 @@ public:
 
    typedef
     q<other_pad, other_whole, other_frac>
-    other_type;
-    
-   // constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
-      
-   // typedef typename
-   //  find_integer<SIGNED, INTERMED_SIZE>::type
-   //  intermediary_type;
+    other_type;    
 
    static_assert(
     ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
     "Signedness mismatch!"
    );
 
-   /* big_value_type */
    shared<big_value_type>::value   = value;
-   shared<big_value_type>::value                   <<= other_frac;
-   shared<big_value_type>::value                    /= other.value;
-   value_type small_tmp        = shared<big_value_type>::value;
-   
-   // if (true) {
-   //  printf(
-   //   "\nDIV  % 10u.%2u / % 10u.%2u = % 10u.%2u using a %u bit temporary\n",
-   //   WHOLE,
-   //   FRAC,
-   //   other_whole,
-   //   other_frac,
-   //   WHOLE,
-   //   FRAC,
-   //   (sizeof(intermediary_type) << 3)
-   //  );
-   //  printf(
-   //   " div % 16.05lf / % 16.05lf = % 16.05lf \n",
-   //   float(*this),
-   //   float(other),
-   //   float(q(small_tmp))
-   //  );
-   //  printf(
-   //   " big %16lu << ",
-   //   ((intermediary_type)value)
-   //  );
-   //  printf("%lld ", ((intermediary_type)value) << other_frac);
-   //  printf(
-   //   " after shift %2u \n",
-   //   other_frac
-   //  );
-   //  printf(
-   //   " div % 16lu / % 16lu = % 16lu \n",
-   //   value,
-   //   other.value,
-   //   small_tmp
-   //  );
-   // }
+   shared<big_value_type>::value <<= other_frac;
+   shared<big_value_type>::value  /= other.value;
    
    return q((value_type)shared<big_value_type>::value);
   }
 
- 
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
  constexpr q    operator   + ()                     const = delete;
  constexpr q    operator   ~ ()                     const { return                       q(       ~ value  ); }
@@ -310,11 +266,9 @@ public:
  constexpr bool operator  != (value_type const & o) const { return       ! (*this     == o )                ; }
 //-------------------------------------------------------------------------------------------------------------
 };
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- //template <uint8_t P, uint8_t W, uint8_t F> typename q<P,W,F>::big_value_type q<P,W,F>::big_tmp = 0;
-
- ////////////////////////////////////////////////////////////////////////////////
+ 
 
  template <uint8_t w, uint8_t f>
  using fixed = q<0, w, f>;
@@ -349,7 +303,7 @@ public:
  typedef fixed<  2, 13 > s2q13;
  typedef fixed<  3, 13 > u3q13;
  //---------------------------------------------------------------------------------------
- typedef fixed<  3, 12 > s3q12;
+ typedef fixed<  3, 12 > s3q12;
  typedef fixed<  4, 12 > u4q12;
  //---------------------------------------------------------------------------------------
  typedef fixed<  4, 11 > s4q11;
