@@ -11,57 +11,17 @@ using namespace lamb;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
-template <typename c>
-class parent;
-
-
-template <typename integer_>
-class child {
-public:
- typedef integer_ integer;
- integer value;
-
- inline child(integer const & v) : value(v) {}
- 
- inline child operator + (child const & other) {
-  child r(0);
-
-  r.value = value + other.value;
-
-  return r;
- }
-};
-
-template <typename c>
-class parent : public c {
-public:
- inline parent(typename c::integer const & v) : c(v) {}
-
- parent operator += (parent const & v) {
-  c::value = ((*this) + v).value;
-  
-  return *this;
- }
-
- operator c() {
-  return *((c*)this);
- }
- 
- operator c() const {
-  return *((c*)this);
- }
-};
-
-
 int main() {
- parent<child<uint8_t>> x(7);
- parent<child<uint8_t>> y(9);
+ // pi:      51471  3.14154 
+ // one:     16384  1.00000 
+ // one:     16384  1.00000 
+ // two:     32768  2.00000 
+ // half:     8192  0.50000 
+ // B:       19901  1.21466 
+ // C:        3517  0.21466
 
- 
- printf("=> %u \n", (x + y).value);
-
- x += y;
-
- printf("=> %u \n", x.value);
+ printf("pi:   % 8d % 05.5lf \n", s17q14::PI.value,         double(s17q14::PI));
+ printf("dec:  % 8d % 05.5lf \n", s17q14::PI - s17q14(3,0), double(s17q14::PI - s17q14(3,0)));
+ printf("pi+1: % 8d % 05.5lf \n", s17q14::PI.value + 1,     double(s17q14::PI + 1));
+ printf("pi-1: % 8d % 05.5lf \n", s17q14::PI.value - 1,     double(s17q14::PI - 1));
 }
