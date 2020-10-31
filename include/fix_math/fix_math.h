@@ -267,8 +267,8 @@ public:
  //----------------------------------------------------------------------------------------------------------------------
  constexpr q              operator  +  (value_type const & other) const { return                  q(value  + other      ); }
  constexpr q              operator  -  (value_type const & other) const { return                  q(value  - other      ); }
- constexpr q              operator  *  (value_type const & other) const { return                  q(value  * other.value); }
- constexpr q              operator  /  (value_type const & other) const { return                  q(value  / other.value); }
+ constexpr q              operator  *  (value_type const & other) const { return                  q(value  * other      ); }
+ constexpr q              operator  /  (value_type const & other) const { return                  q(value  / other      ); }
  //----------------------------------------------------------------------------------------------------------------------
  constexpr bool           operator  <  (value_type const & other) const { return                   (value  < other      ); }
  constexpr bool           operator  >  (value_type const & other) const { return                   (value  > other      ); }
