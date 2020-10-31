@@ -86,6 +86,8 @@ public:
 
    constexpr bool    FROM_SIGNED   = SIGNED && ! other_type::SIGNED;
    constexpr int8_t  FRAC_DELTA    = FRAC - frac;
+
+   printf("Shift by % 2d \n", FRAC_DELTA);
    
    if constexpr(FROM_SIGNED) {
     if (value < 0) {
@@ -102,6 +104,8 @@ public:
     ret.value <<= -FRAC_DELTA;
    }
    
+   printf("Final value: % 8ld \n", ret.value);
+
    return ret;
   }
 
@@ -110,7 +114,8 @@ public:
  explicit constexpr 
  operator float() const {
   constexpr float one = ONE.value * 1.0;
-   
+
+  printf("Float  % 8d from % 2d.% 2d = % 5.5lf \n", value, WHOLE, FRAC, value / one);
   return value / one;
  }
 
@@ -133,11 +138,11 @@ public:
   q ffrom_float(
    float const & tmp
   ) {
-   printf("Convert % 5.5lf \n", tmp);
    int        divisor = tmp;
    float     modulus = tmp - divisor;
    value_type ipart   = ONE.value * divisor + int(ONE.value * modulus + 0.5);
-   printf("div % 8ld mod % 8ld ipart % 8ld \n", divisor, modulus, ipart);
+   printf("Un-float % 5.5lf to % 2d.% 2d = % 8d \n", tmp, WHOLE, FRAC, ipart);
+//   printf("div % 8ld mod % 8ld ipart % 8ld \n", divisor, modulus, ipart);
    
    return q(ipart);
   }
@@ -363,7 +368,7 @@ public:
  typedef fixed<  2, 13 > s2q13;
  typedef fixed<  3, 13 > u3q13;
  //---------------------------------------------------------------------------------------
- typedef fixed<  3, 12 > s3q12;
+ typedef fixed<  3, 12 > s3q12;
  typedef fixed<  4, 12 > u4q12;
  //---------------------------------------------------------------------------------------
  typedef fixed<  4, 11 > s4q11;

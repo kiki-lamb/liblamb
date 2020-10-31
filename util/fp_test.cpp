@@ -21,12 +21,12 @@ int main() {
  // C:        3517  0.21466
 
  // 3.14159265359
- printf("MPI:           % 010.10lf \n", M_PI);
+ // printf("MPI:           % 010.10lf \n", M_PI);
  // printf("pi:   % 8d % 010.10lf \n", s17q14::PI.value,         float(s17q14::PI));
  // printf("dec:  % 8d % 010.10lf \n", s17q14::PI - s17q14(3,0), float(s17q14::PI - s17q14(3,0)));
  // printf("pi+1: % 8d % 010.10lf \n", s17q14::PI.value + 1,     float(s17q14::PI + 1));
  // printf("pi-1: % 8d % 010.10lf \n", s17q14::PI.value - 1,     float(s17q14::PI - 1));
  // printf("x:    % 8d % 010.10lf \n", float(s17q14::ffrom_float(1.5)));
  // printf("x:    % 8d % 010.10lf \n", float(s15q16::ffrom_float(1.5)));
- printf("x:    % 8d % 010.10lf \n", float(s17q14::ffrom_float(1.5).scaled_add(s15q16::ffrom_float(1.5))));
+ printf("x:    % 10.10lf \n", float(s15q16::ffrom_float(1.5).scaled_add(s15q16::ffrom_float(1.5))));
 }
