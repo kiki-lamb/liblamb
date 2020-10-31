@@ -26,4 +26,7 @@ int main() {
  printf("dec:  % 8d % 010.10lf \n", s17q14::PI - s17q14(3,0), float(s17q14::PI - s17q14(3,0)));
  printf("pi+1: % 8d % 010.10lf \n", s17q14::PI.value + 1,     float(s17q14::PI + 1));
  printf("pi-1: % 8d % 010.10lf \n", s17q14::PI.value - 1,     float(s17q14::PI - 1));
+ printf("x:    % 8d % 010.10lf \n", float(s17q14::from_float(1.5)));
+ printf("x:    % 8d % 010.10lf \n", float(s15q16::from_float(1.5)));
+ printf("x:    % 8d % 010.10lf \n", float(s17q14::from_float(1.5).scaled_add(s15q16::from_float(1.5))));
 }
