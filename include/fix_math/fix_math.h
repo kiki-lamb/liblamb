@@ -308,8 +308,8 @@ public:
  constexpr bool operator   > (value_type const & o) const { return                        (value  > o      ); }
  constexpr bool operator  == (value_type const & o) const { return                        (value == o      ); }
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
- constexpr q &  operator  -- (                    )       { this        -=                q(1); return *this; }
- constexpr q &  operator  ++ (                    )       { this        +=                q(1); return *this; }
+ constexpr q &  operator  -- (                    )       { this        -= 1;                   return *this; }
+ constexpr q &  operator  ++ (                    )       { this        += 1;                   return *this; }
  //------------------------------------------------------------------------------------------------------------
  constexpr q &  operator >>= (uint8_t    const & v)       { this->value  = (*this >> v ).value; return *this; }
  constexpr q &  operator <<= (uint8_t    const & v)       { this->value  = (*this << v ).value; return *this; }
