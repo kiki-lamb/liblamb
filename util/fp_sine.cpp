@@ -48,7 +48,7 @@ namespace math {
  out_type qsin(s0q31 const & x_)
   {
    //-----------------------------------------------------------------------------
-   constexpr uint8_t  q_shift { mid_type::FRAC                   };
+   constexpr uint8_t  q_shift { mid_type::WHOLE                  };
    constexpr mid_type pi      { mid_type::PI                     };
    constexpr mid_type two     { 2.0_mid                          };
    constexpr mid_type one     { 1.0_mid                          };
@@ -59,9 +59,10 @@ namespace math {
    printf("% 8d, ", x_);
       
    //--------------------------------------------------------------
-   mid_type           x       { x_.value >> 1                    }; printf("% 8d, ", x);  
+   mid_type           x       { x_.value >> 1                    }; printf("% 8d, ", x);
    mid_type           cry     { x         << q_shift             }; printf("% 8d, ", cry);
-   //--------------------------------------------------------------                      
+   //--------------------------------------------------------------
+   x.value += 1;
    x                          = x          - half                 ; printf("% 13d, ", x);  
    x                          = x         << q_shift + 1          ; printf("% 13d, ", x);  
    x                          = x         >> q_shift + 1          ; printf("% 13d, ", x);  
