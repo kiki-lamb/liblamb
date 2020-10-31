@@ -28,7 +28,7 @@ public:
  static constexpr uint8_t WHOLE       = W;
  static constexpr uint8_t FRAC        = F;
  static constexpr uint8_t SIZE        = size_fit_bits(WHOLE + FRAC);
- static constexpr uint8_t BIG_SIZE    = size_fit_bits((SIZE + 1) << 3);
+ static constexpr uint8_t BIG_SIZE    = (SIZE < 8) ? SIZE << 1 : SIZE;
  static constexpr bool    SIGNED      = ((WHOLE + FRAC ) % 2) == 1;
 
  //---------------------------------------------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ public:
  //---------------------------------------------------------------------------------------------------------------------
 
  typedef find_integer<SIGNED, BIG_SIZE> big_traits;
- typedef typename traits::type          big_value_type;
+ typedef typename big_traits::type          big_value_type;
 
  //---------------------------------------------------------------------------------------------------------------------
 
@@ -72,23 +72,11 @@ public:
   constexpr 
   operator q<whole, frac>() const {
 
-   typedef
-    q<whole, frac>
-    other_type;
-
-   constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
-
-   printf("Convert % 2d.% 2d to % 2d.% 2d via % 0d byte type. \n", WHOLE, FRAC, whole, frac, INTERMED_SIZE);
-   
-   typedef typename
-    find_integer<SIGNED, INTERMED_SIZE>::type
-    intermediary_type;
+   typedef q<whole, frac> other_type;
 
    constexpr bool    FROM_SIGNED   = SIGNED && ! other_type::SIGNED;
    constexpr int8_t  FRAC_DELTA    = FRAC - frac;
 
-   printf("Shift by % 2d \n", FRAC_DELTA);
-   
    if constexpr(FROM_SIGNED) {
     if (value < 0) {
      return other_type(0);
@@ -104,8 +92,6 @@ public:
     ret.value <<= -FRAC_DELTA;
    }
    
-   printf("Final value: % 8ld \n", ret.value);
-
    return ret;
   }
 
@@ -114,8 +100,6 @@ public:
  explicit constexpr 
  operator float() const {
   constexpr float one = ONE.value * 1.0;
-
-  printf("Float  % 8d from % 2d.% 2d = % 5.5lf \n", value, WHOLE, FRAC, value / one);
   return value / one;
  }
 
@@ -126,7 +110,7 @@ public:
    float const & tmp
   ) {
    int        divisor = tmp;
-   float     modulus  = tmp - divisor;
+   float      modulus  = tmp - divisor;
    value_type ipart   = ONE.value * divisor + int(ONE.value * modulus + 0.5);
    
    return q(ipart);
@@ -141,8 +125,6 @@ public:
    int        divisor = tmp;
    float     modulus  = tmp - divisor;
    value_type ipart   = ONE.value * divisor + int(ONE.value * modulus + 0.5);
-   printf("Un-float % 5.5lf to % 2d.% 2d = % 8d \n", tmp, WHOLE, FRAC, ipart);
-//   printf("div % 8ld mod % 8ld ipart % 8ld \n", divisor, modulus, ipart);
    
    return q(ipart);
   }
@@ -160,19 +142,7 @@ public:
    return value ^ other.value;
   }  
  
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- 
- template <uint8_t other_whole, uint8_t other_frac>
- constexpr
-  q scaled_add (
-   q<other_whole, other_frac> const & other
-  ) const {
-  q tmp(other);
-  
-  return (*this) + tmp;
- }
-
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
  template <uint8_t other_whole, uint8_t other_frac>
  constexpr
@@ -200,13 +170,13 @@ public:
    big_tmp                     >>= other_frac;
 
    // if (false) {
-   //  printf(
+//   //  printf(
    //   "MUL % 13.05lf * % 13.05lf = % 13.05lf \n",
    //   float(*this),
    //   float(other),
    //   float(q(small_tmp))
    //  );
-   //  printf(
+//   //  printf(
    //   "MUL % 13lu * % 13lu = % 13lu \n",
    //   value,
    //   other.value,
