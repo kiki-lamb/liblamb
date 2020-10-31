@@ -80,29 +80,23 @@ namespace lamb {
   
   /////////////////////////////////////////////////////////////////////////////////////////
     
-  template <uint8_t whole, uint8_t frac>
+  template <uint8_t pad, uint8_t whole, uint8_t frac>
   constexpr 
-  operator q<PAD, whole, frac>() const {
+  operator q<pad, whole, frac>() const {
 
-   typedef q<PAD, whole, frac> other_type;
+   typedef q<pad, whole, frac> other_type;
 
    constexpr bool    FROM_SIGNED   = SIGNED && ! other_type::SIGNED;
    constexpr int8_t  FRAC_DELTA    = FRAC - frac;
 
-   // printf(
-   //  "\nConvert %2u.%-2u to %2u.%-2u '%8u', shift %d.\n",
-   //  WHOLE,
-   //  FRAC,
-   //  whole,
-   //  frac,
-   //  value,
-   //  FRAC_DELTA
-   // );
-   
    if constexpr(FRAC_DELTA >= 0) {
     other_type ret(value >> FRAC_DELTA);
 
     // printf("After2: %lu  \n", ret.value);
+
+    if constexpr(pad != 0) {
+     ret.val &= other_type::DATA_MASK;
+    }
 
     return ret;
    }
@@ -111,6 +105,10 @@ namespace lamb {
 
     // printf("After2: %lu  \n", ret.value);
 
+    if constexpr(pad != 0) {
+     ret.val &= other_type::DATA_MASK;
+    }
+    
     return ret;
    }
   }
