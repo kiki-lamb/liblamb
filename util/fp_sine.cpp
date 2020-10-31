@@ -49,7 +49,9 @@ namespace math {
   {
    //--------------------------------------------------------------
    static bool logged = false;
-   
+
+   if (! logged) printf("small one: % 8d \n", u8q8::ONE);
+      
    constexpr uint8_t  q_shift { mid_type::CHARACTERISTIC         };
    constexpr mid_type pi      { mid_type::constants::pi          }; if (! logged) printf("pi:   % 8d % 05.5lf \n", pi,   double(pi));  
    constexpr mid_type two     { 2.0_mid                          }; if (! logged) printf("two:  % 8d % 05.5lf \n", two,  double(two)); 
