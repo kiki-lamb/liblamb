@@ -67,8 +67,8 @@ namespace math {
    mid_type           cry       { x         << q_shift           }; //printf("% 6d, ", cry);
    //-----------------------------------------------------------------------------
    x                           -= half                            ; //printf("% 13d, ", x);
-   x                          <<= q_shift + 1                     ; //printf("% 13d, ", x); 
-   x                          >>= q_shift + 1                     ; //printf("% 13d, ", x); 
+   x                          <<= q_shift    + 1                  ; //printf("% 13d, ", x); 
+   x                          >>= q_shift    + 1                  ; //printf("% 13d, ", x); 
    x                           *= x                               ; //printf("% 13d, ", x);  
    x                          <<= 2                               ; //printf("% 13d, ", x);
    //--------------------------------------------------------------                      
