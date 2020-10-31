@@ -63,7 +63,7 @@ namespace math {
    //----------------------------------------------------------------------------
    logged                       = true;
    //----------------------------------------------------------------------------
-   mid_type           x         { x_        << q_shift - 1 }; //printf("%6d, ", x);
+   mid_type           x         { x_        << q_shift - 1 }; printf("%6d, ", x);
    mid_type           cry       { x         << q_shift     }; //printf("% 6d, ", cry);
    //----------------------------------------------------------------------------
    x                           -= half                      ; //printf("% 13d, ", x);
@@ -86,7 +86,7 @@ namespace math {
  
  template <typename out_type>
  out_type qcos(s0q31 const & x) {
-  return -qsin<out_type>(x);
+  return qsin<out_type>(x + 16384);
  }
 
  /////////////////////////////////////////////////////////////////////////////////////////
