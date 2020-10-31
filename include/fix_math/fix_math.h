@@ -167,9 +167,9 @@ public:
    q const & other
   ) const {
 
-  big_value_type big_tmp = value;
-  big_tmp               *= other.value;
-  big_tmp              >>= FRAC;
+  big_value_type big_tmp    = value;
+  big_tmp                  *= other.value;
+  big_tmp                 >>= FRAC;
   
    // if (false) {
    //  printf(
@@ -196,16 +196,9 @@ public:
    q const & other
   ) const {
 
-   constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE << 1);
-      
-   typedef typename
-    find_integer<SIGNED, INTERMED_SIZE>::type
-    intermediary_type;
-
-   intermediary_type big_tmp   = value;
-   big_tmp                   <<= FRAC;
-   big_tmp                    /= other.value;
-   value_type small_tmp        = big_tmp;
+   big_value_type big_tmp   = value;
+   big_tmp                <<= FRAC;
+   big_tmp                 /= other.value;
    
    // if (true) {
    //  printf(
@@ -282,17 +275,17 @@ public:
  constexpr q &  operator  *= (value_type const & v)       { this->value  = (*this  * v ).value; return *this; }
  constexpr q &  operator  /= (value_type const & v)       { this->value  = (*this  / v ).value; return *this; }
  //------------------------------------------------------------------------------------------------------------
+ constexpr bool operator  <= (q          const & o) const { return              (*this == o ) || (*this < o); }
+ constexpr bool operator  >= (q          const & o) const { return              (*this == o ) || (*this > o); }
+ constexpr bool operator  != (q          const & o) const { return            ! (*this == o )               ; }
+ //------------------------------------------------------------------------------------------------------------
+ constexpr bool operator  <= (value_type const & o) const { return              (*this == o ) || (*this < o); }
+ constexpr bool operator  >= (value_type const & o) const { return              (*this == o ) || (*this > o); }
+ constexpr bool operator  != (value_type const & o) const { return            ! (*this == o )               ; }
+ //------------------------------------------------------------------------------------------------------------
  constexpr q &  operator  -- (                    )       { this        -= 1;                   return *this; }
  constexpr q &  operator  ++ (                    )       { this        += 1;                   return *this; }
- //------------------------------------------------------------------------------------------------------------
- constexpr bool operator  <= (q          const & o) const { return         (*this     == o ) || (*this < o) ; }
- constexpr bool operator  >= (q          const & o) const { return         (*this     == o ) || (*this > o) ; }
- constexpr bool operator  != (q          const & o) const { return       ! (*this     == o )                ; }
- //------------------------------------------------------------------------------------------------------------
- constexpr bool operator  <= (value_type const & o) const { return         (*this     == o ) || (*this < o) ; }
- constexpr bool operator  >= (value_type const & o) const { return         (*this     == o ) || (*this > o) ; }
- constexpr bool operator  != (value_type const & o) const { return       ! (*this     == o )                ; }
-//-------------------------------------------------------------------------------------------------------------
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 };
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
