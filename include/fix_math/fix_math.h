@@ -19,7 +19,7 @@ namespace lamb {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- template <uint8_t P, uint8_t W, uint8_t F>
+ template <uint8_t W, uint8_t F>
 class q {
 //----------------------------------------------------------------------------------------------------------------------
 public:
@@ -84,31 +84,35 @@ public:
  
  /////////////////////////////////////////////////////////////////////////////////////////
   
-  template <uint8_t pad, uint8_t whole, uint8_t frac>
+  template <uint8_t whole, uint8_t frac>
   constexpr 
-  operator q<pad, whole, frac>() const {
+  operator q<whole, frac>() const {
 
-   typedef q<pad, whole, frac> other_type;
+   typedef q<whole, frac> other_type;
 
    constexpr bool    FROM_SIGNED   = SIGNED && ! other_type::SIGNED;
    constexpr int8_t  FRAC_DELTA    = FRAC - frac;
 
-   if constexpr(FROM_SIGNED) {
-    if (value < 0) {
-     return other_type(0);
-    }
-   }
-
-   other_type ret(value);
+   printf(
+    "\nConvert %2u.%-2u to %2u.%-2u '%8u', shift %d.\n",
+    WHOLE,
+    FRAC,
+    whole,
+    frac,
+    value,
+    FRAC_DELTA
+   );
    
    if constexpr(FRAC_DELTA >= 0) {
-    ret.value >>= FRAC_DELTA;
+    other_type ret(value >> FRAC_DELTA);
+    printf("After2: %lu  \n", ret.value);
+    return ret;
    }
    else if constexpr(FRAC_DELTA <= 0) {
-    ret.value <<= -FRAC_DELTA;
+    other_type ret(value<<-FRAC_DELTA);
+    printf("After2: %lu  \n", ret.value);
+    return ret;
    }
-   
-   return ret;
   }
 
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -147,14 +151,14 @@ public:
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  template <uint8_t other_pad, uint8_t other_whole, uint8_t other_frac>
+  template <uint8_t other_whole, uint8_t other_frac>
   constexpr
   q operator * (
-   q<other_pad, other_whole, other_frac> const & other
+   q<other_whole, other_frac> const & other
   ) const {
 
    typedef
-    q<other_pad, other_whole, other_frac>
+    q<other_whole, other_frac>
     other_type;
 
    // constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
@@ -192,15 +196,15 @@ public:
 
    /////////////////////////////////////////////////////////////////////////////////////////
   
-  template <uint8_t other_pad, uint8_t other_whole, uint8_t other_frac>
+  template <uint8_t other_whole, uint8_t other_frac>
   constexpr
   q
   operator / (
-   q<other_pad, other_whole, other_frac> const & other
+   q<other_whole, other_frac> const & other
   ) const {
 
    typedef
-    q<other_pad, other_whole, other_frac>
+    q<other_whole, other_frac>
     other_type;
     
    // constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
@@ -309,7 +313,7 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
  template <uint8_t w, uint8_t f>
- using fixed = q<0, w, f>;
+ using fixed = q<w, f>;
  
  /////////////////////////////////////////////////////////////////////////////////////////
  // Typedefs
