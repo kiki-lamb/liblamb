@@ -56,25 +56,25 @@ namespace math {
    constexpr mid_type B       { two        - pi / 4.0_mid        };
    constexpr mid_type C       { one        - pi / 4.0_mid        };
 
-   printf("% 8d, ", x_);
+   //printf("% 8d, ", x_);
       
    //--------------------------------------------------------------
-   mid_type           x       { x_.value >> 1                    }; printf("% 8d, ", x);
-   mid_type           cry     { x         << q_shift             }; printf("% 8d, ", cry);
+   mid_type           x       { x_.value >> 1                    }; //printf("% 8d, ", x);
+   mid_type           cry     { x         << q_shift             }; //printf("% 8d, ", cry);
    //--------------------------------------------------------------
    x.value += 1;
-   x                          = x          - half                 ; printf("% 13d, ", x);  
-   x                          = x         << q_shift + 1          ; printf("% 13d, ", x);  
-   x                          = x         >> q_shift + 1          ; printf("% 13d, ", x);  
-   x                          = x          * x                    ; printf("% 13d, ", x);  
-   x                          = x         << 2                    ; printf("% 13d, ", x);  
+   x                          = x          - half                 ; //printf("% 13d, ", x);  
+   x                          = x         << q_shift + 1          ; //printf("% 13d, ", x);  
+   x                          = x         >> q_shift + 1          ; //printf("% 13d, ", x);  
+   x                          = x          * x                    ; //printf("% 13d, ", x);  
+   x                          = x         << 2                    ; //printf("% 13d, ", x);  
    //--------------------------------------------------------------                      
-   mid_type           y       { x          * C                   }; printf("% 13d, ", y);  
+   mid_type           y       { x          * C                   }; //printf("% 13d, ", y);  
    //--------------------------------------------------------------                      
-   y                          = B          - y                    ; printf("% 13d, ", y);  
-   y                          = y          * x                    ; printf("% 13d, ", y);  
-   y                          = one        - y                    ; printf("% 13d, ", y);  
-   y                          = cry.value >= 0 ? y : -y           ; printf("% 13d, ", y);  
+   y                          = B          - y                    ; //printf("% 13d, ", y);  
+   y                          = y          * x                    ; //printf("% 13d, ", y);  
+   y                          = one        - y                    ; //printf("% 13d, ", y);  
+   y                          = cry.value >= 0 ? y : -y           ; //printf("% 13d, ", y);  
    //--------------------------------------------------------------
    return                       out_type(y)                       ;
   }
