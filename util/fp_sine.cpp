@@ -56,24 +56,24 @@ namespace math {
    constexpr mid_type B       { two        - pi / 4.0_mid        };
    constexpr mid_type C       { one        - pi / 4.0_mid        };
 
-   printf("%lu, ", x_);
+   printf("%12lu, ", x_);
    
    //--------------------------------------------------------------
-   mid_type           x       { x_        << q_shift - 1         }; printf("%lu, ", x);
-   mid_type           cry     { x         << q_shift             }; printf("%lu, ", cry);
+   mid_type           x       { x_        << q_shift - 1         }; printf("%12lu, ", x);
+   mid_type           cry     { x         << q_shift             }; printf("%12lu, ", cry);
    //--------------------------------------------------------------
-   x                          = x          - half                 ; printf("%lu, ", x);
-   x                          = x         << q_shift + 1          ; printf("%lu, ", x);
-   x                          = x         >> q_shift + 1          ; printf("%lu, ", x);
-   x                          = x          * x                    ; printf("%lu, ", x);
-   x                          = x         << 2                    ; printf("%lu, ", x);
+   x                          = x          - half                 ; printf("%12lu, ", x);
+   x                          = x         << q_shift + 1          ; printf("%12lu, ", x);
+   x                          = x         >> q_shift + 1          ; printf("%12lu, ", x);
+   x                          = x          * x                    ; printf("%12lu, ", x);
+   x                          = x         << 2                    ; printf("%12lu, ", x);
    //--------------------------------------------------------------
-   mid_type           y       { x          * C                   }; printf("%lu, ", y);
+   mid_type           y       { x          * C                   }; printf("%12lu, ", y);
    //--------------------------------------------------------------
-   y                          = B          - y                    ; printf("%lu, ", y);
-   y                          = y          * x                    ; printf("%lu, ", y);
-   y                          = one        - y                    ; printf("%lu, ", y);
-   y                          = cry.value >= 0 ? y : -y           ; printf("%lu, ", y);
+   y                          = B          - y                    ; printf("%12lu, ", y);
+   y                          = y          * x                    ; printf("%12lu, ", y);
+   y                          = one        - y                    ; printf("%12lu, ", y);
+   y                          = cry.value >= 0 ? y : -y           ; printf("%12lu, ", y);
    //--------------------------------------------------------------
    return                       out_type(y)                       ;
   }
