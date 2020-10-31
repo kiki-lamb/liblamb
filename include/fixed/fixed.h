@@ -157,9 +157,7 @@ namespace lamb {
    q<other_pad, other_whole, other_frac> const & other
   ) const {
 
-   typedef
-    q<other_pad, other_whole, other_frac>
-    other_type;
+   typedef q<other_pad, other_whole, other_frac> other_type;
 
    static_assert(
     ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
@@ -239,8 +237,36 @@ namespace lamb {
   //------------------------------------------------------------------------------------------------------------
   constexpr q &  operator  -= (value_type const & v)       { this->value  = (*this  - v ).value; return *this; }
   constexpr q &  operator  += (value_type const & v)       { this->value  = (*this  + v ).value; return *this; }
-  constexpr q &  operator  *= (value_type const & v)       { this->value  = (*this  * v ).value; return *this; }
-  constexpr q &  operator  /= (value_type const & v)       { this->value  = (*this  / v ).value; return *this; }
+  //------------------------------------------------------------------------------------------------------------
+  template <uint8_t other_pad, uint8_t other_whole, uint8_t other_frac>
+  constexpr q &  operator  *= (q<other_pad, other_whole, other_frac> const & v) {
+   typedef q<other_pad, other_whole, other_frac> other_type;
+
+   if constexpr(PAD > other_type::DATA_SIZE) {
+    value  *= v.value;
+    value >>= other_frac;
+   }
+   else {
+    this->value  = (*this  * v ).value; 
+   }
+   
+   return *this;
+  }
+  //------------------------------------------------------------------------------------------------------------
+  template <uint8_t other_pad, uint8_t other_whole, uint8_t other_frac>
+  constexpr q &  operator  /= (q<other_pad, other_whole, other_frac> const & v) {
+   typedef q<other_pad, other_whole, other_frac> other_type;
+
+   if constexpr(PAD > other_type::DATA_SIZE) {
+    value <<= other_frac;
+    value  /= v.value;
+   }
+   else {
+    this->value  = (*this  / v ).value; 
+   }
+   
+   return *this;
+  }
   //------------------------------------------------------------------------------------------------------------
   constexpr bool operator  <= (value_type const & o) const { return         (*this     == o ) || (*this < o) ; }
   constexpr bool operator  >= (value_type const & o) const { return         (*this     == o ) || (*this > o) ; }
