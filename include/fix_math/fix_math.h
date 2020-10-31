@@ -69,7 +69,7 @@ public:
  /////////////////////////////////////////////////////////////////////////////////////////
   
   template <uint8_t whole, uint8_t frac>
-  /* NOT explicit */ constexpr 
+  explicit constexpr 
   operator q<whole, frac>() const {
 
    typedef
