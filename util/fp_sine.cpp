@@ -53,7 +53,7 @@ namespace math {
    //if (! logged) printf("small one: % 8d \n", u8q8::ONE);
    //-----------------------------------------------------------------------------
    constexpr uint8_t  q_shift   { mid_type::WHOLE          };   
-   constexpr mid_type pi        { mid_type::Pi             }; // if (! logged) printf("pi:   % 8d % 05.5lf \n", pi,        double(pi));
+   constexpr mid_type pi        { mid_type::Q_PI           }; // if (! logged) printf("pi:   % 8d % 05.5lf \n", pi,        double(pi));
    constexpr mid_type one       { 1.0_mid                  }; // if (! logged) printf("one:  % 8d % 05.5lf \n", one,       double(one));
    constexpr mid_type small_one { 1.0_mid - 1              }; // if (! logged) printf("sone: % 8d % 05.5lf \n", small_one, double(small_one));
    constexpr mid_type two       { 2.0_mid                  }; // if (! logged) printf("two:  % 8d % 05.5lf \n", two,       double(two));
