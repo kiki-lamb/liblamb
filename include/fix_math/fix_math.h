@@ -61,10 +61,11 @@ public:
  
   static constexpr q              MAX      = q(traits::MAX);
   static constexpr q              MIN      = q(traits::MIN);
+  static constexpr big_value_type TRUE_ONE = ((big_value_type)1) << FRAC;
   static constexpr q              ONE      = q(  
    WHOLE == 0 ?
    MAX.value :
-   (((value_type)1) << FRAC) // - 1 ?
+   (((value_type)1) << FRAC)
   );
  
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -119,7 +120,7 @@ public:
  
  explicit constexpr 
  operator float() const {
-  constexpr float one = ONE.value * 1.0;
+  constexpr float one = TRUE_ONE * 1.0;
   return value / one;
  }
 
