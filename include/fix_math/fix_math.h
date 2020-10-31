@@ -19,14 +19,14 @@ namespace lamb {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <uint8_t whole_, uint8_t frac_>
+template <uint8_t W, uint8_t F>
 class q {
 //----------------------------------------------------------------------------------------------------------------------
 public:
  //---------------------------------------------------------------------------------------------------------------------
  
- static constexpr uint8_t WHOLE       = whole_;
- static constexpr uint8_t FRAC        = frac_;
+ static constexpr uint8_t WHOLE       = W;
+ static constexpr uint8_t FRAC        = F;
  static constexpr uint8_t SIZE        = size_fit_bits(WHOLE + FRAC);
  static constexpr uint8_t BIG_SIZE    = size_fit_bits((SIZE + 1) << 3);
  static constexpr bool    SIGNED      = ((WHOLE + FRAC ) % 2) == 1;
@@ -69,7 +69,7 @@ public:
  /////////////////////////////////////////////////////////////////////////////////////////
   
   template <uint8_t whole, uint8_t frac>
-  explicit constexpr 
+  constexpr 
   operator q<whole, frac>() const {
 
    typedef
@@ -284,54 +284,54 @@ public:
   }
 
  
- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- constexpr q    operator   + ()                         const = delete;
- constexpr q    operator   ~ ()                         const { return                  q(       ~ value)      ; }
- constexpr q    operator   - ()                         const { return                  q(       - value)      ; }
- //---------------------------------------------------------------------------------------------------------------
- constexpr q    operator  >> (uint8_t    const & shift) const { return                  q(value >> shift)      ; }
- constexpr q    operator  << (uint8_t    const & shift) const { return                  q(value << shift)      ; }
- //---------------------------------------------------------------------------------------------------------------
- constexpr q    operator   + (q          const & other) const { return                  q(value  + other.value); }
- constexpr q    operator   - (q          const & other) const { return                  q(value  - other.value); }
- //---------------------------------------------------------------------------------------------------------------
- constexpr bool operator   < (q          const & other) const { return                   (value  < other.value); }
- constexpr bool operator   > (q          const & other) const { return                   (value  > other.value); }
- constexpr bool operator  == (q          const & other) const { return                   (value == other.value); }
- //---------------------------------------------------------------------------------------------------------------
- constexpr q    operator   + (value_type const & other) const { return                  q(value  + other      ); }
- constexpr q    operator   - (value_type const & other) const { return                  q(value  - other      ); }
- constexpr q    operator   * (value_type const & other) const { return                  q(value  * other      ); }
- constexpr q    operator   / (value_type const & other) const { return                  q(value  / other      ); }
- //---------------------------------------------------------------------------------------------------------------
- constexpr bool operator   < (value_type const & other) const { return                   (value  < other      ); }
- constexpr bool operator   > (value_type const & other) const { return                   (value  > other      ); }
- constexpr bool operator  == (value_type const & other) const { return                   (value == other      ); }
- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- constexpr q &  operator  -- (                        )       { this        -=               q(1); return *this; }
- constexpr q &  operator  ++ (                        )       { this        +=               q(1); return *this; }
- //---------------------------------------------------------------------------------------------------------------
- constexpr q &  operator >>= (uint8_t    const &     v)       { this->value  = (*this>> v ).value; return *this; }
- constexpr q &  operator <<= (uint8_t    const &     v)       { this->value  = (*this<< v ).value; return *this; }
- //---------------------------------------------------------------------------------------------------------------
- constexpr q &  operator  -= (q          const &     v)       { this->value  = (*this - v ).value; return *this; }
- constexpr q &  operator  += (q          const &     v)       { this->value  = (*this + v ).value; return *this; }
- constexpr q &  operator  *= (q          const &     v)       { this->value  = (*this * v ).value; return *this; }
- constexpr q &  operator  /= (q          const &     v)       { this->value  = (*this / v ).value; return *this; }
- //---------------------------------------------------------------------------------------------------------------
- constexpr bool operator  <= (q          const &     o) const { return         (*this    == o ) || (*this < o) ; }
- constexpr bool operator  >= (q          const &     o) const { return         (*this    == o ) || (*this > o) ; }
- constexpr bool operator  != (q          const &     o) const { return       ! (*this    == o )                ; }
- //---------------------------------------------------------------------------------------------------------------
- constexpr q &  operator  -= (value_type const &     v)       { this->value  = (*this - v ).value; return *this; }
- constexpr q &  operator  += (value_type const &     v)       { this->value  = (*this + v ).value; return *this; }
- constexpr q &  operator  *= (value_type const &     v)       { this->value  = (*this * v ).value; return *this; }
- constexpr q &  operator  /= (value_type const &     v)       { this->value  = (*this / v ).value; return *this; }
- //---------------------------------------------------------------------------------------------------------------
- constexpr bool operator  <= (value_type const &     o) const { return         (*this    == o ) || (*this < o) ; }
- constexpr bool operator  >= (value_type const &     o) const { return         (*this    == o ) || (*this > o) ; }
- constexpr bool operator  != (value_type const &     o) const { return       ! (*this    == o )                ; }
-//----------------------------------------------------------------------------------------------------------------
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ constexpr q    operator   + ()                     const = delete;
+ constexpr q    operator   ~ ()                     const { return                  q(       ~ value      ); }
+ constexpr q    operator   - ()                     const { return                  q(       - value      ); }
+ //-----------------------------------------------------------------------------------------------------------
+ constexpr q    operator  >> (uint8_t    const & s) const { return                  q(value >> s          ); }
+ constexpr q    operator  << (uint8_t    const & s) const { return                  q(value << s          ); }
+ //-----------------------------------------------------------------------------------------------------------
+ constexpr q    operator   + (q          const & o) const { return                  q(value  + o.value    ); }
+ constexpr q    operator   - (q          const & o) const { return                  q(value  - o.value    ); }
+ //-----------------------------------------------------------------------------------------------------------
+ constexpr bool operator   < (q          const & o) const { return                   (value  < o.value    ); }
+ constexpr bool operator   > (q          const & o) const { return                   (value  > o.value    ); }
+ constexpr bool operator  == (q          const & o) const { return                   (value == o.value    ); }
+ //-----------------------------------------------------------------------------------------------------------
+ constexpr q    operator   + (value_type const & o) const { return                  q(value  + o          ); }
+ constexpr q    operator   - (value_type const & o) const { return                  q(value  - o          ); }
+ constexpr q    operator   * (value_type const & o) const { return                  q(value  * o          ); }
+ constexpr q    operator   / (value_type const & o) const { return                  q(value  / o          ); }
+ //-----------------------------------------------------------------------------------------------------------
+ constexpr bool operator   < (value_type const & o) const { return                   (value  < o          ); }
+ constexpr bool operator   > (value_type const & o) const { return                   (value  > o          ); }
+ constexpr bool operator  == (value_type const & o) const { return                   (value == o          ); }
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ constexpr q &  operator  -- (                    )       { this        -=               q(1); return *this; }
+ constexpr q &  operator  ++ (                    )       { this        +=               q(1); return *this; }
+ //-----------------------------------------------------------------------------------------------------------
+ constexpr q &  operator >>= (uint8_t    const & v)       { this->value  = (*this>> v ).value; return *this; }
+ constexpr q &  operator <<= (uint8_t    const & v)       { this->value  = (*this<< v ).value; return *this; }
+ //-----------------------------------------------------------------------------------------------------------
+ constexpr q &  operator  -= (q          const & v)       { this->value  = (*this - v ).value; return *this; }
+ constexpr q &  operator  += (q          const & v)       { this->value  = (*this + v ).value; return *this; }
+ constexpr q &  operator  *= (q          const & v)       { this->value  = (*this * v ).value; return *this; }
+ constexpr q &  operator  /= (q          const & v)       { this->value  = (*this / v ).value; return *this; }
+ //-----------------------------------------------------------------------------------------------------------
+ constexpr bool operator  <= (q          const & o) const { return         (*this    == o ) || (*this < o) ; }
+ constexpr bool operator  >= (q          const & o) const { return         (*this    == o ) || (*this > o) ; }
+ constexpr bool operator  != (q          const & o) const { return       ! (*this    == o )                ; }
+ //-----------------------------------------------------------------------------------------------------------
+ constexpr q &  operator  -= (value_type const & v)       { this->value  = (*this - v ).value; return *this; }
+ constexpr q &  operator  += (value_type const & v)       { this->value  = (*this + v ).value; return *this; }
+ constexpr q &  operator  *= (value_type const & v)       { this->value  = (*this * v ).value; return *this; }
+ constexpr q &  operator  /= (value_type const & v)       { this->value  = (*this / v ).value; return *this; }
+ //-----------------------------------------------------------------------------------------------------------
+ constexpr bool operator  <= (value_type const & o) const { return         (*this    == o ) || (*this < o) ; }
+ constexpr bool operator  >= (value_type const & o) const { return         (*this    == o ) || (*this > o) ; }
+ constexpr bool operator  != (value_type const & o) const { return       ! (*this    == o )                ; }
+//------------------------------------------------------------------------------------------------------------
 };
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
