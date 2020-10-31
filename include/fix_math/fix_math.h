@@ -19,7 +19,7 @@ namespace lamb {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <uint8_t W, uint8_t F>
+ template <uint8_t P, uint8_t W, uint8_t F>
 class q {
 //----------------------------------------------------------------------------------------------------------------------
 public:
@@ -87,11 +87,11 @@ public:
  
  /////////////////////////////////////////////////////////////////////////////////////////
   
-  template <uint8_t whole, uint8_t frac>
+  template <uint8_t pad, uint8_t whole, uint8_t frac>
   constexpr 
-  operator q<whole, frac>() const {
+  operator q<pad, whole, frac>() const {
 
-   typedef q<whole, frac> other_type;
+   typedef q<pad, whole, frac> other_type;
 
    constexpr bool    FROM_SIGNED   = SIGNED && ! other_type::SIGNED;
    constexpr int8_t  FRAC_DELTA    = FRAC - frac;
@@ -141,23 +141,23 @@ public:
  
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  
- constexpr
+  constexpr
   q operator ^ (
    q const & other
   ) const {
    return value ^ other.value;
   }  
- 
+  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
- template <uint8_t other_whole, uint8_t other_frac>
- constexpr
+  
+  template <uint8_t other_pad, uint8_t other_whole, uint8_t other_frac>
+  constexpr
   q operator * (
-   q<other_whole, other_frac> const & other
+   q<other_pad, other_whole, other_frac> const & other
   ) const {
 
    typedef
-    q<other_whole, other_frac>
+    q<other_pad, other_whole, other_frac>
     other_type;
 
    // constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
@@ -195,15 +195,15 @@ public:
 
    /////////////////////////////////////////////////////////////////////////////////////////
   
-  template <uint8_t other_whole, uint8_t other_frac>
+  template <uint8_t other_pad, uint8_t other_whole, uint8_t other_frac>
   constexpr
   q
   operator / (
-   q<other_whole, other_frac> const & other
+   q<other_pad, other_whole, other_frac> const & other
   ) const {
 
    typedef
-    q<other_whole, other_frac>
+    q<other_pad, other_whole, other_frac>
     other_type;
     
    // constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
@@ -312,7 +312,7 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
  template <uint8_t w, uint8_t f>
- using fixed = q<w, f>;
+ using fixed = q<0, w, f>;
  
  /////////////////////////////////////////////////////////////////////////////////////////
  // Typedefs
