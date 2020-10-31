@@ -438,49 +438,49 @@ public:
  typedef fixed< 30,  1 > s30q1;
  typedef fixed< 31,  1 > u31q1;
  //---------------------------------------------------------------------------------------
- constexpr u0q32    operator ""_u0q32(long double x)  { return u0q32::from_double(x); }
+ constexpr u0q32    operator ""_u0q32(long double x)   { return u0q32::from_double(x); }
  //---------------------------------------------------------------------------------------
- constexpr s0q31    operator ""_s0q31(long double x)  { return s0q31::from_double(x); }
- constexpr u1q31    operator ""_u1q31(long double x)  { return u1q31::from_double(x); }
+ constexpr s0q31    operator ""_s0q31(long double x)   { return s0q31::from_double(x); }
+ constexpr u1q31    operator ""_u1q31(long double x)   { return u1q31::from_double(x); }
  //---------------------------------------------------------------------------------------
- constexpr s1q30    operator ""_s1q30(long double x)  { return s1q30::from_double(x); }
- constexpr u2q30    operator ""_u2q30(long double x)  { return u2q30::from_double(x); }
+ constexpr s1q30    operator ""_s1q30(long double x)   { return s1q30::from_double(x); }
+ constexpr u2q30    operator ""_u2q30(long double x)   { return u2q30::from_double(x); }
  //---------------------------------------------------------------------------------------
- constexpr s2q29    operator ""_s2q29(long double x)  { return s2q29::from_double(x); }
- constexpr u3q29    operator ""_u3q29(long double x)  { return u3q29::from_double(x); }
+ constexpr s2q29    operator ""_s2q29(long double x)   { return s2q29::from_double(x); }
+ constexpr u3q29    operator ""_u3q29(long double x)   { return u3q29::from_double(x); }
  //---------------------------------------------------------------------------------------
- constexpr s3q28    operator ""_s3q28(long double x)  { return s3q28::from_double(x); }
- constexpr u4q28    operator ""_u4q28(long double x)  { return u4q28::from_double(x); }
+ constexpr s3q28    operator ""_s3q28(long double x)   { return s3q28::from_double(x); }
+ constexpr u4q28    operator ""_u4q28(long double x)   { return u4q28::from_double(x); }
  //---------------------------------------------------------------------------------------
- constexpr u4q27    operator ""_u4q27(long double x)  { return u4q27::from_double(x); }
- constexpr s5q27    operator ""_s5q27(long double x)  { return s5q27::from_double(x); }
+ constexpr u4q27    operator ""_u4q27(long double x)   { return u4q27::from_double(x); }
+ constexpr s5q27    operator ""_s5q27(long double x)   { return s5q27::from_double(x); }
  //---------------------------------------------------------------------------------------
- constexpr s5q26    operator ""_s5q26(long double x)  { return s5q26::from_double(x); }
- constexpr u6q26    operator ""_u6q26(long double x)  { return u6q26::from_double(x); }
+ constexpr s5q26    operator ""_s5q26(long double x)   { return s5q26::from_double(x); }
+ constexpr u6q26    operator ""_u6q26(long double x)   { return u6q26::from_double(x); }
  //---------------------------------------------------------------------------------------
- constexpr s7q25    operator ""_s7q25(long double x)  { return s7q25::from_double(x); }
- constexpr u8q25    operator ""_u8q25(long double x)  { return u8q25::from_double(x); }
+ constexpr s7q25    operator ""_s7q25(long double x)   { return s7q25::from_double(x); }
+ constexpr u8q25    operator ""_u8q25(long double x)   { return u8q25::from_double(x); }
  //---------------------------------------------------------------------------------------
- constexpr s7q24    operator ""_s7q24(long double x)  { return s7q24::from_double(x); }
- constexpr u8q24    operator ""_u8q24(long double x)  { return u8q24::from_double(x); }
+ constexpr s7q24    operator ""_s7q24(long double x)   { return s7q24::from_double(x); }
+ constexpr u8q24    operator ""_u8q24(long double x)   { return u8q24::from_double(x); }
  //---------------------------------------------------------------------------------------
- constexpr s11q20   operator ""_s11q20(long double x)  { return s11q20::from_double(x); }
- constexpr u12q20   operator ""_u12q20(long double x)  { return u12q20::from_double(x); }
+ constexpr s11q20   operator ""_s11q20(long double x)  { return s11q20::from_double(x);}
+ constexpr u12q20   operator ""_u12q20(long double x)  { return u12q20::from_double(x);}
  //---------------------------------------------------------------------------------------
- constexpr s15q16   operator ""_s15q16(long double x)  { return s15q16::from_double(x); }
- constexpr u16q16   operator ""_u16q16(long double x)  { return u16q16::from_double(x); }
+ constexpr s15q16   operator ""_s15q16(long double x)  { return s15q16::from_double(x);}
+ constexpr u16q16   operator ""_u16q16(long double x)  { return u16q16::from_double(x);}
  //---------------------------------------------------------------------------------------
- constexpr s16q15   operator ""_s16q15(long double x)  { return s16q15::from_double(x); }
- constexpr u17q15   operator ""_u17q15(long double x)  { return u17q15::from_double(x); }
+ constexpr s16q15   operator ""_s16q15(long double x)  { return s16q15::from_double(x);}
+ constexpr u17q15   operator ""_u17q15(long double x)  { return u17q15::from_double(x);}
  //---------------------------------------------------------------------------------------
- constexpr s17q14   operator ""_s17q14(long double x)  { return s17q14::from_double(x); }
- constexpr u18q14   operator ""_u18q14(long double x)  { return u18q14::from_double(x); }
+ constexpr s17q14   operator ""_s17q14(long double x)  { return s17q14::from_double(x);}
+ constexpr u18q14   operator ""_u18q14(long double x)  { return u18q14::from_double(x);}
  //---------------------------------------------------------------------------------------
- constexpr s19q12   operator ""_s19q12(long double x)  { return s19q12::from_double(x); }
- constexpr u20q12   operator ""_u20q12(long double x)  { return u20q12::from_double(x); }
+ constexpr s19q12   operator ""_s19q12(long double x)  { return s19q12::from_double(x);}
+ constexpr u20q12   operator ""_u20q12(long double x)  { return u20q12::from_double(x);}
  //---------------------------------------------------------------------------------------
- constexpr s32q10   operator ""_s32q10(long double x)  { return s32q10::from_double(x); }
- constexpr u22q10   operator ""_u22q10(long double x)  { return u22q10::from_double(x); }
+ constexpr s32q10   operator ""_s32q10(long double x)  { return s32q10::from_double(x);}
+ constexpr u22q10   operator ""_u22q10(long double x)  { return u22q10::from_double(x);}
  //---------------------------------------------------------------------------------------
  constexpr s23q8    operator ""_s23q8(long double x)   { return s23q8::from_double(x); }
  constexpr u24q8    operator ""_u24q8(long double x)   { return u24q8::from_double(x); }
@@ -507,8 +507,8 @@ public:
  typedef fixed< 32,  0 > u32q0;
  typedef fixed< 31,  0 > s31q0;
  //---------------------------------------------------------------------------------------
- constexpr u8q0    operator ""_u8q0(long double x)    { return u8q0::from_double(x); }
- constexpr s7q0    operator ""_s7q0(long double x)    { return s7q0::from_double(x); }
+ constexpr u8q0    operator ""_u8q0(long double x)    { return u8q0::from_double(x);  }
+ constexpr s7q0    operator ""_s7q0(long double x)    { return s7q0::from_double(x);  }
  //---------------------------------------------------------------------------------------
  constexpr u16q0   operator ""_u16q0(long double x)   { return u16q0::from_double(x); }
  constexpr s15q0   operator ""_s15q0(long double x)   { return s15q0::from_double(x); }
