@@ -238,7 +238,9 @@ int main() {
 
  size_t successes = 0;
  size_t errors = 0;
- 
+
+ goto spot;
+
  test_fix_math_type<u0q8,   2, 0 >(successes, errors);
  test_fix_math_type<s0q7,   2, 0 >(successes, errors);
  
@@ -259,14 +261,16 @@ int main() {
 
  for (uint8_t ix = 0; ix < 80; ix++) printf("/");
 
- printf("\n\nTOTAL PASSED: %u / %u \n\n", successes, successes + errors);
 
+ printf("\n\nTOTAL PASSED: %u / %u \n\n", successes, successes + errors);
+ 
+spot:
  {
-  u0q8  x0(0, 128);       printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", float(x0), x0.value,  u0q8::ONE);
-  u0q16 x1 = u0q16(x0);   printf("u0q16:  % 05.05lf % 12u % 12llu % 12llu \n", float(x1), x1.value, u0q16::ONE);
-  u0q32 x2 = u0q32(x1);   printf("u0q32:  % 05.05lf % 12u % 12llu % 12llu \n", float(x2), x2.value, u0q32::ONE);
-  u0q16 x3 = u0q16(x2);   printf("u0q16:  % 05.05lf % 12u % 12llu % 12llu \n", float(x3), x3.value, u0q16::ONE);
-  u0q8  x4 = u0q8(x3);    printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", float(x4), x4.value,  u0q8::ONE);
+  u0q8  x0(0, 128);       printf("u0q8:   % 05.05lf % 12u % 12llu \n", float(x0), x0.value,  u0q8::ONE);
+  u0q16 x1 = u0q16(x0);   printf("u0q16:  % 05.05lf % 12u % 12llu \n", float(x1), x1.value, u0q16::ONE);
+  u0q32 x2 = u0q32(x1);   printf("u0q32:  % 05.05lf % 12u % 12llu \n", float(x2), x2.value, u0q32::ONE);
+  u0q16 x3 = u0q16(x2);   printf("u0q16:  % 05.05lf % 12u % 12llu \n", float(x3), x3.value, u0q16::ONE);
+  u0q8  x4 = u0q8(x3);    printf("u0q8:   % 05.05lf % 12u % 12llu \n", float(x4), x4.value,  u0q8::ONE);
 
   printf("\n");
  }
