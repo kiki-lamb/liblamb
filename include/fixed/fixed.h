@@ -91,14 +91,14 @@ namespace lamb {
 
    other_type ret(0);
    
-   if constexpr(FRAC_DELTA >= 0) {
-    ret.value  = value >> FRAC_DELTA;
+   if      constexpr(FRAC_DELTA >= 0) {
+    ret.value >>=  FRAC_DELTA;
    }
    else if constexpr(FRAC_DELTA <= 0) {
-    ret.value  = value << -FRAC_DELTA;
+    ret.value <<= -FRAC_DELTA;
    }
 
-   if constexpr(pad != 0) {
+   if      constexpr(pad != 0) {
     ret.value &= other_type::DATA_MASK;
    }
    
