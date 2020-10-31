@@ -154,20 +154,20 @@ public:
     q<other_whole, other_frac>
     other_type;
 
-   constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
+   // constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
       
-   typedef typename
-    find_integer<SIGNED, INTERMED_SIZE>::type
-    intermediary_type;
+   // typedef typename
+   //  find_integer<SIGNED, INTERMED_SIZE>::type
+   //  intermediary_type;
 
    static_assert(
     ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
     "Signedness mismatch!"
    );
 
-   intermediary_type big_tmp     = value;
-   big_tmp                      *= other.value;
-   big_tmp                     >>= other_frac;
+   big_value_type big_tmp   = value;
+   big_tmp                 *= other.value;
+   big_tmp                >>= other_frac;
 
    // if (false) {
 //   //  printf(
@@ -200,18 +200,18 @@ public:
     q<other_whole, other_frac>
     other_type;
     
-   constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
+   // constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
       
-   typedef typename
-    find_integer<SIGNED, INTERMED_SIZE>::type
-    intermediary_type;
+   // typedef typename
+   //  find_integer<SIGNED, INTERMED_SIZE>::type
+   //  intermediary_type;
 
    static_assert(
     ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
     "Signedness mismatch!"
    );
 
-   intermediary_type big_tmp   = value;
+   big_value_type big_tmp   = value;
    big_tmp                   <<= other_frac;
    big_tmp                    /= other.value;
    value_type small_tmp        = big_tmp;
