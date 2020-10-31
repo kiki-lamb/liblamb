@@ -32,7 +32,7 @@ namespace lamb {
   //----------------------------------------------------------------------------
   typedef s0q15   external_type;
   //----------------------------------------------------------------------------
-  typedef s2q29   internal_type;
+  typedef s3q28   internal_type;
   internal_type   L;
   internal_type   H;
   internal_type   B;

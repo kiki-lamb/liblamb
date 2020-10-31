@@ -44,8 +44,8 @@ namespace math {
   return mid_type::from_float(x);
  }
  
- template <typename out_type>
- out_type qsin(s0q31 const & x_)
+  template <typename out_type>
+  out_type qsin(s0q31 const & x_)
   {
    //-----------------------------------------------------------------------------
    static    bool     logged    = false;
@@ -53,7 +53,7 @@ namespace math {
    //if (! logged) printf("small one: % 8d \n", u8q8::ONE);
    //-----------------------------------------------------------------------------
    constexpr uint8_t  q_shift   { mid_type::WHOLE          };   
-   constexpr mid_type pi        { mid_type::PI             }; // if (! logged) printf("pi:   % 8d % 05.5lf \n", pi,        double(pi));
+   constexpr mid_type pi        { mid_type::Q_PI           }; // if (! logged) printf("pi:   % 8d % 05.5lf \n", pi,        double(pi));
    constexpr mid_type one       { 1.0_mid                  }; // if (! logged) printf("one:  % 8d % 05.5lf \n", one,       double(one));
    constexpr mid_type small_one { 1.0_mid - 1              }; // if (! logged) printf("sone: % 8d % 05.5lf \n", small_one, double(small_one));
    constexpr mid_type two       { 2.0_mid                  }; // if (! logged) printf("two:  % 8d % 05.5lf \n", two,       double(two));
@@ -63,7 +63,7 @@ namespace math {
    //----------------------------------------------------------------------------
    logged                       = true;
    //----------------------------------------------------------------------------
-   mid_type           x         { x_        << q_shift - 1 }; //printf("%6d, ", x);
+   mid_type           x         { x_        << q_shift - 1 }; printf("%6d, ", x);
    mid_type           cry       { x         << q_shift     }; //printf("% 6d, ", cry);
    //----------------------------------------------------------------------------
    x                           -= half                      ; //printf("% 13d, ", x);
@@ -81,6 +81,15 @@ namespace math {
    //----------------------------------------------------------------------------
    return                         out_type(y)               ;
   }
+
+ /////////////////////////////////////////////////////////////////////////////////////////
+ 
+ template <typename out_type>
+ out_type qcos(s0q31 const & x) {
+  return qsin<out_type>(x + 16384);
+ }
+
+ /////////////////////////////////////////////////////////////////////////////////////////
 };
  
 /////////////////////////////////////////////////////////////////////////////////
@@ -100,8 +109,9 @@ int main() {
   last = math::qsin<s0q31>(s0q31(ix));
 
   // printf("%d, % 05.5lf \n", last, last / 4096.0);
-  printf("% 05.5lf \n", float(last));
-
+  printf("% 05.5lf, ", float(last));
+  printf("% 05.5lf \n", float(math::qcos<s0q31>(s0q31(ix))));
+  
   if (last > max)
    max = last;
 

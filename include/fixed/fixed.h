@@ -14,249 +14,244 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 
 namespace lamb {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <uint8_t W, uint8_t F>
-class q {
-//----------------------------------------------------------------------------------------------------------------------
-public:
- //---------------------------------------------------------------------------------------------------------------------
  
- static constexpr uint8_t WHOLE       = W;
- static constexpr uint8_t FRAC        = F;
- static constexpr uint8_t SIZE        = size_fit_bits(WHOLE + FRAC);
- static constexpr uint8_t BIG_SIZE    = size_fit_bits((SIZE + 1) << 3);
- static constexpr bool    SIGNED      = ((WHOLE + FRAC ) % 2) == 1;
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ template <uint8_t P, uint8_t W, uint8_t F>
+ struct q {
  //---------------------------------------------------------------------------------------------------------------------
 
- typedef find_integer<SIGNED, SIZE>     traits;
- typedef typename traits::type          value_type;
+  static constexpr uint8_t PAD         = P;
+  static constexpr uint8_t WHOLE       = W;
+  static constexpr uint8_t FRAC        = F;
+  static constexpr uint8_t DATA_SIZE   = size_fit_bits(WHOLE + FRAC);
+  static constexpr uint8_t SIZE        = size_fit_bits(PAD + WHOLE + FRAC);
+  static constexpr uint8_t BIG_SIZE    = SIZE < 8 ? SIZE << 1 : SIZE;
+  static constexpr bool    SIGNED      = (WHOLE + FRAC ) % 2 == 1;
 
- //---------------------------------------------------------------------------------------------------------------------
+  //---------------------------------------------------------------------------------------------------------------------
 
- typedef find_integer<SIGNED, BIG_SIZE> big_traits;
- typedef typename big_traits::type      big_value_type;
+  typedef find_integer<SIGNED, SIZE>     traits;
+  typedef typename traits::type          value_type;
 
- //---------------------------------------------------------------------------------------------------------------------
+  //---------------------------------------------------------------------------------------------------------------------
 
- static constexpr q       MAX         = q(traits::MAX);
- static constexpr q       MIN         = q(traits::MIN);
- static constexpr q       ONE         = q(  
+  typedef find_integer<SIGNED, BIG_SIZE> big_traits;
+  typedef typename big_traits::type      big_value_type;
+
+  //----------------------------------------------------------------------------------------------------------------------
+ 
+  static constexpr big_value_type TRUE_ONE    = ((big_value_type)1) << FRAC;
+  static constexpr q              MAX         = q(traits::MAX);
+  static constexpr q              MIN         = q(traits::MIN);
+  static constexpr value_type     MASK        = ~((big_value_type)1);
+  static constexpr value_type     DATA_MASK   = (((big_value_type)1) << FRAC << WHOLE) - 1;
+  static constexpr value_type     FRAC_MASK   = TRUE_ONE - 1;
+  static constexpr value_type     WHOLE_MASK  = DATA_MASK ^ FRAC_MASK;  
+  static constexpr q              ONE        = q(  
    WHOLE == 0 ?
    MAX.value :
-   (((value_type)1) << FRAC) // - 1 ?
+   (((value_type)1) << FRAC)
   );
-
- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
- value_type value;
-
- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
- explicit constexpr
- q(value_type const & v) : value(v) {}
-
-//---------------------------------------------------------------------------------------------------------------------
  
- explicit constexpr
- q(value_type const & whole, value_type const & frac) :
-  value(value_type(whole * ONE.value + (whole < 0 ? - frac : frac))) {}
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  value_type value;
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  explicit constexpr
+  q(value_type const & v) : value(v) {}
+
+  //---------------------------------------------------------------------------------------------------------------------
  
- /////////////////////////////////////////////////////////////////////////////////////////
-  
-  template <uint8_t whole, uint8_t frac>
-  constexpr 
-  operator q<whole, frac>() const {
+  explicit constexpr
+  q(value_type const & whole, value_type const & frac) :
+   value(value_type(ONE.value * whole + (whole < 0 ? - frac : frac))) {}
+ 
+  /////////////////////////////////////////////////////////////////////////////////////////
 
-   typedef q<whole, frac> other_type;
-   
-   if constexpr(SIGNED && ! other_type::SIGNED) {
-    if (value < 0) {
-     return q(0);
-    }
-   }   
-   constexpr int8_t FRAC_DELTA = FRAC - frac;
-
-   other_type       ret(value);
-   
-   if constexpr(FRAC_DELTA >= 0) {
-    ret.value >>= FRAC_DELTA;
-   }
-   else if constexpr(FRAC_DELTA <= 0) {
-    ret.value <<= -FRAC_DELTA;
-   }
-   
-   return ret;
+  value_type whole() const {
+   return (value & WHOLE_MASK) >> FRAC;
   }
 
- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  value_type frac() const {
+   return (value & FRAC_MASK);
+  }
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+    
+  template <uint8_t whole, uint8_t frac>
+  constexpr 
+  operator q<PAD, whole, frac>() const {
+
+   typedef q<PAD, whole, frac> other_type;
+
+   constexpr bool    FROM_SIGNED   = SIGNED && ! other_type::SIGNED;
+   constexpr int8_t  FRAC_DELTA    = FRAC - frac;
+
+   // printf(
+   //  "\nConvert %2u.%-2u to %2u.%-2u '%8u', shift %d.\n",
+   //  WHOLE,
+   //  FRAC,
+   //  whole,
+   //  frac,
+   //  value,
+   //  FRAC_DELTA
+   // );
+   
+   if constexpr(FRAC_DELTA >= 0) {
+    other_type ret(value >> FRAC_DELTA);
+
+    // printf("After2: %lu  \n", ret.value);
+
+    return ret;
+   }
+   else if constexpr(FRAC_DELTA <= 0) {
+    other_type ret(value << -FRAC_DELTA);
+
+    // printf("After2: %lu  \n", ret.value);
+
+    return ret;
+   }
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  
- explicit constexpr 
- operator float() const {
-  constexpr float one = ONE.value * 1.0;
+  explicit constexpr 
+  operator float() const {
+   constexpr float one = TRUE_ONE * 1.0;
+   return value / one;
+  }
 
-//  printf("Float  % 8d from % 2d.% 2d = % 5.5lf \n", value, WHOLE, FRAC, value / one);
-  return value / one;
- }
-
- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   static constexpr
   q from_float(
    float const & tmp
   ) {
    int        divisor = tmp;
-   float     modulus  = tmp - divisor;
+   float      modulus = tmp - divisor;
    value_type ipart   = ONE.value * divisor + int(ONE.value * modulus + 0.5);
    
    return q(ipart);
   }
-
- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  
- static constexpr q       PI          = WHOLE >= 2 ? from_float(M_PI) : q(0);
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  
- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  static constexpr q Q_PI = WHOLE >= 2 ? from_float(M_PI) : q(0);
  
- constexpr
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ 
+  constexpr
   q operator ^ (
    q const & other
   ) const {
    return value ^ other.value;
   }  
- 
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
- constexpr
-  q operator * (
-   q const & other
-  ) const {
-
-  big_value_type big_tmp    = value;
-  big_tmp                  *= other.value;
-  big_tmp                 >>= FRAC;
   
-   // if (false) {
-   //  printf(
-   //   "MUL % 13.05lf * % 13.05lf = % 13.05lf \n",
-   //   float(*this),
-   //   float(other),
-   //   float(q(small_tmp))
-   //  );
-   //  printf(
-   //   "MUL % 13lu * % 13lu = % 13lu \n",
-   //   value,
-   //   other.value,
-   //   small_tmp
-   //  );   
-   // }
-   
-   return q((value_type)big_tmp);
-  }
-
-   /////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
+  template <uint8_t other_pad, uint8_t other_whole, uint8_t other_frac>
   constexpr
-  q operator / (
-   q const & other
+  q operator * (
+   q<other_pad, other_whole, other_frac> const & other
   ) const {
+
+   typedef
+    q<other_pad, other_whole, other_frac>
+    other_type;
+
+   static_assert(
+    ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
+    "Signedness mismatch!"
+   );
 
    big_value_type big_tmp   = value;
-   big_tmp                <<= FRAC;
-   big_tmp                 /= other.value;
-   
-   // if (true) {
-   //  printf(
-   //   "\nDIV  % 10u.%2u / % 10u.%2u = % 10u.%2u using a %u bit temporary\n",
-   //   WHOLE,
-   //   FRAC,
-   //   other_whole,
-   //   other_frac,
-   //   WHOLE,
-   //   FRAC,
-   //   (sizeof(intermediary_type) << 3)
-   //  );
-   //  printf(
-   //   " div % 16.05lf / % 16.05lf = % 16.05lf \n",
-   //   float(*this),
-   //   float(other),
-   //   float(q(small_tmp))
-   //  );
-   //  printf(
-   //   " big %16lu << ",
-   //   ((intermediary_type)value)
-   //  );
-   //  printf("%lld ", ((intermediary_type)value) << other_frac);
-   //  printf(
-   //   " after shift %2u \n",
-   //   other_frac
-   //  );
-   //  printf(
-   //   " div % 16lu / % 16lu = % 16lu \n",
-   //   value,
-   //   other.value,
-   //   small_tmp
-   //  );
-   // }
+   big_tmp                 *= other.value;
+   big_tmp                >>= other_frac;
    
    return q((value_type)big_tmp);
   }
 
+  /////////////////////////////////////////////////////////////////////////////////////////
+  
+  template <uint8_t other_pad, uint8_t other_whole, uint8_t other_frac>
+  constexpr
+  q
+  operator / (
+   q<other_pad, other_whole, other_frac> const & other
+  ) const {
+
+   typedef
+    q<other_pad, other_whole, other_frac>
+    other_type;    
+
+   static_assert(
+    ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
+    "Signedness mismatch!"
+   );
+
+   big_value_type big_tmp   = value;
+   big_tmp                <<= other_frac;
+   big_tmp                 /= other.value;
+   
+   return q((value_type)big_tmp);
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  constexpr q    operator   + ()                     const = delete;
+  constexpr q    operator   ~ ()                     const { return                       q(       ~ value  ); }
+  constexpr q    operator   - ()                     const { return                       q(       - value  ); }
+  //------------------------------------------------------------------------------------------------------------
+  constexpr q    operator  >> (uint8_t    const & s) const { return                       q(value >> s      ); }
+  constexpr q    operator  << (uint8_t    const & s) const { return                       q(value << s      ); }
+  //------------------------------------------------------------------------------------------------------------
+  constexpr q    operator   + (value_type const & o) const { return                       q(value  + o      ); }
+  constexpr q    operator   - (value_type const & o) const { return                       q(value  - o      ); }
+  constexpr q    operator   * (value_type const & o) const { return                       q(value  * o      ); }
+  constexpr q    operator   / (value_type const & o) const { return                       q(value  / o      ); }
+  //------------------------------------------------------------------------------------------------------------
+  constexpr q    operator   + (q          const & o) const { return                       q(value  + o.value); }
+  constexpr q    operator   - (q          const & o) const { return                       q(value  - o.value); }
+  //-----------------------------------------------------------------------------------------------------------
+  constexpr bool operator   < (q          const & o) const { return                        (value  < o.value); }
+  constexpr bool operator   > (q          const & o) const { return                        (value  > o.value); }
+  constexpr bool operator  == (q          const & o) const { return                        (value == o.value); }
+  //------------------------------------------------------------------------------------------------------------
+  constexpr bool operator   < (value_type const & o) const { return                        (value  < o      ); }
+  constexpr bool operator   > (value_type const & o) const { return                        (value  > o      ); }
+  constexpr bool operator  == (value_type const & o) const { return                        (value == o      ); }
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  constexpr q &  operator  -- (                    )       { this        -= 1;                   return *this; }
+  constexpr q &  operator  ++ (                    )       { this        += 1;                   return *this; }
+  //------------------------------------------------------------------------------------------------------------
+  constexpr q &  operator >>= (uint8_t    const & v)       { this->value  = (*this >> v ).value; return *this; }
+  constexpr q &  operator <<= (uint8_t    const & v)       { this->value  = (*this << v ).value; return *this; }
+  //------------------------------------------------------------------------------------------------------------
+  constexpr q &  operator  -= (q          const & v)       { this->value  = (*this  - v ).value; return *this; }
+  constexpr q &  operator  += (q          const & v)       { this->value  = (*this  + v ).value; return *this; }
+  constexpr q &  operator  *= (q          const & v)       { this->value  = (*this  * v ).value; return *this; }
+  constexpr q &  operator  /= (q          const & v)       { this->value  = (*this  / v ).value; return *this; }
+  //------------------------------------------------------------------------------------------------------------
+  constexpr bool operator  <= (q          const & o) const { return         (*this     == o ) || (*this < o) ; }
+  constexpr bool operator  >= (q          const & o) const { return         (*this     == o ) || (*this > o) ; }
+  constexpr bool operator  != (q          const & o) const { return       ! (*this     == o )                ; }
+  //------------------------------------------------------------------------------------------------------------
+  constexpr q &  operator  -= (value_type const & v)       { this->value  = (*this  - v ).value; return *this; }
+  constexpr q &  operator  += (value_type const & v)       { this->value  = (*this  + v ).value; return *this; }
+  constexpr q &  operator  *= (value_type const & v)       { this->value  = (*this  * v ).value; return *this; }
+  constexpr q &  operator  /= (value_type const & v)       { this->value  = (*this  / v ).value; return *this; }
+  //------------------------------------------------------------------------------------------------------------
+  constexpr bool operator  <= (value_type const & o) const { return         (*this     == o ) || (*this < o) ; }
+  constexpr bool operator  >= (value_type const & o) const { return         (*this     == o ) || (*this > o) ; }
+  constexpr bool operator  != (value_type const & o) const { return       ! (*this     == o )                ; }
+//-------------------------------------------------------------------------------------------------------------
+ };
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
  
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////
- constexpr q    operator   + ()                     const = delete;
- constexpr q    operator   ~ ()                     const { return                       q(       ~ value  ); }
- constexpr q    operator   - ()                     const { return                       q(       - value  ); }
- //------------------------------------------------------------------------------------------------------------
- constexpr q    operator  >> (uint8_t    const & s) const { return                       q(value >> s      ); }
- constexpr q    operator  << (uint8_t    const & s) const { return                       q(value << s      ); }
- //------------------------------------------------------------------------------------------------------------
- constexpr q    operator   + (q          const & o) const { return                       q(value  + o.value); }
- constexpr q    operator   - (q          const & o) const { return                       q(value  - o.value); }
- //-----------------------------------------------------------------------------------------------------------
- constexpr q    operator   + (value_type const & o) const { return                       q(value  + o      ); }
- constexpr q    operator   - (value_type const & o) const { return                       q(value  - o      ); }
- constexpr q    operator   * (value_type const & o) const { return                       q(value  * o      ); }
- constexpr q    operator   / (value_type const & o) const { return                       q(value  / o      ); }
- //------------------------------------------------------------------------------------------------------------
- constexpr bool operator   < (q          const & o) const { return                        (value  < o.value); }
- constexpr bool operator   > (q          const & o) const { return                        (value  > o.value); }
- constexpr bool operator  == (q          const & o) const { return                        (value == o.value); }
- //------------------------------------------------------------------------------------------------------------
- constexpr bool operator   < (value_type const & o) const { return                        (value  < o      ); }
- constexpr bool operator   > (value_type const & o) const { return                        (value  > o      ); }
- constexpr bool operator  == (value_type const & o) const { return                        (value == o      ); }
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////
- constexpr q &  operator >>= (uint8_t    const & v)       { this->value  = (*this >> v ).value; return *this; }
- constexpr q &  operator <<= (uint8_t    const & v)       { this->value  = (*this << v ).value; return *this; }
- //------------------------------------------------------------------------------------------------------------
- constexpr q &  operator  -= (q          const & v)       { this->value  = (*this  - v ).value; return *this; }
- constexpr q &  operator  += (q          const & v)       { this->value  = (*this  + v ).value; return *this; }
- constexpr q &  operator  *= (q          const & v)       { this->value  = (*this  * v ).value; return *this; }
- constexpr q &  operator  /= (q          const & v)       { this->value  = (*this  / v ).value; return *this; }
- //------------------------------------------------------------------------------------------------------------
- constexpr q &  operator  -= (value_type const & v)       { this->value  = (*this  - v ).value; return *this; }
- constexpr q &  operator  += (value_type const & v)       { this->value  = (*this  + v ).value; return *this; }
- constexpr q &  operator  *= (value_type const & v)       { this->value  = (*this  * v ).value; return *this; }
- constexpr q &  operator  /= (value_type const & v)       { this->value  = (*this  / v ).value; return *this; }
- //------------------------------------------------------------------------------------------------------------
- constexpr bool operator  <= (q          const & o) const { return              (*this == o ) || (*this < o); }
- constexpr bool operator  >= (q          const & o) const { return              (*this == o ) || (*this > o); }
- constexpr bool operator  != (q          const & o) const { return            ! (*this == o )               ; }
- //------------------------------------------------------------------------------------------------------------
- constexpr bool operator  <= (value_type const & o) const { return              (*this == o ) || (*this < o); }
- constexpr bool operator  >= (value_type const & o) const { return              (*this == o ) || (*this > o); }
- constexpr bool operator  != (value_type const & o) const { return            ! (*this == o )               ; }
- //------------------------------------------------------------------------------------------------------------
- constexpr q &  operator  -- (                    )       { this        -= 1;                   return *this; }
- constexpr q &  operator  ++ (                    )       { this        += 1;                   return *this; }
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-};
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
  template <uint8_t w, uint8_t f>
- using fixed = q<w, f>;
+ using fixed = q<0, w, f>;
  
  /////////////////////////////////////////////////////////////////////////////////////////
  // Typedefs
@@ -347,8 +342,8 @@ public:
  typedef fixed<  3, 28 > s3q28;
  typedef fixed<  4, 28 > u4q28;
  //---------------------------------------------------------------------------------------
- typedef fixed<  4, 27 > u4q27;
- typedef fixed<  5, 27 > s5q27;
+ typedef fixed<  4, 27 > s4q27;
+ typedef fixed<  5, 27 > u5q27;
  //---------------------------------------------------------------------------------------
  typedef fixed<  5, 26 > s5q26;
  typedef fixed<  6, 26 > u6q26;
@@ -406,8 +401,8 @@ public:
  constexpr s3q28    operator ""_s3q28(long double x)   { return s3q28::from_float(x); }
  constexpr u4q28    operator ""_u4q28(long double x)   { return u4q28::from_float(x); }
  //---------------------------------------------------------------------------------------
- constexpr u4q27    operator ""_u4q27(long double x)   { return u4q27::from_float(x); }
- constexpr s5q27    operator ""_s5q27(long double x)   { return s5q27::from_float(x); }
+ constexpr s4q27    operator ""_s4q27(long double x)   { return s4q27::from_float(x); }
+ constexpr u5q27    operator ""_u5q27(long double x)   { return u5q27::from_float(x); }
  //---------------------------------------------------------------------------------------
  constexpr s5q26    operator ""_s5q26(long double x)   { return s5q26::from_float(x); }
  constexpr u6q26    operator ""_u6q26(long double x)   { return u6q26::from_float(x); }
