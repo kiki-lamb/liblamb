@@ -64,6 +64,7 @@ public:
   static constexpr q              MAX      = q(traits::MAX);
   static constexpr q              MIN      = q(traits::MIN);
   static constexpr big_value_type TRUE_ONE = ((big_value_type)1) << FRAC;
+  static constexpr value_type     MASK     = TRUE_ONE - 1;
   static constexpr q              ONE      = q(  
    WHOLE == 0 ?
    MAX.value :
@@ -108,12 +109,16 @@ public:
    
    if constexpr(FRAC_DELTA >= 0) {
     other_type ret(value >> FRAC_DELTA);
+
     printf("After2: %lu  \n", ret.value);
+
     return ret;
    }
    else if constexpr(FRAC_DELTA <= 0) {
-    other_type ret(value<<-FRAC_DELTA);
+    other_type ret(value << -FRAC_DELTA);
+
     printf("After2: %lu  \n", ret.value);
+
     return ret;
    }
   }
@@ -164,20 +169,33 @@ public:
     q<other_pad, other_whole, other_frac>
     other_type;
 
+   static_assert(
+    ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
+    "Signedness mismatch!"
+   );
+
+   if constexpr(other_type::DATA_SIZE > PAD) {
+    big_value_type big_tmp   = value;
+    big_tmp                 *= other.value;
+    big_tmp                >>= other_frac;
+    
+    return q((value_type)big_tmp);
+   } else {
+    value_type ret  = value;    
+    ret            *= other.value;
+    ret           >>= other_frac;
+    
+    return q(ret & MASK);
+   }
+
+
+   
    // constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
       
    // typedef typename
    //  find_integer<SIGNED, INTERMED_SIZE>::type
    //  intermediary_type;
 
-   static_assert(
-    ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
-    "Signedness mismatch!"
-   );
-
-   big_value_type big_tmp   = value;
-   big_tmp                 *= other.value;
-   big_tmp                >>= other_frac;
 
    // if (false) {
 //   //  printf(
@@ -193,8 +211,6 @@ public:
    //   small_tmp
    //  );   
    // }
-   
-   return q((value_type)big_tmp);
   }
 
    /////////////////////////////////////////////////////////////////////////////////////////
