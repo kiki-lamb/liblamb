@@ -88,11 +88,11 @@ public:
  
  /////////////////////////////////////////////////////////////////////////////////////////
   
-  template <uint8_t pad, uint8_t whole, uint8_t frac>
+  template <uint8_t whole, uint8_t frac>
   constexpr 
-  operator q<pad, whole, frac>() const {
+  operator q<PAD, whole, frac>() const {
 
-   typedef q<pad, whole, frac> other_type;
+   typedef q<PAD, whole, frac> other_type;
 
    constexpr bool    FROM_SIGNED   = SIGNED && ! other_type::SIGNED;
    constexpr int8_t  FRAC_DELTA    = FRAC - frac;
@@ -174,21 +174,11 @@ public:
     "Signedness mismatch!"
    );
 
-//   if constexpr(other_type::DATA_SIZE > PAD) {
-    big_value_type big_tmp   = value;
-    big_tmp                 *= other.value;
-    big_tmp                >>= other_frac;
-    
-    return q((value_type)big_tmp);
-//   } else {
-//   printf("Mul %u by %u. \n", value, other.value);
-//    
-//    value_type ret  = value;    
-//    ret            *= other.value;
-//    ret           >>= other_frac;
-//    
-//    return q(ret & MASK); 
-//   }
+   big_value_type big_tmp   = value;
+   big_tmp                 *= other.value;
+   big_tmp                >>= other_frac;
+   
+   return q((value_type)big_tmp);
   }
 
    /////////////////////////////////////////////////////////////////////////////////////////
