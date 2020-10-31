@@ -9,14 +9,11 @@
 #include <cmath>
 #endif
 
-#define __STDC_FORMAT_MACROS
 #include <inttypes.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
 namespace lamb {
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <uint8_t W, uint8_t F>
@@ -78,7 +75,7 @@ public:
 
    constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
 
-   printf("Convert % 2d.% 2d to % 2d.% 2d via % 0d byte type. \n", WHOLE, FRAC, whole, frac, INTERMED_SIZE);
+//   printf("Convert % 2d.% 2d to % 2d.% 2d via % 0d byte type. \n", WHOLE, FRAC, whole, frac, INTERMED_SIZE);
    
    typedef typename
     find_integer<SIGNED, INTERMED_SIZE>::type
@@ -87,7 +84,7 @@ public:
    constexpr bool    FROM_SIGNED   = SIGNED && ! other_type::SIGNED;
    constexpr int8_t  FRAC_DELTA    = FRAC - frac;
 
-   printf("Shift by % 2d \n", FRAC_DELTA);
+//   printf("Shift by % 2d \n", FRAC_DELTA);
    
    if constexpr(FROM_SIGNED) {
     if (value < 0) {
@@ -104,7 +101,7 @@ public:
     ret.value <<= -FRAC_DELTA;
    }
    
-   printf("Final value: % 8ld \n", ret.value);
+//   printf("Final value: % 8ld \n", ret.value);
 
    return ret;
   }
@@ -115,7 +112,7 @@ public:
  operator float() const {
   constexpr float one = ONE.value * 1.0;
 
-  printf("Float  % 8d from % 2d.% 2d = % 5.5lf \n", value, WHOLE, FRAC, value / one);
+//  printf("Float  % 8d from % 2d.% 2d = % 5.5lf \n", value, WHOLE, FRAC, value / one);
   return value / one;
  }
 
@@ -131,22 +128,7 @@ public:
    
    return q(ipart);
   }
- 
- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  static
-  q ffrom_float(
-   float const & tmp
-  ) {
-   int        divisor = tmp;
-   float     modulus  = tmp - divisor;
-   value_type ipart   = ONE.value * divisor + int(ONE.value * modulus + 0.5);
-   printf("Un-float % 5.5lf to % 2d.% 2d = % 8d \n", tmp, WHOLE, FRAC, ipart);
-//   printf("div % 8ld mod % 8ld ipart % 8ld \n", divisor, modulus, ipart);
-   
-   return q(ipart);
-  }
- 
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  
  static constexpr q       PI          = WHOLE >= 2 ? from_float(M_PI) : q(0);
@@ -322,7 +304,7 @@ public:
  typedef fixed<  2, 13 > s2q13;
  typedef fixed<  3, 13 > u3q13;
  //---------------------------------------------------------------------------------------
- typedef fixed<  3, 12 > s3q12;
+ typedef fixed<  3, 12 > s3q12;
  typedef fixed<  4, 12 > u4q12;
  //---------------------------------------------------------------------------------------
  typedef fixed<  4, 11 > s4q11;
