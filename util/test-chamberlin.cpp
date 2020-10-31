@@ -41,12 +41,12 @@ int main() {
   
    printf("FF1,          Q1,           L,              H,            B,            N,            D1,           D2  \n");
 
-  for (double qix = 1.0; qix < 20.0; qix += 3.0) {
+  for (double qix = 0.1; qix < 5.0; qix += 0.2) {
    fx_cf.q(qix);
    
-   const size_t fix_incr = 80;
+   const size_t fix_incr = 100;
    
-   for (size_t fix = 4000 + 20; fix > 2000; fix -= fix_incr) {
+   for (size_t fix = 5500 + 10; fix > 10; fix -= fix_incr) {
     acc          = 0;    
     fx_cf.f(fix);
         
