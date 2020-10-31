@@ -64,7 +64,7 @@ public:
   static constexpr q              MAX      = q(traits::MAX);
   static constexpr q              MIN      = q(traits::MIN);
   static constexpr big_value_type TRUE_ONE = ((big_value_type)1) << FRAC;
-  static constexpr value_type     MASK     = TRUE_ONE - 1;
+  static constexpr value_type     MASK     = (((big_value_type)1) << FRAC << WHOLE) - 1;
   static constexpr q              ONE      = q(  
    WHOLE == 0 ?
    MAX.value :
@@ -181,11 +181,13 @@ public:
     
     return q((value_type)big_tmp);
    } else {
+   printf("Mul %u by %u. \n", value, other.value);
+    
     value_type ret  = value;    
     ret            *= other.value;
     ret           >>= other_frac;
     
-    return q(ret & MASK);
+    return q(ret & MASK); 
    }
 
 

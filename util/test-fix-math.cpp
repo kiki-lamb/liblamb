@@ -275,6 +275,14 @@ spot:
   printf("\n");
  }
 
+
+ q<16,8,8> xx(2,0);
+ q<0 ,8,8> yy(4,128);
+
+ auto zz = xx * yy;
+
+ printf("==> %5.5lf \n", float(zz));
+ 
  // {
  //  u0q8  x0(0, 128);       printf("u0q8:   % 05.05lf % 12u % 12llu \n",        float(x0), x0.value,  u0q8::ONE);
  //  s7q8  x1 = s7q8(x0);    printf("s7q8:   % 05.05lf % 12d % 12lld \n",        float(x1), x1.value,  s7q8::ONE);
