@@ -59,12 +59,9 @@ private:
  
 public:
  
- static constexpr typename type_if<(WHOLE == 0), big_value_type, value_type>::type
- TRUE_ONE = (((big_value_type)1) << FRAC);
- 
- static constexpr q              MAX      = q(traits::MAX);
- static constexpr q              MIN      = q(traits::MIN);
- static constexpr q              ONE      = q(  
+  static constexpr q              MAX      = q(traits::MAX);
+  static constexpr q              MIN      = q(traits::MIN);
+  static constexpr q              ONE      = q(  
    WHOLE == 0 ?
    MAX.value :
    (((value_type)1) << FRAC) // - 1 ?
@@ -83,7 +80,7 @@ public:
  
  explicit constexpr
  q(value_type const & whole, value_type const & frac) :
-  value(value_type((WHOLE == 0 ? 0 : whole * TRUE_ONE) + (whole < 0 ? - frac : frac))) {}
+  value(value_type(ONE.value * whole + (whole < 0 ? - frac : frac))) {}
  
  /////////////////////////////////////////////////////////////////////////////////////////
   
@@ -118,7 +115,7 @@ public:
  
  explicit constexpr 
  operator float() const {
-  constexpr float one = TRUE_ONE * 1.0;
+  constexpr float one = ONE.value * 1.0;
   return value / one;
  }
 
@@ -130,7 +127,7 @@ public:
   ) {
    int        divisor = tmp;
    float      modulus = tmp - divisor;
-   value_type ipart   = TRUE_ONE * divisor + int(TRUE_ONE * modulus + 0.5);
+   value_type ipart   = ONE.value * divisor + int(ONE.value * modulus + 0.5);
    
    return q(ipart);
   }
