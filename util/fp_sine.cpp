@@ -44,8 +44,8 @@ namespace math {
   return mid_type::from_float(x);
  }
  
- template <typename out_type>
- out_type qsin(s0q31 const & x_)
+  template <typename out_type>
+  out_type qsin(s0q31 const & x_)
   {
    //-----------------------------------------------------------------------------
    static    bool     logged    = false;
@@ -81,6 +81,15 @@ namespace math {
    //----------------------------------------------------------------------------
    return                         out_type(y)               ;
   }
+
+ /////////////////////////////////////////////////////////////////////////////////////////
+ 
+ template <typename out_type>
+ out_type qcos(s0q31 const & x) {
+  return -qsin<out_type>(x);
+ }
+
+ /////////////////////////////////////////////////////////////////////////////////////////
 };
  
 /////////////////////////////////////////////////////////////////////////////////
@@ -100,8 +109,9 @@ int main() {
   last = math::qsin<s0q31>(s0q31(ix));
 
   // printf("%d, % 05.5lf \n", last, last / 4096.0);
-  printf("% 05.5lf \n", float(last));
-
+  printf("% 05.5lf, ", float(last));
+  printf("% 05.5lf \n", float(math::qcos<s0q31>(s0q31(ix))));
+  
   if (last > max)
    max = last;
 
