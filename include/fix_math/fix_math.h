@@ -196,11 +196,11 @@ public:
     "Signedness mismatch!"
    );
 
-   shared<big_value_type>::value   = value;
-   shared<big_value_type>::value  *= other.value;
-   shared<big_value_type>::value >>= other_frac;
+   big_value_type big_tmp   = value;
+   big_tmp                 *= other.value;
+   big_tmp                >>= other_frac;
    
-   return q((value_type)shared<big_value_type>::value);
+   return q((value_type)big_tmp);
   }
 
    /////////////////////////////////////////////////////////////////////////////////////////
@@ -221,11 +221,11 @@ public:
     "Signedness mismatch!"
    );
 
-   shared<big_value_type>::value   = value;
-   shared<big_value_type>::value <<= other_frac;
-   shared<big_value_type>::value  /= other.value;
+   big_value_type big_tmp          = value;
+   big_tmp                       <<= other_frac;
+   big_tmp                        /= other.value;
    
-   return q((value_type)shared<big_value_type>::value);
+   return q((value_type)big_tmp);
   }
 
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
