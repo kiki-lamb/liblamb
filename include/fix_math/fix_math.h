@@ -16,8 +16,16 @@
 
 namespace lamb {
 
+ 
+ template <typename t>
+ struct shared {
+  static t value;
+ };
 
-
+ //---------------------------------------------------------------------------------------
+ 
+ template <typename t> t shared<t>::value = 0;
+ 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  template <uint8_t P, uint8_t W, uint8_t F>
  class q {
@@ -43,6 +51,8 @@ namespace lamb {
  typedef find_integer<SIGNED, BIG_SIZE> big_traits;
  typedef typename big_traits::type      big_value_type;
 
+// static big_value_type big_tmp;
+  
 //----------------------------------------------------------------------------------------------------------------------
 
 private:
@@ -97,27 +107,27 @@ public:
    constexpr bool    FROM_SIGNED   = SIGNED && ! other_type::SIGNED;
    constexpr int8_t  FRAC_DELTA    = FRAC - frac;
 
-   printf(
-    "\nConvert %2u.%-2u to %2u.%-2u '%8u', shift %d.\n",
-    WHOLE,
-    FRAC,
-    whole,
-    frac,
-    value,
-    FRAC_DELTA
-   );
+   // printf(
+   //  "\nConvert %2u.%-2u to %2u.%-2u '%8u', shift %d.\n",
+   //  WHOLE,
+   //  FRAC,
+   //  whole,
+   //  frac,
+   //  value,
+   //  FRAC_DELTA
+   // );
    
    if constexpr(FRAC_DELTA >= 0) {
     other_type ret(value >> FRAC_DELTA);
 
-    printf("After2: %lu  \n", ret.value);
+    // printf("After2: %lu  \n", ret.value);
 
     return ret;
    }
    else if constexpr(FRAC_DELTA <= 0) {
     other_type ret(value << -FRAC_DELTA);
 
-    printf("After2: %lu  \n", ret.value);
+    // printf("After2: %lu  \n", ret.value);
 
     return ret;
    }
@@ -174,11 +184,13 @@ public:
     "Signedness mismatch!"
    );
 
-   big_value_type big_tmp   = value;
-   big_tmp                 *= other.value;
-   big_tmp                >>= other_frac;
+   /* big_value_type */
    
-   return q((value_type)big_tmp);
+   shared<big_value_type>::value   = value;
+   shared<big_value_type>::value  *= other.value;
+   shared<big_value_type>::value >>= other_frac;
+   
+   return q((value_type)shared<big_value_type>::value);
   }
 
    /////////////////////////////////////////////////////////////////////////////////////////
@@ -205,10 +217,11 @@ public:
     "Signedness mismatch!"
    );
 
-   big_value_type big_tmp   = value;
-   big_tmp                   <<= other_frac;
-   big_tmp                    /= other.value;
-   value_type small_tmp        = big_tmp;
+   /* big_value_type */
+   shared<big_value_type>::value   = value;
+   shared<big_value_type>::value                   <<= other_frac;
+   shared<big_value_type>::value                    /= other.value;
+   value_type small_tmp        = shared<big_value_type>::value;
    
    // if (true) {
    //  printf(
@@ -244,7 +257,7 @@ public:
    //  );
    // }
    
-   return q((value_type)big_tmp);
+   return q((value_type)shared<big_value_type>::value);
   }
 
  
@@ -298,6 +311,10 @@ public:
 //-------------------------------------------------------------------------------------------------------------
 };
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ //template <uint8_t P, uint8_t W, uint8_t F> typename q<P,W,F>::big_value_type q<P,W,F>::big_tmp = 0;
+
+ ////////////////////////////////////////////////////////////////////////////////
 
  template <uint8_t w, uint8_t f>
  using fixed = q<0, w, f>;
