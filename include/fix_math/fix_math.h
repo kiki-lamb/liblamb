@@ -30,8 +30,8 @@ namespace lamb {
  static constexpr uint8_t FRAC        = F;
  static constexpr uint8_t DATA_SIZE   = size_fit_bits(WHOLE + FRAC);
  static constexpr uint8_t SIZE        = size_fit_bits(PAD + WHOLE + FRAC);
- static constexpr uint8_t BIG_SIZE    = (SIZE < 8) ? SIZE << 1 : SIZE;
- static constexpr bool    SIGNED      = ((WHOLE + FRAC ) % 2) == 1;
+ static constexpr uint8_t BIG_SIZE    = SIZE < 8 ? SIZE << 1 : SIZE;
+ static constexpr bool    SIGNED      = (WHOLE + FRAC ) % 2 == 1;
 
  //---------------------------------------------------------------------------------------------------------------------
 
