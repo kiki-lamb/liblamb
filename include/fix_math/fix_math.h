@@ -78,6 +78,8 @@ public:
 
    constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
 
+   printf("Convert % 2d.% 2d to % 2d.% 2d via % 0d byte type. \n", WHOLE, FRAC, whole, frac, INTERMED_SIZE);
+   
    typedef typename
     find_integer<SIGNED, INTERMED_SIZE>::type
     intermediary_type;
@@ -121,6 +123,21 @@ public:
    int        divisor = tmp;
    float     modulus = tmp - divisor;
    value_type ipart   = ONE.value * divisor + int(ONE.value * modulus + 0.5);
+   
+   return q(ipart);
+  }
+ 
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  static
+  q ffrom_float(
+   float const & tmp
+  ) {
+   printf("Convert % 5.5lf \n", tmp);
+   int        divisor = tmp;
+   float     modulus = tmp - divisor;
+   value_type ipart   = ONE.value * divisor + int(ONE.value * modulus + 0.5);
+   printf("div % 8ld mod % 8ld ipart % 8ld \n", divisor, modulus, ipart);
    
    return q(ipart);
   }
