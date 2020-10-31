@@ -98,6 +98,17 @@ public:
   value(value_type(ONE.value * whole + (whole < 0 ? - frac : frac))) {}
  
  /////////////////////////////////////////////////////////////////////////////////////////
+
+  value_type whole() const {
+   return (value & WHOLE_MASK) >> FRAC;
+  }
+
+  value_type frac() const {
+   return (value & FRAC_MASK);
+  }
+  
+  /////////////////////////////////////////////////////////////////////////////////////////
+  
   
   template <uint8_t whole, uint8_t frac>
   constexpr 
