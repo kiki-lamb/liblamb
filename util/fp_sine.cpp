@@ -47,7 +47,7 @@ namespace math {
  template <typename out_type>
  out_type qsin(s0q31 const & x_)
   {
-   //-----------------------------------------------------------------------------
+   //--------------------------------------------------------------
    constexpr uint8_t  q_shift { mid_type::CHARACTERISTIC         };
    constexpr mid_type pi      { mid_type::constants::pi          };
    constexpr mid_type two     { 2.0_mid                          };
@@ -55,23 +55,26 @@ namespace math {
    constexpr mid_type half    { 0.5_mid                          };
    constexpr mid_type B       { two        - pi / 4.0_mid        };
    constexpr mid_type C       { one        - pi / 4.0_mid        };
-   //-----------------------------------------------------------------------------
-   mid_type           x       { x_        << q_shift - 1         }; 
-   mid_type           cry     { x         << q_shift             };
-   //-----------------------------------------------------------------------------
-   x                          = x          - half                 ;    //  -=
-   x                          = x         << q_shift + 1          ;    // <<=
-   x                          = x         >> q_shift + 1          ;    //  *=
-   x                          = x          * x                    ;    //  *=
-   x                          = x         << 2                    ;    // <<=
-   //----------------------------------------------------------------------------
-   mid_type           y       { x          * C                   };
-   //-----------------------------------------------------------------------------
-   y                          = B          - y                    ;
-   y                          = y          * x                    ;    //  *=
-   y                          = one        - y                    ;
-   y                          = cry.value >= 0 ? y : -y           ;
-   //-----------------------------------------------------------------------------
+
+   printf("%lu, ", x_);
+   
+   //--------------------------------------------------------------
+   mid_type           x       { x_        << q_shift - 1         }; printf("%lu, ", x);
+   mid_type           cry     { x         << q_shift             }; printf("%lu, ", cry);
+   //--------------------------------------------------------------
+   x                          = x          - half                 ; printf("%lu, ", x);
+   x                          = x         << q_shift + 1          ; printf("%lu, ", x);
+   x                          = x         >> q_shift + 1          ; printf("%lu, ", x);
+   x                          = x          * x                    ; printf("%lu, ", x);
+   x                          = x         << 2                    ; printf("%lu, ", x);
+   //--------------------------------------------------------------
+   mid_type           y       { x          * C                   }; printf("%lu, ", y);
+   //--------------------------------------------------------------
+   y                          = B          - y                    ; printf("%lu, ", y);
+   y                          = y          * x                    ; printf("%lu, ", y);
+   y                          = one        - y                    ; printf("%lu, ", y);
+   y                          = cry.value >= 0 ? y : -y           ; printf("%lu, ", y);
+   //--------------------------------------------------------------
    return                       out_type(y)                       ;
   }
 };
