@@ -174,8 +174,8 @@ public:
 
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  template <uint8_t other_whole, uint8_t other_frac>
-  constexpr
+ template <uint8_t other_whole, uint8_t other_frac>
+ constexpr
   q operator * (
    q<other_whole, other_frac> const & other
   ) const {
