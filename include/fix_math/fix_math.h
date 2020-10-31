@@ -120,7 +120,7 @@ public:
   ) {
    int        divisor = tmp;
    float     modulus = tmp - divisor;
-   value_type ipart   = ONE.value * divisor + int(ONE.value * modulus);
+   value_type ipart   = ONE.value * divisor + int(ONE.value * modulus + 0.5);
    
    return q(ipart);
   }

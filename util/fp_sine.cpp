@@ -41,7 +41,7 @@ namespace math {
  typedef   s17q14   mid_type;
 
  constexpr mid_type operator ""_mid(long double const x) {
-  return mid_type::from_double(x);
+  return mid_type::from_float(x);
  }
  
  template <typename out_type>
@@ -103,7 +103,7 @@ int main() {
   last = math::qsin<s0q31>(s0q31(ix));
 
   // printf("%d, % 05.5lf \n", last, last / 4096.0);
-  printf("% 05.5lf \n", double(last));
+  printf("% 05.5lf \n", float(last));
 
   if (last > max)
    max = last;
@@ -113,6 +113,6 @@ int main() {
   }
 
  return 0;
- printf("MAX: % 05.5lf %d \n", double(max), max.value); 
- printf("MIN: % 05.5lf %d \n", double(min), min.value);
+ printf("MAX: % 05.5lf %d \n", float(max), max.value); 
+ printf("MIN: % 05.5lf %d \n", float(min), min.value);
 }
