@@ -68,7 +68,9 @@ public:
   template <uint8_t whole, uint8_t frac>
   constexpr 
   operator q<whole, frac>() const {
-    
+
+   typedef q<whole, frac> other_type;
+   
    if constexpr(SIGNED && ! other_type::SIGNED) {
     if (value < 0) {
      return q(0);
@@ -76,7 +78,7 @@ public:
    }   
    constexpr int8_t FRAC_DELTA = FRAC - frac;
 
-   q<whole, frac>   ret(value);
+   other_type       ret(value);
    
    if constexpr(FRAC_DELTA >= 0) {
     ret.value >>= FRAC_DELTA;
