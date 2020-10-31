@@ -48,31 +48,31 @@ namespace math {
  out_type qsin(s0q31 const & x_)
   {
    //-----------------------------------------------------------------------------
-   constexpr uint8_t  q_shift { mid_type::WHOLE                  };
+   static    bool     logged  = false;
 
-   static bool logged = false;
+   if (! logged) printf("small one: % 8d \n", u8q8::ONE);
    
+   constexpr uint8_t  q_shift { mid_type::WHOLE                  };   
    constexpr mid_type pi      { mid_type::PI                     }; if (! logged) printf("pi:   % 8d % 05.5lf \n", pi,   double(pi));
    constexpr mid_type two     { 2.0_mid                          }; if (! logged) printf("two:  % 8d % 05.5lf \n", two,  double(two));
    constexpr mid_type one     { 1.0_mid                          }; if (! logged) printf("one:  % 8d % 05.5lf \n", one,  double(one));
    constexpr mid_type half    { 0.5_mid                          }; if (! logged) printf("half: % 8d % 05.5lf \n", half, double(half));
    constexpr mid_type B       { two        - pi / 4.0_mid        }; if (! logged) printf("B:    % 8d % 05.5lf \n", B,    double(B));
    constexpr mid_type C       { one        - pi / 4.0_mid        }; if (! logged) printf("C:    % 8d % 05.5lf \n", C,    double(C));   
-
    logged = true;
    
-   printf("% 8d, ", x_);
+   printf("% 6d, ", x_);
       
    //--------------------------------------------------------------
-   mid_type           x       { x_        << q_shift - 1         }; printf("%8d, ", x);
-   mid_type           cry     { x         << q_shift             }; printf("% 8d, ", cry);
+   mid_type           x       { x_        << q_shift - 1         }; printf("%6d, ", x);
+   mid_type           cry     { x         << q_shift             }; printf("% 6d, ", cry);
    //--------------------------------------------------------------
    x.value += 1;
    x                          = x          - half                 ; printf("% 13d, ", x);  
    x                          = x         << q_shift + 1          ; printf("% 13d, ", x);  
    x                          = x         >> q_shift + 1          ; printf("% 13d, ", x);  
    x                          = x          * x                    ; printf("% 13d, ", x);  
-   x                          = x         << 2                    ; printf("% 13d, ", x);  
+   x                          = x         << 2                    ; printf("% 13d', ", x);
    //--------------------------------------------------------------                      
    mid_type           y       { x          * C                   }; printf("% 13d, ", y);  
    //--------------------------------------------------------------                      
