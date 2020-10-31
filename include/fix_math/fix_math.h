@@ -41,9 +41,27 @@ public:
  typedef find_integer<SIGNED, BIG_SIZE> big_traits;
  typedef typename big_traits::type      big_value_type;
 
- //---------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
- static constexpr big_value_type TRUE_ONE = (((big_value_type)1) << FRAC);
+private:
+ 
+ template <bool use_left, typename left, typename right>
+ struct type_if {
+  typedef right type;
+ };
+ 
+ template <typename left, typename right>
+ struct type_if<true, left, right> {
+  typedef left type;
+ };
+ 
+//----------------------------------------------------------------------------------------------------------------------
+ 
+public:
+ 
+ static constexpr typename type_if<(WHOLE == 0), big_value_type, value_type>::type
+ TRUE_ONE = (((big_value_type)1) << FRAC);
+ 
  static constexpr q              MAX      = q(traits::MAX);
  static constexpr q              MIN      = q(traits::MIN);
  static constexpr q              ONE      = q(  
@@ -65,7 +83,7 @@ public:
  
  explicit constexpr
  q(value_type const & whole, value_type const & frac) :
-  value(value_type(whole * TRUE_ONE + (whole < 0 ? - frac : frac))) {}
+  value(value_type((WHOLE == 0 ? 0 : whole * TRUE_ONE) + (whole < 0 ? - frac : frac))) {}
  
  /////////////////////////////////////////////////////////////////////////////////////////
   
