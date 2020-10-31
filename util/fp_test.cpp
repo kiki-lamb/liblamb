@@ -29,4 +29,5 @@ int main() {
  // printf("x:    % 8d % 010.10lf \n", float(s17q14::ffrom_float(1.5)));
  // printf("x:    % 8d % 010.10lf \n", float(s15q16::ffrom_float(1.5)));
  printf("x:    % 10.10lf \n", float(s15q16::ffrom_float(1.5).scaled_add(s15q16::ffrom_float(1.5))));
+ printf("x:    % 10.10lf \n", float(s15q16::ffrom_float(1.5) + s15q16::ffrom_float(1.5)));
 }
