@@ -86,19 +86,19 @@ bool compare_floats(float x, float y, uint8_t precis) {
 
 #define TEST_CONVERSIONS(x, y, z0, z1, fprecis)                         \
  {                                                                      \
-  fix_t a(fix_t::from_float(x));                                       \
+  fix_t a(fix_t::from_float(x));                                        \
   fix_t b(y);                                                           \
   fix_t c(z0, z1);                                                      \
                                                                         \
-  TEST_FLEQ("lf", x, float(a), fprecis);                               \
-  TEST_FLEQ("lf", x, float(b), fprecis);                               \
-  TEST_FLEQ("lf", x, float(c), fprecis);                               \
+  TEST_FLEQ("lf", x, float(a), fprecis);                                \
+  TEST_FLEQ("lf", x, float(b), fprecis);                                \
+  TEST_FLEQ("lf", x, float(c), fprecis);                                \
  }
 
 #define TEST_PI(fmt, pi_precis)                                         \
  {                                                                      \
-  fix_t fix_pi = fix_t::from_float(M_PI);                              \
-  float unfix_pi = float(fix_pi);                                      \
+  fix_t fix_pi = fix_t::from_float(M_PI);                               \
+  float unfix_pi = float(fix_pi);                                       \
                                                                         \
   char buff0[32];                                                       \
   char buff1[32];                                                       \
@@ -113,13 +113,13 @@ bool compare_floats(float x, float y, uint8_t precis) {
                                                                         \
   TEST_FLEQ(fmt, M_PI, unfix_pi, pi_precis);                            \
                                                                         \
-  if (fix_t::WHOLE > 2) {                                      \
+  if (fix_t::WHOLE > 2) {                                               \
    snprintf(buff0, 32, "% 05.10lf", 1.5*M_PI);                          \
    buff0[pi_precis+3] = 0;                                              \
    printf("1.5M_PI    : %s\n", buff0);                                  \
                                                                         \
-   fix_pi = fix_t::from_float(1.5*M_PI);                               \
-   unfix_pi = float(fix_pi);                                           \
+   fix_pi = fix_t::from_float(1.5*M_PI);                                \
+   unfix_pi = float(fix_pi);                                            \
                                                                         \
    snprintf(buff1, 32, "% 05.10lf", unfix_pi);                          \
    buff1[pi_precis+3] = 0;                                              \
@@ -128,13 +128,13 @@ bool compare_floats(float x, float y, uint8_t precis) {
    TEST_FLEQ(fmt, 1.5*M_PI, unfix_pi, pi_precis);                       \
   }                                                                     \
                                                                         \
-  if (fix_t::WHOLE > 2) {                                      \
+  if (fix_t::WHOLE > 2) {                                               \
    snprintf(buff0, 32, "% 05.10lf", 2*M_PI);                            \
    buff0[pi_precis+3] = 0;                                              \
    printf("2M_PI      : %s\n", buff0);                                  \
                                                                         \
-   fix_pi = fix_t::from_float(2*M_PI);                                 \
-   unfix_pi = float(fix_pi);                                           \
+   fix_pi = fix_t::from_float(2*M_PI);                                  \
+   unfix_pi = float(fix_pi);                                            \
                                                                         \
    snprintf(buff1, 32, "% 05.10lf", unfix_pi);                          \
    buff1[pi_precis+3] = 0;                                              \
@@ -143,13 +143,13 @@ bool compare_floats(float x, float y, uint8_t precis) {
    TEST_FLEQ(fmt, 2*M_PI, unfix_pi, pi_precis);                         \
   }                                                                     \
                                                                         \
-  if (((fix_t::WHOLE+fix_t::FRAC) % 2) == 1) {             \
+  if (((fix_t::WHOLE+fix_t::FRAC) % 2) == 1) {                          \
    snprintf(buff0, 32, "% 05.10lf", -M_PI);                             \
    buff0[pi_precis+3] = 0;                                              \
    printf("-M_PI      : %s\n", buff0);                                  \
                                                                         \
-   fix_pi = fix_t::from_float(-M_PI);                                  \
-   unfix_pi = float(fix_pi);                                           \
+   fix_pi = fix_t::from_float(-M_PI);                                   \
+   unfix_pi = float(fix_pi);                                            \
                                                                         \
    snprintf(buff1, 32, "% 05.10lf", unfix_pi);                          \
    buff1[pi_precis+3] = 0;                                              \
