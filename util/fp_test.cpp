@@ -20,8 +20,10 @@ int main() {
  // B:       19901  1.21466 
  // C:        3517  0.21466
 
- printf("pi:   % 8d % 05.5lf \n", s17q14::PI.value,         double(s17q14::PI));
- printf("dec:  % 8d % 05.5lf \n", s17q14::PI - s17q14(3,0), double(s17q14::PI - s17q14(3,0)));
- printf("pi+1: % 8d % 05.5lf \n", s17q14::PI.value + 1,     double(s17q14::PI + 1));
- printf("pi-1: % 8d % 05.5lf \n", s17q14::PI.value - 1,     double(s17q14::PI - 1));
+ // 3.14159265359
+ 
+ printf("pi:   % 8d % 010.10lf \n", s17q14::PI.value,         float(s17q14::PI));
+ printf("dec:  % 8d % 010.10lf \n", s17q14::PI - s17q14(3,0), float(s17q14::PI - s17q14(3,0)));
+ printf("pi+1: % 8d % 010.10lf \n", s17q14::PI.value + 1,     float(s17q14::PI + 1));
+ printf("pi-1: % 8d % 010.10lf \n", s17q14::PI.value - 1,     float(s17q14::PI - 1));
 }
