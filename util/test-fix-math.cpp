@@ -86,19 +86,19 @@ bool compare_floats(float x, float y, uint8_t precis) {
 
 #define TEST_CONVERSIONS(x, y, z0, z1, fprecis)                         \
  {                                                                      \
-  fix_t a(fix_t::from_double(x));                                       \
+  fix_t a(fix_t::from_float(x));                                       \
   fix_t b(y);                                                           \
   fix_t c(z0, z1);                                                      \
                                                                         \
-  TEST_FLEQ("lf", x, double(a), fprecis);                               \
-  TEST_FLEQ("lf", x, double(b), fprecis);                               \
-  TEST_FLEQ("lf", x, double(c), fprecis);                               \
+  TEST_FLEQ("lf", x, float(a), fprecis);                               \
+  TEST_FLEQ("lf", x, float(b), fprecis);                               \
+  TEST_FLEQ("lf", x, float(c), fprecis);                               \
  }
 
 #define TEST_PI(fmt, pi_precis)                                         \
  {                                                                      \
-  fix_t fix_pi = fix_t::from_double(M_PI);                              \
-  float unfix_pi = double(fix_pi);                                      \
+  fix_t fix_pi = fix_t::from_float(M_PI);                              \
+  float unfix_pi = float(fix_pi);                                      \
                                                                         \
   char buff0[32];                                                       \
   char buff1[32];                                                       \
@@ -118,8 +118,8 @@ bool compare_floats(float x, float y, uint8_t precis) {
    buff0[pi_precis+3] = 0;                                              \
    printf("1.5M_PI    : %s\n", buff0);                                  \
                                                                         \
-   fix_pi = fix_t::from_double(1.5*M_PI);                               \
-   unfix_pi = double(fix_pi);                                           \
+   fix_pi = fix_t::from_float(1.5*M_PI);                               \
+   unfix_pi = float(fix_pi);                                           \
                                                                         \
    snprintf(buff1, 32, "% 05.10lf", unfix_pi);                          \
    buff1[pi_precis+3] = 0;                                              \
@@ -133,8 +133,8 @@ bool compare_floats(float x, float y, uint8_t precis) {
    buff0[pi_precis+3] = 0;                                              \
    printf("2M_PI      : %s\n", buff0);                                  \
                                                                         \
-   fix_pi = fix_t::from_double(2*M_PI);                                 \
-   unfix_pi = double(fix_pi);                                           \
+   fix_pi = fix_t::from_float(2*M_PI);                                 \
+   unfix_pi = float(fix_pi);                                           \
                                                                         \
    snprintf(buff1, 32, "% 05.10lf", unfix_pi);                          \
    buff1[pi_precis+3] = 0;                                              \
@@ -148,8 +148,8 @@ bool compare_floats(float x, float y, uint8_t precis) {
    buff0[pi_precis+3] = 0;                                              \
    printf("-M_PI      : %s\n", buff0);                                  \
                                                                         \
-   fix_pi = fix_t::from_double(-M_PI);                                  \
-   unfix_pi = double(fix_pi);                                           \
+   fix_pi = fix_t::from_float(-M_PI);                                  \
+   unfix_pi = float(fix_pi);                                           \
                                                                         \
    snprintf(buff1, 32, "% 05.10lf", unfix_pi);                          \
    buff1[pi_precis+3] = 0;                                              \
@@ -262,63 +262,63 @@ int main() {
  printf("\n\nTOTAL PASSED: %u / %u \n\n", successes, successes + errors);
 
  {
-  u0q8  x0(0, 128);       printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x0), x0.value,  u0q8::ONE);
-  u0q16 x1 = u0q16(x0);   printf("u0q16:  % 05.05lf % 12u % 12llu % 12llu \n", double(x1), x1.value, u0q16::ONE);
-  u0q32 x2 = u0q32(x1);   printf("u0q32:  % 05.05lf % 12u % 12llu % 12llu \n", double(x2), x2.value, u0q32::ONE);
-  u0q16 x3 = u0q16(x2);   printf("u0q16:  % 05.05lf % 12u % 12llu % 12llu \n", double(x3), x3.value, u0q16::ONE);
-  u0q8  x4 = u0q8(x3);    printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x4), x4.value,  u0q8::ONE);
+  u0q8  x0(0, 128);       printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", float(x0), x0.value,  u0q8::ONE);
+  u0q16 x1 = u0q16(x0);   printf("u0q16:  % 05.05lf % 12u % 12llu % 12llu \n", float(x1), x1.value, u0q16::ONE);
+  u0q32 x2 = u0q32(x1);   printf("u0q32:  % 05.05lf % 12u % 12llu % 12llu \n", float(x2), x2.value, u0q32::ONE);
+  u0q16 x3 = u0q16(x2);   printf("u0q16:  % 05.05lf % 12u % 12llu % 12llu \n", float(x3), x3.value, u0q16::ONE);
+  u0q8  x4 = u0q8(x3);    printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", float(x4), x4.value,  u0q8::ONE);
 
   printf("\n");
  }
  {
-  u0q8  x0(0, 128);       printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x0), x0.value,  u0q8::ONE);
-  s7q8  x1 = s7q8(x0);    printf("s7q8:   % 05.05lf % 12d  % 12lld \n",        double(x1), x1.value,  s7q8::ONE);
-  x1.value   = -128;        printf("s7q8:   % 05.05lf % 12d  % 12lld \n",        double(x1), x1.value,  s7q8::ONE);  
-  u0q8  x2 = u0q8(x1);    printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x2), x2.value,  u0q8::ONE);
+  u0q8  x0(0, 128);       printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", float(x0), x0.value,  u0q8::ONE);
+  s7q8  x1 = s7q8(x0);    printf("s7q8:   % 05.05lf % 12d  % 12lld \n",        float(x1), x1.value,  s7q8::ONE);
+  x1.value = -128;        printf("s7q8:   % 05.05lf % 12d  % 12lld \n",        float(x1), x1.value,  s7q8::ONE);  
+  u0q8  x2 = u0q8(x1);    printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", float(x2), x2.value,  u0q8::ONE);
 
   printf("\n");
  } 
  {
-  u0q8   x0(0, 128);      printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x0), x0.value,  u0q8::ONE);
-  u8q8   x1 = u8q8(x0);   printf("u8q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x1), x1.value,  u8q8::ONE);
-  u16q16 x2 = u16q16(x1); printf("u16q16: % 05.05lf % 12u % 12llu % 12llu \n", double(x2), x2.value,u16q16::ONE);
-  u24q8  x3 = u24q8(x2);  printf("u24q8:  % 05.05lf % 12u % 12llu % 12llu \n", double(x3), x3.value, u0q32::ONE);
-  u16q16 x4 = u16q16(x3); printf("u16q16: % 05.05lf % 12u % 12llu % 12llu \n", double(x4), x4.value,u16q16::ONE);
-  u8q8   x5 = u8q8(x4);   printf("u8q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x5), x5.value,  u8q8::ONE);
-  u0q8   x6 = u0q8(x5);   printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x6), x6.value,  u0q8::ONE);
+  u0q8   x0(0, 128);      printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", float(x0), x0.value,  u0q8::ONE);
+  u8q8   x1 = u8q8(x0);   printf("u8q8:   % 05.05lf % 12u % 12llu % 12llu \n", float(x1), x1.value,  u8q8::ONE);
+  u16q16 x2 = u16q16(x1); printf("u16q16: % 05.05lf % 12u % 12llu % 12llu \n", float(x2), x2.value,u16q16::ONE);
+  u24q8  x3 = u24q8(x2);  printf("u24q8:  % 05.05lf % 12u % 12llu % 12llu \n", float(x3), x3.value, u0q32::ONE);
+  u16q16 x4 = u16q16(x3); printf("u16q16: % 05.05lf % 12u % 12llu % 12llu \n", float(x4), x4.value,u16q16::ONE);
+  u8q8   x5 = u8q8(x4);   printf("u8q8:   % 05.05lf % 12u % 12llu % 12llu \n", float(x5), x5.value,  u8q8::ONE);
+  u0q8   x6 = u0q8(x5);   printf("u0q8:   % 05.05lf % 12u % 12llu % 12llu \n", float(x6), x6.value,  u0q8::ONE);
 
   printf("\n");
  }
  {
-  u8q8   x0(1, 0);         printf("u8q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x0), x0.value,    u8q8::ONE);
-  u16q16 x1 = u16q16(x0);  printf("u16q16: % 05.05lf % 12u % 12llu % 12llu \n", double(x1), x1.value,  u16q16::ONE);
-  u8q8   x2 = u8q8(x1);    printf("u8q8:   % 05.05lf % 12u % 12llu % 12llu \n", double(x2), x2.value,    u8q8::ONE);
+  u8q8   x0(1, 0);         printf("u8q8:   % 05.05lf % 12u % 12llu % 12llu \n", float(x0), x0.value,    u8q8::ONE);
+  u16q16 x1 = u16q16(x0);  printf("u16q16: % 05.05lf % 12u % 12llu % 12llu \n", float(x1), x1.value,  u16q16::ONE);
+  u8q8   x2 = u8q8(x1);    printf("u8q8:   % 05.05lf % 12u % 12llu % 12llu \n", float(x2), x2.value,    u8q8::ONE);
 
   printf("\n");
  }
  {
-  s0q7  x0(0, 128u);        printf("s0q7:   % 05.05lf % 12d  % 12lld \n", double(x0), x0.value,   s0q7::ONE);
-  s0q15 x1 = s0q15(x0);    printf("s0q15:  % 05.05lf % 12d  % 12lld \n", double(x1), x1.value,  s0q15::ONE);
-  s0q31 x2 = s0q31(x1);    printf("s0q31:  % 05.05lf % 12d  % 12lld \n", double(x2), x2.value,  s0q31::ONE);
-  s0q15 x3 = s0q15(x2);    printf("s0q15:  % 05.05lf % 12d  % 12lld \n", double(x3), x3.value,  s0q15::ONE);
-  s0q7  x4 = s0q7(x3);     printf("s0q7:   % 05.05lf % 12d  % 12lld \n", double(x4), x4.value,   s0q7::ONE);
+  s0q7  x0(0, 128u);        printf("s0q7:   % 05.05lf % 12d  % 12lld \n", float(x0), x0.value,   s0q7::ONE);
+  s0q15 x1 = s0q15(x0);    printf("s0q15:  % 05.05lf % 12d  % 12lld \n",  float(x1), x1.value,  s0q15::ONE);
+  s0q31 x2 = s0q31(x1);    printf("s0q31:  % 05.05lf % 12d  % 12lld \n",  float(x2), x2.value,  s0q31::ONE);
+  s0q15 x3 = s0q15(x2);    printf("s0q15:  % 05.05lf % 12d  % 12lld \n",  float(x3), x3.value,  s0q15::ONE);
+  s0q7  x4 = s0q7(x3);     printf("s0q7:   % 05.05lf % 12d  % 12lld \n",  float(x4), x4.value,   s0q7::ONE);
 
   printf("\n");
  }
  {
-  s7q8   x0(1, 0);         printf("s7q8:   % 05.05lf % 12d  % 12lld \n", double(x0), x0.value,   s7q8::ONE);
-  s15q16 x1 = s15q16(x0);  printf("s15q16: % 05.05lf % 12d  % 12lld \n", double(x1), x1.value, s15q16::ONE);
-  s7q8   x2 = s7q8(x1);    printf("s7q8:   % 05.05lf % 12d  % 12lld \n", double(x2), x2.value,   s7q8::ONE);
+  s7q8   x0(1, 0);         printf("s7q8:   % 05.05lf % 12d  % 12lld \n", float(x0), x0.value,   s7q8::ONE);
+  s15q16 x1 = s15q16(x0);  printf("s15q16: % 05.05lf % 12d  % 12lld \n", float(x1), x1.value, s15q16::ONE);
+  s7q8   x2 = s7q8(x1);    printf("s7q8:   % 05.05lf % 12d  % 12lld \n", float(x2), x2.value,   s7q8::ONE);
 
   printf("\n");
  }
 
  {
-  s7q24s x(s7q24s::from_double(0.666));    printf("X: % 12ld % 12.10lf \n", x.value, double(x));
-  s0q15s y(x);                             printf("Y: % 12ld % 12.10lf \n", y.value, double(y));
+  s7q24 x(s7q24::from_float(0.666));      printf("X: % 12ld % 12.10lf \n", x.value, float(x));
+  s0q15 y(x);                             printf("Y: % 12ld % 12.10lf \n", y.value, float(y));
  }
  {
-  s7q24s x(s7q24s::from_double(-0.40));    printf("X: % 12ld % 12.10lf \n", x.value, double(x));
-  s0q15s y(x);                             printf("Y: % 12d % 12.10lf \n", y.value, double(y));
+  s7q24 x(s7q24::from_float(-0.40));      printf("X: % 12ld % 12.10lf \n", x.value, float(x));
+  s0q15 y(x);                             printf("Y: % 12d % 12.10lf \n", y.value, float(y));
  }
 }
