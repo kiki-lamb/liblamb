@@ -89,28 +89,20 @@ namespace lamb {
    constexpr bool    FROM_SIGNED   = SIGNED && ! other_type::SIGNED;
    constexpr int8_t  FRAC_DELTA    = FRAC - frac;
 
+   other_type ret(0);
+   
    if constexpr(FRAC_DELTA >= 0) {
-    other_type ret(value >> FRAC_DELTA);
-
-    // printf("After2: %lu  \n", ret.value);
-
-    if constexpr(pad != 0) {
-     ret.val &= other_type::DATA_MASK;
-    }
-
-    return ret;
+    ret.value  = value >> FRAC_DELTA;
    }
    else if constexpr(FRAC_DELTA <= 0) {
-    other_type ret(value << -FRAC_DELTA);
-
-    // printf("After2: %lu  \n", ret.value);
-
-    if constexpr(pad != 0) {
-     ret.val &= other_type::DATA_MASK;
-    }
-    
-    return ret;
+    ret.value  = value << -FRAC_DELTA;
    }
+
+   if constexpr(pad != 0) {
+    ret.value &= other_type::DATA_MASK;
+   }
+   
+   return ret;
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
