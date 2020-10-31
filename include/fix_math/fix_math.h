@@ -71,7 +71,7 @@ public:
   static constexpr big_value_type TRUE_ONE    = ((big_value_type)1) << FRAC;
   static constexpr q              MAX         = q(traits::MAX);
   static constexpr q              MIN         = q(traits::MIN);
-  static constexpr value_type     MASK        = (((big_value_type)1) << FRAC << WHOLE) - 1;
+  static constexpr value_type     MASK        = (((big_value_type)1) << FRAC << WHOLE << PAD) - 1;
   static constexpr value_type     DATA_MASK   = (((big_value_type)1) << FRAC << WHOLE) - 1;
   static constexpr value_type     FRAC_MASK   = TRUE_ONE - 1;
   static constexpr value_type     WHOLE_MASK  = DATA_MASK ^ FRAC_MASK;
@@ -168,7 +168,7 @@ public:
  
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  
- static constexpr q       PI          = WHOLE >= 2 ? from_float(M_PI) : q(0);
+ static constexpr q PI = WHOLE >= 2 ? from_float(M_PI) : q(0);
  
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  
@@ -221,9 +221,9 @@ public:
     "Signedness mismatch!"
    );
 
-   big_value_type big_tmp          = value;
-   big_tmp                       <<= other_frac;
-   big_tmp                        /= other.value;
+   big_value_type big_tmp   = value;
+   big_tmp                <<= other_frac;
+   big_tmp                 /= other.value;
    
    return q((value_type)big_tmp);
   }
