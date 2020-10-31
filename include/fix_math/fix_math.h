@@ -174,45 +174,21 @@ public:
     "Signedness mismatch!"
    );
 
-   if constexpr(other_type::DATA_SIZE > PAD) {
+//   if constexpr(other_type::DATA_SIZE > PAD) {
     big_value_type big_tmp   = value;
     big_tmp                 *= other.value;
     big_tmp                >>= other_frac;
     
     return q((value_type)big_tmp);
-   } else {
-   printf("Mul %u by %u. \n", value, other.value);
-    
-    value_type ret  = value;    
-    ret            *= other.value;
-    ret           >>= other_frac;
-    
-    return q(ret & MASK); 
-   }
-
-
-   
-   // constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
-      
-   // typedef typename
-   //  find_integer<SIGNED, INTERMED_SIZE>::type
-   //  intermediary_type;
-
-
-   // if (false) {
-//   //  printf(
-   //   "MUL % 13.05lf * % 13.05lf = % 13.05lf \n",
-   //   float(*this),
-   //   float(other),
-   //   float(q(small_tmp))
-   //  );
-//   //  printf(
-   //   "MUL % 13lu * % 13lu = % 13lu \n",
-   //   value,
-   //   other.value,
-   //   small_tmp
-   //  );   
-   // }
+//   } else {
+//   printf("Mul %u by %u. \n", value, other.value);
+//    
+//    value_type ret  = value;    
+//    ret            *= other.value;
+//    ret           >>= other_frac;
+//    
+//    return q(ret & MASK); 
+//   }
   }
 
    /////////////////////////////////////////////////////////////////////////////////////////
