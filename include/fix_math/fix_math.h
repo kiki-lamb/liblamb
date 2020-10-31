@@ -308,9 +308,6 @@ public:
  constexpr bool operator   > (value_type const & o) const { return                        (value  > o      ); }
  constexpr bool operator  == (value_type const & o) const { return                        (value == o      ); }
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
- constexpr q &  operator  -- (                    )       { this        -= 1;                   return *this; }
- constexpr q &  operator  ++ (                    )       { this        += 1;                   return *this; }
- //------------------------------------------------------------------------------------------------------------
  constexpr q &  operator >>= (uint8_t    const & v)       { this->value  = (*this >> v ).value; return *this; }
  constexpr q &  operator <<= (uint8_t    const & v)       { this->value  = (*this << v ).value; return *this; }
  //------------------------------------------------------------------------------------------------------------
@@ -323,6 +320,9 @@ public:
  constexpr q &  operator  += (value_type const & v)       { this->value  = (*this  + v ).value; return *this; }
  constexpr q &  operator  *= (value_type const & v)       { this->value  = (*this  * v ).value; return *this; }
  constexpr q &  operator  /= (value_type const & v)       { this->value  = (*this  / v ).value; return *this; }
+ //------------------------------------------------------------------------------------------------------------
+ constexpr q &  operator  -- (                    )       { this        -= 1;                   return *this; }
+ constexpr q &  operator  ++ (                    )       { this        += 1;                   return *this; }
  //------------------------------------------------------------------------------------------------------------
  constexpr bool operator  <= (q          const & o) const { return         (*this     == o ) || (*this < o) ; }
  constexpr bool operator  >= (q          const & o) const { return         (*this     == o ) || (*this > o) ; }
