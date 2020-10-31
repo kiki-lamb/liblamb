@@ -161,43 +161,21 @@ public:
   }  
  
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- 
- template <uint8_t other_whole, uint8_t other_frac>
- constexpr
-  q scaled_add (
-   q<other_whole, other_frac> const & other
-  ) const {
-  q tmp(other);
-  
-  return (*this) + tmp;
- }
 
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
- template <uint8_t other_whole, uint8_t other_frac>
  constexpr
   q operator * (
-   q<other_whole, other_frac> const & other
+   q const & other
   ) const {
 
-   typedef
-    q<other_whole, other_frac>
-    other_type;
-
-   constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
+  constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE << 1);
       
    typedef typename
     find_integer<SIGNED, INTERMED_SIZE>::type
     intermediary_type;
 
-   static_assert(
-    ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
-    "Signedness mismatch!"
-   );
-
    intermediary_type big_tmp     = value;
    big_tmp                      *= other.value;
-   big_tmp                     >>= other_frac;
+   big_tmp                     >>= FRAC;
 
    // if (false) {
    //  printf(
@@ -219,30 +197,19 @@ public:
 
    /////////////////////////////////////////////////////////////////////////////////////////
   
-  template <uint8_t other_whole, uint8_t other_frac>
   constexpr
-  q
-  operator / (
-   q<other_whole, other_frac> const & other
+  q operator / (
+   q const & other
   ) const {
 
-   typedef
-    q<other_whole, other_frac>
-    other_type;
-    
-   constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE+other_type::SIZE);
+   constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE << 1);
       
    typedef typename
     find_integer<SIGNED, INTERMED_SIZE>::type
     intermediary_type;
 
-   static_assert(
-    ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
-    "Signedness mismatch!"
-   );
-
    intermediary_type big_tmp   = value;
-   big_tmp                   <<= other_frac;
+   big_tmp                   <<= FRAC;
    big_tmp                    /= other.value;
    value_type small_tmp        = big_tmp;
    
