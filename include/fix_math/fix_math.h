@@ -39,7 +39,7 @@ public:
  //---------------------------------------------------------------------------------------------------------------------
 
  typedef find_integer<SIGNED, BIG_SIZE> big_traits;
- typedef typename traits::type          big_value_type;
+ typedef typename big_traits::type      big_value_type;
 
  //---------------------------------------------------------------------------------------------------------------------
 
@@ -167,16 +167,10 @@ public:
    q const & other
   ) const {
 
-  constexpr uint8_t INTERMED_SIZE = size_fit_bytes(SIZE << 1);
-      
-   typedef typename
-    find_integer<SIGNED, INTERMED_SIZE>::type
-    intermediary_type;
-
-   intermediary_type big_tmp     = value;
-   big_tmp                      *= other.value;
-   big_tmp                     >>= FRAC;
-
+  big_value_type big_tmp = value;
+  big_tmp               *= other.value;
+  big_tmp              >>= FRAC;
+  
    // if (false) {
    //  printf(
    //   "MUL % 13.05lf * % 13.05lf = % 13.05lf \n",
@@ -400,8 +394,8 @@ public:
  typedef fixed<  5, 26 > s5q26;
  typedef fixed<  6, 26 > u6q26;
  //---------------------------------------------------------------------------------------
- typedef fixed<  7, 25 > s7q25;
- typedef fixed<  8, 25 > u8q25;
+ typedef fixed<  6, 25 > s6q25;
+ typedef fixed<  7, 25 > u7q25;
  //---------------------------------------------------------------------------------------
  typedef fixed<  7, 24 > s7q24;
  typedef fixed<  8, 24 > u8q24;
@@ -459,8 +453,8 @@ public:
  constexpr s5q26    operator ""_s5q26(long double x)   { return s5q26::from_float(x); }
  constexpr u6q26    operator ""_u6q26(long double x)   { return u6q26::from_float(x); }
  //---------------------------------------------------------------------------------------
- constexpr s7q25    operator ""_s7q25(long double x)   { return s7q25::from_float(x); }
- constexpr u8q25    operator ""_u8q25(long double x)   { return u8q25::from_float(x); }
+ constexpr s6q25    operator ""_s6q25(long double x)   { return s6q25::from_float(x); }
+ constexpr u7q25    operator ""_u7q25(long double x)   { return u7q25::from_float(x); }
  //---------------------------------------------------------------------------------------
  constexpr s7q24    operator ""_s7q24(long double x)   { return s7q24::from_float(x); }
  constexpr u8q24    operator ""_u8q24(long double x)   { return u8q24::from_float(x); }
