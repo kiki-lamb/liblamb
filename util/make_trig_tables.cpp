@@ -19,15 +19,22 @@ using namespace lamb;
 
 //----------------------------------------------------------------------------------------
 
-// make_tanh_table<s0q15>(512);
+// make_trig_table<s0q15>(512);
 
 template <typename table_t>
-void make_tanh_table(const char * type_label, const char * func_label, size_t const & count) {
+void make_trig_table(
+ size_t const & count,
+ const char * type_label,
+ const char * func_label,
+ double (*func) (double)
+) {
  typedef q<0, table_t::WHOLE + 2, table_t::FRAC - 2> index_t;
 
  char fname[64];
  snprintf(fname, 64, "kl_%lu_%s_%s.h", count, type_label, func_label);
  FILE *fp = fopen(fname, "w");
+
+ printf("#include \"%s\" \n", fname);
  
  index_t  index = index_t::MIN;
  uint32_t lines = 0;
@@ -40,7 +47,7 @@ void make_tanh_table(const char * type_label, const char * func_label, size_t co
   ix++, lines++
  ) {
 
-  float tmp  = tanh((float)index);
+  float tmp  = func((float)index);
   
   table_t qtmp = table_t::from_float(tmp);
   table_t table[count];
@@ -49,7 +56,7 @@ void make_tanh_table(const char * type_label, const char * func_label, size_t co
   
   index += (((uint32_t)UINT16_MAX) + 1) / count;
  }
-  
+ 
  fprintf(fp, "#ifndef KL_%u_%s_%s_h \n", count, type_label, func_label);
  fprintf(fp, "#define KL_%u_%s_%s_h \n\n", count, type_label, func_label);
  fprintf(fp, "#define KL_%u_%s_%s_h_cells % \n\n", count, type_label, func_label, count);
@@ -92,7 +99,35 @@ void make_tanh_table(const char * type_label, const char * func_label, size_t co
  
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
+template <typename table_t>
+void make_trig_tables(
+ const char * type_label
+) {
+ const size_t sizes[] = { 256, 512, 1024, 2048, 4096 };
+ 
+ for (
+  size_t ix = 0;
+  ix < 4;
+  ix++
+ ) {
+  make_trig_table<table_t>(sizes[ix], type_label, "acos",   acos);
+  make_trig_table<table_t>(sizes[ix], type_label, "acosh",  acosh);
+  make_trig_table<table_t>(sizes[ix], type_label, "atan",   atan);
+  make_trig_table<table_t>(sizes[ix], type_label, "cos",    cos);
+  make_trig_table<table_t>(sizes[ix], type_label, "tan",    tan);
+  make_trig_table<table_t>(sizes[ix], type_label, "cosh",   cosh);
+  make_trig_table<table_t>(sizes[ix], type_label, "sinh",   sinh);
+  make_trig_table<table_t>(sizes[ix], type_label, "tanh",   tanh);
+  make_trig_table<table_t>(sizes[ix], type_label, "atanh",  atanh);        
+ }
+}
+
+////////////////////////////////////////////////////////////////////////////////
 
 int main() {
- make_tanh_table<s0q15>("s0q15", "tanh", 512);
+ make_trig_tables<s0q7> ("s0q7");
+ make_trig_tables<s0q15>("s0q15");
+ make_trig_tables<s0q31>("s0q31");
 }
