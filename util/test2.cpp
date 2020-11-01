@@ -34,9 +34,19 @@ int main() {
   ix++, lines++
  ) {
 
-  float tmp = tanh((float)index);
+  float tmp  = tanh((float)index);
   
-  printf("%u, %d, % 10.5lf, % 10.5lf  \n", lines, (int16_t)index, float(index), tmp);
+  s1q14 qtmp = s1q14::from_float(tmp);
+                                 
+  printf(
+   "% 8u, % 8d, % 10.5lf, % 10.5lf, % 8u, % 10.5lf  \n",
+   lines,
+   int16_t(index),
+   float  (index),
+   tmp,
+   int16_t(qtmp),
+   float  (qtmp)
+  );
 
   index += (((uint32_t)UINT16_MAX) + 1) / 512;
  }
