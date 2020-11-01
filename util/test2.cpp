@@ -61,7 +61,7 @@ int main() {
  printf("#ifdef __AVR__ \n");
  printf("PROGMEM \n");
  printf("#endif \n");
- printf(" = { \n");
+ printf("= { \n ");
 
  for (
   uint32_t ix = 0;
@@ -69,8 +69,8 @@ int main() {
   ix++
  ) {
 
-  char buff[16];
-  snprintf(buff, 16, "s0q15(%d), ", out_table[ix].value);
+  char buff[32];
+  snprintf(buff, 32, "s0q15(%6d), ", out_table[ix].value);
    
   printf("%-16s", buff);
 
