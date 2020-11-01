@@ -127,7 +127,7 @@ void make_trig_tables(
 ////////////////////////////////////////////////////////////////////////////////
 
 int main() {
- make_trig_tables<s0q7> ("s0q7");
+// make_trig_tables<s0q7> ("s0q7");
  make_trig_tables<s0q15>("s0q15");
- make_trig_tables<s0q31>("s0q31");
+// make_trig_tables<s0q31>("s0q31");
 }
