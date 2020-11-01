@@ -28,6 +28,8 @@ int main() {
 
  printf("%d, % 10.5lf  \n", (int16_t)index, float(index));
 
+ s1q14 out_table[512];
+ 
  for (
   uint32_t ix = 0;
   ix < 512;
