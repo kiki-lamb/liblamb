@@ -18,28 +18,27 @@ using namespace lamb;
 
 int main() {
  typedef s2q13 index_t;
- index_t index = index_t::MIN;
-
- uint32_t lines = 0;
+ typedef s0q15 table_t;
  
-// double last    = 0.0;
-// double lim     = 4.0;
-// double incr    = 4.0 / 512.0;
+ index_t index  = index_t::MIN;
+ size_t count   = 512;
+ uint32_t lines = 0;
 
  printf("%d, % 10.5lf  \n", (int16_t)index, float(index));
 
- s1q14 out_table[512];
+ s0q15 out_table[count];
  
  for (
   uint32_t ix = 0;
-  ix < 512;
+  ix < count;
   ix++, lines++
  ) {
 
   float tmp  = tanh((float)index);
   
-  s1q14 qtmp = s1q14::from_float(tmp);
-                                 
+  s0q15 qtmp = s0q15::from_float(tmp);
+  s0q15 table[count];
+  
   printf(
    "% 8u, % 8d, % 10.5lf, % 10.5lf, % 8u, % 10.5lf  \n",
    lines,
@@ -50,22 +49,37 @@ int main() {
    float  (qtmp)
   );
 
-  index += (((uint32_t)UINT16_MAX) + 1) / 512;
- }
- 
- // for (
- //  double ix = -lim;
- //  ix < lim;
- //  ix+= incr,
- //  lines++
- // ) {
- //  double next = tanh(ix);
+  out_table[ix] = qtmp;
   
- //  printf("% 10.5lf, % 10.5lf, % 10.5lf \n", lines, ix, next, next - last);
+  index += (((uint32_t)UINT16_MAX) + 1) / count;
+ }
+  
+ printf("%lu lines.\n\n", lines);
 
- //  last = next;
- // }
+ printf("const size_t length = %d; \n", count);
+ printf("const s0q15  data[] \n");
+ printf("#ifdef __AVR__ \n");
+ printf("PROGMEM \n");
+ printf("#endif \n");
+ printf(" = { \n");
+
+ for (
+  uint32_t ix = 0;
+  ix < count;
+  ix++
+ ) {
+
+  char buff[16];
+  snprintf(buff, 16, "s0q15(%d), ", out_table[ix].value);
+   
+  printf("%-16s", buff);
+
+  if (((ix + 1) % 8) == 0)
+   printf("\n ");
+  fflush(stdout);
+ }
+
+ printf("\b};\n");
  
- printf("%lu lines.\n", lines);
 }
 
