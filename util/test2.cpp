@@ -22,14 +22,15 @@ using namespace lamb;
 // make_tanh_table<s0q15>(512);
 
 template <typename table_t>
-void make_tanh_table(const char * type_label, const char * func_label, size_t const & count, bool const & noisy = false) {
+void make_tanh_table(const char * type_label, const char * func_label, size_t const & count) {
  typedef q<0, table_t::WHOLE + 2, table_t::FRAC - 2> index_t;
-  
+
+ char fname[64];
+ snprintf(fname, 64, "kl_%lu_%s_%s.h", count, type_label, func_label);
+ FILE *fp = fopen(fname, "w");
+ 
  index_t  index = index_t::MIN;
  uint32_t lines = 0;
-
- if (noisy)
-  printf("%d, % 10.5lf  \n", (typename index_t::value_type)index, float(index));
 
  s0q15 out_table[count];
 
@@ -44,39 +45,24 @@ void make_tanh_table(const char * type_label, const char * func_label, size_t co
   table_t qtmp = table_t::from_float(tmp);
   table_t table[count];
 
-  if (noisy) {
-   printf(
-    "% 8u, % 8d, % 10.5lf, % 10.5lf, % 8u, % 10.5lf  \n",
-    lines,
-    int16_t(index),
-    float  (index),
-    tmp,
-    int16_t(qtmp),
-    float  (qtmp)
-   );
-  }
-  
   out_table[ix] = qtmp;
   
   index += (((uint32_t)UINT16_MAX) + 1) / count;
  }
   
- if (noisy) 
-  printf("%lu lines.\n\n", lines);
-
- printf("#ifndef KL_%u_%s_%s_h \n", count, type_label, func_label);
- printf("#define KL_%u_%s_%s_h \n\n", count, type_label, func_label);
- printf("#define KL_%u_%s_%s_h_cells % \n\n", count, type_label, func_label, count);
- printf("namespace lamb {\n");
- printf(" namespace tables {\n");
- printf("  namespace %s%d_%s {\n", func_label, count, type_label);
- printf("   typedef %s q_t; \n", type_label);
- printf("   const size_t length = %d; \n", count);
- printf("   const q_t  data[] \n");
- printf("#ifdef __AVR__ \n");
- printf("   PROGMEM \n");
- printf("#endif \n");
- printf("   = { \n    ");
+ fprintf(fp, "#ifndef KL_%u_%s_%s_h \n", count, type_label, func_label);
+ fprintf(fp, "#define KL_%u_%s_%s_h \n\n", count, type_label, func_label);
+ fprintf(fp, "#define KL_%u_%s_%s_h_cells % \n\n", count, type_label, func_label, count);
+ fprintf(fp, "namespace lamb {\n");
+ fprintf(fp, " namespace tables {\n");
+ fprintf(fp, "  namespace %s%d_%s {\n", func_label, count, type_label);
+ fprintf(fp, "   typedef %s q_t; \n", type_label);
+ fprintf(fp, "   const size_t length = %d; \n", count);
+ fprintf(fp, "   const q_t  data[] \n");
+ fprintf(fp, "#ifdef __AVR__ \n");
+ fprintf(fp, "   PROGMEM \n");
+ fprintf(fp, "#endif \n");
+ fprintf(fp, "   = { \n    ");
 
  for (
   uint32_t ix = 0;
@@ -87,24 +73,26 @@ void make_tanh_table(const char * type_label, const char * func_label, size_t co
   char buff[32];
   snprintf(buff, 32, "q_t(%6d), ", out_table[ix].value);
    
-  printf("%-12s", buff);
+  fprintf(fp, "%-12s", buff);
 
   if (((ix + 1) % 4) == 0)
-   printf(" // %u \n    ", ix - 3);
+   fprintf(fp, " // %u \n    ", ix - 3);
   
   fflush(stdout);
  }
 
- printf("}; \n");
- printf("  } \n");
- printf(" } \n");
- printf("} \n");
- printf("\n");
- printf("#endif");
+ fprintf(fp, "}; \n");
+ fprintf(fp, "  } \n");
+ fprintf(fp, " } \n");
+ fprintf(fp, "} \n");
+ fprintf(fp, "\n");
+ fprintf(fp, "#endif");
 
+ fclose(fp);
+ 
 }
 
 
 int main() {
- make_tanh_table<s0q15>("s0q14", "tanh", 512);
+ make_tanh_table<s0q15>("s0q15", "tanh", 512);
 }
