@@ -59,12 +59,12 @@ namespace lamb {
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  explicit constexpr
+  explicit inline constexpr
   q(value_type const & v) : value(v) {}
 
   //---------------------------------------------------------------------------------------------------------------------
  
-  explicit constexpr
+  explicit inline constexpr
   q(value_type const & whole, value_type const & frac) :
    value(value_type(ONE.value * whole + (whole < 0 ? - frac : frac))) {}
  
@@ -81,7 +81,7 @@ namespace lamb {
   /////////////////////////////////////////////////////////////////////////////////////////
     
   template <uint8_t whole, uint8_t frac>
-  constexpr 
+  inline constexpr 
   operator q<PAD, whole, frac>() const {
 
    typedef q<PAD, whole, frac> other_type;
