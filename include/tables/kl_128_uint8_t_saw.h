@@ -4,7 +4,7 @@
 #define KL_128_uint8_t_saw_cells 128
 
 namespace lamb {
-  namespace Tables {
+  namespace tables {
     namespace saw128_uint8_t {
       typedef uint8_t value_type;
       const   size_t length = 128;

@@ -4,7 +4,7 @@
 #define KL_512_int16_t_saw_cells 512
 
 namespace lamb {
-  namespace Tables {
+  namespace tables {
     namespace saw512_int16_t {
       typedef int16_t value_type;
       const   size_t length = 512;

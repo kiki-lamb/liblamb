@@ -4,7 +4,7 @@
 #define KL_1024_uint8_t_saw_cells 1024
 
 namespace lamb {
-  namespace Tables {
+  namespace tables {
     namespace saw1024_uint8_t {
       typedef uint8_t value_type;
       const   size_t length = 1024;

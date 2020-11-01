@@ -4,7 +4,7 @@
 #define KL_4096_int16_t_silence_cells 4096
 
 namespace lamb {
-  namespace Tables {
+  namespace tables {
     namespace silence4096_int16_t {
       typedef int16_t value_type;
       const   size_t length = 4096;

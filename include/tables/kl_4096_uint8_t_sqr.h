@@ -4,7 +4,7 @@
 #define KL_4096_uint8_t_sqr_cells 4096
 
 namespace lamb {
-  namespace Tables {
+  namespace tables {
     namespace sqr4096_uint8_t {
       typedef uint8_t value_type;
       const   size_t length = 4096;

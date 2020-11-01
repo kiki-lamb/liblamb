@@ -4,7 +4,7 @@
 #define KL_2048_uint12_t_tri_cells 2048
 
 namespace lamb {
-  namespace Tables {
+  namespace tables {
     namespace tri2048_uint12_t {
       typedef uint16_t value_type;
       const   size_t length = 2048;

@@ -189,9 +189,10 @@
 #include "kl_256_uint8_t_qsin.h"
 #include "kl_256_uint16_t_qsin.h"
 #include "kl_256_uint12_t_qsin.h"
+#include "kl_512_s0q15_tanh.h"
 
 namespace lamb {
-  namespace Tables {
+  namespace tables {
     inline size_t generate_phase_increment(
       size_t clock_hz,
       double freq,

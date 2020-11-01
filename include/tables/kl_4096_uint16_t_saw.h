@@ -4,7 +4,7 @@
 #define KL_4096_uint16_t_saw_cells 4096
 
 namespace lamb {
-  namespace Tables {
+  namespace tables {
     namespace saw4096_uint16_t {
       typedef uint16_t value_type;
       const   size_t length = 4096;

@@ -4,7 +4,7 @@
 #define KL_512_uint8_t_sqr_cells 512
 
 namespace lamb {
-  namespace Tables {
+  namespace tables {
     namespace sqr512_uint8_t {
       typedef uint8_t value_type;
       const   size_t length = 512;

@@ -4,7 +4,7 @@
 #define KL_2048_uint8_t_saw_cells 2048
 
 namespace lamb {
-  namespace Tables {
+  namespace tables {
     namespace saw2048_uint8_t {
       typedef uint8_t value_type;
       const   size_t length = 2048;

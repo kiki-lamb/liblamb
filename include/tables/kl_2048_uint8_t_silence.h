@@ -4,7 +4,7 @@
 #define KL_2048_uint8_t_silence_cells 2048
 
 namespace lamb {
-  namespace Tables {
+  namespace tables {
     namespace silence2048_uint8_t {
       typedef uint8_t value_type;
       const   size_t length = 2048;

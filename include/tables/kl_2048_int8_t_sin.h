@@ -4,7 +4,7 @@
 #define KL_2048_int8_t_sin_cells 2048
 
 namespace lamb {
-  namespace Tables {
+  namespace tables {
     namespace sin2048_int8_t {
       typedef int8_t value_type;
       const   size_t length = 2048;

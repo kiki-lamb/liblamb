@@ -4,7 +4,7 @@
 #define KL_256_int16_t_silence_cells 256
 
 namespace lamb {
-  namespace Tables {
+  namespace tables {
     namespace silence256_int16_t {
       typedef int16_t value_type;
       const   size_t length = 256;

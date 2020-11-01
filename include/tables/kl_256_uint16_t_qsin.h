@@ -4,7 +4,7 @@
 #define KL_256_uint16_t_qsin_cells 256
 
 namespace lamb {
-  namespace Tables {
+  namespace tables {
     namespace qsin256_uint16_t {
       typedef uint16_t value_type;
       const   size_t length = 256;

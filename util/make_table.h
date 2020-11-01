@@ -32,7 +32,7 @@ inline void make_table(
   fprintf(fp,"#define %s %lu\n", buff, SIZE);
   fprintf(fp,"\n");
   fprintf(fp,"namespace lamb {\n");
-  fprintf(fp,"  namespace Tables {\n");
+  fprintf(fp,"  namespace tables {\n");
   fprintf(fp,"    namespace %s%lu_%s {\n", WF_NAME, SIZE, DECOR_NAME);
   fprintf(fp,"      typedef %s value_type;\n", TYPE_NAME);
   fprintf(fp,"      const   size_t length = %lu;\n", SIZE);
@@ -109,7 +109,7 @@ inline void make_quarter_table(
   fprintf(fp,"#define %s %lu\n", buff, SIZE);
   fprintf(fp,"\n");
   fprintf(fp,"namespace lamb {\n");
-  fprintf(fp,"  namespace Tables {\n");
+  fprintf(fp,"  namespace tables {\n");
   fprintf(fp,"    namespace %s%lu_%s {\n", WF_NAME, SIZE, DECOR_NAME);
   fprintf(fp,"      typedef %s value_type;\n", TYPE_NAME);
   fprintf(fp,"      const   size_t length = %lu;\n", SIZE);

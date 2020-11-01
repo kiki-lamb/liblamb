@@ -4,7 +4,7 @@
 #define KL_2048_uint16_t_sqr_cells 2048
 
 namespace lamb {
-  namespace Tables {
+  namespace tables {
     namespace sqr2048_uint16_t {
       typedef uint16_t value_type;
       const   size_t length = 2048;

@@ -4,7 +4,7 @@
 #define KL_128_uint16_t_qsin_cells 128
 
 namespace lamb {
-  namespace Tables {
+  namespace tables {
     namespace qsin128_uint16_t {
       typedef uint16_t value_type;
       const   size_t length = 128;

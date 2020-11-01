@@ -4,7 +4,7 @@
 #define KL_4096_uint12_t_sin_cells 4096
 
 namespace lamb {
-  namespace Tables {
+  namespace tables {
     namespace sin4096_uint12_t {
       typedef uint16_t value_type;
       const   size_t length = 4096;

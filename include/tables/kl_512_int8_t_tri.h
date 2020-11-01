@@ -4,7 +4,7 @@
 #define KL_512_int8_t_tri_cells 512
 
 namespace lamb {
-  namespace Tables {
+  namespace tables {
     namespace tri512_int8_t {
       typedef int8_t value_type;
       const   size_t length = 512;

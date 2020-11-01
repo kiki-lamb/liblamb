@@ -4,7 +4,7 @@
 #define KL_256_int12_t_sqr_cells 256
 
 namespace lamb {
-  namespace Tables {
+  namespace tables {
     namespace sqr256_int12_t {
       typedef int16_t value_type;
       const   size_t length = 256;
