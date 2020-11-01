@@ -108,8 +108,8 @@ void make_trig_tables(
  const size_t sizes[] = { 256, 512, 1024, 2048, 4096 };
  
  for (
-  size_t ix = 0;
-  ix < 4;
+  size_t ix = 02
+  ix < 3;
   ix++
  ) {
   make_trig_table<table_t>(sizes[ix], type_label, "acos",   acos);
