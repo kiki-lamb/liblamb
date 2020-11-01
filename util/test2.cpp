@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <inttypes.h>
 #include <cmath>
+
+#define LAMB_NO_ARDUINO
+
 #include "../include/lamb.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -16,18 +19,20 @@ using namespace lamb;
 
 //----------------------------------------------------------------------------------------
 
-int main() {
- typedef s2q13 index_t;
- typedef s0q15 table_t;
- 
- index_t index  = index_t::MIN;
- size_t count   = 512;
+// make_tanh_table<s0q15>(512);
+
+template <typename table_t>
+void make_tanh_table(const char * label, size_t const & count, bool const & noisy = false) {
+ typedef q<0, table_t::WHOLE + 2, table_t::FRAC - 2> index_t;
+  
+ index_t  index = index_t::MIN;
  uint32_t lines = 0;
 
- printf("%d, % 10.5lf  \n", (int16_t)index, float(index));
+ if (noisy)
+  printf("%d, % 10.5lf  \n", (typename index_t::value_type)index, float(index));
 
  s0q15 out_table[count];
- 
+
  for (
   uint32_t ix = 0;
   ix < count;
@@ -36,28 +41,33 @@ int main() {
 
   float tmp  = tanh((float)index);
   
-  s0q15 qtmp = s0q15::from_float(tmp);
-  s0q15 table[count];
-  
-  printf(
-   "% 8u, % 8d, % 10.5lf, % 10.5lf, % 8u, % 10.5lf  \n",
-   lines,
-   int16_t(index),
-   float  (index),
-   tmp,
-   int16_t(qtmp),
-   float  (qtmp)
-  );
+  table_t qtmp = table_t::from_float(tmp);
+  table_t table[count];
 
+  if (noisy) {
+   printf(
+    "% 8u, % 8d, % 10.5lf, % 10.5lf, % 8u, % 10.5lf  \n",
+    lines,
+    int16_t(index),
+    float  (index),
+    tmp,
+    int16_t(qtmp),
+    float  (qtmp)
+   );
+  }
+  
   out_table[ix] = qtmp;
   
   index += (((uint32_t)UINT16_MAX) + 1) / count;
  }
   
- printf("%lu lines.\n\n", lines);
+ if (noisy) 
+  printf("%lu lines.\n\n", lines);
 
+ printf("\n\n");
+ printf("typedef %s q_t; \n", label);
  printf("const size_t length = %d; \n", count);
- printf("const s0q15  data[] \n");
+ printf("const q_t  data[] \n");
  printf("#ifdef __AVR__ \n");
  printf("PROGMEM \n");
  printf("#endif \n");
@@ -70,12 +80,13 @@ int main() {
  ) {
 
   char buff[32];
-  snprintf(buff, 32, "s0q15(%6d), ", out_table[ix].value);
+  snprintf(buff, 32, "q_t(%6d), ", out_table[ix].value);
    
-  printf("%-16s", buff);
+  printf("%-12s", buff);
 
-  if (((ix + 1) % 8) == 0)
-   printf("\n ");
+  if (((ix + 1) % 4) == 0)
+   printf(" // %u \n ", ix - 3);
+  
   fflush(stdout);
  }
 
@@ -83,3 +94,7 @@ int main() {
  
 }
 
+
+int main() {
+ make_tanh_table<s0q15>("s0q14", 512);
+}
