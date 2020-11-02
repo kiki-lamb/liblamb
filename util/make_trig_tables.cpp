@@ -37,7 +37,7 @@ void make_trig_table(
   printf("#include \"%s\" \n", fname);
  }
  
- index_t  index = index_t::MIN;
+ index_t  func_arg = index_t::MIN;
  uint32_t lines = 0;
 
  s0q15 out_table[count];
@@ -47,7 +47,7 @@ void make_trig_table(
   ix < count;
   ix++, lines++
  ) {
-  float tmp  = func((float)index);
+  float tmp  = func((float)func_arg);
   
   table_t qtmp = table_t::from_float(tmp);
   table_t table[count];
@@ -55,12 +55,12 @@ void make_trig_table(
   out_table[ix] = qtmp;
 
   if (for_plot) {
-   fprintf(fp, "%8u, ", ix);
-   
-   fprintf(fp, "% 10.5lf, ", tmp);
+//   fprintf(fp, "%8u, ", ix);   
+   fprintf(fp, "  % 10.5lf", float(func_arg));
+   fprintf(fp, ", % 10.5lf", tmp);
   }
   
-  index += (((uint32_t)UINT16_MAX) + 1) / count;
+  func_arg += (((uint32_t)UINT16_MAX) + 1) / count;
 
   fprintf(fp, "\n");
  }
