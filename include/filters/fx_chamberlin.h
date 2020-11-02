@@ -16,7 +16,7 @@ namespace lamb {
   typedef u17q15  hz_type;
   //----------------------------------------------------------------------------
   static constexpr
-  hz_type         PI2 = hz_type::from_float(2*M_PI);
+  hz_type         PI2 = hz_type::from_double(2*M_PI);
   //----------------------------------------------------------------------------
   hz_type         FS;
   hz_type         F0;
@@ -37,8 +37,8 @@ namespace lamb {
   internal_type   H;
   internal_type   B;
   internal_type   N;
-  internal_type   D0;
-  internal_type   D1;
+  internal_type   Z0;
+  internal_type   Z1;
   //----------------------------------------------------------------------------
   
   //////////////////////////////////////////////////////////////////////////////
@@ -54,8 +54,8 @@ namespace lamb {
    H(0),
    B(0),
    N(0),
-   D0(0),
-   D1(0) {
+   Z0(0),
+   Z1(0) {
     f(F0);
     q(Q0);
    }
@@ -66,7 +66,7 @@ namespace lamb {
   external_type externalize(internal_type const & intern) {
    external_type ret((external_type)(intern >> 2));
    
-   printf("% 9.9lf  ", float(ret));
+   printf("% 9.9f  ", double(ret));
 
    return ret;
   }
@@ -109,7 +109,7 @@ namespace lamb {
 
   constexpr
   void q(double const & x) {
-   q(q0_type::from_float(x >= 0.5 ? x : 0.5));
+   q(q0_type::from_double(x >= 0.5 ? x : 0.5));
    }
 
   //----------------------------------------------------------------------------
@@ -126,7 +126,7 @@ namespace lamb {
    Q0.value = x;
    Q1       = q1_type::ONE / Q0;
 
-//   printf("% 12ld, % 12ld \n", float(q0_type(x)), float(Q0));
+//   printf("% 12ld, % 12ld \n", double(q0_type(x)), double(Q0));
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -175,12 +175,12 @@ namespace lamb {
   //////////////////////////////////////////////////////////////////////////////
 
   //----------------------------------------------------------------------------
-  // L = F1 * D0*D1
-  // H = I - L - Q1*D0
-  // B = F1 * H + D0
+  // L = F1 * Z0*Z1
+  // H = I - L - Q1*Z0
+  // B = F1 * H + Z0
   // N = H + L
-  // D0 = B
-  // D1 = L
+  // Z0 = B
+  // Z1 = L
   //----------------------------------------------------------------------------
 
   // constexpr
@@ -194,17 +194,17 @@ namespace lamb {
   external_type process(external_type I_) {
    internal_type I(I_)              ;
 
-   printf("% 6.9lf, ", float(F1))  ;        
-   printf("% 6.9lf, ", float(Q1))  ;
+   printf("% 6.9f, ", double(F1))  ;        
+   printf("% 6.9f, ", double(Q1))  ;
    
-   L  = D1     + D0 * F1            ;    printf("% 9.9lf, ", float(L)) ;
-   H  = I  - L - D0 * Q1            ;    printf("% 9.9lf, ", float(H)) ;
-   B  = D0     + H  * F1            ;    printf("% 9.9lf, ", float(B)) ;
-   N  = H      + L                  ;    printf("% 9.9lf, ", float(N)) ;
-   D0 = B                           ;    printf("% 9.9lf, ", float(D0));
-   D1 = L                           ;    printf("% 9.9lf, ", float(D1));
+   L  = Z1     + Z0 * F1            ;    printf("% 9.9f, ", double(L)) ;
+   H  = I  - L - Z0 * Q1            ;    printf("% 9.9f, ", double(H)) ;
+   B  = Z0     + H  * F1            ;    printf("% 9.9f, ", double(B)) ;
+   N  = H      + L                  ;    printf("% 9.9f, ", double(N)) ;
+   Z0 = B                           ;    printf("% 9.9f, ", double(Z0));
+   Z1 = L                           ;    printf("% 9.9f, ", double(Z1));
 
-   printf("% 9.9lf, ", float(L));
+   printf("% 9.9f, ", double(L));
 
    return externalize(L);
   }
