@@ -144,6 +144,12 @@ void make_trig_table(
   // }
   
   table_t q_func_result = table_t::from_float(func_result);
+
+  if (q_func_result <= -1974861824L) {
+//   q_func_result.value = (-21361236 * 2);
+   q_func_result.value = -5330086 * 16;
+  }
+  
   table_t table[count];
 
   out_table[ix] = q_func_result;  
@@ -152,13 +158,13 @@ void make_trig_table(
 //   fprintf(fp, "  %6d, ",    int16_t(ix));
    fprintf(fp, "  % 10.5lf", float(func_arg));
    fprintf(fp, ", % 10.5lf", tan_arg);
-//   fprintf(fp, ", % 10d",    q_func_result.value);
-   fprintf(fp, ", % 10.5lf", float(q_func_result));
+//   fprintf(fp, ", % 15d",    q_func_result.value);
+   fprintf(fp, ", % 15.5lf", float(q_func_result));
 //   fprintf(fp, ", % 10d",    tan_table[((ix >> 2) + 0x40) & 0xff]);
-   fprintf(fp, ", % 10.5lf", float(tan_table[((ix >> 2) + 0x40) & 0xff]));
+//   fprintf(fp, ", % 10.5lf", float(tan_table[((ix >> 1) + 0x0) & 0xff]));
   }
 
-  func_arg += (((uint16_t)UINT16_MAX) + 1) / count;
+  func_arg += (((uint16_t)UINT16_MAX) + 1) / (count << 1);
 
   fprintf(fp, "\n");
  }
@@ -242,5 +248,5 @@ int main() {
 // make_trig_tables<s0q15>("s0q15");
 // make_trig_tables<s0q31>("s0q31");
 
- make_trig_table<s16q15>(1024, "s16q15", "tan",    tan, true, true);
+ make_trig_table<s16q15>(512, "s16q15", "tan",    tan, true, true);
 }
