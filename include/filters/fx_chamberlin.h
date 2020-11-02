@@ -16,7 +16,7 @@ namespace lamb {
   typedef u17q15  hz_type;
   //----------------------------------------------------------------------------
   static constexpr
-  hz_type         PI2 = hz_type::from_double(2*M_PI);
+  hz_type         PI2 = hz_type::from_float(2*M_PI);
   //----------------------------------------------------------------------------
   hz_type         FS;
   hz_type         F0;
@@ -57,7 +57,7 @@ namespace lamb {
    Z0(0),
    Z1(0) {
     f(F0);
-    q(Q0);
+    res(Q0);
    }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -66,7 +66,7 @@ namespace lamb {
   external_type externalize(internal_type const & intern) {
    external_type ret((external_type)(intern >> 2));
    
-   printf("% 9.9f  ", double(ret));
+   printf("% 9.9f  ", float(ret));
 
    return ret;
   }
@@ -108,25 +108,25 @@ namespace lamb {
   //----------------------------------------------------------------------------
 
   constexpr
-  void q(double const & x) {
-   q(q0_type::from_double(x >= 0.5 ? x : 0.5));
+  void res(float const & x) {
+   res(q0_type::from_float(x >= 0.5 ? x : 0.5));
    }
 
   //----------------------------------------------------------------------------
 
   constexpr
-  void q(q0_type const & x) {
-   q(x.value);
+  void res(q0_type const & x) {
+   res_(x.value);
   }
 
   //----------------------------------------------------------------------------
   
   constexpr
-  void q(q0_type::value_type const & x) {
+  void res_(q0_type::value_type const & x) {
    Q0.value = x;
    Q1       = q1_type::ONE / Q0;
 
-//   printf("% 12ld, % 12ld \n", double(q0_type(x)), double(Q0));
+//   printf("% 12ld, % 12ld \n", float(q0_type(x)), float(Q0));
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -194,17 +194,17 @@ namespace lamb {
   external_type process(external_type I_) {
    internal_type I(I_)              ;
 
-   printf("% 6.9f, ", double(F1))  ;        
-   printf("% 6.9f, ", double(Q1))  ;
+   printf("% 6.9f, ", float(F1))  ;        
+   printf("% 6.9f, ", float(Q1))  ;
    
-   L  = Z1     + Z0 * F1            ;    printf("% 9.9f, ", double(L)) ;
-   H  = I  - L - Z0 * Q1            ;    printf("% 9.9f, ", double(H)) ;
-   B  = Z0     + H  * F1            ;    printf("% 9.9f, ", double(B)) ;
-   N  = H      + L                  ;    printf("% 9.9f, ", double(N)) ;
-   Z0 = B                           ;    printf("% 9.9f, ", double(Z0));
-   Z1 = L                           ;    printf("% 9.9f, ", double(Z1));
+   L  = Z1     + Z0 * F1            ;    printf("% 9.9f, ", float(L)) ;
+   H  = I  - L - Z0 * Q1            ;    printf("% 9.9f, ", float(H)) ;
+   B  = Z0     + H  * F1            ;    printf("% 9.9f, ", float(B)) ;
+   N  = H      + L                  ;    printf("% 9.9f, ", float(N)) ;
+   Z0 = B                           ;    printf("% 9.9f, ", float(Z0));
+   Z1 = L                           ;    printf("% 9.9f, ", float(Z1));
 
-   printf("% 9.9f, ", double(L));
+   printf("% 9.9f, ", float(L));
 
    return externalize(L);
   }

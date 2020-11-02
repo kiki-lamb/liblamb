@@ -41,7 +41,7 @@ namespace math {
  typedef   s17q14   mid_type;
 
  constexpr mid_type operator ""_mid(long double const x) {
-  return mid_type::from_double(x);
+  return mid_type::from_float(x);
  }
  
   template <typename out_type>
@@ -53,13 +53,13 @@ namespace math {
    //if (! logged) printf("small one: % 8d \n", u8q8::ONE);
    //-----------------------------------------------------------------------------
    constexpr uint8_t  q_shift   { mid_type::WHOLE          };   
-   constexpr mid_type pi        { mid_type::Q_PI           }; // if (! logged) printf("pi:   % 8d % 05.5lf \n", pi,        double(pi));
-   constexpr mid_type one       { 1.0_mid                  }; // if (! logged) printf("one:  % 8d % 05.5lf \n", one,       double(one));
-   constexpr mid_type small_one { 1.0_mid - 1              }; // if (! logged) printf("sone: % 8d % 05.5lf \n", small_one, double(small_one));
-   constexpr mid_type two       { 2.0_mid                  }; // if (! logged) printf("two:  % 8d % 05.5lf \n", two,       double(two));
-   constexpr mid_type half      { 0.5_mid                  }; // if (! logged) printf("half: % 8d % 05.5lf \n", half,      double(half));
-   constexpr mid_type B         { two     - pi / 4.0_mid   }; // if (! logged) printf("B:    % 8d % 05.5lf \n", B,         double(B));
-   constexpr mid_type C         { one     - pi / 4.0_mid   }; // if (! logged) printf("C:    % 8d % 05.5lf \n", C,         double(C));   
+   constexpr mid_type pi        { mid_type::Q_PI           }; // if (! logged) printf("pi:   % 8d % 05.5lf \n", pi,        float(pi));
+   constexpr mid_type one       { 1.0_mid                  }; // if (! logged) printf("one:  % 8d % 05.5lf \n", one,       float(one));
+   constexpr mid_type small_one { 1.0_mid - 1              }; // if (! logged) printf("sone: % 8d % 05.5lf \n", small_one, float(small_one));
+   constexpr mid_type two       { 2.0_mid                  }; // if (! logged) printf("two:  % 8d % 05.5lf \n", two,       float(two));
+   constexpr mid_type half      { 0.5_mid                  }; // if (! logged) printf("half: % 8d % 05.5lf \n", half,      float(half));
+   constexpr mid_type B         { two     - pi / 4.0_mid   }; // if (! logged) printf("B:    % 8d % 05.5lf \n", B,         float(B));
+   constexpr mid_type C         { one     - pi / 4.0_mid   }; // if (! logged) printf("C:    % 8d % 05.5lf \n", C,         float(C));   
    //----------------------------------------------------------------------------
    logged                       = true;
    //----------------------------------------------------------------------------
@@ -109,8 +109,8 @@ int main() {
   last = math::qsin<s0q31>(s0q31(ix));
 
   // printf("%d, % 05.5lf \n", last, last / 4096.0);
-  printf("% 05.5lf, ", double(last));
-  printf("% 05.5lf \n", double(math::qcos<s0q31>(s0q31(ix))));
+  printf("% 05.5lf, ", float(last));
+  printf("% 05.5lf \n", float(math::qcos<s0q31>(s0q31(ix))));
   
   if (last > max)
    max = last;
@@ -120,6 +120,6 @@ int main() {
   }
 
  return 0;
- printf("MAX: % 05.5lf %d \n", double(max), max.value); 
- printf("MIN: % 05.5lf %d \n", double(min), min.value);
+ printf("MAX: % 05.5lf %d \n", float(max), max.value); 
+ printf("MIN: % 05.5lf %d \n", float(min), min.value);
 }

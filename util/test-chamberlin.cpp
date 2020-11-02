@@ -42,7 +42,7 @@ int main() {
    printf("FF1,          Q1,           L,              H,            B,            N,            D1,           D2  \n");
 
   for (double qix = 0.1; qix < 5.0; qix += 0.2) {
-   fx_cf.q(qix);
+   fx_cf.res(qix);
    
    const size_t fix_incr = 100;
    

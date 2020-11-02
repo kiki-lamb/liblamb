@@ -40,7 +40,7 @@ bool compare_floats(float x, float y, uint8_t precis) {
  {                                                                      \
   char  buff[32];                                                       \
   snprintf(buff, 32, "%-8s: %% 05.5lf %%%s.%%%s \n", name, fmt, fmt);   \
-  printf(buff, double(x), x.top(), x.bottom());                         \
+  printf(buff, float(x), x.top(), x.bottom());                         \
  }                                               
 
 #define TEST_EQ(fmt,x, y)                                               \
