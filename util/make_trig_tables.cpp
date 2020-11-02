@@ -53,7 +53,7 @@ void make_trig_table(
   float   func_result   = func(tan_arg); // float(func_arg));
 
   if (func_result > float(table_t::MAX)) {
-   func_result = float(table_t::MAX) - 1;
+   func_result = 169.0; // float(table_t::MAX) - 1;
   }
   
   table_t q_func_result = table_t::from_float(func_result);
