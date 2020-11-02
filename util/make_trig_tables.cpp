@@ -157,7 +157,6 @@ void make_trig_table(
 
   if (for_plot) {
    fprintf(fp, "  %6d, ",    int16_t(ix));
-   fprintf(fp, "  % 6d",     func_arg.value);
    fprintf(fp, "  % 10.5lf", float(func_arg));
    fprintf(fp, ", % 10.5lf", tan_arg);
    fprintf(fp, ", % 10.5lf", float(q_func_result));
