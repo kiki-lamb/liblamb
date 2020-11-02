@@ -56,7 +56,7 @@ void make_trig_table(
   out_table[ix] = qtmp;
 
   if (for_plot) {
-//   fprintf(fp, "%8u, ", ix);
+   fprintf(fp, "  %8d, ",    int16_t(ix));
    fprintf(fp, "  % 10d",    func_arg.value);
    fprintf(fp, "  % 10.5lf", float(func_arg));
    fprintf(fp, ", % 10.5lf", tmp);
