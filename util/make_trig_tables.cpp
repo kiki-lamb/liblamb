@@ -8,7 +8,7 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-// g++ -std=gnu++17 -DLAMB_NO_ARDUINO test2.cpp && .\a.exe > a.csv && sigrok-cli -I csv:column_formats="*a" -i a.csv -o x.sr
+// g++ -std=gnu++17 make_trig_tables.cpp && .\a.exe > a.csv && sigrok-cli -I csv:column_formats="*a" -i a.csv -o x.sr
  
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -48,20 +48,28 @@ void make_trig_table(
   ix < count;
   ix++, lines++
  ) {
-  float tmp  = func((float)func_arg);
   
-  table_t qtmp = table_t::from_float(tmp);
-  table_t table[count];
+  float   tan_arg       = float(func_arg) * M_PI;
+  float   func_result   = func(tan_arg); // float(func_arg));
 
-  out_table[ix] = qtmp;
-
-  if (for_plot) {
-   fprintf(fp, "  %8d, ",    int16_t(ix));
-   fprintf(fp, "  % 10d",    func_arg.value);
-   fprintf(fp, "  % 10.5lf", float(func_arg));
-   fprintf(fp, ", % 10.5lf", tmp);
+  if (func_result > float(table_t::MAX)) {
+   func_result = float(table_t::MAX) - 1;
   }
   
+  table_t q_func_result = table_t::from_float(func_result);
+  table_t table[count];
+
+  out_table[ix] = q_func_result;  
+
+  if (for_plot) {
+   // fprintf(fp, "  %6d, ",    int16_t(ix));
+   // fprintf(fp, "  % 6d",     func_arg.value);
+   fprintf(fp, "  % 10.5lf", float(func_arg));
+   fprintf(fp, ", % 10.5lf", tan_arg);
+//   fprintf(fp, ", % 20.5lf", func_result);
+   fprintf(fp, ", % 10.5lf", float(q_func_result));
+  }
+
   func_arg += (((uint16_t)UINT16_MAX) + 1) / count;
 
   fprintf(fp, "\n");
@@ -146,5 +154,5 @@ int main() {
 // make_trig_tables<s0q15>("s0q15");
 // make_trig_tables<s0q31>("s0q31");
 
- make_trig_table<s0q15>(1024, "s0q15", "tan",    tan, true, true);
+ make_trig_table<s8q23>(1024, "s8q23", "tan",    tan, true, true);
 }
