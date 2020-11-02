@@ -17,7 +17,7 @@ using namespace lamb;
 //////////////////////////////////////////////////////////////////////////////////////////
 
 
-typedef s0q31 tan_t;
+typedef s16q15 tan_t;
 
 tan_t tan_table[256] =
 {
@@ -103,13 +103,6 @@ tan_t tan_table[256] =
  
 };
 
-//------------------------------------------------------------------------------
-
-s0q31 qtan(s0q31 const & ba) {
- return tan_table[((ba.value + 0x4000) >> 15) & 0xFF];
-}
-
-
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename table_t>
@@ -146,9 +139,9 @@ void make_trig_table(
   float   tan_arg       = float(func_arg) * M_PI;
   float   func_result   = func(tan_arg); // float(func_arg));
 
-  if (func_result > float(table_t::MAX)) {
-   func_result = 169.0; // float(table_t::MAX) - 1;
-  }
+  // if (func_result > float(table_t::MAX)) {
+  //  func_result = 169.0; // float(table_t::MAX) - 1;
+  // }
   
   table_t q_func_result = table_t::from_float(func_result);
   table_t table[count];
@@ -156,12 +149,13 @@ void make_trig_table(
   out_table[ix] = q_func_result;  
 
   if (for_plot) {
-   fprintf(fp, "  %6d, ",    int16_t(ix));
+//   fprintf(fp, "  %6d, ",    int16_t(ix));
    fprintf(fp, "  % 10.5lf", float(func_arg));
    fprintf(fp, ", % 10.5lf", tan_arg);
+//   fprintf(fp, ", % 10d",    q_func_result.value);
    fprintf(fp, ", % 10.5lf", float(q_func_result));
-   fprintf(fp, ", % 15d",    q_func_result.value);
-   fprintf(fp, ", % 10d",    tan_table[ix >> 2]);
+//   fprintf(fp, ", % 10d",    tan_table[((ix >> 2) + 0x40) & 0xff]);
+   fprintf(fp, ", % 10.5lf", float(tan_table[((ix >> 2) + 0x40) & 0xff]));
   }
 
   func_arg += (((uint16_t)UINT16_MAX) + 1) / count;
@@ -248,5 +242,5 @@ int main() {
 // make_trig_tables<s0q15>("s0q15");
 // make_trig_tables<s0q31>("s0q31");
 
- make_trig_table<s8q23>(1024, "s8q23", "tan",    tan, true, true);
+ make_trig_table<s16q15>(1024, "s16q15", "tan",    tan, true, true);
 }
