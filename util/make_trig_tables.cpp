@@ -27,8 +27,9 @@ void make_trig_table(
  bool to_stdout,
  bool for_plot
 ) {
- typedef q<0, table_t::WHOLE + 2, table_t::FRAC - 2> index_t;
-
+ // typedef q<0, table_t::WHOLE + 2, table_t::FRAC - 2> index_t;
+ typedef s0q15 index_t;
+  
  char fname[64];
  snprintf(fname, 64, "kl_%lu_%s_%s.h", count, type_label, func_label);
  FILE *fp = to_stdout ? stdout : fopen(fname, "w");
@@ -55,12 +56,13 @@ void make_trig_table(
   out_table[ix] = qtmp;
 
   if (for_plot) {
-//   fprintf(fp, "%8u, ", ix);   
+//   fprintf(fp, "%8u, ", ix);
+   fprintf(fp, "  % 10d",    func_arg.value);
    fprintf(fp, "  % 10.5lf", float(func_arg));
    fprintf(fp, ", % 10.5lf", tmp);
   }
   
-  func_arg += (((uint32_t)UINT16_MAX) + 1) / count;
+  func_arg += (((uint16_t)UINT16_MAX) + 1) / count;
 
   fprintf(fp, "\n");
  }
