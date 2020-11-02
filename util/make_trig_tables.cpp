@@ -16,7 +16,94 @@ using namespace lamb;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-// make_trig_table<s0q15>(512);
+
+typedef s0q31 tan_t;
+
+tan_t tan_table[256] =
+{
+ tan_t(0L),      tan_t(804L),    tan_t(1609L),   tan_t(2414L),
+ tan_t(3220L),   tan_t(4026L),   tan_t(4834L),   tan_t(5644L),
+ tan_t(6455L),   tan_t(7268L),   tan_t(8083L),   tan_t(8901L),
+ tan_t(9721L),   tan_t(10545L),  tan_t(11372L),  tan_t(12202L),
+ 
+ tan_t(13036L),  tan_t(13874L),  tan_t(14717L),  tan_t(15564L),
+ tan_t(16416L),  tan_t(17273L),  tan_t(18136L),  tan_t(19005L),
+ tan_t(19880L),  tan_t(20762L),  tan_t(21650L),  tan_t(22546L),
+ tan_t(23449L),  tan_t(24360L),  tan_t(25280L),  tan_t(26208L),
+ 
+ tan_t(27146L),  tan_t(28093L),  tan_t(29050L),  tan_t(30018L),
+ tan_t(30996L),  tan_t(31986L),  tan_t(32988L),  tan_t(34002L),
+ tan_t(35030L),  tan_t(36071L),  tan_t(37126L),  tan_t(38196L),
+ tan_t(39281L),  tan_t(40382L),  tan_t(41500L),  tan_t(42636L),
+ 
+ tan_t(43790L),  tan_t(44963L),  tan_t(46156L),  tan_t(47369L),
+ tan_t(48605L),  tan_t(49863L),  tan_t(51145L),  tan_t(52451L),
+ tan_t(53784L),  tan_t(55144L),  tan_t(56532L),  tan_t(57950L),
+ tan_t(59398L),  tan_t(60880L),  tan_t(62395L),  tan_t(63947L),
+ 
+ tan_t(65536L),  tan_t(67165L),  tan_t(68835L),  tan_t(70548L),
+ tan_t(72308L),  tan_t(74116L),  tan_t(75974L),  tan_t(77887L),
+ tan_t(79856L),  tan_t(81885L),  tan_t(83977L),  tan_t(86135L),
+ tan_t(88365L),  tan_t(90670L),  tan_t(93054L),  tan_t(95523L),
+ 
+ tan_t(98082L),  tan_t(100736L), tan_t(103493L), tan_t(106358L),
+ tan_t(109340L), tan_t(112447L), tan_t(115687L), tan_t(119071L),
+ tan_t(122609L), tan_t(126314L), tan_t(130198L), tan_t(134276L),
+ tan_t(138564L), tan_t(143081L), tan_t(147847L), tan_t(152884L),
+ 
+ tan_t(158218L), tan_t(163878L), tan_t(169896L), tan_t(176309L),
+ tan_t(183161L), tan_t(190499L), tan_t(198380L), tan_t(206870L),
+ tan_t(216043L), tan_t(225990L), tan_t(236817L), tan_t(248648L),
+ tan_t(261634L), tan_t(275959L), tan_t(291845L), tan_t(309568L),
+ 
+ tan_t(329472L), tan_t(351993L), tan_t(377693L), tan_t(407305L),
+ tan_t(441808L), tan_t(482534L), tan_t(531352L), tan_t(590958L),
+ tan_t(665398L), tan_t(761030L), tan_t(888450L), tan_t(1066730L),
+ tan_t(1334016L),tan_t(1779314L),tan_t(2669641L),tan_t(5340086L),
+ 
+ -tan_t(2147483647L), -tan_t(5340086L), -tan_t(2669641L), -tan_t(1779314L),
+ -tan_t(1334016L),    -tan_t(1066730L), -tan_t(888450L),  -tan_t(761030L),
+ -tan_t(665398L),     -tan_t(590958L),  -tan_t(531352L),  -tan_t(482534L),
+ -tan_t(441808L),     -tan_t(407305L),  -tan_t(377693L),  -tan_t(351993L),
+ 
+ -tan_t(329472L),-tan_t(309568L),-tan_t(291845L),-tan_t(275959L),
+ -tan_t(261634L),-tan_t(248648L),-tan_t(236817L),-tan_t(225990L),
+ -tan_t(216043L),-tan_t(206870L),-tan_t(198380L),-tan_t(190499L),
+ -tan_t(183161L),-tan_t(176309L),-tan_t(169896L),-tan_t(163878L),
+ 
+ -tan_t(158218L),-tan_t(152884L),-tan_t(147847L),-tan_t(143081L),
+ -tan_t(138564L),-tan_t(134276L),-tan_t(130198L),-tan_t(126314L),
+ -tan_t(122609L),-tan_t(119071L),-tan_t(115687L),-tan_t(112447L),
+ -tan_t(109340L),-tan_t(106358L),-tan_t(103493L),-tan_t(100736L),
+ 
+ -tan_t(98082L), -tan_t(95523L), -tan_t(93054L), -tan_t(90670L),
+ -tan_t(88365L), -tan_t(86135L), -tan_t(83977L), -tan_t(81885L),
+ -tan_t(79856L), -tan_t(77887L), -tan_t(75974L), -tan_t(74116L),
+ -tan_t(72308L), -tan_t(70548L), -tan_t(68835L), -tan_t(67165L),
+ 
+ -tan_t(65536L), -tan_t(63947L), -tan_t(62395L), -tan_t(60880L),
+ -tan_t(59398L), -tan_t(57950L), -tan_t(56532L), -tan_t(55144L),
+ -tan_t(53784L), -tan_t(52451L), -tan_t(51145L), -tan_t(49863L),
+ -tan_t(48605L), -tan_t(47369L), -tan_t(46156L), -tan_t(44963L),
+ 
+ -tan_t(43790L), -tan_t(42636L), -tan_t(41500L), -tan_t(40382L),
+ -tan_t(39281L), -tan_t(38196L), -tan_t(37126L), -tan_t(36071L),
+ -tan_t(35030L), -tan_t(34002L), -tan_t(32988L), -tan_t(31986L),
+ -tan_t(30996L), -tan_t(30018L), -tan_t(29050L), -tan_t(28093L),
+ 
+ -tan_t(27146L), -tan_t(26208L), -tan_t(25280L), -tan_t(24360L),
+ -tan_t(23449L), -tan_t(22546L), -tan_t(21650L), -tan_t(20762L),
+ -tan_t(19880L), -tan_t(19005L), -tan_t(18136L), -tan_t(17273L),
+ -tan_t(16416L), -tan_t(15564L), -tan_t(14717L), -tan_t(13874L),
+ 
+ -tan_t(13036L), -tan_t(12202L), -tan_t(11372L), -tan_t(10545L),
+ -tan_t(9721L),  -tan_t(8901L),  -tan_t(8083L),  -tan_t(7268L),
+ -tan_t(6455L),  -tan_t(5644L),  -tan_t(4834L),  -tan_t(4026L),
+ -tan_t(3220L),  -tan_t(2414L),  -tan_t(1609L),  -tan_t(804L)
+ 
+};
+
+////////////////////////////////////////////////////////////////////////////////
 
 template <typename table_t>
 void make_trig_table(

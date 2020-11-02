@@ -125,6 +125,7 @@ namespace lamb {
   explicit constexpr 
   operator float() const {
    constexpr float one = TRUE_ONE * 1.0;
+   
    return value / one;
   }
 
@@ -141,11 +142,11 @@ namespace lamb {
   q from_float(
    float const & tmp
   ) {
-   int        divisor = tmp;
-   float      modulus = tmp - divisor;
-   value_type ipart   = ONE.value * divisor + int(ONE.value * modulus + 0.5);
+    int        divisor = tmp;
+    float      modulus = tmp - divisor;
+    value_type ipart   = ONE.value * divisor + int(ONE.value * modulus + 0.5);
    
-   return q(ipart);
+    return q(ipart);
   }
  
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
