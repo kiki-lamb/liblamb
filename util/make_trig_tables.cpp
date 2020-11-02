@@ -103,6 +103,13 @@ tan_t tan_table[256] =
  
 };
 
+//------------------------------------------------------------------------------
+
+s0q31 qtan(s0q31 const & ba) {
+ return tan_table[((ba.value + 0x4000) >> 15) & 0xFF];
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename table_t>
@@ -149,12 +156,13 @@ void make_trig_table(
   out_table[ix] = q_func_result;  
 
   if (for_plot) {
-   // fprintf(fp, "  %6d, ",    int16_t(ix));
-   // fprintf(fp, "  % 6d",     func_arg.value);
+   fprintf(fp, "  %6d, ",    int16_t(ix));
+   fprintf(fp, "  % 6d",     func_arg.value);
    fprintf(fp, "  % 10.5lf", float(func_arg));
    fprintf(fp, ", % 10.5lf", tan_arg);
-//   fprintf(fp, ", % 20.5lf", func_result);
    fprintf(fp, ", % 10.5lf", float(q_func_result));
+   fprintf(fp, ", % 15d",    q_func_result.value);
+   fprintf(fp, ", % 10d",    tan_table[ix >> 2]);
   }
 
   func_arg += (((uint16_t)UINT16_MAX) + 1) / count;

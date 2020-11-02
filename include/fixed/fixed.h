@@ -153,15 +153,6 @@ namespace lamb {
  
   static constexpr q Q_PI = WHOLE >= 2 ? from_float(M_PI) : q(0);
  
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- 
-  constexpr
-  q operator ^ (
-   q const & other
-  ) const {
-   return value ^ other.value;
-  }  
-  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   template <uint8_t other_pad, uint8_t other_whole, uint8_t other_frac>
@@ -222,18 +213,26 @@ namespace lamb {
   constexpr q    operator   + (value_type const & o) const { return                       q(value  + o      ); }
   constexpr q    operator   - (value_type const & o) const { return                       q(value  - o      ); }
   constexpr q    operator   * (value_type const & o) const { return                       q(value  * o      ); }
-  constexpr q    operator   / (value_type const & o) const { return                       q(value  / o      ); }
+  constexpr q    operator   / (value_type const & o) const { return                       q(value  / o      ); }  
   //------------------------------------------------------------------------------------------------------------
-  constexpr q    operator   + (q          const & o) const { return                       q(value  + o.value); }
-  constexpr q    operator   - (q          const & o) const { return                       q(value  - o.value); }
-  //-----------------------------------------------------------------------------------------------------------
-  constexpr bool operator   < (q          const & o) const { return                        (value  < o.value); }
-  constexpr bool operator   > (q          const & o) const { return                        (value  > o.value); }
-  constexpr bool operator  == (q          const & o) const { return                        (value == o.value); }
+  constexpr q    operator   ^ (value_type const & o) const { return                       q(value  ^ o      ); }
+  constexpr q    operator   & (value_type const & o) const { return                       q(value  & o      ); }
+  constexpr q    operator   | (value_type const & o) const { return                       q(value  | o      ); }
   //------------------------------------------------------------------------------------------------------------
   constexpr bool operator   < (value_type const & o) const { return                        (value  < o      ); }
   constexpr bool operator   > (value_type const & o) const { return                        (value  > o      ); }
   constexpr bool operator  == (value_type const & o) const { return                        (value == o      ); }
+  //------------------------------------------------------------------------------------------------------------
+  constexpr q    operator   + (q          const & o) const { return                       q(value  + o.value); }
+  constexpr q    operator   - (q          const & o) const { return                       q(value  - o.value); }
+  //------------------------------------------------------------------------------------------------------------
+  constexpr q    operator   ^ (q          const & o) const { return                       q(value  ^ o.value); } // <==
+  constexpr q    operator   & (q          const & o) const { return                       q(value  & o.value); }
+  constexpr q    operator   | (q          const & o) const { return                       q(value  | o.value); }
+  //-----------------------------------------------------------------------------------------------------------
+  constexpr bool operator   < (q          const & o) const { return                        (value  < o.value); }
+  constexpr bool operator   > (q          const & o) const { return                        (value  > o.value); }
+  constexpr bool operator  == (q          const & o) const { return                        (value == o.value); }
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////
   constexpr q &  operator  -- (                    )       { this        -= 1;                   return *this; }
   constexpr q &  operator  ++ (                    )       { this        += 1;                   return *this; }
@@ -254,6 +253,10 @@ namespace lamb {
   constexpr q &  operator  += (value_type const & v)       { this->value  = (*this  + v ).value; return *this; }
   constexpr q &  operator  *= (value_type const & v)       { this->value  = (*this  * v ).value; return *this; }
   constexpr q &  operator  /= (value_type const & v)       { this->value  = (*this  / v ).value; return *this; }
+  //------------------------------------------------------------------------------------------------------------
+  constexpr q &  operator  ^= (value_type const & v)       { this->value  = (*this  ^ v ).value; return *this; }
+  constexpr q &  operator  &= (value_type const & v)       { this->value  = (*this  & v ).value; return *this; }
+  constexpr q &  operator  |= (value_type const & v)       { this->value  = (*this  | v ).value; return *this; }
   //------------------------------------------------------------------------------------------------------------
   constexpr bool operator  <= (value_type const & o) const { return         (*this     == o ) || (*this < o) ; }
   constexpr bool operator  >= (value_type const & o) const { return         (*this     == o ) || (*this > o) ; }
