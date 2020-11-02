@@ -16,9 +16,6 @@ using namespace lamb;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-
-//----------------------------------------------------------------------------------------
-
 // make_trig_table<s0q15>(512);
 
 template <typename table_t>
@@ -26,15 +23,19 @@ void make_trig_table(
  size_t const & count,
  const char * type_label,
  const char * func_label,
- double (*func) (double)
+ double (*func) (double),
+ bool to_stdout,
+ bool for_plot
 ) {
  typedef q<0, table_t::WHOLE + 2, table_t::FRAC - 2> index_t;
 
  char fname[64];
  snprintf(fname, 64, "kl_%lu_%s_%s.h", count, type_label, func_label);
- FILE *fp = fopen(fname, "w");
+ FILE *fp = to_stdout ? stdout : fopen(fname, "w");
 
- printf("#include \"%s\" \n", fname);
+ if (! for_plot) {
+  printf("#include \"%s\" \n", fname);
+ }
  
  index_t  index = index_t::MIN;
  uint32_t lines = 0;
@@ -46,57 +47,69 @@ void make_trig_table(
   ix < count;
   ix++, lines++
  ) {
-
   float tmp  = func((float)index);
   
   table_t qtmp = table_t::from_float(tmp);
   table_t table[count];
 
   out_table[ix] = qtmp;
+
+  if (for_plot) {
+   fprintf(fp, "%8u, ", ix);
+   
+   fprintf(fp, "% 10.5lf, ", tmp);
+  }
   
   index += (((uint32_t)UINT16_MAX) + 1) / count;
+
+  fprintf(fp, "\n");
  }
- 
- fprintf(fp, "#ifndef KL_%u_%s_%s_h \n", count, type_label, func_label);
- fprintf(fp, "#define KL_%u_%s_%s_h \n\n", count, type_label, func_label);
- fprintf(fp, "#define KL_%u_%s_%s_h_cells % \n\n", count, type_label, func_label, count);
- fprintf(fp, "namespace lamb {\n");
- fprintf(fp, " namespace tables {\n");
- fprintf(fp, "  namespace %s%d_%s {\n", func_label, count, type_label);
- fprintf(fp, "   typedef %s q_t; \n", type_label);
- fprintf(fp, "   const size_t length = %d; \n", count);
- fprintf(fp, "   const q_t  data[] \n");
- fprintf(fp, "#ifdef __AVR__ \n");
- fprintf(fp, "   PROGMEM \n");
- fprintf(fp, "#endif \n");
- fprintf(fp, "   = { \n    ");
 
- for (
-  uint32_t ix = 0;
-  ix < count;
-  ix++
- ) {
+ if (! for_plot) {
+  fprintf(fp, "#ifndef KL_%u_%s_%s_h \n", count, type_label, func_label);
+  fprintf(fp, "#define KL_%u_%s_%s_h \n\n", count, type_label, func_label);
+  fprintf(fp, "#define KL_%u_%s_%s_h_cells % \n\n", count, type_label, func_label, count);
+  fprintf(fp, "namespace lamb {\n");
+  fprintf(fp, " namespace tables {\n");
+  fprintf(fp, "  namespace %s%d_%s {\n", func_label, count, type_label);
+  fprintf(fp, "   typedef %s q_t; \n", type_label);
+  fprintf(fp, "   const size_t length = %d; \n", count);
+  fprintf(fp, "   const q_t  data[] \n");
+  fprintf(fp, "#ifdef __AVR__ \n");
+  fprintf(fp, "   PROGMEM \n");
+  fprintf(fp, "#endif \n");
+  fprintf(fp, "   = { \n    ");
 
-  char buff[32];
-  snprintf(buff, 32, "q_t(%6d), ", out_table[ix].value);
+  for (
+   uint32_t ix = 0;
+   ix < count;
+   ix++
+  ) {
    
-  fprintf(fp, "%-12s", buff);
+   if (! for_plot) {
+    char buff[32];
+    snprintf(buff, 32, "q_t(%6d), ", out_table[ix].value);
 
-  if (((ix + 1) % 4) == 0)
-   fprintf(fp, " // %u \n    ", ix - 3);
-  
-  fflush(stdout);
+    fprintf(fp, "%-12s", buff);
+    
+    if (((ix + 1) % 4) == 0) {
+     fprintf(fp, " // %u \n    ", ix - 3);
+    }
+    
+    fflush(stdout);
+   }
+   
+   fprintf(fp, "}; \n");
+   fprintf(fp, "  } \n");
+   fprintf(fp, " } \n");
+   fprintf(fp, "} \n");
+   fprintf(fp, "\n");
+   fprintf(fp, "#endif");
+  }
  }
-
- fprintf(fp, "}; \n");
- fprintf(fp, "  } \n");
- fprintf(fp, " } \n");
- fprintf(fp, "} \n");
- fprintf(fp, "\n");
- fprintf(fp, "#endif");
-
- fclose(fp);
  
+ if (! to_stdout)
+  fclose(fp);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -108,7 +121,7 @@ void make_trig_tables(
  const size_t sizes[] = { 256, 512, 1024, 2048, 4096 };
  
  for (
-  size_t ix = 02
+  size_t ix = 2;
   ix < 3;
   ix++
  ) {
@@ -128,6 +141,8 @@ void make_trig_tables(
 
 int main() {
 // make_trig_tables<s0q7> ("s0q7");
- make_trig_tables<s0q15>("s0q15");
+// make_trig_tables<s0q15>("s0q15");
 // make_trig_tables<s0q31>("s0q31");
+
+ make_trig_table<s0q15>(1024, "s0q15", "tan",    tan, true, true);
 }
