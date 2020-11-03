@@ -179,7 +179,8 @@ namespace lamb {
    );
 
    if constexpr(PAD > other_type::DATA_SIZE) {
-    value_type     tmp       = value * other.value;
+    value_type     tmp       = value;
+    tmp                     *= other.value;
     tmp                    >>= other_frac;
 
     return q(tmp);
@@ -190,6 +191,39 @@ namespace lamb {
     big_tmp                >>= other_frac;
     
     return q((value_type)big_tmp);
+   }
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  template <uint8_t other_pad, uint8_t other_whole, uint8_t other_frac>
+  constexpr
+  q & operator *= (
+   q<other_pad, other_whole, other_frac> const & other
+  ) const {
+
+   typedef
+    q<other_pad, other_whole, other_frac>
+    other_type;
+
+   static_assert(
+    ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
+    "Signedness mismatch!"
+   );
+
+   if constexpr(PAD > other_type::DATA_SIZE) {
+    value                   *= other.value;
+    value                  >>= other_frac;
+
+    return *this;
+   }
+   else {
+    big_value_type big_tmp   = value;
+    big_tmp                 *= other.value;
+    big_tmp                >>= other_frac;
+    value                    = big_tmp;
+    
+    return *this;
    }
   }
 
@@ -212,7 +246,8 @@ namespace lamb {
    );
 
    if constexpr(PAD > other_type::DATA_SIZE) {
-    value_type     tmp       = value << other_frac;
+    value_type     tmp       = value;
+    tmp                    <<= other_frac;
     tmp                     /= other.value;
 
     return q(tmp);
@@ -224,6 +259,37 @@ namespace lamb {
     
     return q((value_type)big_tmp);
    }
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  template <uint8_t other_pad, uint8_t other_whole, uint8_t other_frac>
+  constexpr
+  q & operator /= (
+   q<other_pad, other_whole, other_frac> const & other
+  ) const {
+
+   typedef
+    q<other_pad, other_whole, other_frac>
+    other_type;
+
+   static_assert(
+    ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
+    "Signedness mismatch!"
+   );
+
+   if constexpr(PAD > other_type::DATA_SIZE) {
+    value                  <<= other_frac;
+    value                   /= other.value;
+   }
+   else {
+    big_value_type big_tmp   = value;
+    big_tmp                <<= other_frac;
+    big_tmp                 /= other.value;
+    value                    = big_tmp;
+   }
+
+   return *this;
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -258,8 +324,8 @@ namespace lamb {
   //------------------------------------------------------------------------------------------------------------
   constexpr q &  operator  -= (q          const & v)       { this->value  = (*this  - v ).value; return *this; }
   constexpr q &  operator  += (q          const & v)       { this->value  = (*this  + v ).value; return *this; }
-  constexpr q &  operator  *= (q          const & v)       { this->value  = (*this  * v ).value; return *this; }
-  constexpr q &  operator  /= (q          const & v)       { this->value  = (*this  / v ).value; return *this; }
+  // constexpr q &  operator  *= (q          const & v)       { this->value  = (*this  * v ).value; return *this; }
+  // constexpr q &  operator  /= (q          const & v)       { this->value  = (*this  / v ).value; return *this; }
   //------------------------------------------------------------------------------------------------------------
   constexpr bool operator  <= (q          const & o) const { return         (*this     == o ) || (*this < o) ; }
   constexpr bool operator  >= (q          const & o) const { return         (*this     == o ) || (*this > o) ; }
