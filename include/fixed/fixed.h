@@ -179,7 +179,7 @@ namespace lamb {
    );
 
    typedef typename
-    type_if<(pad > other_type::DATA_SIZE), value_type, big_value_type>::type
+    type_if<(PAD > other_type::DATA_SIZE), value_type, big_value_type>::type
     tmp_value_type;
    
    tmp_value_type tmp       = value;

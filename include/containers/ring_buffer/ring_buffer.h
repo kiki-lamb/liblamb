@@ -22,32 +22,32 @@ namespace lamb {
       read_ix(0),
       count_(0) {}
 
-    inline bool writable() volatile {
+    inline bool writable() {
       return count_ < SIZE;
     }
 
-    inline bool readable() volatile {
+    inline bool readable() {
       return count_;
     }
 
-    inline void clear() volatile {
+    inline void clear() {
       write_ix = 0;
       read_ix  = 0;
       count_   = 0;
     }
 
-    inline bool empty() volatile {
+    inline bool empty() {
       return (0 == count_);
     }
 
-    inline void enqueue(value_type const & t) volatile {
+    inline void enqueue(value_type const & t) {
       buff[write_ix] = t;
       count_++;
       write_ix++;
       write_ix %= SIZE;
     }
 
-    inline value_type dequeue() volatile {
+    inline value_type dequeue() {
       value_type tmp = buff[read_ix];
       count_--;
       read_ix++;
@@ -56,7 +56,7 @@ namespace lamb {
       return tmp;
     }
 
-    inline size_t count() volatile {
+    inline size_t count() {
       return count_;
     }
   };

@@ -101,7 +101,7 @@ namespace lamb {
  public:
   
   constexpr
-  q0_type q() const {
+  q0_type res() const {
    return Q0;
   }
 

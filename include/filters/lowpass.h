@@ -5,17 +5,20 @@ namespace lamb {
   template <typename sample_t_>
   class lowpass {
   public:
-    typedef sample_t_                                            sample_t;
-    typedef typename sample_type_traits<sample_t>::unsigned_type unsigned_sample_t;
-    typedef typename sample_type_traits<sample_t>::mix_type      mix_t;
-    typedef typename sample_type_traits<mix_t>::unsigned_type    unsigned_mix_t;
+   typedef sample_t_                                                sample_t;
+   typedef typename
+   sample_type_traits<typename sample_t::value_type>::unsigned_type unsigned_sample_t;
+   typedef typename
+   sample_type_traits<typename sample_t::value_type>::mix_type      mix_t;
+   typedef typename
+   sample_type_traits<mix_t>::unsigned_type    unsigned_mix_t;
 
     typedef fixed<0, (
       sizeof(
-        typename sample_type_traits<sample_t>::unmixed_type
+       typename sample_type_traits<typename sample_t::value_type>::unmixed_type
       ) << 3)>                                                   control_frac_t;
 
-    typedef typename control_frac_t::value_type                        control_t;
+    typedef typename control_frac_t::value_type                  control_t;
 
     static const control_t control_t_one = control_frac_t::ONE.value;
 
@@ -60,22 +63,17 @@ namespace lamb {
     }
 
     sample_t process(sample_t const & in_) {
+     
       // D0 = D0 + FREQ * (IN - D0 + FB * (D0 - O));
       // O  = O  + FREQ * (D0 - O);
 
       sample_t hp = in_ - _d0;
       
-      _d0 += m_fxmul_mXs(
-        hp + m_fxmul_mXs(_feedback, _d0 - _o),
-        freq()
-      );
+      _d0 += hp * freq();
       
       sample_t bp = _d0 - _o;
 
-      _o += s_fxmul_sXc(
-        bp,
-        freq()
-      ); 
+      _o += bp * freq();
 
       if      (_mode == HP)
         return hp;
