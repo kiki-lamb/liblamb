@@ -200,7 +200,7 @@ namespace lamb {
   constexpr
   q & operator *= (
    q<other_pad, other_whole, other_frac> const & other
-  ) const {
+  ) {
 
    typedef
     q<other_pad, other_whole, other_frac>
@@ -267,7 +267,7 @@ namespace lamb {
   constexpr
   q & operator /= (
    q<other_pad, other_whole, other_frac> const & other
-  ) const {
+  ) {
 
    typedef
     q<other_pad, other_whole, other_frac>
@@ -324,8 +324,6 @@ namespace lamb {
   //------------------------------------------------------------------------------------------------------------
   constexpr q &  operator  -= (q          const & v)       { this->value  = (*this  - v ).value; return *this; }
   constexpr q &  operator  += (q          const & v)       { this->value  = (*this  + v ).value; return *this; }
-  // constexpr q &  operator  *= (q          const & v)       { this->value  = (*this  * v ).value; return *this; }
-  // constexpr q &  operator  /= (q          const & v)       { this->value  = (*this  / v ).value; return *this; }
   //------------------------------------------------------------------------------------------------------------
   constexpr bool operator  <= (q          const & o) const { return         (*this     == o ) || (*this < o) ; }
   constexpr bool operator  >= (q          const & o) const { return         (*this     == o ) || (*this > o) ; }
