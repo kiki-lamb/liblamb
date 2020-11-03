@@ -178,20 +178,15 @@ namespace lamb {
     "Signedness mismatch!"
    );
 
-   if constexpr(PAD > other_type::DATA_SIZE) {
-    value_type     tmp       = value;
-    tmp                     *= other.value;
-    tmp                    >>= other_frac;
-
-    return q(tmp);
-   }
-   else {
-    big_value_type big_tmp   = value;
-    big_tmp                 *= other.value;
-    big_tmp                >>= other_frac;
-    
-    return q((value_type)big_tmp);
-   }
+   typedef typename
+    type_if<(PAD > other_type::DATA_SIZE), value_type, big_value_type>::type
+    tmp_value_type;
+   
+   tmp_value_type tmp       = value;
+   tmp                     *= other.value;
+   tmp                    >>= other_frac;
+   
+   return q((value_type)tmp);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -214,25 +209,21 @@ namespace lamb {
    if constexpr(PAD > other_type::DATA_SIZE) {
     value                   *= other.value;
     value                  >>= other_frac;
-
-    return *this;
    }
    else {
     big_value_type big_tmp   = value;
     big_tmp                 *= other.value;
     big_tmp                >>= other_frac;
     value                    = big_tmp;
-    
+   }    
     return *this;
-   }
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////
   
   template <uint8_t other_pad, uint8_t other_whole, uint8_t other_frac>
   constexpr
-  q
-  operator / (
+  q operator / (
    q<other_pad, other_whole, other_frac> const & other
   ) const {
 
@@ -245,20 +236,15 @@ namespace lamb {
     "Signedness mismatch!"
    );
 
-   if constexpr(PAD > other_type::DATA_SIZE) {
-    value_type     tmp       = value;
-    tmp                    <<= other_frac;
-    tmp                     /= other.value;
+   typedef typename
+    type_if<(PAD > other_type::DATA_SIZE), value_type, big_value_type>::type
+    tmp_value_type;
 
-    return q(tmp);
-   }
-   else{
-    big_value_type big_tmp   = value;
-    big_tmp                <<= other_frac;
-    big_tmp                 /= other.value;
-    
-    return q((value_type)big_tmp);
-   }
+   tmp_value_type tmp       = value;
+   tmp                    <<= other_frac;
+   tmp                     /= other.value;
+   
+   return q((value_type)tmp);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
