@@ -61,6 +61,8 @@ namespace lamb {
    //snprintf(buff, 64, "% d, ", res()); Serial.print(buff);
    //snprintf(buff, 64, "% 9.9f, ", float(u0q8(res()))); Serial.print(buff);
    
+   int16_t in_ = in__.value;
+
    //snprintf(buff, 64, "% d,  ",  in_); Serial.print(buff);
    //snprintf(buff, 64, "% 9.9f, ", float(s0q15(in_))); Serial.print(buff);
    
