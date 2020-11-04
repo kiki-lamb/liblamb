@@ -55,24 +55,13 @@ namespace lamb {
   inline s0q15 process(s0q15 const & in) {
    char buff[64];   
 
-   s0q15 hp     = (in              - _d0                   );
-   s0q15 tmp1   = (_d0             - _o.value              );                             
-   s0q15 tmp2   = (tmp1            * u8q8(_feedback.value) );
-   
-   // snprintf(
-   //  buff, 64,
-   //  "%d, %d, %d, \n",
-   //  _feedback.value,
-   //  tmp1.value,
-   //  tmp2
-   // );
-   
-   // Serial.print(buff);
-   s0q15 tmp3   = hp         + tmp2;
-   
-   _d0         += (tmp3.value * freq().value) >> FX_SHIFT;        
-   s0q15 bp     = (_d0             - _o          );
-   _o          += (bp.value        * freq().value)                 >> FX_SHIFT;
+   s0q15 hp     = (in       - _d0                   );
+   s0q15 tmp1   = (_d0      - _o.value              );                             
+   s0q15 tmp2   = (tmp1     * u8q8(_feedback.value ));
+   s0q15 tmp3   = (hp       + tmp2                  );
+   _d0         += (tmp3     * freq()                );
+   s0q15 bp     = (_d0      - _o                    );
+   _o          += (bp       * freq()                );
 
    // if      (_mode == HP)
    //  return s0q15(hp);
