@@ -339,4 +339,12 @@ spot:
  //  s7q24 x(s7q24::from_float(-0.40));      printf("X: % 12ld % 12.10lf \n", x.value, float(x));
  //  s0q15 y(x);                             printf("Y: % 12d % 12.10lf \n", y.value, float(y));
  // }
+
+ u0q16 _feedback(0);
+ u0q8  res(118);
+
+ _feedback = res;
+
+ printf("==> %d \n", _feedback.value);
+
 }

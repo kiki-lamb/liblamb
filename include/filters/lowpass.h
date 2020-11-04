@@ -7,7 +7,9 @@ namespace lamb {
   static constexpr u0q8 q8_one = u0q8::ONE;
 
   static constexpr uint8_t FX_SHIFT = 8;
-    
+
+  enum mode_t { mode_lp, mode_hp, mode_bp };
+  
   u0q8    _q;
   u0q8    _freq;
   u0q16   _feedback;
@@ -36,16 +38,14 @@ namespace lamb {
   inline void freq(u0q8 const & freq_) {
    _freq     = freq_;
 
-   u0q8 tmp  = res() * (q8_one - _freq);
+   u0q16 tmp((res() * (q8_one - _freq)).value);
 
-   Serial.println(tmp.value);
-   
-   _feedback.value  = res().value;
-   _feedback       += tmp.value;
+   _feedback.value  = res().value; //.value;
+   _feedback       += tmp;
 
-   // char buff[64];
-   // snprintf(buff, 64, "%d, %d, %d ", res().value, tmp, _feedback.value);
-   // Serial.println(buff);
+   char buff[64];
+   snprintf(buff, 64, "%d, %d, %d ", res().value, tmp.value, _feedback.value);
+   Serial.println(buff);
   }
 
   inline void res(u0q8 const & q_) {
