@@ -40,16 +40,14 @@ int main() {
   lowpass       fx_lp;
   uint16_t      acc(0);
   
-  for (uint16_t qix = 0; qix < 256; qix += 16) {
+  for (uint16_t qix = 0; qix < 255; qix += 16) {
    fx_lp.res(qix);
    
-   const size_t fix_incr = 100;
-   
-   for (uint16_t fix = 0; fix < 256; fix += 16) {
+   for (uint16_t fix = 255; fix > 0; fix -= 16) {
     acc          = 0;    
     fx_lp.freq(fix);
         
-    const size_t fdiv = 64;
+    const size_t fdiv = 2048;
     
     for(size_t cycle_ix = 0; cycle_ix < 1; cycle_ix++) {
      for(size_t pix = 0; pix < (65534L / fdiv); pix ++) {

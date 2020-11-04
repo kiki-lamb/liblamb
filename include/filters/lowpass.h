@@ -67,13 +67,14 @@ namespace lamb {
   }
 
   inline io_t process(io_t const & in__) {
-   // printf("% 9.9f, ", float(u0q8(freq())));
+   printf("% 9.9f, ", float(u0q8(freq())));
 
-   // printf("% 9.9f, ", float(u0q8(res())));
+   printf("% 9.9f, ", float(u0q8(res())));
    
    int16_t in_ = in__.value;
 
-   // printf("% 9.9f, ", float(s0q15(in_)));
+   printf("% d,  ",  in_);
+   printf("% 9.9f, ", float(s0q15(in_)));
    
    // D0 = D0 + FREQ * (IN - D0 + FB * (D0 - O));
    // O  = O  + FREQ * (D0 - O);
@@ -92,8 +93,13 @@ namespace lamb {
     return io_t(hp);
    else if (_mode == BP)
     return io_t(bp);
-      
-   return io_t(_o);
+
+   io_t out(_o);
+
+   printf("% d,  ",  out.value);
+   printf("% 9.9f ", float(out));
+   
+   return out;
   }
  };
 }
