@@ -7,7 +7,7 @@ namespace lamb {
 
  /////////////////////////////////////////////////////////////////////////////////////////
 
- template <typename internal_t = s0q31, typename external_t = s0q15>
+ template <typename internal_t = s0q31, typename external_t = s0q15, bool use_limits = true>
  // tested with s0q15 and s0q31
  class lowpass {
 
@@ -36,9 +36,9 @@ namespace lamb {
 
   //--------------------------------------------------------------------------------------
   
-  inline mode_t mode()             const { return _mode;                  }
-  inline u0q16 freq()              const { return _freq;                  }
-  inline u0q16 res()               const { return _res;                   }
+  inline mode_t     mode()         const { return _mode;                  }
+  inline u0q16      freq()         const { return _freq;                  }
+  inline u0q16      res()          const { return _res;                   }
   inline external_t lp()           const { return external_t(_lp);        }
   inline external_t bp()           const { return external_t(_bp);        }
   inline external_t hp()           const { return external_t(_hp);        }
@@ -46,11 +46,50 @@ namespace lamb {
   //--------------------------------------------------------------------------------------
 
   inline void mode(mode_t const & mode_) { _mode = mode_;                 }
-  inline void res (u0q16  const & res_ ) { _res = res_;                   }
+  inline void res (u0q16  const & res_ ) { _res.value = min(60000L, res_.value); }
   inline void freq(u0q16  const & freq_) {
-   // Serial.print("Filter: ");
-   // Serial.print(freq_.value);
-   // Serial.println();
+
+   if constexpr(use_limits) {
+    if (freq_ < 1000) {    
+     static constexpr size_t   limits_count            = 4;
+    
+     static constexpr uint16_t limits[limits_count][2] = {
+      { 300, 55500 },
+      { 450, 56000 },
+      { 650, 56500 },
+      { 900, 59000 },
+     };
+
+     for (size_t ix = 0; ix < limits_count; ix++) {
+      if ((freq_ < limits[ix][0]) && (_res > limits[ix][1])) {
+       _res.value = limits[ix][1];
+
+       Serial.print("Clamp ");
+       Serial.print(ix);
+       Serial.println();
+      
+       break;
+      }
+     }
+    }
+   }
+   
+   //  if      ((freq_ < 300) && (_res > 62000)) {
+   //   _res.value = 62000;
+   //  }
+   //  else if ((freq_ < 400) && (_res > 64000)) {
+   //   _res.value = 64000;
+   //  }
+   //  else if  ((freq_ < 520) && (_res > 64250)) {
+   //   _res.value = 64500;
+   //  }
+   // }
+
+   Serial.print("Filter: ");
+   Serial.print(freq_.value);
+   Serial.print(" Res: ");
+   Serial.print(_res.value);
+   Serial.println();
    
    _freq            = freq_;
    _feedback        = _res;
@@ -59,18 +98,19 @@ namespace lamb {
   }
 
   inline external_t process(external_t const & in) {
-   if (_freq.value < 160) {
-    _hp.value >>= 1;
-    _bp.value >>= 1;
-    _lp.value >>= 1;
-    _d0.value >>= 1;
+   if constexpr(use_limits) {
+    if (_freq.value < 100) {
+     _hp.value -= 2;
+     _bp.value -= 2;
+     _lp.value -= 2;
+     _d0.value -= 2;
+    }
    }
-   else {   
-    _hp  = in   - _d0;
-    _d0 += (_hp + ((_d0 - _lp) * u8q8(_feedback.value))) * _freq;
-    _bp  = _d0  - _lp;
-    _lp += _bp  * _freq;
-   }
+   
+   _hp  = in   - _d0;
+   _d0 += (_hp + ((_d0 - _lp) * u8q8(_feedback.value))) * _freq;
+   _bp  = _d0  - _lp;
+   _lp += _bp  * _freq;
    
    if      (_mode == mode_hp)
     return _hp;
