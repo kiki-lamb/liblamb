@@ -29,9 +29,9 @@ namespace lamb {
    return _q;
   }
 
-  // inline void mode(mode_t const & mode_) {
-  //  _mode = mode_;
-  // }
+  inline void mode(mode_t const & mode_) {
+   _mode = mode_;
+  }
     
   inline void freq(u0q8 const & freq_) {
    _freq     = freq_;
