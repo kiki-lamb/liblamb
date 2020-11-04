@@ -48,29 +48,34 @@ namespace lamb {
   inline void mode(mode_t const & mode_) {
    _mode = mode_;
   }
-    
-  inline void freq(u0q8 const & freq_) {
-   _freq     = freq_;
 
-   u0q16 tmp((res() * (q8_one - _freq)).value);
-
-   _feedback.value  = res().value; //.value;
-   _feedback       += tmp;
-
-   // char buff[64];
-   // snprintf(buff, 64, "%d, %d, %d ", res().value, tmp.value, _feedback.value);
-   // Serial.println(buff);
+  inline void freq(u0q16 const & freq_) {
+   freq(u0q8(freq_.value >> 4));
+  }
+  
+  inline void res(u0q16 const & q_) {
+   res(u0q8(q_.value >> 4));
   }
 
+ private:
+  
+  inline void freq(u0q8 const & freq_) {
+   _freq            = freq_;
+   _feedback.value  = res().value;
+   _feedback       += (res() * (q8_one - _freq)).value;
+  }
+  
   inline void res(u0q8 const & q_) {
    _q = q_;
   }
 
+ public:
+  
   inline s0q15 process(s0q15 const & in) {
-   _hp  = in    - _d0;
-   _d0 += ((_hp + ((_d0 - _lp) * u8q8(_feedback.value))) * freq());
-   _bp  = _d0   - _lp;
-   _lp += _bp   * freq();
+   _hp  = in   - _d0;
+   _d0 += (_hp + ((_d0 - _lp) * u8q8(_feedback.value))) * freq();
+   _bp  = _d0  - _lp;
+   _lp += _bp  * freq();
 
    if      (_mode == mode_hp)
     return _hp;
