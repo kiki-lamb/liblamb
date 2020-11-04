@@ -44,17 +44,9 @@ namespace lamb {
   //--------------------------------------------------------------------------------------
 
   inline void mode(mode_t const & mode_) { _mode = mode_;                 }
-  inline void freq(u0q16  const & freq_) { freq(u0q8(freq_.value >> 4));  }
   inline void res (u0q16  const & res_ ) { _res = u0q8(res_.value >> 4);  }
-
- /////////////////////////////////////////////////////////////////////////////////////////
-  
- private:
-
-  //--------------------------------------------------------------------------------------
-  
-  inline void freq(u0q8   const & freq_) {
-   _freq            = freq_;
+  inline void freq(u0q16  const & freq_) {
+   _freq.value      = freq_.value >> 4;
    _feedback.value  = _res.value;
    _feedback       += (_res * (q8_one - _freq)).value;
   }
