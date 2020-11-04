@@ -14,20 +14,12 @@ namespace lamb {
 
   typedef u0q8                                                 control_frac_t;
 
- public:
-  
-//  typedef typename control_frac_t::value_type                  control_t;
-  
  private:
-
-  typedef int16_t                                              sample_t;
-  typedef typename sample_type_traits<sample_t>::unsigned_type unsigned_sample_t;
-  typedef typename sample_type_traits<sample_t>::mix_type      mix_t;
-  typedef typename sample_type_traits<mix_t>::unsigned_type    unsigned_mix_t;
 
   static constexpr control_frac_t control_t_one = control_frac_t::ONE;
 
  private:
+
   static constexpr uint8_t FX_SHIFT = 8;
     
   control_frac_t    _q;
@@ -38,6 +30,7 @@ namespace lamb {
 //  mode_t          _mode;
     
  public:
+
   lowpass() /* : _mode(LP) */ {}
 
   // inline mode_t mode() const {
@@ -60,7 +53,7 @@ namespace lamb {
    _freq     = freq_;
 
    auto tmp  = (
-    (unsigned_mix_t(res().value)) *
+    (uint16_t(res().value)) *
     (control_t_one - _freq).value
    ) >> FX_SHIFT;
    
@@ -88,7 +81,7 @@ namespace lamb {
    // D0 = D0 + FREQ * (IN - D0 + FB * (D0 - O));
    // O  = O  + FREQ * (D0 - O);
      
-   sample_t hp = in_ - _d0.value;                          ////snprintf(buff, 64, "% 9.9f, ", float(s0q15(in_))); Serial.print(buff);
+   int16_t hp = in_ - _d0.value;                          ////snprintf(buff, 64, "% 9.9f, ", float(s0q15(in_))); Serial.print(buff);
 
    ////snprintf(buff, 64, "% 9.9f, ", float(s0q15(_feedback))); Serial.print(buff);
 
@@ -97,7 +90,7 @@ namespace lamb {
       
    _d0 += ((hp + tmp2) * freq().value) >> FX_SHIFT;        ////snprintf(buff, 64, "% 9.9fc, ", float(s0q15(_d0))); Serial.print(buff);
       
-   sample_t bp = (_d0 - _o).value;                           ////snprintf(buff, 64, "% 9.9f, ", float(s0q15(bp))); Serial.print(buff);
+   int16_t bp = (_d0 - _o).value;                           ////snprintf(buff, 64, "% 9.9f, ", float(s0q15(bp))); Serial.print(buff);
 
    _o += (bp * freq().value) >> FX_SHIFT;                  ////snprintf(buff, 64, "% 9.9f, ", float(s0q15(_o))); Serial.print(buff);
 
