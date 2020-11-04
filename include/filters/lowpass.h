@@ -41,7 +41,12 @@ namespace lamb {
     (q8_one - _freq).value
    ) >> FX_SHIFT;
    
-   _feedback.value = (res() + tmp).value;
+   _feedback.value = res().value;
+   _feedback += tmp;
+
+   // char buff[64];
+   // snprintf(buff, 64, "%d, %d, %d ", res().value, tmp, _feedback.value);
+   // Serial.println(buff);
   }
 
   inline void res(u0q8 const & q_) {
