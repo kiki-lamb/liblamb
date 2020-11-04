@@ -50,7 +50,6 @@
 //  #include "filters/moog.h"
   #include "filters/fx_chamberlin.h"
   #include "filters/lowpass.h"
-  #include "filters/lowpass_8.h"
 
   #include "events/event.h"
   #include "events/sources/buffer.h"
