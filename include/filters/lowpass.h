@@ -52,15 +52,14 @@ namespace lamb {
    _q = q_;
   }
 
-  inline s0q15 process(s0q15 const & in__) {
-   char buff[64];
-   
-   int16_t in_  = in__.value;
-   int16_t hp   = in_ - _d0.value;                           
-   auto tmp1    = _d0 - _o.value;                             
-   auto tmp2    = (_feedback.value * tmp1.value) >> FX_SHIFT; 
-   _d0         += ((hp + tmp2) * freq().value) >> FX_SHIFT;        
-   int16_t bp   = (_d0 - _o).value;                          
+  inline s0q15 process(s0q15 const & in) {
+   char buff[64];   
+
+   int16_t hp   = (in.value        - _d0.value );
+   auto tmp1    = (_d0             - _o.value  );                             
+   auto tmp2    = (_feedback.value * tmp1.value)                 >> FX_SHIFT; 
+   _d0         += ((hp             + tmp2      ) * freq().value) >> FX_SHIFT;        
+   int16_t bp   = (_d0             - _o        ).value;                          
    _o          += (bp * freq().value) >> FX_SHIFT;                  
 
    // if      (_mode == HP)
