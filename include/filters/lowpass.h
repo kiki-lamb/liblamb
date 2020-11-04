@@ -16,7 +16,7 @@ namespace lamb {
     typename sample_type_traits<sample_t>::unmixed_type
    ) << 3)>                                                   control_frac_t;
 
-  typedef typename control_frac_t::value_type                  control_t;
+  typedef typename control_frac_t::value_type                 control_t;
 
   static const control_t control_t_one = control_frac_t::ONE.value;
 
