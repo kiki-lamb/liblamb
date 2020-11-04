@@ -4,29 +4,15 @@
 namespace lamb {
  class lowpass {
 
- public:
-
-  typedef s0q15                                                io_t;
-
-//  enum mode_t { LP, BP, HP };
-
- private:
-
-  typedef u0q8                                                 control_frac_t;
-
- private:
-
-  static constexpr control_frac_t control_t_one = control_frac_t::ONE;
-
- private:
+  static constexpr u0q8 q8_one = u0q8::ONE;
 
   static constexpr uint8_t FX_SHIFT = 8;
     
-  control_frac_t    _q;
-  control_frac_t    _freq;
+  u0q8    _q;
+  u0q8    _freq;
   u0q16             _feedback;
-  io_t              _d0;
-  io_t              _o;
+  s0q15              _d0;
+  s0q15              _o;
 //  mode_t          _mode;
     
  public:
@@ -37,11 +23,11 @@ namespace lamb {
   //  return _mode;
   // }
 
-  inline control_frac_t freq() const {
+  inline u0q8 freq() const {
    return _freq;
   }
     
-  inline control_frac_t res() const {
+  inline u0q8 res() const {
    return _q;
   }
 
@@ -49,22 +35,22 @@ namespace lamb {
   //  _mode = mode_;
   // }
     
-  inline void freq(control_frac_t const & freq_) {
+  inline void freq(u0q8 const & freq_) {
    _freq     = freq_;
 
    auto tmp  = (
     (uint16_t(res().value)) *
-    (control_t_one - _freq).value
+    (q8_one - _freq).value
    ) >> FX_SHIFT;
    
    _feedback.value = (res() + tmp).value;
   }
 
-  inline void res(control_frac_t const & q_) {
+  inline void res(u0q8 const & q_) {
    _q = q_;
   }
 
-  inline io_t process(io_t const & in__) {
+  inline s0q15 process(s0q15 const & in__) {
    char buff[64];
    
    //snprintf(buff, 64, "% d, ", freq()); Serial.print(buff);
@@ -95,11 +81,11 @@ namespace lamb {
    _o += (bp * freq().value) >> FX_SHIFT;                  ////snprintf(buff, 64, "% 9.9f, ", float(s0q15(_o))); Serial.print(buff);
 
    // if      (_mode == HP)
-   //  return io_t(hp);
+   //  return s0q15(hp);
    // else if (_mode == BP)
-   //  return io_t(bp);
+   //  return s0q15(bp);
 
-   io_t out(_o);
+   s0q15 out(_o);
 
    // //snprintf(buff, 64, "% d,  ",  out.value); Serial.print(buff);
    // //snprintf(buff, 64, "% 9.9f ", float(out)); Serial.print(buff); Serial.println(); 
