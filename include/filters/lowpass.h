@@ -14,7 +14,9 @@ namespace lamb {
   u0q8    _freq;
   u0q16   _feedback;
   s0q15   _d0;
-  s0q15   _o;
+  s0q15   _lp;
+  s0q15   _hp;
+  s0q15   _bp;
   mode_t  _mode;
     
  public:
@@ -29,6 +31,18 @@ namespace lamb {
     
   inline u0q8 res() const {
    return _q;
+  }
+
+  inline s0q15 lp() const {
+   return _lp;
+  }
+
+  inline s0q15 bp() const {
+   return _bp;
+  }
+
+  inline s0q15 hp() const {
+   return _hp;
   }
 
   inline void mode(mode_t const & mode_) {
@@ -53,21 +67,17 @@ namespace lamb {
   }
 
   inline s0q15 process(s0q15 const & in) {
-   char buff[64];   
-
-   s0q15 hp     = (in       - _d0                         );
-   s0q15 tmp2   = ((_d0      - _o) * u8q8(_feedback.value));
-   s0q15 tmp3   = (hp       + tmp2                        );
-   _d0         += (tmp3     * freq()                      );
-   s0q15 bp     = (_d0      - _o                          );
-   _o          += (bp       * freq()                      );
+   _hp  = in    - _d0;
+   _d0 += ((_hp + ((_d0 - _lp) * u8q8(_feedback.value))) * freq());
+   _bp  = _d0   - _lp;
+   _lp += _bp   * freq();
 
    if      (_mode == mode_hp)
-    return s0q15(hp);
+    return _hp;
    else if (_mode == mode_bp)
-    return s0q15(bp);
+    return _bp;
 
-   return _o;
+   return _lp;
   }
  };
 }
