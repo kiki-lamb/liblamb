@@ -46,20 +46,20 @@ namespace lamb {
   //--------------------------------------------------------------------------------------
 
   inline void mode(mode_t const & mode_) { _mode = mode_;                 }
-  inline void res (u0q16  const & res_ ) { _res.value = min(60000L, res_.value); }
+  inline void res (u0q16  const & res_ ) { _res.value = min(62000L, res_.value); }
   inline void freq(u0q16  const & freq_) {
 
    if constexpr(use_limits) {
-    if (freq_ < 1000) {    
-     static constexpr size_t   limits_count            = 4;
+    static constexpr size_t   limits_count            = 4;
     
-     static constexpr uint16_t limits[limits_count][2] = {
-      { 300, 55500 },
-      { 450, 56000 },
-      { 650, 56500 },
-      { 900, 59000 },
-     };
-
+    static constexpr uint16_t limits[limits_count][2] = {
+     { 300, 58000 },
+     { 500, 59000 },
+     { 700, 60000 },
+     { 900, 61000 },
+    };
+    
+    if (freq_ <= limits[limits_count - 1][0]) {    
      for (size_t ix = 0; ix < limits_count; ix++) {
       if ((freq_ < limits[ix][0]) && (_res > limits[ix][1])) {
        _res.value = limits[ix][1];
