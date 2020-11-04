@@ -36,13 +36,12 @@ namespace lamb {
   inline void freq(u0q8 const & freq_) {
    _freq     = freq_;
 
-   auto tmp  = (
-    (uint16_t(res().value)) *
-    (q8_one - _freq).value
-   ) >> FX_SHIFT;
+   u0q8 tmp  = res() * (q8_one - _freq);
+
+   Serial.println(tmp.value);
    
-   _feedback.value = res().value;
-   _feedback += tmp;
+   _feedback.value  = res().value;
+   _feedback       += tmp.value;
 
    // char buff[64];
    // snprintf(buff, 64, "%d, %d, %d ", res().value, tmp, _feedback.value);
@@ -62,8 +61,6 @@ namespace lamb {
    //snprintf(buff, 64, "% d, ", res()); Serial.print(buff);
    //snprintf(buff, 64, "% 9.9f, ", float(u0q8(res()))); Serial.print(buff);
    
-   int16_t in_ = in__.value;
-
    //snprintf(buff, 64, "% d,  ",  in_); Serial.print(buff);
    //snprintf(buff, 64, "% 9.9f, ", float(s0q15(in_))); Serial.print(buff);
    
