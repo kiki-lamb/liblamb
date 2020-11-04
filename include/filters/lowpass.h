@@ -84,14 +84,15 @@ namespace lamb {
    sample_t hp = in_ - _d0;                          printf("% 9.9f, ", float(s0q15(in_)));
 
    printf("% 9.9f, ", float(s0q15(_feedback)));
+
+   auto tmp1 = _d0 - _o;                             printf("% 9.9fa, ", float(s0q15(tmp1)));
+   auto tmp2 = (_feedback * tmp1) >> FX_SHIFT;       printf("% 9.9fb, ", float(s0q15(tmp2)));
       
-   auto tmp = (_feedback * (_d0 - _o)) >> FX_SHIFT;  printf("% 9.9f, ", float(s0q15(tmp)));
-      
-   _d0 += ((hp + tmp) * freq()) >> FX_SHIFT;         printf("% 9.9f, ", float(s0q15(_d0)));
+   _d0 += ((hp + tmp2) * freq()) >> FX_SHIFT;        printf("% 9.9fc, ", float(s0q15(_d0)));
       
    sample_t bp = _d0 - _o;                           printf("% 9.9f, ", float(s0q15(bp)));
 
-   _o += (bp * freq()) >> FX_SHIFT;                  printf("% 9.9f, ",  float(s0q15(_o)));
+   _o += (bp * freq()) >> FX_SHIFT;                  printf("% 9.9f, ", float(s0q15(_o)));
 
    if      (_mode == HP)
     return io_t(hp);

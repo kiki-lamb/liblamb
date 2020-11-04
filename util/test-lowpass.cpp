@@ -40,7 +40,7 @@ int main() {
   lowpass       fx_lp;
   uint16_t      acc(0);
   
-  for (uint16_t qix = 255; qix > 16; qix -= 16) {
+  for (uint16_t qix = 128; qix > 16; qix -= 16) {
    fx_lp.res(qix);
    
    for (uint16_t fix = 255; fix > 16; fix -= 16) {
