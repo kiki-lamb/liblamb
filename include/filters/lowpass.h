@@ -47,8 +47,9 @@ namespace lamb {
   inline void res (u0q16  const & res_ ) { _res = res_;                   }
   inline void freq(u0q16  const & freq_) {
    _freq            = freq_;
-   _feedback.value  = _res.value >> 8;
-   _feedback       += (_res * (q8_one - _freq)).value >> 8;
+   _feedback        = _res;
+   _feedback      >>= 8;
+   _feedback       += (_res * (q8_one - _freq)) >> 8;
   }
 
  /////////////////////////////////////////////////////////////////////////////////////////
