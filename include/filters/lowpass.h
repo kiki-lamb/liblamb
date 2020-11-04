@@ -43,9 +43,9 @@ namespace lamb {
    _feedback.value  = res().value; //.value;
    _feedback       += tmp;
 
-   char buff[64];
-   snprintf(buff, 64, "%d, %d, %d ", res().value, tmp.value, _feedback.value);
-   Serial.println(buff);
+   // char buff[64];
+   // snprintf(buff, 64, "%d, %d, %d ", res().value, tmp.value, _feedback.value);
+   // Serial.println(buff);
   }
 
   inline void res(u0q8 const & q_) {
@@ -68,8 +68,9 @@ namespace lamb {
    // );
    
    // Serial.print(buff);
+   s0q15 tmp3   = hp         + tmp2;
    
-   _d0         += ((hp.value       + tmp2.value  ) * freq().value) >> FX_SHIFT;        
+   _d0         += (tmp3.value * freq().value) >> FX_SHIFT;        
    s0q15 bp     = (_d0             - _o          );
    _o          += (bp.value        * freq().value)                 >> FX_SHIFT;
 
