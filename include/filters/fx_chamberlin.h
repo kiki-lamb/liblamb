@@ -45,7 +45,7 @@ namespace lamb {
 
   constexpr
   fx_chamberlin() :
-   FS(44100, 0),
+   FS(48000, 0),
    F0(1000, 0),
    F1(0), 
    Q0(1, 0),
@@ -56,7 +56,7 @@ namespace lamb {
    N(0),
    Z0(0),
    Z1(0) {
-    f(F0);
+    freq(F0);
     res(Q0);
    }
 
@@ -66,7 +66,7 @@ namespace lamb {
   external_type externalize(internal_type const & intern) {
    external_type ret((external_type)(intern >> 2));
    
-   printf("% 9.9f  ", float(ret));
+   //printf("% 9.9f  ", float(ret));
 
    return ret;
   }
@@ -74,59 +74,45 @@ namespace lamb {
   //////////////////////////////////////////////////////////////////////////////
 
   constexpr
-  hz_type::value_type f() {
+  hz_type::value_type freq() {
    return F0.value; // .characteristic();
   }
   
   //----------------------------------------------------------------------------
   
-  constexpr
-  void f(hz_type::value_type const & x) {
-   f(hz_type(x & 0xffffff, 0));
-  }
+  // constexpr
+  // void freq(hz_type::value_type const & x) {
+  //  freq(hz_type(x & 0xffffff, 0));
+  // }
 
   //----------------------------------------------------------------------------
 
- private:
   
   constexpr
-  void f(hz_type const & x) {
+  void freq(hz_type const & x) {
    F0  = x;
    F1  = F0 / FS;
    F1 *= PI2;
   }
 
   //////////////////////////////////////////////////////////////////////////////
-
- public:
   
   constexpr
-  q0_type q() const {
+  q0_type res() const {
    return Q0;
   }
 
   //----------------------------------------------------------------------------
 
   constexpr
-  void res(float const & x) {
-   res(q0_type::from_float(x >= 0.5 ? x : 0.5));
-   }
-
-  //----------------------------------------------------------------------------
-
-  constexpr
-  void res(q0_type const & x) {
-   res_(x.value);
-  }
-
-  //----------------------------------------------------------------------------
-  
-  constexpr
-  void res_(q0_type::value_type const & x) {
-   Q0.value = x;
+  void res(q0_type x) {
+   if (x.value == 0)
+    x.value = 1;
+   
+   Q0.value = x.value;
    Q1       = q1_type::ONE / Q0;
 
-//   printf("% 12ld, % 12ld \n", float(q0_type(x)), float(Q0));
+//   //printf("% 12ld, % 12ld \n", float(q0_type(x)), float(Q0));
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -141,7 +127,7 @@ namespace lamb {
   constexpr
   void fs(uint32_t const & x) {
    FS = hz_type(x, 0);
-   f(F0);
+   freq(F0);
   }
 
   //////////////////////////////////////////////////////////////////////////////

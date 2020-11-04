@@ -67,32 +67,32 @@ namespace lamb {
   }
 
   inline io_t process(io_t const & in__) {
-//   printf("% d, ", freq());
-   printf("% 9.9f, ", float(u0q8(freq())));
+//   //printf("% d, ", freq());
+   //printf("% 9.9f, ", float(u0q8(freq())));
 
-//   printf("% d, ", res());
-   printf("% 9.9f, ", float(u0q8(res())));
+//   //printf("% d, ", res());
+   //printf("% 9.9f, ", float(u0q8(res())));
    
    int16_t in_ = in__.value;
 
-//   printf("% d,  ",  in_);
-   printf("% 9.9f, ", float(s0q15(in_)));
+//   //printf("% d,  ",  in_);
+   //printf("% 9.9f, ", float(s0q15(in_)));
    
    // D0 = D0 + FREQ * (IN - D0 + FB * (D0 - O));
    // O  = O  + FREQ * (D0 - O);
      
-   sample_t hp = in_ - _d0;                          printf("% 9.9f, ", float(s0q15(in_)));
+   sample_t hp = in_ - _d0;                          //printf("% 9.9f, ", float(s0q15(in_)));
 
-   printf("% 9.9f, ", float(s0q15(_feedback)));
+   //printf("% 9.9f, ", float(s0q15(_feedback)));
 
-   auto tmp1 = _d0 - _o;                             printf("% 9.9fa, ", float(s0q15(tmp1)));
-   auto tmp2 = (_feedback * tmp1) >> FX_SHIFT;       printf("% 9.9fb, ", float(s0q15(tmp2)));
+   auto tmp1 = _d0 - _o;                             //printf("% 9.9fa, ", float(s0q15(tmp1)));
+   auto tmp2 = (_feedback * tmp1) >> FX_SHIFT;       //printf("% 9.9fb, ", float(s0q15(tmp2)));
       
-   _d0 += ((hp + tmp2) * freq()) >> FX_SHIFT;        printf("% 9.9fc, ", float(s0q15(_d0)));
+   _d0 += ((hp + tmp2) * freq()) >> FX_SHIFT;        //printf("% 9.9fc, ", float(s0q15(_d0)));
       
-   sample_t bp = _d0 - _o;                           printf("% 9.9f, ", float(s0q15(bp)));
+   sample_t bp = _d0 - _o;                           //printf("% 9.9f, ", float(s0q15(bp)));
 
-   _o += (bp * freq()) >> FX_SHIFT;                  printf("% 9.9f, ", float(s0q15(_o)));
+   _o += (bp * freq()) >> FX_SHIFT;                  //printf("% 9.9f, ", float(s0q15(_o)));
 
    if      (_mode == HP)
     return io_t(hp);
@@ -101,8 +101,8 @@ namespace lamb {
 
    io_t out(_o);
 
-//   printf("% d,  ",  out.value);
-   printf("% 9.9f ", float(out));
+//   //printf("% d,  ",  out.value);
+   //printf("% 9.9f ", float(out));
    
    return out;
   }
