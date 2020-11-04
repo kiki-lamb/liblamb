@@ -67,32 +67,34 @@ namespace lamb {
   }
 
   inline io_t process(io_t const & in__) {
-//   //printf("% d, ", freq());
-   //printf("% 9.9f, ", float(u0q8(freq())));
+   char buff[64];
+   
+   //snprintf(buff, 64, "% d, ", freq()); Serial.print(buff);
+   //snprintf(buff, 64, "% 9.9f, ", float(u0q8(freq()))); Serial.print(buff);
 
-//   //printf("% d, ", res());
-   //printf("% 9.9f, ", float(u0q8(res())));
+   //snprintf(buff, 64, "% d, ", res()); Serial.print(buff);
+   //snprintf(buff, 64, "% 9.9f, ", float(u0q8(res()))); Serial.print(buff);
    
    int16_t in_ = in__.value;
 
-//   //printf("% d,  ",  in_);
-   //printf("% 9.9f, ", float(s0q15(in_)));
+   //snprintf(buff, 64, "% d,  ",  in_); Serial.print(buff);
+   //snprintf(buff, 64, "% 9.9f, ", float(s0q15(in_))); Serial.print(buff);
    
    // D0 = D0 + FREQ * (IN - D0 + FB * (D0 - O));
    // O  = O  + FREQ * (D0 - O);
      
-   sample_t hp = in_ - _d0;                          //printf("% 9.9f, ", float(s0q15(in_)));
+   sample_t hp = in_ - _d0;                          ////snprintf(buff, 64, "% 9.9f, ", float(s0q15(in_))); Serial.print(buff);
 
-   //printf("% 9.9f, ", float(s0q15(_feedback)));
+   ////snprintf(buff, 64, "% 9.9f, ", float(s0q15(_feedback))); Serial.print(buff);
 
-   auto tmp1 = _d0 - _o;                             //printf("% 9.9fa, ", float(s0q15(tmp1)));
-   auto tmp2 = (_feedback * tmp1) >> FX_SHIFT;       //printf("% 9.9fb, ", float(s0q15(tmp2)));
+   auto tmp1 = _d0 - _o;                             ////snprintf(buff, 64, "% 9.9fa, ", float(s0q15(tmp1))); Serial.print(buff);
+   auto tmp2 = (_feedback * tmp1) >> FX_SHIFT;       ////snprintf(buff, 64, "% 9.9fb, ", float(s0q15(tmp2))); Serial.print(buff);
       
-   _d0 += ((hp + tmp2) * freq()) >> FX_SHIFT;        //printf("% 9.9fc, ", float(s0q15(_d0)));
+   _d0 += ((hp + tmp2) * freq()) >> FX_SHIFT;        ////snprintf(buff, 64, "% 9.9fc, ", float(s0q15(_d0))); Serial.print(buff);
       
-   sample_t bp = _d0 - _o;                           //printf("% 9.9f, ", float(s0q15(bp)));
+   sample_t bp = _d0 - _o;                           ////snprintf(buff, 64, "% 9.9f, ", float(s0q15(bp))); Serial.print(buff);
 
-   _o += (bp * freq()) >> FX_SHIFT;                  //printf("% 9.9f, ", float(s0q15(_o)));
+   _o += (bp * freq()) >> FX_SHIFT;                  ////snprintf(buff, 64, "% 9.9f, ", float(s0q15(_o))); Serial.print(buff);
 
    if      (_mode == HP)
     return io_t(hp);
@@ -101,9 +103,10 @@ namespace lamb {
 
    io_t out(_o);
 
-//   //printf("% d,  ",  out.value);
-   //printf("% 9.9f ", float(out));
-   
+   // //snprintf(buff, 64, "% d,  ",  out.value); Serial.print(buff);
+   // //snprintf(buff, 64, "% 9.9f ", float(out)); Serial.print(buff); Serial.println(); 
+   // Serial.println();
+
    return out;
   }
  };
