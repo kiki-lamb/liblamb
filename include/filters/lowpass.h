@@ -67,27 +67,31 @@ namespace lamb {
   }
 
   inline io_t process(io_t const & in__) {
+//   printf("% d, ", freq());
    printf("% 9.9f, ", float(u0q8(freq())));
 
+//   printf("% d, ", res());
    printf("% 9.9f, ", float(u0q8(res())));
    
    int16_t in_ = in__.value;
 
-   printf("% d,  ",  in_);
+//   printf("% d,  ",  in_);
    printf("% 9.9f, ", float(s0q15(in_)));
    
    // D0 = D0 + FREQ * (IN - D0 + FB * (D0 - O));
    // O  = O  + FREQ * (D0 - O);
      
-   sample_t hp = in_ - _d0;                          // printf("% 9.9f, ", float(s15q16(in_)));
-   
-   auto tmp = (_feedback * (_d0 - _o)) >> FX_SHIFT;  // printf("% 9.9f, ", float(s15q16(tmp)));
-      
-   _d0 += ((hp + tmp) * freq()) >> FX_SHIFT;         // printf("% 9.9f, ", float(s15q16(_d0)));
-      
-   sample_t bp = _d0 - _o;                           // printf("% 9.9f, ", float(s15q16(bp)));
+   sample_t hp = in_ - _d0;                          printf("% 9.9f, ", float(s0q15(in_)));
 
-   _o += (bp * freq()) >> FX_SHIFT;                  // printf("% 9.9f ", float(s15q16(_o)));
+   printf("% 9.9f, ", float(s0q15(_feedback)));
+      
+   auto tmp = (_feedback * (_d0 - _o)) >> FX_SHIFT;  printf("% 9.9f, ", float(s0q15(tmp)));
+      
+   _d0 += ((hp + tmp) * freq()) >> FX_SHIFT;         printf("% 9.9f, ", float(s0q15(_d0)));
+      
+   sample_t bp = _d0 - _o;                           printf("% 9.9f, ", float(s0q15(bp)));
+
+   _o += (bp * freq()) >> FX_SHIFT;                  printf("% 9.9f, ",  float(s0q15(_o)));
 
    if      (_mode == HP)
     return io_t(hp);
@@ -96,7 +100,7 @@ namespace lamb {
 
    io_t out(_o);
 
-   printf("% d,  ",  out.value);
+//   printf("% d,  ",  out.value);
    printf("% 9.9f ", float(out));
    
    return out;

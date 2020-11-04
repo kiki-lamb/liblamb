@@ -40,10 +40,10 @@ int main() {
   lowpass       fx_lp;
   uint16_t      acc(0);
   
-  for (uint16_t qix = 0; qix < 255; qix += 16) {
+  for (uint16_t qix = 255; qix > 16; qix -= 16) {
    fx_lp.res(qix);
    
-   for (uint16_t fix = 255; fix > 0; fix -= 16) {
+   for (uint16_t fix = 255; fix > 16; fix -= 16) {
     acc          = 0;    
     fx_lp.freq(fix);
         
