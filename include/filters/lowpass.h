@@ -7,11 +7,12 @@ namespace lamb {
 
  /////////////////////////////////////////////////////////////////////////////////////////
 
+ template <typename internal_t = s0q31> // tested with s0q15 and s0q31
  class lowpass {
 
   //--------------------------------------------------------------------------------------
   
-  static constexpr u0q8 q8_one = u0q16::ONE;
+  static constexpr u0q16 q8_one = u0q16::ONE;
 
   //--------------------------------------------------------------------------------------
 
@@ -19,14 +20,14 @@ namespace lamb {
   
   //--------------------------------------------------------------------------------------
 
-  u0q16   _res;
-  u0q16   _freq;
-  u0q16   _feedback;
-  s0q15   _d0;
-  s0q15   _lp;
-  s0q15   _hp;
-  s0q15   _bp;
-  mode_t  _mode;
+  u0q16      _res;
+  u0q16      _freq;
+  u0q16      _feedback;
+  internal_t _d0;
+  internal_t _lp;
+  internal_t _hp;
+  internal_t _bp;
+  mode_t     _mode;
 
  /////////////////////////////////////////////////////////////////////////////////////////
   
@@ -37,9 +38,9 @@ namespace lamb {
   inline mode_t mode()             const { return _mode;                  }
   inline u0q16 freq()              const { return _freq;                  }
   inline u0q16 res()               const { return _res;                   }
-  inline s0q15 lp()                const { return _lp;                    }
-  inline s0q15 bp()                const { return _bp;                    }
-  inline s0q15 hp()                const { return _hp;                    }
+  inline s0q15 lp()                const { return s0q15(_lp);             }
+  inline s0q15 bp()                const { return s0q15(_bp);             }
+  inline s0q15 hp()                const { return s0q15(_hp);             }
 
   //--------------------------------------------------------------------------------------
 
@@ -52,12 +53,6 @@ namespace lamb {
    _feedback       += (_res * (q8_one - _freq)) >> 8;
   }
 
- /////////////////////////////////////////////////////////////////////////////////////////
-  
- public:
-
-  //--------------------------------------------------------------------------------------
-  
   inline s0q15 process(s0q15 const & in) {
    _hp  = in   - _d0;
    _d0 += (_hp + ((_d0 - _lp) * u8q8(_feedback.value))) * _freq;
