@@ -7,10 +7,16 @@ namespace lamb {
  public:
 
   typedef s0q15                                                io_t;
-  typedef u0q8                                                 control_frac_t;
-  typedef typename control_frac_t::value_type                  control_t;
 
   enum mode_t { LP, BP, HP };
+
+ private:
+
+  typedef u0q8                                                 control_frac_t;
+
+ public:
+  
+  typedef typename control_frac_t::value_type                  control_t;
   
  private:
 
