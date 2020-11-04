@@ -19,7 +19,7 @@ namespace lamb {
   
   //--------------------------------------------------------------------------------------
 
-  u0q8    _res;
+  u0q16   _res;
   u0q16   _freq;
   u0q16   _feedback;
   s0q15   _d0;
@@ -35,8 +35,8 @@ namespace lamb {
   //--------------------------------------------------------------------------------------
   
   inline mode_t mode()             const { return _mode;                  }
-  inline u0q16 freq()              const { return u0q16(_freq);           }
-  inline u0q16 res()               const { return u0q16(_res);            }
+  inline u0q16 freq()              const { return _freq;                  }
+  inline u0q16 res()               const { return _res;                   }
   inline s0q15 lp()                const { return _lp;                    }
   inline s0q15 bp()                const { return _bp;                    }
   inline s0q15 hp()                const { return _hp;                    }
@@ -44,11 +44,11 @@ namespace lamb {
   //--------------------------------------------------------------------------------------
 
   inline void mode(mode_t const & mode_) { _mode = mode_;                 }
-  inline void res (u0q16  const & res_ ) { _res = u0q8(res_);             }
+  inline void res (u0q16  const & res_ ) { _res = res_;                   }
   inline void freq(u0q16  const & freq_) {
    _freq            = freq_;
-   _feedback.value  = _res.value;
-   _feedback       += (_res * (q8_one - _freq)).value;
+   _feedback.value  = _res.value >> 8;
+   _feedback       += (_res * (q8_one - _freq)).value >> 8;
   }
 
  /////////////////////////////////////////////////////////////////////////////////////////
