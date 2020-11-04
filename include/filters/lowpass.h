@@ -10,18 +10,16 @@ namespace lamb {
     
   u0q8    _q;
   u0q8    _freq;
-  u0q16             _feedback;
-  s0q15              _d0;
-  s0q15              _o;
-//  mode_t          _mode;
+  u0q16   _feedback;
+  s0q15   _d0;
+  s0q15   _o;
+  mode_t  _mode;
     
  public:
 
-  lowpass() /* : _mode(LP) */ {}
-
-  // inline mode_t mode() const {
-  //  return _mode;
-  // }
+  inline mode_t mode() const {
+   return _mode;
+  }
 
   inline u0q8 freq() const {
    return _freq;
