@@ -47,6 +47,10 @@ namespace lamb {
   inline void mode(mode_t const & mode_) { _mode = mode_;                 }
   inline void res (u0q16  const & res_ ) { _res = res_;                   }
   inline void freq(u0q16  const & freq_) {
+   // Serial.print("Filter: ");
+   // Serial.print(freq_.value);
+   // Serial.println();
+   
    _freq            = freq_;
    _feedback        = _res;
    _feedback      >>= 8;
@@ -54,11 +58,16 @@ namespace lamb {
   }
 
   inline s0q15 process(s0q15 const & in) {
-   _hp  = in   - _d0;
-   _d0 += (_hp + ((_d0 - _lp) * u8q8(_feedback.value))) * _freq;
-   _bp  = _d0  - _lp;
-   _lp += _bp  * _freq;
-
+   if (_freq.value < 160) {
+    _hp.value = _bp.value = _lp.value = _d0.value = 0;
+   }
+   else {   
+    _hp  = in   - _d0;
+    _d0 += (_hp + ((_d0 - _lp) * u8q8(_feedback.value))) * _freq;
+    _bp  = _d0  - _lp;
+    _lp += _bp  * _freq;
+   }
+   
    if      (_mode == mode_hp)
     return _hp;
    else if (_mode == mode_bp)
