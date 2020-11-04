@@ -33,8 +33,8 @@ namespace lamb {
   control_frac_t    _q;
   control_frac_t    _freq;
   u0q16             _feedback;
-  sample_t          _d0;
-  sample_t          _o;
+  io_t              _d0;
+  io_t              _o;
 //  mode_t          _mode;
     
  public:
@@ -88,16 +88,16 @@ namespace lamb {
    // D0 = D0 + FREQ * (IN - D0 + FB * (D0 - O));
    // O  = O  + FREQ * (D0 - O);
      
-   sample_t hp = in_ - _d0;                          ////snprintf(buff, 64, "% 9.9f, ", float(s0q15(in_))); Serial.print(buff);
+   sample_t hp = in_ - _d0.value;                          ////snprintf(buff, 64, "% 9.9f, ", float(s0q15(in_))); Serial.print(buff);
 
    ////snprintf(buff, 64, "% 9.9f, ", float(s0q15(_feedback))); Serial.print(buff);
 
-   auto tmp1 = _d0 - _o;                             ////snprintf(buff, 64, "% 9.9fa, ", float(s0q15(tmp1))); Serial.print(buff);
-   auto tmp2 = (_feedback.value * tmp1) >> FX_SHIFT;       ////snprintf(buff, 64, "% 9.9fb, ", float(s0q15(tmp2))); Serial.print(buff);
+   auto tmp1 = _d0 - _o.value;                             ////snprintf(buff, 64, "% 9.9fa, ", float(s0q15(tmp1))); Serial.print(buff);
+   auto tmp2 = (_feedback.value * tmp1.value) >> FX_SHIFT;       ////snprintf(buff, 64, "% 9.9fb, ", float(s0q15(tmp2))); Serial.print(buff);
       
    _d0 += ((hp + tmp2) * freq().value) >> FX_SHIFT;        ////snprintf(buff, 64, "% 9.9fc, ", float(s0q15(_d0))); Serial.print(buff);
       
-   sample_t bp = _d0 - _o;                           ////snprintf(buff, 64, "% 9.9f, ", float(s0q15(bp))); Serial.print(buff);
+   sample_t bp = (_d0 - _o).value;                           ////snprintf(buff, 64, "% 9.9f, ", float(s0q15(bp))); Serial.print(buff);
 
    _o += (bp * freq().value) >> FX_SHIFT;                  ////snprintf(buff, 64, "% 9.9f, ", float(s0q15(_o))); Serial.print(buff);
 
