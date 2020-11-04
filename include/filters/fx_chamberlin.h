@@ -194,19 +194,21 @@ namespace lamb {
   external_type process(external_type I_) {
    internal_type I(I_)              ;
 
-   printf("% 6.9f, ", float(F1))  ;        
-   printf("% 6.9f, ", float(Q1))  ;
+   //printf("% 6.9f, ", float(F1))  ;        
+   //printf("% 6.9f, ", float(Q1))  ;
    
-   L  = Z1     + Z0 * F1            ;    printf("% 9.9f, ", float(L)) ;
-   H  = I  - L - Z0 * Q1            ;    printf("% 9.9f, ", float(H)) ;
-   B  = Z0     + H  * F1            ;    printf("% 9.9f, ", float(B)) ;
-   N  = H      + L                  ;    printf("% 9.9f, ", float(N)) ;
-   Z0 = B                           ;    printf("% 9.9f, ", float(Z0));
-   Z1 = L                           ;    printf("% 9.9f, ", float(Z1));
+   L  = Z1     + Z0 * F1            ;    //printf("% 9.9f, ", float(L)) ;
+   H  = I  - L - Z0 * Q1            ;    //printf("% 9.9f, ", float(H)) ;
+   B  = Z0     + H  * F1            ;    //printf("% 9.9f, ", float(B)) ;
+   N  = H      + L                  ;    //printf("% 9.9f, ", float(N)) ;
+   Z0 = B                           ;    //printf("% 9.9f, ", float(Z0));
+   Z1 = L                           ;    //printf("% 9.9f, ", float(Z1));
 
-   printf("% 9.9f, ", float(L));
+   //printf("% 9.9f, ", float(L));
 
-   return externalize(L);
+   auto t = externalize(L);
+   
+   return t;
   }
 
 ////////////////////////////////////////////////////////////////////////////////
