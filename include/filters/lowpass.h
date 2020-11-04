@@ -57,7 +57,7 @@ namespace lamb {
 
    s0q15 hp     = (in              - _d0                   );
    s0q15 tmp1   = (_d0             - _o.value              );                             
-   auto  tmp2   = (tmp1            * u8q8(_feedback.value) ).value;
+   s0q15 tmp2   = (tmp1            * u8q8(_feedback.value) );
    
    // snprintf(
    //  buff, 64,
@@ -69,7 +69,7 @@ namespace lamb {
    
    // Serial.print(buff);
    
-   _d0         += ((hp.value       + tmp2        ) * freq().value) >> FX_SHIFT;        
+   _d0         += ((hp.value       + tmp2.value  ) * freq().value) >> FX_SHIFT;        
    s0q15 bp     = (_d0             - _o          );
    _o          += (bp.value        * freq().value)                 >> FX_SHIFT;
 
