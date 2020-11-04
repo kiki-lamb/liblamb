@@ -7,7 +7,8 @@ namespace lamb {
 
  /////////////////////////////////////////////////////////////////////////////////////////
 
- template <typename internal_t = s0q31> // tested with s0q15 and s0q31
+ template <typename internal_t = s0q31, typename external_t = s0q15>
+ // tested with s0q15 and s0q31
  class lowpass {
 
   //--------------------------------------------------------------------------------------
@@ -38,9 +39,9 @@ namespace lamb {
   inline mode_t mode()             const { return _mode;                  }
   inline u0q16 freq()              const { return _freq;                  }
   inline u0q16 res()               const { return _res;                   }
-  inline s0q15 lp()                const { return s0q15(_lp);             }
-  inline s0q15 bp()                const { return s0q15(_bp);             }
-  inline s0q15 hp()                const { return s0q15(_hp);             }
+  inline external_t lp()           const { return external_t(_lp);        }
+  inline external_t bp()           const { return external_t(_bp);        }
+  inline external_t hp()           const { return external_t(_hp);        }
 
   //--------------------------------------------------------------------------------------
 
@@ -57,7 +58,7 @@ namespace lamb {
    _feedback       += (_res * (q8_one - _freq)) >> 8;
   }
 
-  inline s0q15 process(s0q15 const & in) {
+  inline external_t process(external_t const & in) {
    if (_freq.value < 160) {
     _hp.value >>= 1;
     _bp.value >>= 1;
