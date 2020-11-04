@@ -32,7 +32,7 @@ namespace lamb {
     
   control_frac_t    _q;
   control_frac_t    _freq;
-  unsigned_sample_t _feedback;
+  u0q16             _feedback;
   sample_t          _d0;
   sample_t          _o;
 //  mode_t          _mode;
@@ -64,7 +64,7 @@ namespace lamb {
     (control_t_one - _freq).value
    ) >> FX_SHIFT;
    
-   _feedback = (res() + tmp).value;
+   _feedback.value = (res() + tmp).value;
   }
 
   inline void res(control_frac_t const & q_) {
@@ -93,7 +93,7 @@ namespace lamb {
    ////snprintf(buff, 64, "% 9.9f, ", float(s0q15(_feedback))); Serial.print(buff);
 
    auto tmp1 = _d0 - _o;                             ////snprintf(buff, 64, "% 9.9fa, ", float(s0q15(tmp1))); Serial.print(buff);
-   auto tmp2 = (_feedback * tmp1) >> FX_SHIFT;       ////snprintf(buff, 64, "% 9.9fb, ", float(s0q15(tmp2))); Serial.print(buff);
+   auto tmp2 = (_feedback.value * tmp1) >> FX_SHIFT;       ////snprintf(buff, 64, "% 9.9fb, ", float(s0q15(tmp2))); Serial.print(buff);
       
    _d0 += ((hp + tmp2) * freq().value) >> FX_SHIFT;        ////snprintf(buff, 64, "% 9.9fc, ", float(s0q15(_d0))); Serial.print(buff);
       
