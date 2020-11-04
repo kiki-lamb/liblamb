@@ -59,7 +59,10 @@ namespace lamb {
 
   inline s0q15 process(s0q15 const & in) {
    if (_freq.value < 160) {
-    _hp.value = _bp.value = _lp.value = _d0.value = 0;
+    _hp.value >>= 1;
+    _bp.value >>= 1;
+    _lp.value >>= 1;
+    _d0.value >>= 1;
    }
    else {   
     _hp  = in   - _d0;
