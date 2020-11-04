@@ -10,13 +10,12 @@ namespace lamb {
 
   enum mode_t { LP, BP, HP };
 
- private:
+  typedef u0q32                                                  freq_t;
+  typedef u0q32                                                  res_t;
 
-  typedef u0q8                                                 control_frac_t;
-
- public:
+ // public:
   
-  typedef typename control_frac_t::value_type                  control_t;
+ //  typedef typename control_frac_t::value_type                  control_t;
   
  private:
 
@@ -25,14 +24,13 @@ namespace lamb {
   typedef typename sample_type_traits<sample_t>::mix_type      mix_t;
   typedef typename sample_type_traits<mix_t>::unsigned_type    unsigned_mix_t;
 
-  static const control_t control_t_one = control_frac_t::ONE.value;
+  static constexpr freq_t freq_t_one = freq_t::ONE;
+  static constexpr res_t  res_t_one  = res_t::ONE;
 
  private:
-  static const uint8_t FX_SHIFT = sizeof(control_t) << 3;
-    
-  control_t         _q;
-  control_t         _freq;
-  unsigned_sample_t _feedback;
+  res_t             _q;
+  freq_t            _freq;
+  res_t             _feedback;
   sample_t          _d0;
   sample_t          _o;
   mode_t            _mode;
@@ -44,11 +42,11 @@ namespace lamb {
    return _mode;
   }
 
-  inline control_t freq() const {
+  inline freq_t freq() const {
    return _freq;
   }
     
-  inline control_t q() const {
+  inline res_t q() const {
    return _q;
   }
 
@@ -56,13 +54,13 @@ namespace lamb {
    _mode = mode_;
   }
     
-  inline void freq(control_t const & freq_) {
+  inline void freq(freq_t const & freq_) {
    _freq     = freq_;
-   auto tmp  = ((unsigned_mix_t(q())) * (control_t_one - _freq)) >> FX_SHIFT;
+   res_t tmp = q() * (freq_t_one - _freq);
    _feedback = q() + tmp;
   }
 
-  inline void q(control_t const & q_) {
+  inline void q(res_t const & q_) {
    _q = q_;
   }
 
@@ -72,15 +70,11 @@ namespace lamb {
    // D0 = D0 + FREQ * (IN - D0 + FB * (D0 - O));
    // O  = O  + FREQ * (D0 - O);
      
-   sample_t hp = in_ - _d0;
-     
-   auto tmp = (_feedback * (_d0 - _o)) >> FX_SHIFT;
-      
-   _d0 += ((hp + tmp) * freq()) >> FX_SHIFT;
-      
-   sample_t bp = _d0 - _o;
-
-   _o += (bp * freq()) >> FX_SHIFT;
+   sample_t hp   = in_ - _d0;     
+   res_t    tmp  = _feedback * (_d0 - _o);
+   _d0          += ((tmp + hp) * freq()).value;
+   sample_t bp   = _d0 - _o;
+   _o           += (freq() * bp).value;
 
    if      (_mode == HP)
     return io_t(hp);
