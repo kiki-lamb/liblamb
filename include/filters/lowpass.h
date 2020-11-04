@@ -3,24 +3,23 @@
 
 namespace lamb {
  class lowpass {
+
  public:
+
   typedef s0q15                                                io_t;
+  typedef u0q8                                                 control_frac_t;
+
+  enum mode_t { LP, BP, HP };
+  
+ private:
 
   typedef int16_t                                              sample_t;
   typedef typename sample_type_traits<sample_t>::unsigned_type unsigned_sample_t;
   typedef typename sample_type_traits<sample_t>::mix_type      mix_t;
   typedef typename sample_type_traits<mix_t>::unsigned_type    unsigned_mix_t;
-
-  typedef fixed<0, (
-   sizeof(
-    typename sample_type_traits<sample_t>::unmixed_type
-   ) << 3)>                                                   control_frac_t;
-
-  typedef typename control_frac_t::value_type                 control_t;
+  typedef typename control_frac_t::value_type                  control_t;
 
   static const control_t control_t_one = control_frac_t::ONE.value;
-
-  enum mode_t { LP, BP, HP };
 
  private:
   static const uint8_t FX_SHIFT = sizeof(control_t) << 3;
