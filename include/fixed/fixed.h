@@ -11,6 +11,12 @@
 
 #include <inttypes.h>
 
+#ifdef LAMB_NO_ARDUINO
+#define LOG_ERR(x) printf(x);
+#else
+#define LOG_ERR(x) Serial.print(x);
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace lamb {
@@ -184,10 +190,10 @@ namespace lamb {
    ovf_tmp       >>= other_frac;
    
    if      (ovf_tmp > MAX.value) {
-    Serial.print("Overflow.");
+    LOG_ERR("Overflow.");
    }
    else if (ovf_tmp < MIN.value) {
-    Serial.print("Underflow.");
+    LOG_ERR("Underflow. \n");
    }
 #endif
    
@@ -225,10 +231,10 @@ namespace lamb {
    ovf_tmp       >>= other_frac;
    
    if      (ovf_tmp > MAX.value) {
-    Serial.print("Overflow.");
+    LOG_ERR("Overflow. \n");
    }
    else if (ovf_tmp < MIN.value) {
-    Serial.print("Underflow.");
+    LOG_ERR("Underflow. \n");
    }
 #endif
 
@@ -268,10 +274,10 @@ namespace lamb {
    ovf_tmp        /= other.value;
    
    if      (ovf_tmp > MAX.value) {
-    Serial.print("Overflow.");
+    LOG_ERR("Overflow. \n");
    }
    else if (ovf_tmp < MIN.value) {
-    Serial.print("Underflow.");
+    LOG_ERR("Underflow. \n");
    }
 #endif
 
@@ -309,10 +315,10 @@ namespace lamb {
    ovf_tmp        /= other.value;
    
    if      (ovf_tmp > MAX.value) {
-    Serial.print("Overflow.");
+    LOG_ERR("Overflow. \n");
    }
    else if (ovf_tmp < MIN.value) {
-    Serial.print("Underflow.");
+    LOG_ERR("Underflow. \n");
    }
 #endif
 
@@ -354,10 +360,10 @@ namespace lamb {
    big_value_type ovf_tmp = value + o.value;
 
    if      (ovf_tmp > MAX.value) {
-    Serial.print("Overflow.");
+    LOG_ERR("Overflow. \n");
    }
    else if (ovf_tmp < MIN.value) {
-    Serial.print("Underflow.");
+    LOG_ERR("Underflow. \n");
    }
    
    return q(value  + o.value);
@@ -367,10 +373,10 @@ namespace lamb {
    big_value_type ovf_tmp = value - o.value;
 
    if      (ovf_tmp > MAX.value) {
-    Serial.print("Overflow.");
+    LOG_ERR("Overflow. \n");
    }
    else if (ovf_tmp < MIN.value) {
-    Serial.print("Underflow.");
+    LOG_ERR("Underflow. \n");
    }
    
    return                       q(value  - o.value);
@@ -396,10 +402,10 @@ namespace lamb {
    big_value_type ovf_tmp = value + o.value;
    
    if      (ovf_tmp > MAX.value) {
-    Serial.print("Overflow.");
+    LOG_ERR("Overflow. \n");
    }
    else if (ovf_tmp < MIN.value) {
-    Serial.print("Underflow.");
+    LOG_ERR("Underflow. \n");
    }
    
    value        = (*this  + o ).value; return *this;
@@ -409,10 +415,10 @@ namespace lamb {
    big_value_type ovf_tmp = value - o.value;
    
    if      (ovf_tmp > MAX.value) {
-    Serial.print("Overflow.");
+    LOG_ERR("Overflow. \n");
    }
    else if (ovf_tmp < MIN.value) {
-    Serial.print("Underflow.");
+    LOG_ERR("Underflow. \n");
    }
    
    value        = (*this  - o ).value; return *this;
