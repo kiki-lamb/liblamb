@@ -13,7 +13,7 @@ namespace lamb {
 
   //--------------------------------------------------------------------------------------
   
-  static constexpr u0q16 q8_one = u0q16::ONE;
+  static constexpr u0q16 q16_one = u0q16::ONE;
 
   //--------------------------------------------------------------------------------------
 
@@ -21,37 +21,27 @@ namespace lamb {
   
   //--------------------------------------------------------------------------------------
 
-  u0q16      _res;
-  u0q16      _freq;
-  u0q16      _feedback;
-  internal_t _d0;
-  internal_t _lp;
-  internal_t _hp;
-  internal_t _bp;
-  mode_t     _mode;
-
- /////////////////////////////////////////////////////////////////////////////////////////
+#define ACCESSOR(store_type, cast_type, name)                   \
+  private:                                                      \
+  store_type (_ ## name);                                       \
+ public:                                                        \
+ inline cast_type name() const { return cast_type(_ ## name);  }
   
- public:
-
-  //--------------------------------------------------------------------------------------
-  
-#define ACCESSOR(type, name, member)                            \
-  inline type       name()         const { return type(member); }
-
-  ACCESSOR(mode_t,     mode, _mode);
-  ACCESSOR(u0q16,      freq, _freq);
-  ACCESSOR(u0q16,      res,  _res);
-  ACCESSOR(external_t, lp,   _lp);
-  ACCESSOR(external_t, bp,   _bp);
-  ACCESSOR(external_t, hp,   _hp);
+  ACCESSOR(mode_t,     mode_t,     mode);
+  ACCESSOR(u0q16,      u0q16,      freq);
+  ACCESSOR(u0q16,      u0q16,      feedback);
+  ACCESSOR(u0q16,      u0q16,      res);
+  ACCESSOR(internal_t, extrenal_t, d0);
+  ACCESSOR(internal_t, external_t, lp); 
+  ACCESSOR(internal_t, external_t, bp);
+  ACCESSOR(internal_t, external_t, hp);
 
 #undef ACCESSOR
     
   //--------------------------------------------------------------------------------------
 
   inline void mode(mode_t const & x) { _mode = x; }
-  inline void res (u0q16  const & x) { _res.value = min(62000L, res_.value); }
+  inline void res (u0q16  const & x) { _res.value = min(62000L, x.value); }
   inline void freq(u0q16  const & x) {
 
    if constexpr(use_limits) {
@@ -64,9 +54,9 @@ namespace lamb {
      { 900, 61000 },
     };
     
-    if (freq_ <= limits[limits_count - 1][0]) {    
+    if (x <= limits[limits_count - 1][0]) {    
      for (size_t ix = 0; ix < limits_count; ix++) {
-      if ((freq_ < limits[ix][0]) && (_res > limits[ix][1])) {
+      if ((x < limits[ix][0]) && (_res > limits[ix][1])) {
        _res.value = limits[ix][1];
 
        Serial.print("Clamp ");
@@ -78,28 +68,17 @@ namespace lamb {
      }
     }
    }
-   
-   //  if      ((freq_ < 300) && (_res > 62000)) {
-   //   _res.value = 62000;
-   //  }
-   //  else if ((freq_ < 400) && (_res > 64000)) {
-   //   _res.value = 64000;
-   //  }
-   //  else if  ((freq_ < 520) && (_res > 64250)) {
-   //   _res.value = 64500;
-   //  }
-   // }
 
    Serial.print("Filter: ");
-   Serial.print(freq_.value);
+   Serial.print(x.value);
    Serial.print(" Res: ");
    Serial.print(_res.value);
    Serial.println();
    
-   _freq            = freq_;
+   _freq            = x;
    _feedback        = _res;
    _feedback      >>= 8;
-   _feedback       += (_res * (q8_one - _freq)) >> 8;
+   _feedback       += (_res * (q16_one - _freq)) >> 8;
   }
 
   //--------------------------------------------------------------------------------------
