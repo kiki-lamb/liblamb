@@ -406,7 +406,7 @@ namespace lamb {
   }
   //------------------------------------------------------------------------------------------------------------
   constexpr q &  operator  -= (q          const & o)       {                                                     // checks ovf
-   big_value_type ovf_tmp = value + o.value;
+   big_value_type ovf_tmp = value - o.value;
    
    if      (ovf_tmp > MAX.value) {
     Serial.print("Overflow.");
@@ -424,10 +424,10 @@ namespace lamb {
   constexpr bool operator  >= (q          const & o) const { return         (*this == o )     || (*this > o) ; } // can't ovf
   constexpr bool operator  != (q          const & o) const { return       ! (*this == o )                    ; } // can't ovf
   //------------------------------------------------------------------------------------------------------------
-  constexpr q &  operator  += (value_type const & v)       { value        = (*this  + v ).value; return *this; }
-  constexpr q &  operator  -= (value_type const & v)       { value        = (*this  - v ).value; return *this; }
-  constexpr q &  operator  *= (value_type const & v)       { value        = (*this  * v ).value; return *this; }
-  constexpr q &  operator  /= (value_type const & v)       { value        = (*this  / v ).value; return *this; }
+  constexpr q &  operator  += (value_type const & v)       { value        = (*this  + v ).value; return *this; } // uses called's ovf
+  constexpr q &  operator  -= (value_type const & v)       { value        = (*this  - v ).value; return *this; } // uses called's ovf
+  constexpr q &  operator  *= (value_type const & v)       { value        = (*this  * v ).value; return *this; } // uses called's ovf
+  constexpr q &  operator  /= (value_type const & v)       { value        = (*this  / v ).value; return *this; } // uses called's ovf
   constexpr bool operator  <= (value_type const & o) const { return         (*this     == o ) || (*this < o) ; } // can't ovf
   constexpr bool operator  >= (value_type const & o) const { return         (*this     == o ) || (*this > o) ; } // can't ovf
   constexpr bool operator  != (value_type const & o) const { return       ! (*this     == o )                ; } // can't ovf
