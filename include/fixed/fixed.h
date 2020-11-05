@@ -288,8 +288,8 @@ namespace lamb {
   //------------------------------------------------------------------------------------------------------------
   constexpr q    operator   + (value_type const & o) const { return                       (*this   + q(o   )); }
   constexpr q    operator   - (value_type const & o) const { return                       (*this   - q(o   )); }
-  constexpr q    operator   * (value_type const & o) const { return                       (q(value * o     )); }
-  constexpr q    operator   / (value_type const & o) const { return                       (q(value / o     )); }
+  constexpr q    operator   * (value_type const & o) const { return                       (q(value * o     );  } // don't convert arg so that we can mul by things > MAX
+  constexpr q    operator   / (value_type const & o) const { return                       (q(value / o     )); } // don't convert arg so that we can div by things > MAX
   constexpr bool operator   < (value_type const & o) const { return                       (*this   < q(o   )); }
   constexpr bool operator   > (value_type const & o) const { return                       (*this   > q(o   )); }
   constexpr bool operator  == (value_type const & o) const { return                       (*this  == q(o   )); }
