@@ -415,7 +415,7 @@ namespace lamb {
     Serial.print("Underflow.");
    }
    
-   value        = (*this  - v ).value; return *this;
+   value        = (*this  - o ).value; return *this;
   }
   //------------------------------------------------------------------------------------------------------------
 #endif
