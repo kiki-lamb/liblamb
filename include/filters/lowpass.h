@@ -36,18 +36,23 @@ namespace lamb {
 
   //--------------------------------------------------------------------------------------
   
-  inline mode_t     mode()         const { return _mode;                  }
-  inline u0q16      freq()         const { return _freq;                  }
-  inline u0q16      res()          const { return _res;                   }
-  inline external_t lp()           const { return external_t(_lp);        }
-  inline external_t bp()           const { return external_t(_bp);        }
-  inline external_t hp()           const { return external_t(_hp);        }
+#define ACCESSOR(type, name, member)                            \
+  inline type       name()         const { return type(member); }
 
+  ACCESSOR(mode_t,     mode, _mode);
+  ACCESSOR(u0q16,      freq, _freq);
+  ACCESSOR(u0q16,      res,  _res);
+  ACCESSOR(external_t, lp,   _lp);
+  ACCESSOR(external_t, bp,   _bp);
+  ACCESSOR(external_t, hp,   _hp);
+
+#undef ACCESSOR
+    
   //--------------------------------------------------------------------------------------
 
-  inline void mode(mode_t const & mode_) { _mode = mode_;                 }
-  inline void res (u0q16  const & res_ ) { _res.value = min(62000L, res_.value); }
-  inline void freq(u0q16  const & freq_) {
+  inline void mode(mode_t const & x) { _mode = x; }
+  inline void res (u0q16  const & x) { _res.value = min(62000L, res_.value); }
+  inline void freq(u0q16  const & x) {
 
    if constexpr(use_limits) {
     static constexpr size_t   limits_count            = 4;
@@ -96,6 +101,8 @@ namespace lamb {
    _feedback      >>= 8;
    _feedback       += (_res * (q8_one - _freq)) >> 8;
   }
+
+  //--------------------------------------------------------------------------------------
 
   inline external_t process(external_t const & in) {
    if constexpr(use_limits) {
