@@ -331,26 +331,26 @@ namespace lamb {
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  constexpr q    operator   + ()                     const = delete;
-  constexpr q    operator   ~ ()                     const { return                       q(       ~ value  ); }
-  constexpr q    operator   - ()                     const { return                       q(       - value  ); }
+  constexpr q    operator   + ()                     const = delete;                                             // can't ovf
+  constexpr q    operator   ~ ()                     const { return                       q(       ~ value  ); } // can't ovf
+  constexpr q    operator   - ()                     const { return                       q(       - value  ); } // can't ovf
   //------------------------------------------------------------------------------------------------------------
-  constexpr q    operator  >> (uint8_t    const & s) const { return                       q(value >> s      ); }
-  constexpr q    operator  << (uint8_t    const & s) const { return                       q(value << s      ); }
+  constexpr q    operator  >> (uint8_t    const & s) const { return                       q(value >> s      ); } // can't ovf
+  constexpr q    operator  << (uint8_t    const & s) const { return                       q(value << s      ); } // can't ovf
   //------------------------------------------------------------------------------------------------------------
-  constexpr q    operator   + (value_type const & o) const { return                       (*this   + q(o   )); }
-  constexpr q    operator   - (value_type const & o) const { return                       (*this   - q(o   )); }
+  constexpr q    operator   + (value_type const & o) const { return                       (*this   + q(o   )); } // uses overload's ovf
+  constexpr q    operator   - (value_type const & o) const { return                       (*this   - q(o   )); } // uses overload's ovf
   constexpr q    operator   * (value_type const & o) const { return                       (q(value * o     )); } // don't convert arg so that we can mul by things > MAX // add OVF
   constexpr q    operator   / (value_type const & o) const { return                       (q(value / o     )); } // don't convert arg so that we can div by things > MAX // add OVF
-  constexpr bool operator   < (value_type const & o) const { return                       (*this   < q(o   )); }
-  constexpr bool operator   > (value_type const & o) const { return                       (*this   > q(o   )); }
-  constexpr bool operator  == (value_type const & o) const { return                       (*this  == q(o   )); }
+  constexpr bool operator   < (value_type const & o) const { return                       (*this   < q(o   )); } // can't ovf
+  constexpr bool operator   > (value_type const & o) const { return                       (*this   > q(o   )); } // can't ovf
+  constexpr bool operator  == (value_type const & o) const { return                       (*this  == q(o   )); } // can't ovf
   //------------------------------------------------------------------------------------------------------------
 #ifndef LAMB_FIXED_CHECK_OVERFLOWS
-  constexpr q    operator   + (q          const & o) const { return                       q(value  + o.value); }
-  constexpr q    operator   - (q          const & o) const { return                       q(value  - o.value); }
+  constexpr q    operator   + (q          const & o) const { return                       q(value  + o.value); } // checks in alt case
+  constexpr q    operator   - (q          const & o) const { return                       q(value  - o.value); } // checks in alt case
 #else
-  constexpr q    operator   + (q          const & o) const {
+  constexpr q    operator   + (q          const & o) const {                                                     // checks ovf
    big_value_type ovf_tmp = value + o.value;
 
    if      (ovf_tmp > MAX.value) {
@@ -363,7 +363,7 @@ namespace lamb {
    return q(value  + o.value);
   }
   //------------------------------------------------------------------------------------------------------------
-  constexpr q    operator   - (q          const & o) const {
+  constexpr q    operator   - (q          const & o) const {                                                     // checks ovf
    big_value_type ovf_tmp = value - o.value;
 
    if      (ovf_tmp > MAX.value) {
@@ -377,22 +377,22 @@ namespace lamb {
   }
 #endif
   //------------------------------------------------------------------------------------------------------------  
-  constexpr bool operator   < (q          const & o) const { return                        (value  < o.value); }
-  constexpr bool operator   > (q          const & o) const { return                        (value  > o.value); }
-  constexpr bool operator  == (q          const & o) const { return                        (value == o.value); }
+  constexpr bool operator   < (q          const & o) const { return                        (value  < o.value); } // can't ovf
+  constexpr bool operator   > (q          const & o) const { return                        (value  > o.value); } // can't ovf
+  constexpr bool operator  == (q          const & o) const { return                        (value == o.value); } // can't ovf
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  constexpr q &  operator  -- (                    )       { this        -= 1;                   return *this; }
-  constexpr q &  operator  ++ (                    )       { this        += 1;                   return *this; }
+  constexpr q &  operator  -- (                    )       { this        -= 1;                   return *this; } // unlikely to ovf
+  constexpr q &  operator  ++ (                    )       { this        += 1;                   return *this; } // unlikely to bovf
   //------------------------------------------------------------------------------------------------------------
-  constexpr q &  operator >>= (uint8_t    const & v)       { value        = (*this >> v ).value; return *this; }
-  constexpr q &  operator <<= (uint8_t    const & v)       { value        = (*this << v ).value; return *this; }
+  constexpr q &  operator >>= (uint8_t    const & v)       { value        = (*this >> v ).value; return *this; } // can't ovf
+  constexpr q &  operator <<= (uint8_t    const & v)       { value        = (*this << v ).value; return *this; } // can't ovf
   //------------------------------------------------------------------------------------------------------------
 #ifndef LAMB_FIXED_CHECK_OVERFLOWS
-  constexpr q &  operator  += (q          const & o)       { value        = (*this  + o ).value; return *this; }
-  constexpr q &  operator  -= (q          const & o)       { value        = (*this  - o ).value; return *this; }
+  constexpr q &  operator  += (q          const & o)       { value        = (*this  + o ).value; return *this; } // checks in alt caes
+  constexpr q &  operator  -= (q          const & o)       { value        = (*this  - o ).value; return *this; } // checks in alt caes
 #else
   //------------------------------------------------------------------------------------------------------------
-  constexpr q &  operator  += (q          const & o)       {
+  constexpr q &  operator  += (q          const & o)       {                                                     // checks ovf
    big_value_type ovf_tmp = value + o.value;
    
    if      (ovf_tmp > MAX.value) {
@@ -405,7 +405,7 @@ namespace lamb {
    value        = (*this  + o ).value; return *this;
   }
   //------------------------------------------------------------------------------------------------------------
-  constexpr q &  operator  -= (q          const & o)       {
+  constexpr q &  operator  -= (q          const & o)       {                                                     // checks ovf
    big_value_type ovf_tmp = value + o.value;
    
    if      (ovf_tmp > MAX.value) {
