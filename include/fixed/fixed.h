@@ -178,6 +178,19 @@ namespace lamb {
     "Signedness mismatch!"
    );
 
+#ifdef LAMB_FIXED_CHECK_OVERFLOWS
+   int64 ovf_tmp   = value;
+   ovf_tmp        *= other.value;
+   ovf_tmp       >>= other_frac;
+   
+   if      (ovf_tmp > MAX.value) {
+    Serial.print("Overflow.");
+   }
+   else if (ovf_tmp < MIN.value) {
+    Serial.print("Underflow.");
+   }
+#endif
+   
    typedef typename
     type_if<(PAD > other_type::DATA_SIZE), value_type, big_value_type>::type
     tmp_value_type;
@@ -205,6 +218,19 @@ namespace lamb {
     ( ! ( ( ! SIGNED) && (other_type::SIGNED) ) ),
     "Signedness mismatch!"
    );
+
+#ifdef LAMB_FIXED_CHECK_OVERFLOWS
+   int64 ovf_tmp   = value;
+   ovf_tmp        *= other.value;
+   ovf_tmp       >>= other_frac;
+   
+   if      (ovf_tmp > MAX.value) {
+    Serial.print("Overflow.");
+   }
+   else if (ovf_tmp < MIN.value) {
+    Serial.print("Underflow.");
+   }
+#endif
 
    if constexpr(PAD > other_type::DATA_SIZE) {
     value                   *= other.value;
@@ -236,6 +262,19 @@ namespace lamb {
     "Signedness mismatch!"
    );
 
+#ifdef LAMB_FIXED_CHECK_OVERFLOWS
+   int64 ovf_tmp   = value;
+   ovf_tmp       <<= other_frac;
+   ovf_tmp        /= other.value;
+   
+   if      (ovf_tmp > MAX.value) {
+    Serial.print("Overflow.");
+   }
+   else if (ovf_tmp < MIN.value) {
+    Serial.print("Underflow.");
+   }
+#endif
+
    typedef typename
     type_if<(PAD > other_type::DATA_SIZE), value_type, big_value_type>::type
     tmp_value_type;
@@ -264,6 +303,19 @@ namespace lamb {
     "Signedness mismatch!"
    );
 
+#ifdef LAMB_FIXED_CHECK_OVERFLOWS
+   int64 ovf_tmp   = value;
+   ovf_tmp       <<= other_frac;
+   ovf_tmp        /= other.value;
+   
+   if      (ovf_tmp > MAX.value) {
+    Serial.print("Overflow.");
+   }
+   else if (ovf_tmp < MIN.value) {
+    Serial.print("Underflow.");
+   }
+#endif
+
    if constexpr(PAD > other_type::DATA_SIZE) {
     value                  <<= other_frac;
     value                   /= other.value;
@@ -288,14 +340,43 @@ namespace lamb {
   //------------------------------------------------------------------------------------------------------------
   constexpr q    operator   + (value_type const & o) const { return                       (*this   + q(o   )); }
   constexpr q    operator   - (value_type const & o) const { return                       (*this   - q(o   )); }
-  constexpr q    operator   * (value_type const & o) const { return                       (q(value * o     )); } // don't convert arg so that we can mul by things > MAX
-  constexpr q    operator   / (value_type const & o) const { return                       (q(value / o     )); } // don't convert arg so that we can div by things > MAX
+  constexpr q    operator   * (value_type const & o) const { return                       (q(value * o     )); } // don't convert arg so that we can mul by things > MAX // add OVF
+  constexpr q    operator   / (value_type const & o) const { return                       (q(value / o     )); } // don't convert arg so that we can div by things > MAX // add OVF
   constexpr bool operator   < (value_type const & o) const { return                       (*this   < q(o   )); }
   constexpr bool operator   > (value_type const & o) const { return                       (*this   > q(o   )); }
   constexpr bool operator  == (value_type const & o) const { return                       (*this  == q(o   )); }
   //------------------------------------------------------------------------------------------------------------
+#ifndef LAMB_FIXED_CHECK_OVERFLOWS
   constexpr q    operator   + (q          const & o) const { return                       q(value  + o.value); }
   constexpr q    operator   - (q          const & o) const { return                       q(value  - o.value); }
+#else
+  constexpr q    operator   + (q          const & o) const {
+   big_value_type ovf_tmp = value + o.value;
+
+   if      (ovf_tmp > MAX.value) {
+    Serial.print("Overflow.");
+   }
+   else if (ovf_tmp < MIN.value) {
+    Serial.print("Underflow.");
+   }
+   
+   return q(value  + o.value);
+  }
+  //------------------------------------------------------------------------------------------------------------
+  constexpr q    operator   - (q          const & o) const {
+   big_value_type ovf_tmp = value - o.value;
+
+   if      (ovf_tmp > MAX.value) {
+    Serial.print("Overflow.");
+   }
+   else if (ovf_tmp < MIN.value) {
+    Serial.print("Underflow.");
+   }
+   
+   return                       q(value  - o.value);
+  }
+#endif
+  //------------------------------------------------------------------------------------------------------------  
   constexpr bool operator   < (q          const & o) const { return                        (value  < o.value); }
   constexpr bool operator   > (q          const & o) const { return                        (value  > o.value); }
   constexpr bool operator  == (q          const & o) const { return                        (value == o.value); }
@@ -306,14 +387,45 @@ namespace lamb {
   constexpr q &  operator >>= (uint8_t    const & v)       { value        = (*this >> v ).value; return *this; }
   constexpr q &  operator <<= (uint8_t    const & v)       { value        = (*this << v ).value; return *this; }
   //------------------------------------------------------------------------------------------------------------
-  constexpr q &  operator  -= (q          const & v)       { value        = (*this  - v ).value; return *this; }
-  constexpr q &  operator  += (q          const & v)       { value        = (*this  + v ).value; return *this; }
+#ifndef LAMB_FIXED_CHECK_OVERFLOWS
+  constexpr q &  operator  += (q          const & o)       { value        = (*this  + o ).value; return *this; }
+  constexpr q &  operator  -= (q          const & o)       { value        = (*this  - o ).value; return *this; }
+#else
+  //------------------------------------------------------------------------------------------------------------
+  constexpr q &  operator  += (q          const & o)       {
+   big_value_type ovf_tmp = value + o.value;
+   
+   if      (ovf_tmp > MAX.value) {
+    Serial.print("Overflow.");
+   }
+   else if (ovf_tmp < MIN.value) {
+    Serial.print("Underflow.");
+   }
+   
+   value        = (*this  + o ).value; return *this;
+  }
+  //------------------------------------------------------------------------------------------------------------
+  constexpr q &  operator  -= (q          const & o)       {
+   big_value_type ovf_tmp = value + o.value;
+   
+   if      (ovf_tmp > MAX.value) {
+    Serial.print("Overflow.");
+   }
+   else if (ovf_tmp < MIN.value) {
+    Serial.print("Underflow.");
+   }
+   
+   value        = (*this  - v ).value; return *this;
+  }
+  //------------------------------------------------------------------------------------------------------------
+#endif
+  //------------------------------------------------------------------------------------------------------------
   constexpr bool operator  <= (q          const & o) const { return         (*this == o )     || (*this < o) ; }
   constexpr bool operator  >= (q          const & o) const { return         (*this == o )     || (*this > o) ; }
   constexpr bool operator  != (q          const & o) const { return       ! (*this == o )                    ; }
   //------------------------------------------------------------------------------------------------------------
-  constexpr q &  operator  -= (value_type const & v)       { value        = (*this  - v ).value; return *this; }
   constexpr q &  operator  += (value_type const & v)       { value        = (*this  + v ).value; return *this; }
+  constexpr q &  operator  -= (value_type const & v)       { value        = (*this  - v ).value; return *this; }
   constexpr q &  operator  *= (value_type const & v)       { value        = (*this  * v ).value; return *this; }
   constexpr q &  operator  /= (value_type const & v)       { value        = (*this  / v ).value; return *this; }
   constexpr bool operator  <= (value_type const & o) const { return         (*this     == o ) || (*this < o) ; }
