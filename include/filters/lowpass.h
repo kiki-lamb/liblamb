@@ -7,8 +7,11 @@ namespace lamb {
 
  /////////////////////////////////////////////////////////////////////////////////////////
 
- template <typename internal_t = s0q31, typename external_t = s0q15, bool use_limits = true>
- // tested with s0q15 and s0q31
+ template <
+  typename internal_t = s0q31,
+  typename external_t = s0q15,
+  bool use_limits = true
+  >  // tested with s0q15 and s0q31
  class lowpass {
 
   //--------------------------------------------------------------------------------------
@@ -31,7 +34,7 @@ namespace lamb {
   ACCESSOR(u0q16,      u0q16,      freq);
   ACCESSOR(u0q16,      u0q16,      feedback);
   ACCESSOR(u0q16,      u0q16,      res);
-  ACCESSOR(internal_t, extrenal_t, d0);
+  ACCESSOR(internal_t, external_t, d0);
   ACCESSOR(internal_t, external_t, lp); 
   ACCESSOR(internal_t, external_t, bp);
   ACCESSOR(internal_t, external_t, hp);
