@@ -420,21 +420,20 @@ namespace lamb {
   //------------------------------------------------------------------------------------------------------------
 #endif
   //------------------------------------------------------------------------------------------------------------
-  constexpr bool operator  <= (q          const & o) const { return         (*this == o )     || (*this < o) ; }
-  constexpr bool operator  >= (q          const & o) const { return         (*this == o )     || (*this > o) ; }
-  constexpr bool operator  != (q          const & o) const { return       ! (*this == o )                    ; }
+  constexpr bool operator  <= (q          const & o) const { return         (*this == o )     || (*this < o) ; } // can't ovf
+  constexpr bool operator  >= (q          const & o) const { return         (*this == o )     || (*this > o) ; } // can't ovf
+  constexpr bool operator  != (q          const & o) const { return       ! (*this == o )                    ; } // can't ovf
   //------------------------------------------------------------------------------------------------------------
   constexpr q &  operator  += (value_type const & v)       { value        = (*this  + v ).value; return *this; }
   constexpr q &  operator  -= (value_type const & v)       { value        = (*this  - v ).value; return *this; }
   constexpr q &  operator  *= (value_type const & v)       { value        = (*this  * v ).value; return *this; }
   constexpr q &  operator  /= (value_type const & v)       { value        = (*this  / v ).value; return *this; }
-  constexpr bool operator  <= (value_type const & o) const { return         (*this     == o ) || (*this < o) ; }
-  constexpr bool operator  >= (value_type const & o) const { return         (*this     == o ) || (*this > o) ; }
-  constexpr bool operator  != (value_type const & o) const { return       ! (*this     == o )                ; }
-//-------------------------------------------------------------------------------------------------------------
- };
+  constexpr bool operator  <= (value_type const & o) const { return         (*this     == o ) || (*this < o) ; } // can't ovf
+  constexpr bool operator  >= (value_type const & o) const { return         (*this     == o ) || (*this > o) ; } // can't ovf
+  constexpr bool operator  != (value_type const & o) const { return       ! (*this     == o )                ; } // can't ovf
+  //------------------------------------------------------------------------------------------------------------
+ }; 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
- 
 
  template <uint8_t w, uint8_t f>
  using fixed = q<0, w, f>;
