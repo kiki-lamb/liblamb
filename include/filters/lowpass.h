@@ -16,7 +16,8 @@ namespace lamb {
 
   //--------------------------------------------------------------------------------------
   
-  static constexpr u0q16 q16_one = u0q16::ONE;
+  static constexpr u0q16 Q16_ONE     = u0q16::ONE;
+  static constexpr u0q16 DEFAULT_RES = u0q16(63000L);
 
   //--------------------------------------------------------------------------------------
 
@@ -40,23 +41,34 @@ namespace lamb {
   ACCESSOR(internal_t, external_t, hp);
 
 #undef ACCESSOR
-    
+
+  //--------------------------------------------------------------------------------------
+
+  lowpass() : _res(u0q16::MAX) {}
+  
   //--------------------------------------------------------------------------------------
 
   inline void mode(mode_t const & x) { _mode = x; }
   inline void res (u0q16  const & x) { _res.value = min(62000L, x.value); }
   inline void freq(u0q16  const & x) {
-
+   // if (lamb_fixed_overflow) {
+   //  _res -= 4;
+   //  lamb_fixed_overflow = false;
+   // }
+   
    if constexpr(use_limits) {
-    static constexpr size_t   limits_count            = 4;
-    
+    static constexpr size_t   limits_count            = 7;
+   
     static constexpr uint16_t limits[limits_count][2] = {
-     { 300, 58000 },
-     { 500, 59000 },
-     { 700, 60000 },
-     { 900, 61000 },
+     { 600,  48500             }, // calib
+     { 900,  52000             }, // guessed
+     { 1200, 56000             }, // calib
+     { 1800, 57000             }, // guessed
+     { 2300, 58000             }, // calib
+     { 2800, 59750             }, // calib
+     { 3500, DEFAULT_RES.value }, // calib
     };
-    
+   
     if (x <= limits[limits_count - 1][0]) {    
      for (size_t ix = 0; ix < limits_count; ix++) {
       if ((x < limits[ix][0]) && (_res > limits[ix][1])) {
@@ -65,7 +77,7 @@ namespace lamb {
        Serial.print("Clamp ");
        Serial.print(ix);
        Serial.print(" ");
-       
+    
        break;
       }
      }
@@ -81,7 +93,7 @@ namespace lamb {
    _freq            = x;
    _feedback        = _res;
    _feedback      >>= 8;
-   _feedback       += (_res * (q16_one - _freq)) >> 8;
+   _feedback       += (_res * (Q16_ONE - _freq)) >> 8;
   }
 
   //--------------------------------------------------------------------------------------

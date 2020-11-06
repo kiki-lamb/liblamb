@@ -1,12 +1,13 @@
 #include <Arduino.h>
 #include "../../include/global/global.h"
 
-int __free_mem()
-{
+int __free_mem() {
   extern int __heap_start, *__brkval;
   int v;
   return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
 }
+
+bool lamb::lamb_fixed_overflow = false;
 
 int lamb::free_mem() {
 	return __free_mem();

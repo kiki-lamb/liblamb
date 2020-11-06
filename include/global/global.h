@@ -11,6 +11,8 @@ namespace lamb {
 
   int free_mem();
 
+  extern bool lamb_fixed_overflow;
+ 
   class delete_traits {
   public:
     template<typename T1>

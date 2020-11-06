@@ -20,7 +20,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace lamb {
- 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
  template <uint8_t P, uint8_t W, uint8_t F>
  struct q {
@@ -191,9 +191,13 @@ namespace lamb {
    
    if      (ovf_tmp > MAX.value) {
     LOG_ERR("OVERFLOW in *.\n");
+
+    lamb::lamb_fixed_overflow = true;
    }
    else if (ovf_tmp < MIN.value) {
     LOG_ERR("UNDERFLOW in *. \n");
+
+    lamb::lamb_fixed_overflow = true;
    }
 #endif
    
@@ -232,9 +236,13 @@ namespace lamb {
    
    if      (ovf_tmp > MAX.value) {
     LOG_ERR("OVERFLOW in *=. \n");
+
+    lamb::lamb_fixed_overflow = true;
    }
    else if (ovf_tmp < MIN.value) {
     LOG_ERR("UNDERFLOW in *=. \n");
+
+    lamb::lamb_fixed_overflow = true;
    }
 #endif
 
@@ -275,9 +283,13 @@ namespace lamb {
    
    if      (ovf_tmp > MAX.value) {
     LOG_ERR("OVERFLOW in /. \n");
+
+    lamb::lamb_fixed_overflow = true;
    }
    else if (ovf_tmp < MIN.value) {
     LOG_ERR("UNDERFLOW in /. \n");
+
+    lamb::lamb_fixed_overflow = true;
    }
 #endif
 
@@ -316,9 +328,13 @@ namespace lamb {
    
    if      (ovf_tmp > MAX.value) {
     LOG_ERR("OVERFLOW in /=. \n");
+
+    lamb::lamb_fixed_overflow = true;
    }
    else if (ovf_tmp < MIN.value) {
     LOG_ERR("UNDERFLOW in /=. \n");
+
+    lamb::lamb_fixed_overflow = true;
    }
 #endif
 
@@ -361,9 +377,13 @@ namespace lamb {
 
    if      (ovf_tmp > MAX.value) {
     LOG_ERR("OVERFLOW in +. \n");
+
+    lamb::lamb_fixed_overflow = true;
    }
    else if (ovf_tmp < MIN.value) {
     LOG_ERR("UNDERFLOW in +. \n");
+
+    lamb::lamb_fixed_overflow = true;
    }
    
    return q(value  + o.value);
@@ -374,9 +394,13 @@ namespace lamb {
 
    if      (ovf_tmp > MAX.value) {
     LOG_ERR("OVERFLOW in -. \n");
+
+    lamb::lamb_fixed_overflow = true;
    }
    else if (ovf_tmp < MIN.value) {
     LOG_ERR("UNDERFLOW in -. \n");
+
+    lamb::lamb_fixed_overflow = true;
    }
    
    return                       q(value  - o.value);
@@ -403,9 +427,13 @@ namespace lamb {
    
    if      (ovf_tmp > MAX.value) {
     LOG_ERR("OVERFLOW in +=. \n");
+
+    lamb::lamb_fixed_overflow = true;
    }
    else if (ovf_tmp < MIN.value) {
     LOG_ERR("UNDERFLOW in +=. \n");
+
+    lamb::lamb_fixed_overflow = true;
    }
    
    value        = (*this  + o ).value; return *this;
@@ -416,9 +444,13 @@ namespace lamb {
    
    if      (ovf_tmp > MAX.value) {
     LOG_ERR("OVERFLOW in -=. \n");
+
+    lamb::lamb_fixed_overflow = true;
    }
    else if (ovf_tmp < MIN.value) {
     LOG_ERR("UNDERFLOW in -=. \n");
+
+    lamb::lamb_fixed_overflow = true;
    }
    
    value        = (*this  - o ).value; return *this;
