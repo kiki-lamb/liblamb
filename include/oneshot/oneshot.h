@@ -47,7 +47,7 @@ namespace lamb {
    phincr(0),
    next_phincr(0) {}
 
-  virtual typename phase_type::value_type index() {
+  virtual length_type index() {
    static const uint8_t shift     = 
     ((sizeof(phase_type) - sizeof(length_type)) << 3);
       
