@@ -13,10 +13,11 @@ namespace lamb {
 
   template <
    typename external_t          = s0q15,
-   bool use_limits              = true,
+   bool     use_limits          = true,
    typename internal_t          = s16p0q15
    >
   class basic {
+   
    //--------------------------------------------------------------------------------------
 
    typedef u0q16 unsigned_internal_t;
