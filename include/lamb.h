@@ -49,7 +49,7 @@
 
 //  #include "filters/moog.h"
   #include "filters/fx_chamberlin.h"
-  #include "filters/lowpass.h"
+  #include "filters/basic.h"
 
   #include "events/event.h"
   #include "events/sources/buffer.h"
