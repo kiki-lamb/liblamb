@@ -32,8 +32,8 @@ namespace lamb {
  inline cast_type name() const { return cast_type(_ ## name);  }
   
   ACCESSOR(mode_t,     mode_t,     mode);
-  ACCESSOR(u0q16,      u0q16,      freq);
-  ACCESSOR(u0q16,      u0q16,      feedback);
+  ACCESSOR(u16p0q16,   u0q16,      freq);
+  ACCESSOR(u16p0q16,   u0q16,      feedback);
   ACCESSOR(u16p0q16,   u0q16,      res);
   ACCESSOR(internal_t, external_t, d0);
   ACCESSOR(internal_t, external_t, lp); 

@@ -204,6 +204,26 @@ namespace lamb {
    typedef typename
     type_if<(PAD >= other_type::DATA_SIZE), value_type, big_value_type>::type
     tmp_value_type;
+
+   if (PAD > 0) {
+    if (! (PAD >= other_type::DATA_SIZE)) {
+     LOG_ERR("UNPADDED *: ");
+     LOG_ERR(q::PAD);
+     LOG_ERR("p");
+     LOG_ERR(q::WHOLE);
+     LOG_ERR("q");
+     LOG_ERR(q::FRAC);
+     LOG_ERR(" with ");
+     LOG_ERR(other_pad);
+     LOG_ERR("p");
+     LOG_ERR(other_whole);
+     LOG_ERR("q");
+     LOG_ERR(other_frac);
+     LOG_ERR("\n");
+    } else {
+     // LOG_ERR("Padded *. \n");
+    }
+   }
    
    tmp_value_type tmp       = value;
    tmp                     *= other.value;
@@ -247,10 +267,18 @@ namespace lamb {
 #endif
 
    if constexpr(PAD >= other_type::DATA_SIZE) {
+    // if (PAD > 0) {
+    //  LOG_ERR("Padded *=. \n");
+    // }
+    
     value                   *= other.value;
     value                  >>= other_frac;
    }
    else {
+    if (PAD > 0) {
+     LOG_ERR("UNPADDED *=. \n");
+    }
+    
     big_value_type big_tmp   = value;
     big_tmp                 *= other.value;
     big_tmp                >>= other_frac;
@@ -294,9 +322,18 @@ namespace lamb {
 #endif
 
    typedef typename
-    type_if<(PAD > other_type::DATA_SIZE), value_type, big_value_type>::type
+    type_if<(PAD >= other_type::DATA_SIZE), value_type, big_value_type>::type
     tmp_value_type;
 
+   if (PAD > 0) {
+    if (! (PAD >= other_type::DATA_SIZE)) {
+     LOG_ERR("UNPADDED /. \n");
+    }
+    // else {
+    //  LOG_ERR("Padded /. \n");
+    // }
+   }
+   
    tmp_value_type tmp       = value;
    tmp                    <<= other_frac;
    tmp                     /= other.value;
@@ -338,11 +375,19 @@ namespace lamb {
    }
 #endif
 
-   if constexpr(PAD > other_type::DATA_SIZE) {
+   if constexpr(PAD >= other_type::DATA_SIZE) {
+    // if (PAD > 0) {
+    //  LOG_ERR("Padded /=. \n");
+    // }
+    
     value                  <<= other_frac;
     value                   /= other.value;
    }
    else {
+    if (PAD > 0) {
+     LOG_ERR("UNPADDED /=. \n");
+    }
+
     big_value_type big_tmp   = value;
     big_tmp                <<= other_frac;
     big_tmp                 /= other.value;
