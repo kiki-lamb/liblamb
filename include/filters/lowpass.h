@@ -85,11 +85,11 @@ namespace lamb {
     }
    }
 
-   Serial.print("Filter: ");
-   Serial.print(x.value);
-   Serial.print(" Res: ");
-   Serial.print(_res.value);
-   Serial.println();
+   // Serial.print("Filter: ");
+   // Serial.print(x.value);
+   // Serial.print(" Res: ");
+   // Serial.print(_res.value);
+   // Serial.println();
    
    _freq            = x;
    _feedback        = _res;
