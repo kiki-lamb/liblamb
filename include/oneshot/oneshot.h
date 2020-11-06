@@ -9,10 +9,10 @@ namespace lamb {
   typename output_value_t_ = value_t_,
   typename length_t_    = uint16_t,
   typename phase_t_     = typename q<0, 0, 8 * (sizeof(length_t_) + 2)>::value_type,
-  typename amplitude_t_ = typename q<0, 0, 8 * (sizeof(value_t_) >> 1)>::value_type
+  typename amplitude_t_ = u0q8
   >
  class oneshot :
-  public sample_source<value_t_>,
+//  public sample_source<output_value_t_>,
   triggerable,
   stoppable
  {
@@ -42,7 +42,7 @@ namespace lamb {
    state(false),
    length(length_),
    data(data_),
-   amplitude(sample_type_traits<amplitude_type>::maximum),
+   amplitude(amplitude_type::MAX),
    phacc(0),
    phincr(0),
    next_phincr(0) {}
@@ -76,19 +76,15 @@ namespace lamb {
     stop();
    }
 
-   if (! state) return 0;
-
-   static const uint8_t shift =
-    sizeof(amplitude_type) << 3;
-
-   typename sample_type_traits<table_value_type>::mix_type accum =
-    amplitude * data[index()];
+   if (! state) return output_value_type(0);
    
-   accum >>= shift;
-
+   output_value_type out(data[index()]);
+   out *= amplitude;
+// ^ right now, output_value_type must be a q<> or this probably won't work.
+   
    phacc  += phincr;
-      
-   return output_value_type(accum);
+
+   return out;
   }
     
   inline virtual output_value_type read() {

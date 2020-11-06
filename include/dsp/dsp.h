@@ -6,6 +6,9 @@ namespace lamb {
 #define MIX(out_, sources_, count_) \
   { for (size_t ix = 0; ix < count_; ix ++) { out_ += sources_[ix]->play(); } }
 
+#define MIX_Q(out_, sources_, count_)                                     \
+  { for (size_t ix = 0; ix < count_; ix ++) { out_ += sources_[ix]->play().value; } }
+
 #define AMPLIFY(out_, amplitude_, shift_) \
   { out_ *= amplitude_; out_ >>= shift_; }
 
