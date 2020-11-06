@@ -9,6 +9,7 @@ namespace lamb {
 
  template <
   typename internal_t = s16p0q15,
+  typename unsigned_internal_t = u16p0q16,
   typename external_t = s0q15,
   bool use_limits = true
   >  // tested with s0q15 and s0q31
@@ -31,14 +32,14 @@ namespace lamb {
  public:                                                        \
  inline cast_type name() const { return cast_type(_ ## name);  }
   
-  ACCESSOR(mode_t,     mode_t,     mode);
-  ACCESSOR(u16p0q16,   u0q16,      freq);
-  ACCESSOR(u16p0q16,   u0q16,      feedback);
-  ACCESSOR(u16p0q16,   u0q16,      res);
-  ACCESSOR(internal_t, external_t, d0);
-  ACCESSOR(internal_t, external_t, lp); 
-  ACCESSOR(internal_t, external_t, bp);
-  ACCESSOR(internal_t, external_t, hp);
+  ACCESSOR(mode_t,                mode_t,     mode);
+  ACCESSOR(unsigned_internal_t,   u0q16,      freq);
+  ACCESSOR(unsigned_internal_t,   u0q16,      feedback);
+  ACCESSOR(unsigned_internal_t,   u0q16,      res);
+  ACCESSOR(internal_t,            external_t, d0);
+  ACCESSOR(internal_t,            external_t, lp); 
+  ACCESSOR(internal_t,            external_t, bp);
+  ACCESSOR(internal_t,            external_t, hp);
 
 #undef ACCESSOR
 
