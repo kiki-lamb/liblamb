@@ -10,8 +10,8 @@ namespace lamb {
  template <
   typename external_t          = s0q15,
   bool use_limits              = true,
-  typename internal_t          = s16p0q31,
-  typename unsigned_internal_t = u16p0q32
+  typename internal_t          = s16p0q15,
+  typename unsigned_internal_t = u16p0q16
   >
  class lowpass {
 
