@@ -8,7 +8,7 @@ namespace lamb {
   typename value_t_,
   typename output_value_t_ = value_t_,
   typename length_t_    = uint16_t,
-  typename phase_t_     = typename q<0, 0, 8 * (sizeof(length_t_) + 2)>::value_type,
+  typename phase_t_     = u0q32, // q<0, 0, 8 * (sizeof(length_t_) + 2)>::value_type, //
   typename amplitude_t_ = u0q8
   >
  class oneshot :
@@ -28,7 +28,7 @@ namespace lamb {
 
   bool                         state;
   length_type                  length;
-  const table_value_type *    data;
+  const table_value_type *     data;
   amplitude_type               amplitude;
   phase_type                   phacc;
   phase_type                   phincr;
@@ -47,28 +47,28 @@ namespace lamb {
    phincr(0),
    next_phincr(0) {}
 
-  virtual phase_type index() {
+  virtual typename phase_type::value_type index() {
    static const uint8_t shift     = 
     ((sizeof(phase_type) - sizeof(length_type)) << 3);
       
-   return  phacc >> shift;
+   return  (phacc >> shift).value;
   }
 
   inline virtual void stop() {
    // _trigger = false;
    state    = false;
-   phacc    = 0;
+   phacc    = phase_type(0);
   }
 
   inline virtual output_value_type play() {
    if (_trigger) {
     _trigger = false;
     state    = true;
-    phacc    = 0;
+    phacc    = phase_type(0);
         
     if (next_phincr != 0) {
      phincr      = next_phincr;
-     next_phincr = 0;
+     next_phincr = phase_type(0);
     }
    }
       
