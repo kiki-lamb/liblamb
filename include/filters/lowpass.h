@@ -8,7 +8,7 @@ namespace lamb {
  /////////////////////////////////////////////////////////////////////////////////////////
 
  template <
-  typename internal_t = s0q31,
+  typename internal_t = s16p0q15,
   typename external_t = s0q15,
   bool use_limits = true
   >  // tested with s0q15 and s0q31
@@ -34,7 +34,7 @@ namespace lamb {
   ACCESSOR(mode_t,     mode_t,     mode);
   ACCESSOR(u0q16,      u0q16,      freq);
   ACCESSOR(u0q16,      u0q16,      feedback);
-  ACCESSOR(u0q16,      u0q16,      res);
+  ACCESSOR(u16p0q16,   u0q16,      res);
   ACCESSOR(internal_t, external_t, d0);
   ACCESSOR(internal_t, external_t, lp); 
   ACCESSOR(internal_t, external_t, bp);
@@ -49,7 +49,7 @@ namespace lamb {
   //--------------------------------------------------------------------------------------
 
   inline void mode(mode_t const & x) { _mode = x; }
-  inline void res (u0q16  const & x) { _res.value = min(62000L, x.value); }
+  inline void res (u0q16  const & x) { _res.value = min(DEFAULT_RES.value, x.value); }
   inline void freq(u0q16  const & x) {
    // if (lamb_fixed_overflow) {
    //  _res -= 4;

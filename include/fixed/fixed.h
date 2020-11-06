@@ -202,7 +202,7 @@ namespace lamb {
 #endif
    
    typedef typename
-    type_if<(PAD > other_type::DATA_SIZE), value_type, big_value_type>::type
+    type_if<(PAD >= other_type::DATA_SIZE), value_type, big_value_type>::type
     tmp_value_type;
    
    tmp_value_type tmp       = value;
@@ -246,7 +246,7 @@ namespace lamb {
    }
 #endif
 
-   if constexpr(PAD > other_type::DATA_SIZE) {
+   if constexpr(PAD >= other_type::DATA_SIZE) {
     value                   *= other.value;
     value                  >>= other_frac;
    }
@@ -546,6 +546,62 @@ namespace lamb {
  //-------------------------------------------------------------------------------------------------
  constexpr s7q8    operator ""_s7q8(long double x)    { return s7q8::from_float(x);  }
  constexpr u8q8    operator ""_u8q8(long double x)    { return u8q8::from_float(x);  }
+ //-------------------------------------------------------------------------------------------------
+
+ //-------------------------------------------------------------------------------------------------
+ // 16 bits padded to 32
+ //-------------------------------------------------------------------------------------------------
+ typedef q<16, 0, 16 > u16p0q16;
+ //-------------------------------------------------------------------------------------------------
+ typedef q<16, 0, 15 > s16p0q15;
+ typedef q<16, 1, 15 > u16p1q15;
+ //-------------------------------------------------------------------------------------------------
+ typedef q<16, 1, 14 > s16p1q14;
+ typedef q<16, 2, 14 > u16p2q14;
+ //-------------------------------------------------------------------------------------------------
+ typedef q<16, 2, 13 > s16p2q13;
+ typedef q<16, 3, 13 > u16p3q13;
+ //-------------------------------------------------------------------------------------------------
+ typedef q<16, 3, 12 > s16p3q12;
+ typedef q<16, 4, 12 > u16p4q12;
+ //-------------------------------------------------------------------------------------------------
+ typedef q<16, 4, 11 > s16p4q11;
+ typedef q<16, 5, 11 > u16p5q11;
+ //-------------------------------------------------------------------------------------------------
+ typedef q<16, 5, 10 > s16p5q10;
+ typedef q<16, 6, 10 > u16p6q10;
+ //-------------------------------------------------------------------------------------------------
+ typedef q<16, 6,  9 > s16p6q9;
+ typedef q<16, 7,  9 > u16p7q9;
+ //-------------------------------------------------------------------------------------------------
+ typedef q<16, 7,  8 > s16p7q8;
+ typedef q<16, 8,  8 > u16p8q8;
+ //-------------------------------------------------------------------------------------------------
+ constexpr u16p0q16   operator ""_u16p0q16(long double x)   { return u16p0q16::from_float(x); }
+ //-------------------------------------------------------------------------------------------------
+ constexpr s16p0q15   operator ""_s16p0q15(long double x)   { return s16p0q15::from_float(x); }
+ constexpr u16p1q15   operator ""_u16p1q15(long double x)   { return u16p1q15::from_float(x); }
+ //-------------------------------------------------------------------------------------------------
+ constexpr s16p1q14   operator ""_s16p1q14(long double x)   { return s16p1q14::from_float(x); }
+ constexpr u16p2q14   operator ""_u16p2q14(long double x)   { return u16p2q14::from_float(x); }
+ //-------------------------------------------------------------------------------------------------
+ constexpr s16p2q13   operator ""_s16p2q13(long double x)   { return s16p2q13::from_float(x); }
+ constexpr u16p3q13   operator ""_u16p3q13(long double x)   { return u16p3q13::from_float(x); }
+ //-------------------------------------------------------------------------------------------------
+ constexpr s16p3q12   operator ""_s16p3q12(long double x)   { return s16p3q12::from_float(x); }
+ constexpr u16p4q12   operator ""_u16p4q12(long double x)   { return u16p4q12::from_float(x); }
+ //-------------------------------------------------------------------------------------------------
+ constexpr s16p4q11   operator ""_s16p4q11(long double x)   { return s16p4q11::from_float(x); }
+ constexpr u16p5q11   operator ""_u16p5q11(long double x)   { return u16p5q11::from_float(x); }
+ //-------------------------------------------------------------------------------------------------
+ constexpr s16p5q10   operator ""_s16p5q10(long double x)   { return s16p5q10::from_float(x); }
+ constexpr u16p6q10   operator ""_u16p6q10(long double x)   { return u16p6q10::from_float(x); }
+ //-------------------------------------------------------------------------------------------------
+ constexpr s16p6q9    operator ""_s16p6q9(long double x)    { return s16p6q9::from_float(x);  }
+ constexpr u16p7q9    operator ""_u16p7q9(long double x)    { return u16p7q9::from_float(x);  }
+ //-------------------------------------------------------------------------------------------------
+ constexpr s16p7q8    operator ""_s16p7q8(long double x)    { return s16p7q8::from_float(x);  }
+ constexpr u16p8q8    operator ""_u16p8q8(long double x)    { return u16p8q8::from_float(x);  }
  //-------------------------------------------------------------------------------------------------
  
  //-------------------------------------------------------------------------------------------------
