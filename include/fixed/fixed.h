@@ -205,8 +205,8 @@ namespace lamb {
     type_if<(PAD >= other_type::DATA_SIZE), value_type, big_value_type>::type
     tmp_value_type;
 
-   if (PAD > 0) {
-    if (! (PAD >= other_type::DATA_SIZE)) {
+#ifdef LAMB_FIXED_CHECK_OVERFLOWS
+   if ((PAD > 0) && (! (PAD >= other_type::DATA_SIZE))) {
      LOG_ERR("UNPADDED *: ");
      LOG_ERR(q::PAD);
      LOG_ERR("p");
@@ -220,10 +220,8 @@ namespace lamb {
      LOG_ERR("q");
      LOG_ERR(other_frac);
      LOG_ERR("\n");
-    } else {
-     // LOG_ERR("Padded *. \n");
     }
-   }
+#endif
    
    tmp_value_type tmp       = value;
    tmp                     *= other.value;
@@ -275,9 +273,11 @@ namespace lamb {
     value                  >>= other_frac;
    }
    else {
+#ifdef LAMB_FIXED_CHECK_OVERFLOWS
     if (PAD > 0) {
      LOG_ERR("UNPADDED *=. \n");
     }
+#endif
     
     big_value_type big_tmp   = value;
     big_tmp                 *= other.value;
@@ -325,14 +325,11 @@ namespace lamb {
     type_if<(PAD >= other_type::DATA_SIZE), value_type, big_value_type>::type
     tmp_value_type;
 
-   if (PAD > 0) {
-    if (! (PAD >= other_type::DATA_SIZE)) {
-     LOG_ERR("UNPADDED /. \n");
-    }
-    // else {
-    //  LOG_ERR("Padded /. \n");
-    // }
+#ifdef LAMB_FIXED_CHECK_OVERFLOWS
+   if ((PAD > 0) && (! (PAD >= other_type::DATA_SIZE))) {
+    LOG_ERR("UNPADDED /. \n");
    }
+#endif
    
    tmp_value_type tmp       = value;
    tmp                    <<= other_frac;
@@ -384,9 +381,11 @@ namespace lamb {
     value                   /= other.value;
    }
    else {
+#ifdef LAMB_FIXED_CHECK_OVERFLOWS
     if (PAD > 0) {
      LOG_ERR("UNPADDED /=. \n");
     }
+#endif
 
     big_value_type big_tmp   = value;
     big_tmp                <<= other_frac;
