@@ -64,19 +64,19 @@ namespace lamb {
 
        Serial.print("Clamp ");
        Serial.print(ix);
-       Serial.println();
-      
+       Serial.print(" ");
+       
        break;
       }
      }
     }
    }
 
-   // Serial.print("Filter: ");
-   // Serial.print(x.value);
-   // Serial.print(" Res: ");
-   // Serial.print(_res.value);
-   // Serial.println();
+   Serial.print("Filter: ");
+   Serial.print(x.value);
+   Serial.print(" Res: ");
+   Serial.print(_res.value);
+   Serial.println();
    
    _freq            = x;
    _feedback        = _res;

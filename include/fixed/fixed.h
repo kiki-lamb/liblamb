@@ -190,10 +190,10 @@ namespace lamb {
    ovf_tmp       >>= other_frac;
    
    if      (ovf_tmp > MAX.value) {
-    LOG_ERR("Overflow in *.\n");
+    LOG_ERR("OVERFLOW in *.\n");
    }
    else if (ovf_tmp < MIN.value) {
-    LOG_ERR("Underflow in *. \n");
+    LOG_ERR("UNDERFLOW in *. \n");
    }
 #endif
    
@@ -231,10 +231,10 @@ namespace lamb {
    ovf_tmp       >>= other_frac;
    
    if      (ovf_tmp > MAX.value) {
-    LOG_ERR("Overflow in *=. \n");
+    LOG_ERR("OVERFLOW in *=. \n");
    }
    else if (ovf_tmp < MIN.value) {
-    LOG_ERR("Underflow in *=. \n");
+    LOG_ERR("UNDERFLOW in *=. \n");
    }
 #endif
 
@@ -274,10 +274,10 @@ namespace lamb {
    ovf_tmp        /= other.value;
    
    if      (ovf_tmp > MAX.value) {
-    LOG_ERR("Overflow in /. \n");
+    LOG_ERR("OVERFLOW in /. \n");
    }
    else if (ovf_tmp < MIN.value) {
-    LOG_ERR("Underflow in /. \n");
+    LOG_ERR("UNDERFLOW in /. \n");
    }
 #endif
 
@@ -315,10 +315,10 @@ namespace lamb {
    ovf_tmp        /= other.value;
    
    if      (ovf_tmp > MAX.value) {
-    LOG_ERR("Overflow in /=. \n");
+    LOG_ERR("OVERFLOW in /=. \n");
    }
    else if (ovf_tmp < MIN.value) {
-    LOG_ERR("Underflow in /=. \n");
+    LOG_ERR("UNDERFLOW in /=. \n");
    }
 #endif
 
@@ -360,10 +360,10 @@ namespace lamb {
    big_value_type ovf_tmp = value + o.value;
 
    if      (ovf_tmp > MAX.value) {
-    LOG_ERR("Overflow in +. \n");
+    LOG_ERR("OVERFLOW in +. \n");
    }
    else if (ovf_tmp < MIN.value) {
-    LOG_ERR("Underflow in +. \n");
+    LOG_ERR("UNDERFLOW in +. \n");
    }
    
    return q(value  + o.value);
@@ -373,10 +373,10 @@ namespace lamb {
    big_value_type ovf_tmp = value - o.value;
 
    if      (ovf_tmp > MAX.value) {
-    LOG_ERR("Overflow in -. \n");
+    LOG_ERR("OVERFLOW in -. \n");
    }
    else if (ovf_tmp < MIN.value) {
-    LOG_ERR("Underflow in -. \n");
+    LOG_ERR("UNDERFLOW in -. \n");
    }
    
    return                       q(value  - o.value);
@@ -402,10 +402,10 @@ namespace lamb {
    big_value_type ovf_tmp = value + o.value;
    
    if      (ovf_tmp > MAX.value) {
-    LOG_ERR("Overflow in +=. \n");
+    LOG_ERR("OVERFLOW in +=. \n");
    }
    else if (ovf_tmp < MIN.value) {
-    LOG_ERR("Underflow in +=. \n");
+    LOG_ERR("UNDERFLOW in +=. \n");
    }
    
    value        = (*this  + o ).value; return *this;
@@ -415,10 +415,10 @@ namespace lamb {
    big_value_type ovf_tmp = value - o.value;
    
    if      (ovf_tmp > MAX.value) {
-    LOG_ERR("Overflow in -=. \n");
+    LOG_ERR("OVERFLOW in -=. \n");
    }
    else if (ovf_tmp < MIN.value) {
-    LOG_ERR("Underflow in -=. \n");
+    LOG_ERR("UNDERFLOW in -=. \n");
    }
    
    value        = (*this  - o ).value; return *this;
