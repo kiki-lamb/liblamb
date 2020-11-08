@@ -82,10 +82,11 @@ namespace lamb {
        if ((x < limits[ix][0]) && (_res > limits[ix][1])) {
         _res.value = limits[ix][1];
 
-        Serial.print("Clamp ");
-        Serial.print(ix);
-        Serial.print(" ");
-    
+        // Serial.print("Clamp ");
+        // Serial.print(ix);
+        // Serial.print(" ");
+        // Serial.println();
+        
         break;
        }
       }
@@ -109,13 +110,69 @@ namespace lamb {
    inline external_t process(external_t const & in) {
     if constexpr(use_limits) {
      if (_freq.value < 100) {
-      _hp.value -= 2;
-      _bp.value -= 2;
-      _lp.value -= 2;
-      _d0.value -= 2;
+      _hp.value >>= 1;
+      _bp.value >>= 1;
+      _lp.value >>= 1;
+      _d0.value >>= 1;
      }
     }
-   
+
+    if (false) {
+     char buff[64];
+    
+     snprintf(
+      buff, 64,
+      "% 10.3f, ",
+      float(_freq)
+     );
+     Serial.print(buff);
+    
+     snprintf(
+      buff, 64,
+      "% 10.3f, ",
+      float(_feedback)
+     );
+     Serial.print(buff);
+    
+     snprintf(
+      buff, 64,
+      "% 10.3f, ",
+      float(in)
+     );
+     Serial.print(buff);
+    
+     snprintf(
+      buff, 64,
+      "% 10.3f, ",
+      float(_hp)
+     );
+     Serial.print(buff);
+    
+     snprintf(
+      buff, 64,
+      "% 10.3f, ",
+      float(_d0)
+     );
+     Serial.print(buff);
+    
+     snprintf(
+      buff, 64,
+      "% 10.3f, ",
+      float(_bp)
+     );
+     Serial.print(buff);
+    
+     snprintf(
+      buff, 64,
+      "% 10.3f, ",
+      float(_lp)
+     );
+     Serial.print(buff);
+
+     Serial.println();
+     Serial.println();
+    }
+    
     _hp  = in   - _d0;
     _d0 += (_hp + ((_d0 - _lp) * u8q8(_feedback.value))) * _freq;
     _bp  = _d0  - _lp;
