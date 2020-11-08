@@ -9,12 +9,12 @@ namespace lamb {
   public:
     typedef T         value_type;
 
-    size_t     write_ix;
-    size_t     read_ix;
+    volatile size_t     write_ix;
+    volatile size_t     read_ix;
     
   private:
-    size_t     count_;
-    value_type buff[SIZE];
+    volatile size_t     count_;
+    value_type          buff[SIZE];
 
   public:
     explicit inline ring_buffer() :
