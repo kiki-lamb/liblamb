@@ -11,26 +11,33 @@ namespace lamb {
     private:
 #ifdef __AVR__
       uint8_t  _pin;
+      uint8_t  _signal_number;
 #else
       uint32_t _pin;
+      uint32_t  _signal_number;
 #endif
       sample_type_traits<uint12_t>::mix_type _accum;
       uint8_t  _averaging;
-      
+     
     public:
       analog(
 #ifdef __AVR__
   uint8_t  const & pin_,
-  uint8_t  const & buffer_size_,
+  uint8_t  const & signal_number = 0xff,
 #else
   uint32_t const & pin_,
-  uint8_t  const & buffer_size_,
+  uint32_t const & signal_number = 0xffff'ffff,
 #endif
-  uint8_t  const & averaging_bb = 1
+  uint8_t  const & buffer_size_ = 8,
+  uint8_t  const & averaging_ = 2
       );
       
       struct analog_event {
-        uint8_t  signal_number;
+#ifdef __AVR__
+       uint8_t   signal_number;
+#else
+       uint32_t  signal_number;
+#endif
         uint16_t adc_value;
         
         analog_event(

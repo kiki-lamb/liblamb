@@ -128,7 +128,7 @@ namespace lamb {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
  
-  explicit constexpr 
+  explicit inline constexpr 
   operator float() const {
    constexpr float one = TRUE_ONE * 1.0;
    return value / one;
@@ -136,14 +136,14 @@ namespace lamb {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
  
-  explicit constexpr 
+  explicit inline  constexpr 
   operator value_type() const {
    return value;
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  static constexpr
+  static inline constexpr
   q from_float(
    float const & tmp
   ) {
@@ -160,7 +160,7 @@ namespace lamb {
  
   //////////////////////////////////////////////////////////////////////////////////////////////////
  
-  constexpr
+  inline constexpr
   q operator ^ (
    q const & other
   ) const {
@@ -170,7 +170,7 @@ namespace lamb {
   //////////////////////////////////////////////////////////////////////////////////////////////////
   
   template <uint8_t other_pad, uint8_t other_whole, uint8_t other_frac>
-  constexpr
+  inline constexpr
   q operator * (
    q<other_pad, other_whole, other_frac> const & other
   ) const {
@@ -233,7 +233,7 @@ namespace lamb {
   //////////////////////////////////////////////////////////////////////////////////////////////////
   
   template <uint8_t other_pad, uint8_t other_whole, uint8_t other_frac>
-  constexpr
+  inline constexpr
   q & operator *= (
    q<other_pad, other_whole, other_frac> const & other
   ) {
@@ -290,7 +290,7 @@ namespace lamb {
   /////////////////////////////////////////////////////////////////////////////////////////
   
   template <uint8_t other_pad, uint8_t other_whole, uint8_t other_frac>
-  constexpr
+  inline constexpr
   q operator / (
    q<other_pad, other_whole, other_frac> const & other
   ) const {
@@ -341,7 +341,7 @@ namespace lamb {
   //////////////////////////////////////////////////////////////////////////////////////////////////
   
   template <uint8_t other_pad, uint8_t other_whole, uint8_t other_frac>
-  constexpr
+  inline constexpr
   q & operator /= (
    q<other_pad, other_whole, other_frac> const & other
   ) {
@@ -397,26 +397,26 @@ namespace lamb {
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  constexpr q    operator   + ()                     const = delete;                                             // can't ovf
-  constexpr q    operator   ~ ()                     const { return                       q(       ~ value  ); } // can't ovf
-  constexpr q    operator   - ()                     const { return                       q(       - value  ); } // can't ovf
+  inline constexpr q    operator   + ()                     const = delete;                                             // can't ovf
+  inline constexpr q    operator   ~ ()                     const { return                       q(       ~ value  ); } // can't ovf
+  inline constexpr q    operator   - ()                     const { return                       q(       - value  ); } // can't ovf
   //------------------------------------------------------------------------------------------------------------
-  constexpr q    operator  >> (uint8_t    const & s) const { return                       q(value >> s      ); } // can't ovf
-  constexpr q    operator  << (uint8_t    const & s) const { return                       q(value << s      ); } // can't ovf
+  inline constexpr q    operator  >> (uint8_t    const & s) const { return                       q(value >> s      ); } // can't ovf
+  inline constexpr q    operator  << (uint8_t    const & s) const { return                       q(value << s      ); } // can't ovf
   //------------------------------------------------------------------------------------------------------------
-  constexpr q    operator   + (value_type const & o) const { return                       (*this   + q(o   )); } // uses overload's ovf
-  constexpr q    operator   - (value_type const & o) const { return                       (*this   - q(o   )); } // uses overload's ovf
-  constexpr q    operator   * (value_type const & o) const { return                       (q(value * o     )); } // don't convert arg so that we can mul by things > MAX // add OVF
-  constexpr q    operator   / (value_type const & o) const { return                       (q(value / o     )); } // don't convert arg so that we can div by things > MAX // add OVF
-  constexpr bool operator   < (value_type const & o) const { return                       (*this   < q(o   )); } // can't ovf
-  constexpr bool operator   > (value_type const & o) const { return                       (*this   > q(o   )); } // can't ovf
-  constexpr bool operator  == (value_type const & o) const { return                       (*this  == q(o   )); } // can't ovf
+  inline constexpr q    operator   + (value_type const & o) const { return                       (*this   + q(o   )); } // uses overload's ovf
+  inline constexpr q    operator   - (value_type const & o) const { return                       (*this   - q(o   )); } // uses overload's ovf
+  inline constexpr q    operator   * (value_type const & o) const { return                       (q(value * o     )); } // don't convert arg so that we can mul by things > MAX // add OVF
+  inline constexpr q    operator   / (value_type const & o) const { return                       (q(value / o     )); } // don't convert arg so that we can div by things > MAX // add OVF
+  inline constexpr bool operator   < (value_type const & o) const { return                       (*this   < q(o   )); } // can't ovf
+  inline constexpr bool operator   > (value_type const & o) const { return                       (*this   > q(o   )); } // can't ovf
+  inline constexpr bool operator  == (value_type const & o) const { return                       (*this  == q(o   )); } // can't ovf
   //------------------------------------------------------------------------------------------------------------
 #ifndef LAMB_FIXED_CHECK_OVERFLOWS
-  constexpr q    operator   + (q          const & o) const { return                       q(value  + o.value); } // checks in alt case
-  constexpr q    operator   - (q          const & o) const { return                       q(value  - o.value); } // checks in alt case
+  inline constexpr q    operator   + (q          const & o) const { return                       q(value  + o.value); } // checks in alt case
+  inline constexpr q    operator   - (q          const & o) const { return                       q(value  - o.value); } // checks in alt case
 #else
-  constexpr q    operator   + (q          const & o) const {                                                     // checks ovf
+  inline constexpr q    operator   + (q          const & o) const {                                                     // checks ovf
    big_value_type ovf_tmp = value + o.value;
 
    if      (ovf_tmp > MAX.value) {
@@ -433,7 +433,7 @@ namespace lamb {
    return q(value  + o.value);
   }
   //------------------------------------------------------------------------------------------------------------
-  constexpr q    operator   - (q          const & o) const {                                                     // checks ovf
+  inline constexpr q    operator   - (q          const & o) const {                                                     // checks ovf
    big_value_type ovf_tmp = value - o.value;
 
    if      (ovf_tmp > MAX.value) {
@@ -451,22 +451,22 @@ namespace lamb {
   }
 #endif
   //------------------------------------------------------------------------------------------------------------  
-  constexpr bool operator   < (q          const & o) const { return                        (value  < o.value); } // can't ovf
-  constexpr bool operator   > (q          const & o) const { return                        (value  > o.value); } // can't ovf
-  constexpr bool operator  == (q          const & o) const { return                        (value == o.value); } // can't ovf
+  inline constexpr bool operator   < (q          const & o) const { return                        (value  < o.value); } // can't ovf
+  inline constexpr bool operator   > (q          const & o) const { return                        (value  > o.value); } // can't ovf
+  inline constexpr bool operator  == (q          const & o) const { return                        (value == o.value); } // can't ovf
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  constexpr q &  operator  -- (                    )       { this        -= 1;                   return *this; } // unlikely to ovf
-  constexpr q &  operator  ++ (                    )       { this        += 1;                   return *this; } // unlikely to bovf
+  inline constexpr q &  operator  -- (                    )       { this        -= 1;                   return *this; } // unlikely to ovf
+  inline constexpr q &  operator  ++ (                    )       { this        += 1;                   return *this; } // unlikely to bovf
   //------------------------------------------------------------------------------------------------------------
-  constexpr q &  operator >>= (uint8_t    const & v)       { value        = (*this >> v ).value; return *this; } // can't ovf
-  constexpr q &  operator <<= (uint8_t    const & v)       { value        = (*this << v ).value; return *this; } // can't ovf
+  inline constexpr q &  operator >>= (uint8_t    const & v)       { value        = (*this >> v ).value; return *this; } // can't ovf
+  inline constexpr q &  operator <<= (uint8_t    const & v)       { value        = (*this << v ).value; return *this; } // can't ovf
   //------------------------------------------------------------------------------------------------------------
 #ifndef LAMB_FIXED_CHECK_OVERFLOWS
-  constexpr q &  operator  += (q          const & o)       { value        = (*this  + o ).value; return *this; } // checks in alt caes
-  constexpr q &  operator  -= (q          const & o)       { value        = (*this  - o ).value; return *this; } // checks in alt caes
+  inline constexpr q &  operator  += (q          const & o)       { value        = (*this  + o ).value; return *this; } // checks in alt caes
+  inline constexpr q &  operator  -= (q          const & o)       { value        = (*this  - o ).value; return *this; } // checks in alt caes
 #else
   //------------------------------------------------------------------------------------------------------------
-  constexpr q &  operator  += (q          const & o)       {                                                     // checks ovf
+  inline constexpr q &  operator  += (q          const & o)       {                                                     // checks ovf
    big_value_type ovf_tmp = value + o.value;
    
    if      (ovf_tmp > MAX.value) {
@@ -483,7 +483,7 @@ namespace lamb {
    value        = (*this  + o ).value; return *this;
   }
   //------------------------------------------------------------------------------------------------------------
-  constexpr q &  operator  -= (q          const & o)       {                                                     // checks ovf
+  inline constexpr q &  operator  -= (q          const & o)       {                                                     // checks ovf
    big_value_type ovf_tmp = value - o.value;
    
    if      (ovf_tmp > MAX.value) {
@@ -502,17 +502,17 @@ namespace lamb {
   //------------------------------------------------------------------------------------------------------------
 #endif
   //------------------------------------------------------------------------------------------------------------
-  constexpr bool operator  <= (q          const & o) const { return         (*this == o )     || (*this < o) ; } // can't ovf
-  constexpr bool operator  >= (q          const & o) const { return         (*this == o )     || (*this > o) ; } // can't ovf
-  constexpr bool operator  != (q          const & o) const { return       ! (*this == o )                    ; } // can't ovf
+  inline constexpr bool operator  <= (q          const & o) const { return         (*this == o )     || (*this < o) ; } // can't ovf
+  inline constexpr bool operator  >= (q          const & o) const { return         (*this == o )     || (*this > o) ; } // can't ovf
+  inline constexpr bool operator  != (q          const & o) const { return       ! (*this == o )                    ; } // can't ovf
   //------------------------------------------------------------------------------------------------------------
-  constexpr q &  operator  += (value_type const & v)       { value        = (*this  + v ).value; return *this; } // uses called's ovf
-  constexpr q &  operator  -= (value_type const & v)       { value        = (*this  - v ).value; return *this; } // uses called's ovf
-  constexpr q &  operator  *= (value_type const & v)       { value        = (*this  * v ).value; return *this; } // uses called's ovf
-  constexpr q &  operator  /= (value_type const & v)       { value        = (*this  / v ).value; return *this; } // uses called's ovf
-  constexpr bool operator  <= (value_type const & o) const { return         (*this     == o ) || (*this < o) ; } // can't ovf
-  constexpr bool operator  >= (value_type const & o) const { return         (*this     == o ) || (*this > o) ; } // can't ovf
-  constexpr bool operator  != (value_type const & o) const { return       ! (*this     == o )                ; } // can't ovf
+  inline constexpr q &  operator  += (value_type const & v)       { value        = (*this  + v ).value; return *this; } // uses called's ovf
+  inline constexpr q &  operator  -= (value_type const & v)       { value        = (*this  - v ).value; return *this; } // uses called's ovf
+  inline constexpr q &  operator  *= (value_type const & v)       { value        = (*this  * v ).value; return *this; } // uses called's ovf
+  inline constexpr q &  operator  /= (value_type const & v)       { value        = (*this  / v ).value; return *this; } // uses called's ovf
+  inline constexpr bool operator  <= (value_type const & o) const { return         (*this     == o ) || (*this < o) ; } // can't ovf
+  inline constexpr bool operator  >= (value_type const & o) const { return         (*this     == o ) || (*this > o) ; } // can't ovf
+  inline constexpr bool operator  != (value_type const & o) const { return       ! (*this     == o )                ; } // can't ovf
   //------------------------------------------------------------------------------------------------------------
  }; 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -531,9 +531,9 @@ namespace lamb {
  //-------------------------------------------------------------------------------------------------
  typedef fixed<  0,  8 > u0q8;
  //-------------------------------------------------------------------------------------------------
- constexpr s0q7  operator ""_s0q7(long double x)    { return s0q7::from_float(x); }
+ inline constexpr s0q7  operator ""_s0q7(long double x)    { return s0q7::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr u0q8  operator ""_u0q8(long double x)    { return u0q8::from_float(x); }
+ inline constexpr u0q8  operator ""_u0q8(long double x)    { return u0q8::from_float(x); }
  //-------------------------------------------------------------------------------------------------
  
  //-------------------------------------------------------------------------------------------------
@@ -565,31 +565,31 @@ namespace lamb {
  typedef fixed<  7,  8 > s7q8;
  typedef fixed<  8,  8 > u8q8;
  //-------------------------------------------------------------------------------------------------
- constexpr u0q16   operator ""_u0q16(long double x)   { return u0q16::from_float(x); }
+ inline constexpr u0q16   operator ""_u0q16(long double x)   { return u0q16::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s0q15   operator ""_s0q15(long double x)   { return s0q15::from_float(x); }
- constexpr u1q15   operator ""_u1q15(long double x)   { return u1q15::from_float(x); }
+ inline constexpr s0q15   operator ""_s0q15(long double x)   { return s0q15::from_float(x); }
+ inline constexpr u1q15   operator ""_u1q15(long double x)   { return u1q15::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s1q14   operator ""_s1q14(long double x)   { return s1q14::from_float(x); }
- constexpr u2q14   operator ""_u2q14(long double x)   { return u2q14::from_float(x); }
+ inline constexpr s1q14   operator ""_s1q14(long double x)   { return s1q14::from_float(x); }
+ inline constexpr u2q14   operator ""_u2q14(long double x)   { return u2q14::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s2q13   operator ""_s2q13(long double x)   { return s2q13::from_float(x); }
- constexpr u3q13   operator ""_u3q13(long double x)   { return u3q13::from_float(x); }
+ inline constexpr s2q13   operator ""_s2q13(long double x)   { return s2q13::from_float(x); }
+ inline constexpr u3q13   operator ""_u3q13(long double x)   { return u3q13::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s3q12   operator ""_s3q12(long double x)   { return s3q12::from_float(x); }
- constexpr u4q12   operator ""_u4q12(long double x)   { return u4q12::from_float(x); }
+ inline constexpr s3q12   operator ""_s3q12(long double x)   { return s3q12::from_float(x); }
+ inline constexpr u4q12   operator ""_u4q12(long double x)   { return u4q12::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s4q11   operator ""_s4q11(long double x)   { return s4q11::from_float(x); }
- constexpr u5q11   operator ""_u5q11(long double x)   { return u5q11::from_float(x); }
+ inline constexpr s4q11   operator ""_s4q11(long double x)   { return s4q11::from_float(x); }
+ inline constexpr u5q11   operator ""_u5q11(long double x)   { return u5q11::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s5q10   operator ""_s5q10(long double x)   { return s5q10::from_float(x); }
- constexpr u6q10   operator ""_u6q10(long double x)   { return u6q10::from_float(x); }
+ inline constexpr s5q10   operator ""_s5q10(long double x)   { return s5q10::from_float(x); }
+ inline constexpr u6q10   operator ""_u6q10(long double x)   { return u6q10::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s6q9    operator ""_s6q9(long double x)    { return s6q9::from_float(x);  }
- constexpr u7q9    operator ""_u7q9(long double x)    { return u7q9::from_float(x);  }
+ inline constexpr s6q9    operator ""_s6q9(long double x)    { return s6q9::from_float(x);  }
+ inline constexpr u7q9    operator ""_u7q9(long double x)    { return u7q9::from_float(x);  }
  //-------------------------------------------------------------------------------------------------
- constexpr s7q8    operator ""_s7q8(long double x)    { return s7q8::from_float(x);  }
- constexpr u8q8    operator ""_u8q8(long double x)    { return u8q8::from_float(x);  }
+ inline constexpr s7q8    operator ""_s7q8(long double x)    { return s7q8::from_float(x);  }
+ inline constexpr u8q8    operator ""_u8q8(long double x)    { return u8q8::from_float(x);  }
  //-------------------------------------------------------------------------------------------------
 
  //-------------------------------------------------------------------------------------------------
@@ -621,31 +621,31 @@ namespace lamb {
  typedef q<16, 7,  8 > s16p7q8;
  typedef q<16, 8,  8 > u16p8q8;
  //-------------------------------------------------------------------------------------------------
- constexpr u16p0q16   operator ""_u16p0q16(long double x)   { return u16p0q16::from_float(x); }
+ inline constexpr u16p0q16   operator ""_u16p0q16(long double x)   { return u16p0q16::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s16p0q15   operator ""_s16p0q15(long double x)   { return s16p0q15::from_float(x); }
- constexpr u16p1q15   operator ""_u16p1q15(long double x)   { return u16p1q15::from_float(x); }
+ inline constexpr s16p0q15   operator ""_s16p0q15(long double x)   { return s16p0q15::from_float(x); }
+ inline constexpr u16p1q15   operator ""_u16p1q15(long double x)   { return u16p1q15::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s16p1q14   operator ""_s16p1q14(long double x)   { return s16p1q14::from_float(x); }
- constexpr u16p2q14   operator ""_u16p2q14(long double x)   { return u16p2q14::from_float(x); }
+ inline constexpr s16p1q14   operator ""_s16p1q14(long double x)   { return s16p1q14::from_float(x); }
+ inline constexpr u16p2q14   operator ""_u16p2q14(long double x)   { return u16p2q14::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s16p2q13   operator ""_s16p2q13(long double x)   { return s16p2q13::from_float(x); }
- constexpr u16p3q13   operator ""_u16p3q13(long double x)   { return u16p3q13::from_float(x); }
+ inline constexpr s16p2q13   operator ""_s16p2q13(long double x)   { return s16p2q13::from_float(x); }
+ inline constexpr u16p3q13   operator ""_u16p3q13(long double x)   { return u16p3q13::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s16p3q12   operator ""_s16p3q12(long double x)   { return s16p3q12::from_float(x); }
- constexpr u16p4q12   operator ""_u16p4q12(long double x)   { return u16p4q12::from_float(x); }
+ inline constexpr s16p3q12   operator ""_s16p3q12(long double x)   { return s16p3q12::from_float(x); }
+ inline constexpr u16p4q12   operator ""_u16p4q12(long double x)   { return u16p4q12::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s16p4q11   operator ""_s16p4q11(long double x)   { return s16p4q11::from_float(x); }
- constexpr u16p5q11   operator ""_u16p5q11(long double x)   { return u16p5q11::from_float(x); }
+ inline constexpr s16p4q11   operator ""_s16p4q11(long double x)   { return s16p4q11::from_float(x); }
+ inline constexpr u16p5q11   operator ""_u16p5q11(long double x)   { return u16p5q11::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s16p5q10   operator ""_s16p5q10(long double x)   { return s16p5q10::from_float(x); }
- constexpr u16p6q10   operator ""_u16p6q10(long double x)   { return u16p6q10::from_float(x); }
+ inline constexpr s16p5q10   operator ""_s16p5q10(long double x)   { return s16p5q10::from_float(x); }
+ inline constexpr u16p6q10   operator ""_u16p6q10(long double x)   { return u16p6q10::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s16p6q9    operator ""_s16p6q9(long double x)    { return s16p6q9::from_float(x);  }
- constexpr u16p7q9    operator ""_u16p7q9(long double x)    { return u16p7q9::from_float(x);  }
+ inline constexpr s16p6q9    operator ""_s16p6q9(long double x)    { return s16p6q9::from_float(x);  }
+ inline constexpr u16p7q9    operator ""_u16p7q9(long double x)    { return u16p7q9::from_float(x);  }
  //-------------------------------------------------------------------------------------------------
- constexpr s16p7q8    operator ""_s16p7q8(long double x)    { return s16p7q8::from_float(x);  }
- constexpr u16p8q8    operator ""_u16p8q8(long double x)    { return u16p8q8::from_float(x);  }
+ inline constexpr s16p7q8    operator ""_s16p7q8(long double x)    { return s16p7q8::from_float(x);  }
+ inline constexpr u16p8q8    operator ""_u16p8q8(long double x)    { return u16p8q8::from_float(x);  }
  //-------------------------------------------------------------------------------------------------
  
  //-------------------------------------------------------------------------------------------------
@@ -710,61 +710,61 @@ namespace lamb {
  typedef fixed< 30,  1 > s30q1;
  typedef fixed< 31,  1 > u31q1;
  //-------------------------------------------------------------------------------------------------
- constexpr u0q32    operator ""_u0q32(long double x)   { return u0q32::from_float(x); }
+ inline constexpr u0q32    operator ""_u0q32(long double x)   { return u0q32::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s0q31    operator ""_s0q31(long double x)   { return s0q31::from_float(x); }
- constexpr u1q31    operator ""_u1q31(long double x)   { return u1q31::from_float(x); }
+ inline constexpr s0q31    operator ""_s0q31(long double x)   { return s0q31::from_float(x); }
+ inline constexpr u1q31    operator ""_u1q31(long double x)   { return u1q31::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s1q30    operator ""_s1q30(long double x)   { return s1q30::from_float(x); }
- constexpr u2q30    operator ""_u2q30(long double x)   { return u2q30::from_float(x); }
+ inline constexpr s1q30    operator ""_s1q30(long double x)   { return s1q30::from_float(x); }
+ inline constexpr u2q30    operator ""_u2q30(long double x)   { return u2q30::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s2q29    operator ""_s2q29(long double x)   { return s2q29::from_float(x); }
- constexpr u3q29    operator ""_u3q29(long double x)   { return u3q29::from_float(x); }
+ inline constexpr s2q29    operator ""_s2q29(long double x)   { return s2q29::from_float(x); }
+ inline constexpr u3q29    operator ""_u3q29(long double x)   { return u3q29::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s3q28    operator ""_s3q28(long double x)   { return s3q28::from_float(x); }
- constexpr u4q28    operator ""_u4q28(long double x)   { return u4q28::from_float(x); }
+ inline constexpr s3q28    operator ""_s3q28(long double x)   { return s3q28::from_float(x); }
+ inline constexpr u4q28    operator ""_u4q28(long double x)   { return u4q28::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s4q27    operator ""_s4q27(long double x)   { return s4q27::from_float(x); }
- constexpr u5q27    operator ""_u5q27(long double x)   { return u5q27::from_float(x); }
+ inline constexpr s4q27    operator ""_s4q27(long double x)   { return s4q27::from_float(x); }
+ inline constexpr u5q27    operator ""_u5q27(long double x)   { return u5q27::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s5q26    operator ""_s5q26(long double x)   { return s5q26::from_float(x); }
- constexpr u6q26    operator ""_u6q26(long double x)   { return u6q26::from_float(x); }
+ inline constexpr s5q26    operator ""_s5q26(long double x)   { return s5q26::from_float(x); }
+ inline constexpr u6q26    operator ""_u6q26(long double x)   { return u6q26::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s6q25    operator ""_s6q25(long double x)   { return s6q25::from_float(x); }
- constexpr u7q25    operator ""_u7q25(long double x)   { return u7q25::from_float(x); }
+ inline constexpr s6q25    operator ""_s6q25(long double x)   { return s6q25::from_float(x); }
+ inline constexpr u7q25    operator ""_u7q25(long double x)   { return u7q25::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s7q24    operator ""_s7q24(long double x)   { return s7q24::from_float(x); }
- constexpr u8q24    operator ""_u8q24(long double x)   { return u8q24::from_float(x); }
+ inline constexpr s7q24    operator ""_s7q24(long double x)   { return s7q24::from_float(x); }
+ inline constexpr u8q24    operator ""_u8q24(long double x)   { return u8q24::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s11q20   operator ""_s11q20(long double x)  { return s11q20::from_float(x);}
- constexpr u12q20   operator ""_u12q20(long double x)  { return u12q20::from_float(x);}
+ inline constexpr s11q20   operator ""_s11q20(long double x)  { return s11q20::from_float(x);}
+ inline constexpr u12q20   operator ""_u12q20(long double x)  { return u12q20::from_float(x);}
  //-------------------------------------------------------------------------------------------------
- constexpr s15q16   operator ""_s15q16(long double x)  { return s15q16::from_float(x);}
- constexpr u16q16   operator ""_u16q16(long double x)  { return u16q16::from_float(x);}
+ inline constexpr s15q16   operator ""_s15q16(long double x)  { return s15q16::from_float(x);}
+ inline constexpr u16q16   operator ""_u16q16(long double x)  { return u16q16::from_float(x);}
  //-------------------------------------------------------------------------------------------------
- constexpr s16q15   operator ""_s16q15(long double x)  { return s16q15::from_float(x);}
- constexpr u17q15   operator ""_u17q15(long double x)  { return u17q15::from_float(x);}
+ inline constexpr s16q15   operator ""_s16q15(long double x)  { return s16q15::from_float(x);}
+ inline constexpr u17q15   operator ""_u17q15(long double x)  { return u17q15::from_float(x);}
  //-------------------------------------------------------------------------------------------------
- constexpr s17q14   operator ""_s17q14(long double x)  { return s17q14::from_float(x);}
- constexpr u18q14   operator ""_u18q14(long double x)  { return u18q14::from_float(x);}
+ inline constexpr s17q14   operator ""_s17q14(long double x)  { return s17q14::from_float(x);}
+ inline constexpr u18q14   operator ""_u18q14(long double x)  { return u18q14::from_float(x);}
  //-------------------------------------------------------------------------------------------------
- constexpr s19q12   operator ""_s19q12(long double x)  { return s19q12::from_float(x);}
- constexpr u20q12   operator ""_u20q12(long double x)  { return u20q12::from_float(x);}
+ inline constexpr s19q12   operator ""_s19q12(long double x)  { return s19q12::from_float(x);}
+ inline constexpr u20q12   operator ""_u20q12(long double x)  { return u20q12::from_float(x);}
  //-------------------------------------------------------------------------------------------------
- constexpr s32q10   operator ""_s32q10(long double x)  { return s32q10::from_float(x);}
- constexpr u22q10   operator ""_u22q10(long double x)  { return u22q10::from_float(x);}
+ inline constexpr s32q10   operator ""_s32q10(long double x)  { return s32q10::from_float(x);}
+ inline constexpr u22q10   operator ""_u22q10(long double x)  { return u22q10::from_float(x);}
  //-------------------------------------------------------------------------------------------------
- constexpr s23q8    operator ""_s23q8(long double x)   { return s23q8::from_float(x); }
- constexpr u24q8    operator ""_u24q8(long double x)   { return u24q8::from_float(x); }
+ inline constexpr s23q8    operator ""_s23q8(long double x)   { return s23q8::from_float(x); }
+ inline constexpr u24q8    operator ""_u24q8(long double x)   { return u24q8::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s27q4    operator ""_s27q4(long double x)   { return s27q4::from_float(x); }
- constexpr u28q4    operator ""_u28q4(long double x)   { return u28q4::from_float(x); }
+ inline constexpr s27q4    operator ""_s27q4(long double x)   { return s27q4::from_float(x); }
+ inline constexpr u28q4    operator ""_u28q4(long double x)   { return u28q4::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s29q2    operator ""_s29q2(long double x)   { return s29q2::from_float(x); }
- constexpr u30q2    operator ""_u30q2(long double x)   { return u30q2::from_float(x); }
+ inline constexpr s29q2    operator ""_s29q2(long double x)   { return s29q2::from_float(x); }
+ inline constexpr u30q2    operator ""_u30q2(long double x)   { return u30q2::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr s30q1    operator ""_s30q1(long double x)   { return s30q1::from_float(x); }
- constexpr u31q1    operator ""_u31q1(long double x)   { return u31q1::from_float(x); }
+ inline constexpr s30q1    operator ""_s30q1(long double x)   { return s30q1::from_float(x); }
+ inline constexpr u31q1    operator ""_u31q1(long double x)   { return u31q1::from_float(x); }
  //-------------------------------------------------------------------------------------------------
 
  //-------------------------------------------------------------------------------------------------
@@ -779,14 +779,14 @@ namespace lamb {
  typedef fixed< 32,  0 > u32q0;
  typedef fixed< 31,  0 > s31q0;
  //-------------------------------------------------------------------------------------------------
- constexpr u8q0    operator ""_u8q0(long double x)    { return u8q0::from_float(x);  }
- constexpr s7q0    operator ""_s7q0(long double x)    { return s7q0::from_float(x);  }
+ inline constexpr u8q0    operator ""_u8q0(long double x)    { return u8q0::from_float(x);  }
+ inline constexpr s7q0    operator ""_s7q0(long double x)    { return s7q0::from_float(x);  }
  //-------------------------------------------------------------------------------------------------
- constexpr u16q0   operator ""_u16q0(long double x)   { return u16q0::from_float(x); }
- constexpr s15q0   operator ""_s15q0(long double x)   { return s15q0::from_float(x); }
+ inline constexpr u16q0   operator ""_u16q0(long double x)   { return u16q0::from_float(x); }
+ inline constexpr s15q0   operator ""_s15q0(long double x)   { return s15q0::from_float(x); }
  //-------------------------------------------------------------------------------------------------
- constexpr u32q0   operator ""_u32q0(long double x)   { return u32q0::from_float(x); }
- constexpr s31q0   operator ""_s31q0(long double x)   { return s31q0::from_float(x); }
+ inline constexpr u32q0   operator ""_u32q0(long double x)   { return u32q0::from_float(x); }
+ inline constexpr s31q0   operator ""_s31q0(long double x)   { return s31q0::from_float(x); }
  //-------------------------------------------------------------------------------------------------
  
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -107,81 +107,81 @@ namespace lamb {
 
    //--------------------------------------------------------------------------------------
 
-   inline external_t process(external_t const & in) {
-    if constexpr(use_limits) {
-     if (_freq.value < 100) {
-      _hp.value >>= 1;
-      _bp.value >>= 1;
-      _lp.value >>= 1;
-      _d0.value >>= 1;
-     }
-    }
+   external_t process(external_t const & in) {
+    // if constexpr(use_limits) {
+    //  if (_freq.value < 100) {
+    //   _hp.value >>= 1;
+    //   _bp.value >>= 1;
+    //   _lp.value >>= 1;
+    //   _d0.value >>= 1;
+    //  }
+    // }
 
-    if (false) {
-     char buff[64];
+    // if (false) {
+    //  char buff[64];
     
-     snprintf(
-      buff, 64,
-      "% 10.3f, ",
-      float(_freq)
-     );
-     Serial.print(buff);
+    //  snprintf(
+    //   buff, 64,
+    //   "% 10.3f, ",
+    //   float(_freq)
+    //  );
+    //  Serial.print(buff);
     
-     snprintf(
-      buff, 64,
-      "% 10.3f, ",
-      float(_feedback)
-     );
-     Serial.print(buff);
-    
-     snprintf(
-      buff, 64,
-      "% 10.3f, ",
-      float(in)
-     );
-     Serial.print(buff);
-    
-     snprintf(
-      buff, 64,
-      "% 10.3f, ",
-      float(_hp)
-     );
-     Serial.print(buff);
-    
-     snprintf(
-      buff, 64,
-      "% 10.3f, ",
-      float(_d0)
-     );
-     Serial.print(buff);
-    
-     snprintf(
-      buff, 64,
-      "% 10.3f, ",
-      float(_bp)
-     );
-     Serial.print(buff);
-    
-     snprintf(
-      buff, 64,
-      "% 10.3f, ",
-      float(_lp)
-     );
-     Serial.print(buff);
+    //  snprintf(
+    //   buff, 64,
+    //   "% 10.3f, ",
+    //   float(_feedback)
+    //  );
+    //  Serial.print(buff);
 
-     Serial.println();
-     Serial.println();
-    }
+    //  snprintf(
+    //   buff, 64,
+    //   "% 10.3f, ",
+    //   float(in)
+    //  );
+    //  Serial.print(buff);
+    
+    //  snprintf(
+    //   buff, 64,
+    //   "% 10.3f, ",
+    //   float(_hp)
+    //  );
+    //  Serial.print(buff);
+    
+    //  snprintf(
+    //   buff, 64,
+    //   "% 10.3f, ",
+    //   float(_d0)
+    //  );
+    //  Serial.print(buff);
+    
+    //  snprintf(
+    //   buff, 64,
+    //   "% 10.3f, ",
+    //   float(_bp)
+    //  );
+    //  Serial.print(buff);
+    
+    //  snprintf(
+    //   buff, 64,
+    //   "% 10.3f, ",
+    //   float(_lp)
+    //  );
+    //  Serial.print(buff);
+
+    //  Serial.println();
+    //  Serial.println();
+    // }
     
     _hp  = in   - _d0;
     _d0 += (_hp + ((_d0 - _lp) * u8q8(_feedback.value))) * _freq;
     _bp  = _d0  - _lp;
     _lp += _bp  * _freq;
    
-    if      (_mode == mode_hp)
-     return _hp;
-    else if (_mode == mode_bp)
-     return _bp;
+    // if      (_mode == mode_hp)
+    //  return _hp;
+    // else if (_mode == mode_bp)
+    //  return _bp;
 
     return _lp;
    }
