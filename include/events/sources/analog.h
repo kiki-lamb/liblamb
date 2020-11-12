@@ -32,16 +32,20 @@
         }
 
         virtual uint8_t impl_queue_count() const {
-          return _device->analog_events_count;
+         return _device->ready() ? 1 : 0;
         }
 
         virtual event impl_dequeue_event() {
+         if (_device->ready()) {                 
           typename analog_type::analog_event tmp =
-            light_buffer_read(_device->analog_events);
+           _device->dequeue();
           
           uint16_t event_arg = (tmp.signal_number << 12) | tmp.adc_value;
-
+          
           return event { (typename event::event_type)event_number, event_arg };
+         }
+         
+         return event { (typename event::event_type)0, 0 };
         };
       };
     }

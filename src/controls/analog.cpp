@@ -16,8 +16,10 @@ lamb::controls::analog::analog(
   _pin(pin_),
   _signal_number(signal_number),
   _accum(0),
-  _averaging(averaging_) {
- dynamic_light_buffer_resize(analog_event, analog_events, buffer_size_);
+  _averaging(averaging_),
+  _event_ready(false),
+  _event(analog_event(_signal_number, 0)) {
+// dynamic_light_buffer_resize(analog_event, analog_events, buffer_size_);
 
 #ifdef __AVR__
   if (_signal_number == 0xff)
@@ -33,11 +35,11 @@ void lamb::controls::analog::setup() {
 }
 
 bool lamb::controls::analog::read() {
-  if (! light_buffer_writable(analog_events)) {
-    Serial.println("Buffer full.");
+  // if (! light_buffer_writable(analog_events)) {
+  //   Serial.println("Buffer full.");
     
-    return false;
-  }
+  //   return false;
+  // }
 
   sample_type_traits<uint12_t>::mix_type tmp = _accum;
   
@@ -49,10 +51,21 @@ bool lamb::controls::analog::read() {
   _accum      += tmp;
   _accum     >>= _averaging;
 
-  light_buffer_write(
-    analog_events,
-    (analog_event(_signal_number, _accum))
-  );
+  _event       = analog_event(_signal_number, _accum);
+  _event_ready = true;
+  // light_buffer_write(
+  //   analog_events,
+  //   (analog_event(_signal_number, _accum))
+  // );
   
   return true;
+}
+
+bool lamb::controls::analog::ready() const {
+ return _event_ready;
+}
+
+lamb::controls::analog::analog_event lamb::controls::analog::dequeue() {
+ _event_ready = false;
+ return _event;
 }

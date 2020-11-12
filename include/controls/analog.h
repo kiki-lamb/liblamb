@@ -38,7 +38,7 @@ namespace lamb {
 #else
        uint32_t  signal_number;
 #endif
-        uint16_t adc_value;
+       uint16_t adc_value;
         
         analog_event(
          uint8_t const & signal_number_,
@@ -48,9 +48,15 @@ namespace lamb {
           adc_value(adc_value_) {}
       };
 
-      declare_dynamic_light_buffer(analog_event, analog_events);
-      
-      bool read();
+
+     bool _event_ready;
+     analog_event _event;
+     
+//      declare_dynamic_light_buffer(analog_event, analog_events);
+
+     analog_event dequeue();
+     bool ready() const;
+     bool read();
 
       void setup();
     };
