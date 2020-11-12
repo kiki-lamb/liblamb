@@ -39,8 +39,10 @@ namespace lamb {
         }
 
         virtual event impl_dequeue_event() {
-          if (! light_buffer_readable(_device->button_events))
-            return event { (typename event::event_type)0 };
+         if (! light_buffer_readable(_device->button_events)) {
+          Serial.print("Give null button event.");
+          return event { (typename event::event_type)0 };
+         }
 
           typename buttons_type::button_event tmp =
             light_buffer_read(_device->button_events);

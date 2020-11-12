@@ -25,13 +25,33 @@ namespace lamb {
           if (! source->poll())
             return;
 
-          while (event e = source->dequeue_event())
+          while (event e = source->dequeue_event()) {
+           if (! e) {
+#ifdef LAMB_DEBUG_EVENTS
+            Serial.print("Queue null event from buffer's source.");
+            Serial.println();
+#endif
+           }
+           else {
+#ifdef LAMB_DEBUG_EVENTS
+            Serial.print("Queue ");
+            Serial.print(e.type);
+            Serial.print(" event from buffer's source.");
+            Serial.println();
+#endif
             light_buffer_write(event_queue, e);
+           }
+          }
         }
         
         virtual event impl_dequeue_event() {
           if (! light_buffer_readable(event_queue) ) {
-            return event();
+#ifdef LAMB_DEBUG_EVENTS            
+           Serial.print("Return a null event.");
+           Serial.println();
+#endif
+           
+           return event();
           }
           
           return light_buffer_read(event_queue);

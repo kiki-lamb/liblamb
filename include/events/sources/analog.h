@@ -44,7 +44,9 @@
           
           return event { (typename event::event_type)event_number, event_arg };
          }
-         
+
+         Serial.print("Give null analog event.");
+
          return event { (typename event::event_type)0, 0 };
         };
       };
