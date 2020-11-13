@@ -26,7 +26,7 @@ namespace lamb {
    data_t parameter;
 
    inline event(
-    event_type type_ = event_type(0),
+    event_type type_ = event_type(),
     data_t parameter_ = data_t()
    ) :
     type(type_),
@@ -41,7 +41,7 @@ namespace lamb {
    }
     
    inline operator bool() const {
-    return type != ((event_type)0);
+    return type != event_type();
    }
   };
  }
