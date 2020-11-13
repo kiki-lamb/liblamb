@@ -10,7 +10,7 @@ bool lamb::controls::button::read() {
   if ((! val) && (_last_state)) {
     light_buffer_write(
       button_events,
-      (button_event { _button_number, true })
+      (button_event { number, true })
     );
 
     _last_state = val;
@@ -26,19 +26,19 @@ bool lamb::controls::button::read() {
 lamb::controls::button::button(
 #ifdef __AVR__
   uint8_t       pin_,
-  uint8_t       button_number_,
+  uint8_t       number_,
   uint8_t       pin_mode_
 #else
   uint32_t      pin_,
-  uint8_t       button_number_,
+  uint8_t       number_,
   WiringPinMode pin_mode_
 #endif
 ) :
   _pin(pin_),
-  _button_number(button_number_),
+  number(number_),
   _pin_mode(pin_mode_) {
-  if (button_number_ == 0xff) {
-    _button_number = (uint8_t)_pin;
+  if (number_ == 0xff) {
+    number = (uint8_t)_pin;
   }
 }
   

@@ -8,13 +8,16 @@
 namespace lamb {
   namespace controls {
     class analog {
-    private:
 #ifdef __AVR__
+    private:
       uint8_t  _pin;
-      uint8_t  _signal_number;
+    public:
+     uint8_t  number = 0;
 #else
-      uint32_t _pin;
-      uint32_t  _signal_number;
+    private:
+     uint32_t _pin;
+    public:
+     uint32_t  number = 0;
 #endif
       sample_type_traits<uint12_t>::mix_type _accum;
       uint8_t  _averaging;
@@ -23,10 +26,10 @@ namespace lamb {
       analog(
 #ifdef __AVR__
   uint8_t  const & pin_,
-  uint8_t  const & signal_number = 0xff,
+  uint8_t  const & number = 0xff,
 #else
   uint32_t const & pin_,
-  uint32_t const & signal_number = 0xffff'ffff,
+  uint32_t const & number = 0xffff'ffff,
 #endif
   uint8_t  const & buffer_size_ = 8,
   uint8_t  const & averaging_ = 2
@@ -34,17 +37,17 @@ namespace lamb {
       
       struct analog_event {
 #ifdef __AVR__
-       uint8_t   signal_number;
+       uint8_t   number;
 #else
-       uint32_t  signal_number;
+       uint32_t  number;
 #endif
        uint16_t adc_value;
         
         analog_event(
-         uint8_t const & signal_number_,
+         uint8_t const & number_,
          uint16_t const & adc_value_
         ) :
-          signal_number(signal_number_),
+          number(number_),
           adc_value(adc_value_) {}
       };
 

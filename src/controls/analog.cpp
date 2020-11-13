@@ -5,28 +5,27 @@
 lamb::controls::analog::analog(
 #ifdef __AVR__
   uint8_t  const & pin_,
-  uint8_t  const & signal_number,
+  uint8_t  const & number_,
 #else
   uint32_t const & pin_,
-  uint32_t const & signal_number,
+  uint32_t const & number_,
 #endif
   uint8_t  const & buffer_size_,
   uint8_t  const & averaging_
 ) :
   _pin(pin_),
-  _signal_number(signal_number),
+  number(number_),
   _accum(0),
   _averaging(averaging_),
   _event_ready(false),
-  _event(analog_event(_signal_number, 0)) {
-// dynamic_light_buffer_resize(analog_event, analog_events, buffer_size_);
+  _event(analog_event(number_, 0)) {
 
 #ifdef __AVR__
-  if (_signal_number == 0xff)
-   _signal_number = _pin;
+  if (number == 0xff)
+   number = _pin;
 #else
-  if (_signal_number == 0xffff'ffff)
-   _signal_number = _pin;
+  if (number == 0xffff'ffff)
+   number = _pin;
 #endif
 }
 
@@ -51,11 +50,11 @@ bool lamb::controls::analog::read() {
   _accum      += tmp;
   _accum     >>= _averaging;
 
-  _event       = analog_event(_signal_number, _accum);
+  _event       = analog_event(number, _accum);
   _event_ready = true;
   // light_buffer_write(
   //   analog_events,
-  //   (analog_event(_signal_number, _accum))
+  //   (analog_event(number, _accum))
   // );
   
   return true;

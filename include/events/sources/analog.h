@@ -40,7 +40,7 @@
           typename analog_type::analog_event tmp =
            _device->dequeue();
           
-          uint16_t event_arg = (tmp.signal_number << 12) | tmp.adc_value;
+          uint16_t event_arg = (tmp.number << 12) | tmp.adc_value;
           
           return event { (typename event::event_type)event_number, event_arg };
          }

@@ -19,15 +19,15 @@ namespace lamb {
 
       private:
         buttons_type  * _device;
-        uint8_t _button_number_mask;
+        uint8_t _number_mask;
 
       public:
         buttons(
           buttons_t_    * device_,
-          uint8_t button_number_mask_ = 0
+          uint8_t number_mask_ = 0
         ) : 
           _device(device_),
-          _button_number_mask(button_number_mask_) {}
+          _number_mask(number_mask_) {}
 
       private:
         virtual void    impl_poll() {
@@ -48,7 +48,7 @@ namespace lamb {
             light_buffer_read(_device->button_events);
 
           uint16_t event_arg = (
-            ((tmp.button_number | _button_number_mask) << 8) |
+            ((tmp.number | _number_mask) << 8) |
             ((uint8_t)tmp.button_state)
           );
 
