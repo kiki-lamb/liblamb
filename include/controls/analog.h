@@ -26,13 +26,13 @@ namespace lamb {
       analog(
 #ifdef __AVR__
   uint8_t  const & pin_,
-  uint8_t  const & number = 0xff,
+  uint8_t  const & averaging_ = 2,
+  uint8_t  const & number = 0xff
 #else
   uint32_t const & pin_,
-  uint32_t const & number = 0xffff'ffff,
+  uint8_t  const & averaging_ = 2,
+  uint32_t const & number = 0xffff'ffff
 #endif
-  uint8_t  const & buffer_size_ = 8,
-  uint8_t  const & averaging_ = 2
       );
       
       struct analog_event {
@@ -55,8 +55,6 @@ namespace lamb {
      bool _event_ready;
      analog_event _event;
      
-//      declare_dynamic_light_buffer(analog_event, analog_events);
-
      analog_event dequeue();
      bool ready() const;
      bool read();

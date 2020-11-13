@@ -4,14 +4,14 @@
 
 lamb::controls::analog::analog(
 #ifdef __AVR__
-  uint8_t  const & pin_,
-  uint8_t  const & number_,
+  uint8_t  const & pin_,  
+  uint8_t  const & averaging_,
+  uint8_t  const & number_
 #else
   uint32_t const & pin_,
-  uint32_t const & number_,
+  uint8_t  const & averaging_,
+  uint32_t const & number_
 #endif
-  uint8_t  const & buffer_size_,
-  uint8_t  const & averaging_
 ) :
   _pin(pin_),
   number(number_),
