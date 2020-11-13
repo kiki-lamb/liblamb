@@ -9,11 +9,11 @@ namespace lamb {
   public:
     typedef T         value_type;
 
-    volatile size_t     write_ix;
-    volatile size_t     read_ix;
+    size_t     write_ix;
+    size_t     read_ix;
     
   private:
-    volatile size_t     count_;
+    size_t     count_;
     value_type          buff[SIZE];
 
   public:
@@ -22,33 +22,33 @@ namespace lamb {
       read_ix(0),
       count_(0) {}
 
-    inline bool writable() volatile {
+    inline bool writable() {
       return count_ < SIZE;
     }
 
-    inline bool readable() volatile {
+    inline bool readable() {
       return count_;
     }
 
-    inline void clear() volatile {
+    inline void clear() {
       write_ix = 0;
       read_ix  = 0;
       count_   = 0;
     }
 
-    inline bool empty() volatile {
+    inline bool empty() {
       return (0 == count_);
     }
 
-    inline void enqueue(value_type const & t) volatile {
+    inline void enqueue(value_type const & t) {
       buff[write_ix] = t;
       count_++;
       write_ix++;
       write_ix %= SIZE;
     }
 
-    inline value_type dequeue() volatile {
-      value_type tmp = buff[read_ix];
+    inline value_type dequeue() {
+      auto tmp = buff[read_ix];
       count_--;
       read_ix++;
       read_ix %= SIZE;
@@ -56,7 +56,7 @@ namespace lamb {
       return tmp;
     }
 
-    inline size_t count() volatile {
+    inline size_t count() {
       return count_;
     }
   };

@@ -7,7 +7,7 @@
 
 namespace lamb {
   namespace device {
-    class pt8211 : public sample_sink<int16_t> {
+    class pt8211 : public sample_sink<s0q15> {
     public:
       inline pt8211(unsigned int ws_pin_, SPIClass * spi_ = nullptr) :
         _spi(spi_),
@@ -24,9 +24,9 @@ namespace lamb {
         pinMode(_ws_pin, OUTPUT);
       }
 
-      inline void write_mono(int16_t sample) {
-        _lData   = sample;
-        _hData   = sample;
+      inline void write_mono(s0q15 const & sample) {
+        _lData   = sample.value;
+        _hData   = sample.value;
         _hData >>= 8;
         
         digitalWrite(_ws_pin, LOW);
@@ -37,7 +37,7 @@ namespace lamb {
       }
 
     protected:
-      inline virtual void impl_sink(int16_t const & val) {
+      inline virtual void impl_sink(s0q15 const & val) {
         write_mono(val);
       }
       
