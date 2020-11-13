@@ -20,10 +20,14 @@ namespace lamb {
    
    //--------------------------------------------------------------------------------------
 
+  public:
+   
    typedef u0q16 unsigned_internal_t;
 
    //--------------------------------------------------------------------------------------
-  
+
+  private:
+   
    static constexpr u0q16 Q16_ONE     = u0q16::ONE;
    static constexpr u0q16 DEFAULT_RES = u0q16(63000L);
 
