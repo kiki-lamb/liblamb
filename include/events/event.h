@@ -37,7 +37,7 @@ namespace lamb {
    }
 
    inline data_t parameter_lo() const {
-    return parameter& bottom_mask;
+    return parameter & bottom_mask;
    }
     
    inline operator bool() const {
