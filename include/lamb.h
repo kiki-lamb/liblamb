@@ -73,6 +73,7 @@
     #include "device/maple_timer/maple_timer.h"
     #include "device/pt8211/pt8211.h"
     #include "device/Adafruit_ILI9341_STM_SPI2/Adafruit_ILI9341_STM_SPI2.h"
+    #include "device/STM_SD_SPI2/SD.h"
   #endif
 
   #ifndef LAMB_NO_ARDUINO
