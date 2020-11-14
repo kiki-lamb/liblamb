@@ -557,7 +557,11 @@ uint8_t SdFile::openCachedEntry(uint8_t dirIndex, uint8_t oflag) {
  */
 uint8_t SdFile::openRoot(SdVolume* vol) {
   // error if file is already open
-  if (isOpen()) return false;
+ if (isOpen()) {
+  Serial.println("Already open.");
+
+  return false;
+ }
 
   if (vol->fatType() == 16) {
     type_ = FAT_FILE_TYPE_ROOT16;
@@ -569,7 +573,11 @@ uint8_t SdFile::openRoot(SdVolume* vol) {
     if (!vol->chainSize(firstCluster_, &fileSize_)) return false;
   } else {
     // volume is not initialized or FAT12
+   {
+    Serial.println("Not initialize or FAT12.");
+    
     return false;
+   }
   }
   vol_ = vol;
   // read only
