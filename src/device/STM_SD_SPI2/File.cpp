@@ -12,7 +12,7 @@
 
  */
 
-#include <SD.h>
+#include "../../../include/device/STM_SD_SPI2/SD.h"
 
 /* for debugging file open/close leaks
    uint8_t nfilecount=0;

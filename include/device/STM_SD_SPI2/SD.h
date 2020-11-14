@@ -22,8 +22,8 @@
 #endif
 
 #include <SPI.h>
-#include <utility/SdFat.h>
-#include <utility/SdFatUtil.h>
+#include "../../../include/device/STM_SD_SPI2/utility/SdFat.h"
+#include "../../../include/device/STM_SD_SPI2/utility/SdFatUtil.h"
 
 #define FILE_READ O_READ
 #define FILE_WRITE (O_READ | O_WRITE | O_CREAT)

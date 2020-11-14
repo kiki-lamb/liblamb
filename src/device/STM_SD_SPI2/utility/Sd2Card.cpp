@@ -17,13 +17,14 @@
  * along with the Arduino Sd2Card Library.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
+
 #define USE_SPI_LIB
 #if ARDUINO >= 100
 #include "Arduino.h"
 #else
 #include "WProgram.h"
 #endif
-#include "Sd2Card.h"
+#include "../../../../include/device/STM_SD_SPI2/utility/Sd2Card.h"
 //------------------------------------------------------------------------------
 #ifdef __arm__
 #ifndef RwReg
@@ -38,9 +39,19 @@ static volatile uint8_t *mosiport, *clkport, *misoport;
 static uint8_t mosipinmask, clkpinmask, misopinmask;
 #endif
 
+#include <avr/pgmspace.h>
+#include <limits.h>
+#include <libmaple/dma.h>
+
+#include "pins_arduino.h"
+#include "wiring_private.h"
+#include <SPI.h> 
+
 //------------------------------------------------------------------------------
 /** nop to tune soft SPI timing */
 #define nop asm volatile ("nop\n\t")
+
+SPIClass SD_SPITWO(2);
 
 #ifndef SOFTWARE_SPI
   #ifdef USE_SPI_LIB
@@ -54,7 +65,7 @@ static uint8_t mosipinmask, clkpinmask, misopinmask;
         SPDR = b;
         while (!(SPSR & (1 << SPIF)));
       #else
-        SPI.transfer(b);
+        SD_SPITWO.transfer(b);
       #endif
     } else {
       noInterrupts();
@@ -81,7 +92,7 @@ static uint8_t mosipinmask, clkpinmask, misopinmask;
       spiSend(0XFF);
       return SPDR;
     #else
-      return SPI.transfer(0xFF);
+      return SD_SPITWO.transfer(0xFF);
     #endif
   } else {
     uint8_t data = 0;
@@ -326,11 +337,11 @@ uint8_t Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin, int8_t mosiPin, 
         // clear double speed
         SPSR &= ~(1 << SPI2X);
       #else // USE_SPI_LIB
-        SPI.begin();
+        SD_SPITWO.begin();
         #ifdef SPI_CLOCK_DIV128
-            SPI.setClockDivider(SPI_CLOCK_DIV128);
+            SD_SPITWO.setClockDivider(SPI_CLOCK_DIV128);
         #else
-            SPI.setClockDivider(255);
+            SD_SPITWO.setClockDivider(255);
         #endif
       #endif // USE_SPI_LIB
     #endif // SOFTWARE_SPI
@@ -585,7 +596,7 @@ uint8_t Sd2Card::setSckRate(uint8_t sckRateID) {
 #else // SPI_CLOCK_DIV128
   v = 2 << sckRateID;
 #endif // SPI_CLOCK_DIV128
-  SPI.setClockDivider(v);
+  SD_SPITWO.setClockDivider(v);
 #endif // USE_SPI_LIB
   return true;
 }

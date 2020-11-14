@@ -50,7 +50,7 @@
 
  */
 
-#include "SD.h"
+#include "../../../include/device/STM_SD_SPI2/SD.h"
 
 // Used by `getNextPathComponent`
 #define MAX_COMPONENT_LEN 12 // What is max length?
