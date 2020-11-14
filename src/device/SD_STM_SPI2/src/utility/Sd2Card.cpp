@@ -268,9 +268,9 @@ uint8_t Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
   pinMode(chipSelectPin_, OUTPUT);
   digitalWrite(chipSelectPin_, HIGH);
   #ifndef USE_SPI_LIB
-  pinMode(SPI_MISO_PIN, INPUT);
-  pinMode(SPI_MOSI_PIN, OUTPUT);
-  pinMode(SPI_SCK_PIN, OUTPUT);
+  // pinMode(SPI_MISO_PIN, INPUT);
+  // pinMode(SPI_MOSI_PIN, OUTPUT);
+  // pinMode(SPI_SCK_PIN, OUTPUT);
   #endif
 
   #ifndef SOFTWARE_SPI
@@ -284,7 +284,7 @@ uint8_t Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
   SPSR &= ~(1 << SPI2X);
   #else // USE_SPI_LIB
   SDCARD_SPI.begin();
-  settings = SPISettings(250000, MSBFIRST, SPI_MODE0);
+  settings = SPISettings(36000000, MSBFIRST, SPI_MODE0);
   #endif // USE_SPI_LIB
   #endif // SOFTWARE_SPI
 

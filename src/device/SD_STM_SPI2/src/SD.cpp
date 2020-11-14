@@ -348,7 +348,7 @@ namespace SDLib {
       Return true if initialization succeeds, false otherwise.
 
     */
-    return card.init(SPI_HALF_SPEED, csPin) &&
+    return card.init(SPI_FULL_SPEED, csPin) &&
            volume.init(card) &&
            root.openRoot(volume);
   }

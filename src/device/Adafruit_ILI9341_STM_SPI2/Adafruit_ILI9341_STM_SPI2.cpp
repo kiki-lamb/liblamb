@@ -59,7 +59,6 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::spiwrite(uint16_t c) {
     SPITWO.setBitOrder(MSBFIRST);
     SPITWO.setDataMode(SPI_MODE0);
     SPITWO.transfer(c);
-
 #endif
   } else {
     // Fast SPI bitbang swiped from LPD8806 library
@@ -102,12 +101,15 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::writedata(uint8_t c) {
 // If the SPI library has transaction support, these functions
 // establish settings and protect from interference from other
 // libraries.  Otherwise, they simply do nothing.
+
 #ifdef SPI_HAS_TRANSACTION
 static inline void spi_begin(void) __attribute__((always_inline));
 static inline void spi_begin(void) {
 #ifdef __STM32F1__
+ Serial.println("CASE ONE");
   SPITWO.beginTransaction(SPISettings(36000000, MSBFIRST, SPI_MODE0));
 #else
+   Serial.println("CASE TWO");
   SPITWO.beginTransaction(SPISettings(8000000, MSBFIRST, SPI_MODE0));
 #endif
 }
@@ -156,14 +158,13 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::commandList(uint8_t *addr) {
 
 
 void lamb::device::Adafruit_ILI9341_STM_SPI2::begin(void) {
-
    if (_rst > 0) {
      pinMode(_rst, OUTPUT);
      digitalWrite(_rst, LOW);
    }
 	
    pinMode(_dc, OUTPUT);   
-	 pinMode(_cs, OUTPUT);
+   pinMode(_cs, OUTPUT);
 
 	 //return;
 	 csport    = portOutputRegister(digitalPinToPort(_cs));
@@ -347,7 +348,7 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::begin(void) {
    writecommand(ILI9341_DISPON);    //Display on
    if (hwSPI) spi_end();
    //return;
-	 if (hwSPI) SPITWO.setDataSize(SPI_CR1_DFF);
+//	 if (hwSPI) SPITWO.setDataSize(SPI_CR1_DFF);
 }
 
 
@@ -687,7 +688,7 @@ uint16_t lamb::device::Adafruit_ILI9341_STM_SPI2::color565(uint8_t r, uint8_t g,
 void lamb::device::Adafruit_ILI9341_STM_SPI2::setRotation(uint8_t m) {
 
   if (hwSPI) spi_begin();
-  if (hwSPI) SPITWO.setDataSize(0);
+//  if (hwSPI) SPITWO.setDataSize(0);
   writecommand(ILI9341_MADCTL);
   rotation = m % 4; // can't be higher than 3
   switch (rotation) {
@@ -712,7 +713,7 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::setRotation(uint8_t m) {
       _height = ILI9341_TFTWIDTH;
       break;
   }
-  if (hwSPI) SPITWO.setDataSize(SPI_CR1_DFF);
+//  if (hwSPI) SPITWO.setDataSize(SPI_CR1_DFF);
   if (hwSPI) spi_end();
 }
 
