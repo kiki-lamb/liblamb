@@ -106,9 +106,9 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::writedata(uint8_t c) {
 static inline void spi_begin(void) __attribute__((always_inline));
 static inline void spi_begin(void) {
 #ifdef __STM32F1__
-  SPITWO.beginTransaction(SPISettings(36000000, MSBFIRST, SPI_MODE0));
+ SPITWO.beginTransaction(SPISettings(36000000));
 #else
-  SPITWO.beginTransaction(SPISettings(8000000, MSBFIRST, SPI_MODE0));
+ SPITWO.beginTransaction(SPISettings(8000000));
 #endif
 }
 static inline void spi_end(void) __attribute__((always_inline));
