@@ -1,3 +1,4 @@
+
 #if defined(STM32F1)
 /*
 See rights and use declaration in License.h
@@ -12,7 +13,7 @@ Includes DMA transfers on DMA1 CH2 and CH3.
 #include "wiring_private.h"
 #include <SPI.h> // Using library SPI in folder: D:\Documents\Arduino\hardware\STM32\STM32F1XX\libraries\SPI
 
-SPIClass SPITWO(2);
+SPIClass SPITWO(1);
 
 // Constructor when using software SPI.  All output pins are configurable.
 lamb::device::Adafruit_ILI9341_STM_SPI2::Adafruit_ILI9341_STM_SPI2(int8_t cs, int8_t dc, int8_t mosi,
