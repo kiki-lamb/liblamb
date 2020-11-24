@@ -7,7 +7,7 @@
 #ifndef LAMB_ADAFRUIT_ILI9341H_STM32F1
 #define LAMB_ADAFRUIT_ILI9341H_STM32F1
 
-#include <Adafruit_GFX_AS.h>
+#include <Adafruit_GFX.h> // #include <Adafruit_GFX_AS.h>
 #include <SPI.h>
 
 #ifndef swap
