@@ -7,10 +7,8 @@
 #ifndef _ADAFRUIT_ILI9341H_SPI2_
 #define _ADAFRUIT_ILI9341H_SPI2_
 
-#include <Arduino.h>
-#include <Print.h>
 #include <Adafruit_GFX_AS.h>
-#include <avr/pgmspace.h>
+#include <SPI.h> // Using library SPI in folder: D:\Documents\Arduino\hardware\STM32\STM32F1XX\libraries\SPI
 
 #ifndef swap
 #define swap(a, b) { int16_t t = a; a = b; b = t; }
@@ -100,38 +98,45 @@ namespace lamb {
   class Adafruit_ILI9341_STM_SPI2 : public Adafruit_GFX {
 
   public:
-   Adafruit_ILI9341_STM_SPI2(int8_t _CS, int8_t _DC, int8_t _RST = -1);
-      
-   void begin(void);
-   void setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
-   void pushColor(uint16_t color);
-   void pushColors(void * colorBuffer, uint16_t nr_pixels, uint8_t async);
-   void fillScreen(uint16_t color);
-   void drawLine(int16_t x0, int16_t y0,int16_t x1, int16_t y1, uint16_t color);
-   void drawPixel(int16_t x, int16_t y, uint16_t color);
-   void drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color);
-   void drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
-   void fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
-   void setRotation(uint8_t r);
-   void invertDisplay(boolean i);
-   uint16_t color565(uint8_t r, uint8_t g, uint8_t b);
-   void spiwrite(uint16_t);
-   void writecommand(uint8_t c);
-   void writedata(uint8_t d);
-   void commandList(uint8_t *addr);
-   uint8_t spiread(void);
+   Adafruit_ILI9341_STM_SPI2(SPIClass & spi, int8_t _CS, int8_t _DC);      
+   void     begin           (void);
+   void     setAddrWindow   (uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
+   void     pushColor       (uint16_t color);
+   void     pushColors      (void * colorBuffer, uint16_t nr_pixels, uint8_t async);
+   void     fillScreen      (uint16_t color);
+   void     drawLine        (int16_t x0, int16_t y0,int16_t x1, int16_t y1, uint16_t color);
+   void     drawPixel       (int16_t x, int16_t y, uint16_t color);
+   void     drawFastVLine   (int16_t x, int16_t y, int16_t h, uint16_t color);
+   void     drawFastHLine   (int16_t x, int16_t y, int16_t w, uint16_t color);
+   void     fillRect        (int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
+   void     setRotation     (uint8_t r);
+   void     invertDisplay   (boolean i);
+   uint16_t color565        (uint8_t r, uint8_t g, uint8_t b);
+   void     spiwrite        (uint16_t);
+   void     writecommand    (uint8_t c);
+   void     writedata       (uint8_t d);
+   void     commandList     (uint8_t *addr);
+   uint8_t  spiread         (void);
    
   private:
-   uint8_t  tabcolor;
-   volatile uint32 * mosiport;
-   volatile uint32 * clkport;
+   SPIClass *        _spi;
+   uint8_t           tabcolor;
    volatile uint32 * dcport;
-   volatile uint32 * rsport;
    volatile uint32 * csport;
    
-   uint32_t  _cs, _dc, _rst, _mosi, _miso, _sclk;
-   uint32_t  mosipinmask, clkpinmask, cspinmask, dcpinmask;
+   uint32_t _cs;
+   uint32_t _dc;
+   uint32_t cspinmask;
+   uint32_t dcpinmask;
    uint16_t lineBuffer[ILI9341_TFTHEIGHT]; // DMA buffer. 16bit color data per pixel
+
+   inline void spi_begin(void) __attribute__((always_inline)) {
+    _spi->beginTransaction(SPISettings(36000000));
+   }
+   
+   inline void spi_end(void) __attribute__((always_inline)) {
+    _spi->endTransaction();
+   }
   };
  }
 }

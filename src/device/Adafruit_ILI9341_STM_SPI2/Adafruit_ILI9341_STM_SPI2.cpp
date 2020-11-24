@@ -1,32 +1,22 @@
 #if defined(STM32F1)
+#include "../../../include/device/Adafruit_ILI9341_STM_SPI2/Adafruit_ILI9341_STM_SPI2.h"
+#include <libmaple/dma.h>
+
 /*
   See rights and use declaration in License.h
   This library has been modified for the Maple Mini.
   Includes DMA transfers on DMA1 CH2 and CH3.
 */
-#include <avr/pgmspace.h>
-#include <limits.h>
-#include <libmaple/dma.h>
-#include "../../../include/device/Adafruit_ILI9341_STM_SPI2/Adafruit_ILI9341_STM_SPI2.h"
-#include "pins_arduino.h"
-#include "wiring_private.h"
-#include <SPI.h> // Using library SPI in folder: D:\Documents\Arduino\hardware\STM32\STM32F1XX\libraries\SPI
 
-SPIClass SPITWO(2);
-
-
-
-// Constructor when using hardware SPI.  Faster, but must use SPI pins
-// specific to each board type (e.g. 11,13 for Uno, 51,52 for Mega, etc.)
-lamb::device::Adafruit_ILI9341_STM_SPI2::Adafruit_ILI9341_STM_SPI2(int8_t cs, int8_t dc, int8_t rst) : Adafruit_GFX(ILI9341_TFTWIDTH, ILI9341_TFTHEIGHT) {
- _cs   = cs;
- _dc   = dc;
- _rst  = rst;
-}
-
+lamb::device::Adafruit_ILI9341_STM_SPI2::Adafruit_ILI9341_STM_SPI2(
+ SPIClass & spi,
+ int8_t cs,
+ int8_t dc
+) :
+ Adafruit_GFX(ILI9341_TFTWIDTH, ILI9341_TFTHEIGHT), _spi(&spi), _cs(cs), _dc(dc) {}
 
 void lamb::device::Adafruit_ILI9341_STM_SPI2::spiwrite(uint16_t c) {
- SPITWO.write(c);
+ _spi->write(c);
 }
 
 
@@ -49,34 +39,12 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::writedata(uint8_t c) {
  *csport |= cspinmask;
 }
 
-// If the SPI library has transaction support, these functions
-// establish settings and protect from interference from other
-// libraries.  Otherwise, they simply do nothing.
-#ifdef SPI_HAS_TRANSACTION
-static inline void spi_begin(void) __attribute__((always_inline));
-static inline void spi_begin(void) {
-#ifdef __STM32F1__
- SPITWO.beginTransaction(SPISettings(36000000));
-#else
- SPITWO.beginTransaction(SPISettings(8000000));
-#endif
-}
-static inline void spi_end(void) __attribute__((always_inline));
-static inline void spi_end(void) {
- SPITWO.endTransaction();
-}
-#else
-#define spi_begin()
-#define spi_end()
-#endif
-
 // Rather than a bazillion writecommand() and writedata() calls, screen
 // initialization commands and arguments are organized in these tables
 // stored in PROGMEM.  The table may look bulky, but that's mostly the
 // formatting -- storage-wise this is hundreds of bytes more compact
 // than the equivalent code.  Companion function follows.
 #define DELAY 0x80
-
 
 // Companion code to the above tables.  Reads and issues
 // a series of LCD commands stored in PROGMEM byte array.
@@ -106,12 +74,6 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::commandList(uint8_t *addr) {
 
 
 void lamb::device::Adafruit_ILI9341_STM_SPI2::begin(void) {
-
- if (_rst > 0) {
-  pinMode(_rst, OUTPUT);
-  digitalWrite(_rst, LOW);
- }
-	
  pinMode(_dc, OUTPUT);   
  pinMode(_cs, OUTPUT);
 
@@ -120,17 +82,7 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::begin(void) {
  dcport    = portOutputRegister(digitalPinToPort(_dc));
  dcpinmask = digitalPinToBitMask(_dc);
 
- SPITWO.beginTransaction(SPISettings(36000000));
-
- // toggle RST low to reset
- if (_rst > 0) {
-  digitalWrite(_rst, HIGH);
-  delay(5);
-  digitalWrite(_rst, LOW);
-  delay(20);
-  digitalWrite(_rst, HIGH);
-  delay(150);
- }
+ _spi->beginTransaction(SPISettings(36000000));
 
  spi_begin();
 
@@ -250,7 +202,7 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::begin(void) {
 
  spi_end();
  
- SPITWO.setDataSize(SPI_CR1_DFF);
+ _spi->setDataSize(SPI_CR1_DFF);
 }
 
 
@@ -263,14 +215,14 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::setAddrWindow(
  writecommand(ILI9341_CASET); // Column addr set
  *dcport |=  dcpinmask;
  *csport &= ~cspinmask;
- SPITWO.write(x0);
- SPITWO.write(x1);
+ _spi->write(x0);
+ _spi->write(x1);
   
  writecommand(ILI9341_PASET); // Row addr set
  *dcport |=  dcpinmask;
  *csport &= ~cspinmask;
- SPITWO.write(y0);
- SPITWO.write(y1);
+ _spi->write(y0);
+ _spi->write(y1);
 
  writecommand(ILI9341_RAMWR); // write to RAM
 }
@@ -296,12 +248,12 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::pushColors(void * colorBuffer, uin
 
  if (async==0) 
  {
-  SPITWO.dmaSend(colorBuffer, nr_pixels, 1);
+  _spi->dmaSend(colorBuffer, nr_pixels, 1);
   *csport |= cspinmask;
  }
  else
  {
-  SPITWO.dmaSendAsync(colorBuffer, nr_pixels, 1);
+  _spi->dmaSendAsync(colorBuffer, nr_pixels, 1);
  }
 
 }
@@ -348,7 +300,7 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::drawFastVLine(int16_t x, int16_t y
   
 #if defined (__STM32F1__)
  lineBuffer[0] = color;
- SPITWO.dmaSend(lineBuffer, h, 0);
+ _spi->dmaSend(lineBuffer, h, 0);
 #else
  uint8_t hi = color >> 8, lo = color;
  while (h--) {
@@ -380,7 +332,7 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::drawFastHLine(int16_t x, int16_t y
  *csport &= ~cspinmask;
 
  lineBuffer[0] = color;
- SPITWO.dmaSend(lineBuffer, w, 0);
+ _spi->dmaSend(lineBuffer, w, 0);
 
  *csport |= cspinmask;
 
@@ -392,8 +344,8 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::fillScreen(uint16_t color) {
  *dcport |=  dcpinmask;
  *csport &= ~cspinmask;
  lineBuffer[0] = color;
- SPITWO.dmaSend(lineBuffer, (65535), 0);
- SPITWO.dmaSend(lineBuffer, ((_width * _height) - 65535), 0);
+ _spi->dmaSend(lineBuffer, (65535), 0);
+ _spi->dmaSend(lineBuffer, ((_width * _height) - 65535), 0);
 }
 
 void lamb::device::Adafruit_ILI9341_STM_SPI2::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
@@ -421,11 +373,11 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::fillRect(int16_t x, int16_t y, int
  lineBuffer[0] = color;
  
  if (w*h <= 65535) {
-  SPITWO.dmaSend(lineBuffer, (w*h), 0);
+  _spi->dmaSend(lineBuffer, (w*h), 0);
  }
  else {
-  SPITWO.dmaSend(lineBuffer, (65535), 0);
-  SPITWO.dmaSend(lineBuffer, ((w*h) - 65535), 0);
+  _spi->dmaSend(lineBuffer, (65535), 0);
+  _spi->dmaSend(lineBuffer, ((w*h) - 65535), 0);
  }
 
  *csport |= cspinmask;
@@ -573,7 +525,7 @@ uint16_t lamb::device::Adafruit_ILI9341_STM_SPI2::color565(uint8_t r, uint8_t g,
 
 void lamb::device::Adafruit_ILI9341_STM_SPI2::setRotation(uint8_t m) {
  /* if (hwSPI) */ spi_begin();
- /* if (hwSPI) */ SPITWO.setDataSize(0);
+ /* if (hwSPI) */ _spi->setDataSize(0);
  writecommand(ILI9341_MADCTL);
  rotation = m % 4; // can't be higher than 3
  switch (rotation) {
@@ -598,7 +550,7 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::setRotation(uint8_t m) {
   _height = ILI9341_TFTWIDTH;
   break;
  }
- /* if (hwSPI) */ SPITWO.setDataSize(SPI_CR1_DFF);
+ /* if (hwSPI) */ _spi->setDataSize(SPI_CR1_DFF);
  /* if (hwSPI) */ spi_end();
 }
 
@@ -613,7 +565,7 @@ uint8_t lamb::device::Adafruit_ILI9341_STM_SPI2::spiread(void) {
  uint8_t r = 0;
 
  /* if (hwSPI) */ {
-  r = SPITWO.transfer(0x00);
+  r = _spi->transfer(0x00);
  }
  
  return r;
