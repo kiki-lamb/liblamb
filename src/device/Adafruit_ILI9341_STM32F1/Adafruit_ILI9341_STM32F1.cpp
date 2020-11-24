@@ -1,5 +1,5 @@
 #if defined(STM32F1)
-#include "../../../include/device/Adafruit_ILI9341_STM_SPI2/Adafruit_ILI9341_STM_SPI2.h"
+#include "../../../include/device/Adafruit_ILI9341_STM32F1/Adafruit_ILI9341_STM32F1.h"
 #include <libmaple/dma.h>
 
 /*
@@ -8,19 +8,19 @@
   Includes DMA transfers on DMA1 CH2 and CH3.
 */
 
-lamb::device::Adafruit_ILI9341_STM_SPI2::Adafruit_ILI9341_STM_SPI2(
+lamb::device::Adafruit_ILI9341_STM32F1::Adafruit_ILI9341_STM32F1(
  SPIClass & spi,
  int8_t cs,
  int8_t dc
 ) :
  Adafruit_GFX(ILI9341_TFTWIDTH, ILI9341_TFTHEIGHT), _spi(&spi), _cs(cs), _dc(dc) {}
 
-void lamb::device::Adafruit_ILI9341_STM_SPI2::spiwrite(uint16_t c) {
+void lamb::device::Adafruit_ILI9341_STM32F1::spiwrite(uint16_t c) {
  _spi->write(c);
 }
 
 
-void lamb::device::Adafruit_ILI9341_STM_SPI2::writecommand(uint8_t c) {
+void lamb::device::Adafruit_ILI9341_STM32F1::writecommand(uint8_t c) {
  *dcport &=  ~dcpinmask;
  *csport &= ~cspinmask;
 
@@ -30,7 +30,7 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::writecommand(uint8_t c) {
 }
 
 
-void lamb::device::Adafruit_ILI9341_STM_SPI2::writedata(uint8_t c) {
+void lamb::device::Adafruit_ILI9341_STM32F1::writedata(uint8_t c) {
  *dcport |=  dcpinmask;
  *csport &= ~cspinmask;
 
@@ -48,7 +48,7 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::writedata(uint8_t c) {
 
 // Companion code to the above tables.  Reads and issues
 // a series of LCD commands stored in PROGMEM byte array.
-void lamb::device::Adafruit_ILI9341_STM_SPI2::commandList(uint8_t *addr) {
+void lamb::device::Adafruit_ILI9341_STM32F1::commandList(uint8_t *addr) {
  return;
   
  uint8_t  numCommands, numArgs;
@@ -73,7 +73,7 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::commandList(uint8_t *addr) {
 }
 
 
-void lamb::device::Adafruit_ILI9341_STM_SPI2::begin(void) {
+void lamb::device::Adafruit_ILI9341_STM32F1::begin(void) {
  pinMode(_dc, OUTPUT);   
  pinMode(_cs, OUTPUT);
 
@@ -206,7 +206,7 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::begin(void) {
 }
 
 
-void lamb::device::Adafruit_ILI9341_STM_SPI2::setAddrWindow(
+void lamb::device::Adafruit_ILI9341_STM32F1::setAddrWindow(
  uint16_t x0,
  uint16_t y0,
  uint16_t x1,
@@ -228,7 +228,7 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::setAddrWindow(
 }
 
 
-void lamb::device::Adafruit_ILI9341_STM_SPI2::pushColor(uint16_t color) {
+void lamb::device::Adafruit_ILI9341_STM32F1::pushColor(uint16_t color) {
  spi_begin();
  
  *dcport |=  dcpinmask;
@@ -241,7 +241,7 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::pushColor(uint16_t color) {
  spi_end();
 }
 
-void lamb::device::Adafruit_ILI9341_STM_SPI2::pushColors(void * colorBuffer, uint16_t nr_pixels, uint8_t async)
+void lamb::device::Adafruit_ILI9341_STM32F1::pushColors(void * colorBuffer, uint16_t nr_pixels, uint8_t async)
 {
  *dcport |=  dcpinmask;
  *csport &= ~cspinmask;
@@ -258,7 +258,7 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::pushColors(void * colorBuffer, uin
 
 }
 
-void lamb::device::Adafruit_ILI9341_STM_SPI2::drawPixel(int16_t x, int16_t y, uint16_t color) {
+void lamb::device::Adafruit_ILI9341_STM32F1::drawPixel(int16_t x, int16_t y, uint16_t color) {
 
  if ((x < 0) || (x >= _width) || (y < 0) || (y >= _height))
   return;
@@ -278,7 +278,7 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::drawPixel(int16_t x, int16_t y, ui
 }
 
 
-void lamb::device::Adafruit_ILI9341_STM_SPI2::drawFastVLine(int16_t x, int16_t y, int16_t h,
+void lamb::device::Adafruit_ILI9341_STM32F1::drawFastVLine(int16_t x, int16_t y, int16_t h,
                                                             uint16_t color) {
 
  // Rudimentary clipping
@@ -312,7 +312,7 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::drawFastVLine(int16_t x, int16_t y
 }
 
 
-void lamb::device::Adafruit_ILI9341_STM_SPI2::drawFastHLine(int16_t x, int16_t y, int16_t w,
+void lamb::device::Adafruit_ILI9341_STM32F1::drawFastHLine(int16_t x, int16_t y, int16_t w,
                                                             uint16_t color) { 
  // Rudimentary clipping
  if ((x >= _width) || (y >= _height || w < 1))
@@ -339,7 +339,7 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::drawFastHLine(int16_t x, int16_t y
 // if (hwSPI) spi_end();
 }
 
-void lamb::device::Adafruit_ILI9341_STM_SPI2::fillScreen(uint16_t color) {
+void lamb::device::Adafruit_ILI9341_STM32F1::fillScreen(uint16_t color) {
  setAddrWindow(0, 0, _width - 1, _height - 1);
  *dcport |=  dcpinmask;
  *csport &= ~cspinmask;
@@ -348,7 +348,7 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::fillScreen(uint16_t color) {
  _spi->dmaSend(lineBuffer, ((_width * _height) - 65535), 0);
 }
 
-void lamb::device::Adafruit_ILI9341_STM_SPI2::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
+void lamb::device::Adafruit_ILI9341_STM32F1::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
                                                        uint16_t color) {
 
  // rudimentary clipping (drawChar w/big text requires this)
@@ -388,7 +388,7 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::fillRect(int16_t x, int16_t y, int
 /*
  * Draw lines faster by calculating straight sections and drawing them with fastVline and fastHline.
  */
-void lamb::device::Adafruit_ILI9341_STM_SPI2::drawLine(
+void lamb::device::Adafruit_ILI9341_STM32F1::drawLine(
  int16_t x0,
  int16_t y0,
  int16_t x1,
@@ -511,7 +511,7 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::drawLine(
 }
 
 // Pass 8-bit (each) R,G,B, get back 16-bit packed color
-uint16_t lamb::device::Adafruit_ILI9341_STM_SPI2::color565(uint8_t r, uint8_t g, uint8_t b) {
+uint16_t lamb::device::Adafruit_ILI9341_STM32F1::color565(uint8_t r, uint8_t g, uint8_t b) {
  return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3);
 }
 
@@ -523,7 +523,7 @@ uint16_t lamb::device::Adafruit_ILI9341_STM_SPI2::color565(uint8_t r, uint8_t g,
 #define MADCTL_BGR 0x08
 #define MADCTL_MH  0x04
 
-void lamb::device::Adafruit_ILI9341_STM_SPI2::setRotation(uint8_t m) {
+void lamb::device::Adafruit_ILI9341_STM32F1::setRotation(uint8_t m) {
  /* if (hwSPI) */ spi_begin();
  /* if (hwSPI) */ _spi->setDataSize(0);
  writecommand(ILI9341_MADCTL);
@@ -555,13 +555,13 @@ void lamb::device::Adafruit_ILI9341_STM_SPI2::setRotation(uint8_t m) {
 }
 
 
-void lamb::device::Adafruit_ILI9341_STM_SPI2::invertDisplay(boolean i) {
+void lamb::device::Adafruit_ILI9341_STM32F1::invertDisplay(boolean i) {
  /* if (hwSPI) */ spi_begin();
  writecommand(i ? ILI9341_INVON : ILI9341_INVOFF);
  /* if (hwSPI) */ spi_end();
 }
 
-uint8_t lamb::device::Adafruit_ILI9341_STM_SPI2::spiread(void) {
+uint8_t lamb::device::Adafruit_ILI9341_STM32F1::spiread(void) {
  uint8_t r = 0;
 
  /* if (hwSPI) */ {

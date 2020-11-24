@@ -4,8 +4,8 @@
   This library has been modified for the Maple Mini
 */
 
-#ifndef _ADAFRUIT_ILI9341H_SPI2_
-#define _ADAFRUIT_ILI9341H_SPI2_
+#ifndef LAMB_ADAFRUIT_ILI9341H_STM32F1
+#define LAMB_ADAFRUIT_ILI9341H_STM32F1
 
 #include <Adafruit_GFX_AS.h>
 #include <SPI.h> // Using library SPI in folder: D:\Documents\Arduino\hardware\STM32\STM32F1XX\libraries\SPI
@@ -95,10 +95,10 @@
 
 namespace lamb {
  namespace device {
-  class Adafruit_ILI9341_STM_SPI2 : public Adafruit_GFX {
+  class Adafruit_ILI9341_STM32F1 : public Adafruit_GFX {
 
   public:
-   Adafruit_ILI9341_STM_SPI2(SPIClass & spi, int8_t _CS, int8_t _DC);      
+   Adafruit_ILI9341_STM32F1(SPIClass & spi, int8_t _CS, int8_t _DC);      
    void     begin           (void);
    void     setAddrWindow   (uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
    void     pushColor       (uint16_t color);
