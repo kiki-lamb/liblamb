@@ -9,11 +9,10 @@
 */
 
 lamb::device::Adafruit_ILI9341_STM32F1::Adafruit_ILI9341_STM32F1(
- SPIClass & spi,
  int8_t cs,
  int8_t dc
 ) :
- Adafruit_GFX(ILI9341_TFTWIDTH, ILI9341_TFTHEIGHT), _spi(&spi), _cs(cs), _dc(dc) {}
+ Adafruit_GFX(ILI9341_TFTWIDTH, ILI9341_TFTHEIGHT), _spi(nullptr), _cs(cs), _dc(dc) {}
 
 void lamb::device::Adafruit_ILI9341_STM32F1::spiwrite(uint16_t c) {
  _spi->write(c);
@@ -73,7 +72,9 @@ void lamb::device::Adafruit_ILI9341_STM32F1::commandList(uint8_t *addr) {
 }
 
 
-void lamb::device::Adafruit_ILI9341_STM32F1::begin(void) {
+void lamb::device::Adafruit_ILI9341_STM32F1::begin(SPIClass & spi) {
+ _spi = &spi;
+ 
  pinMode(_dc, OUTPUT);   
  pinMode(_cs, OUTPUT);
 

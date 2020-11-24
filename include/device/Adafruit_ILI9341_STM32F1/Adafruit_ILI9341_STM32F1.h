@@ -8,7 +8,7 @@
 #define LAMB_ADAFRUIT_ILI9341H_STM32F1
 
 #include <Adafruit_GFX_AS.h>
-#include <SPI.h> // Using library SPI in folder: D:\Documents\Arduino\hardware\STM32\STM32F1XX\libraries\SPI
+#include <SPI.h>
 
 #ifndef swap
 #define swap(a, b) { int16_t t = a; a = b; b = t; }
@@ -98,8 +98,8 @@ namespace lamb {
   class Adafruit_ILI9341_STM32F1 : public Adafruit_GFX {
 
   public:
-   Adafruit_ILI9341_STM32F1(SPIClass & spi, int8_t _CS, int8_t _DC);      
-   void     begin           (void);
+   Adafruit_ILI9341_STM32F1 (int8_t _CS, int8_t _DC);      
+   void     begin           (SPIClass & spi);
    void     setAddrWindow   (uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
    void     pushColor       (uint16_t color);
    void     pushColors      (void * colorBuffer, uint16_t nr_pixels, uint8_t async);
