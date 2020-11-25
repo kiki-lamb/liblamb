@@ -7,6 +7,7 @@
 #ifndef LAMB_ADAFRUIT_ILI9341H_STM32F1
 #define LAMB_ADAFRUIT_ILI9341H_STM32F1
 
+#include "Arduino.h"
 #include <Adafruit_GFX_AS.h>
 #include <SPI.h>
 
@@ -115,7 +116,6 @@ namespace lamb {
    void     spiwrite        (uint16_t);
    void     writecommand    (uint8_t c);
    void     writedata       (uint8_t d);
-   void     commandList     (uint8_t *addr);
    uint8_t  spiread         (void);
    
   private:

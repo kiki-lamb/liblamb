@@ -20,7 +20,7 @@ void lamb::device::Adafruit_ILI9341_STM32F1::spiwrite(uint16_t c) {
 
 
 void lamb::device::Adafruit_ILI9341_STM32F1::writecommand(uint8_t c) {
- *dcport &=  ~dcpinmask;
+ *dcport &= dcpinmask;
  *csport &= ~cspinmask;
 
  spiwrite(c);
@@ -45,33 +45,6 @@ void lamb::device::Adafruit_ILI9341_STM32F1::writedata(uint8_t c) {
 // than the equivalent code.  Companion function follows.
 #define DELAY 0x80
 
-// Companion code to the above tables.  Reads and issues
-// a series of LCD commands stored in PROGMEM byte array.
-void lamb::device::Adafruit_ILI9341_STM32F1::commandList(uint8_t *addr) {
- return;
-  
- uint8_t  numCommands, numArgs;
- uint16_t ms;
-
- numCommands = pgm_read_byte(addr++);   // Number of commands to follow
- while (numCommands--) {                // For each command...
-  writecommand(pgm_read_byte(addr++)); //   Read, issue command
-  numArgs  = pgm_read_byte(addr++);    //   Number of args to follow
-  ms       = numArgs & DELAY;          //   If hibit set, delay follows args
-  numArgs &= ~DELAY;                   //   Mask out delay bit
-  while (numArgs--) {                  //   For each argument...
-   writedata(pgm_read_byte(addr++));  //     Read, issue argument
-  }
-
-  if (ms) {
-   ms = pgm_read_byte(addr++); // Read post-command delay time (ms)
-   if (ms == 255) ms = 500;    // If 255, delay for 500 ms
-   delay(ms);
-  }
- }
-}
-
-
 void lamb::device::Adafruit_ILI9341_STM32F1::begin(SPIClass & spi) {
  _spi = &spi;
  
@@ -82,8 +55,6 @@ void lamb::device::Adafruit_ILI9341_STM32F1::begin(SPIClass & spi) {
  cspinmask = digitalPinToBitMask(_cs);
  dcport    = portOutputRegister(digitalPinToPort(_dc));
  dcpinmask = digitalPinToBitMask(_dc);
-
- _spi->beginTransaction(SPISettings(36000000));
 
  spi_begin();
 
