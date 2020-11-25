@@ -284,7 +284,6 @@ void lamb::device::Adafruit_ILI9341_STM32F1::drawFastVLine(int16_t x, int16_t y,
 
  // Rudimentary clipping
  if ((x >= _width) || (y >= _height || h < 1)) return;
-
  if ((y + h - 1) >= _height)
   h = _height - y;
  if (h < 2 ) {
@@ -292,23 +291,14 @@ void lamb::device::Adafruit_ILI9341_STM32F1::drawFastVLine(int16_t x, int16_t y,
   return;
  }
 
- //  if (hwSPI) spi_begin();
-
  setAddrWindow(x, y, x, y + h - 1);
 
  *dcport |=  dcpinmask;
  *csport &= ~cspinmask;
   
-#if defined (__STM32F1__)
  lineBuffer[0] = color;
  _spi->dmaSend(lineBuffer, h, 0);
-#else
- uint8_t hi = color >> 8, lo = color;
- while (h--) {
-  spiwrite(hi);
-  spiwrite(lo);
- }
-#endif
+
  *csport |= cspinmask;
 }
 
