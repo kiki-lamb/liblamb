@@ -40,8 +40,9 @@ namespace lamb {
 #define ACCESSOR(store_type, cast_type, name)                           \
    private:                                                             \
    store_type (_ ## name);                                              \
+                                                                        \
   public:                                                               \
-  inline cast_type name() const { return cast_type(_ ## name);  }
+  inline constexpr cast_type name() const { return cast_type(_ ## name);  }
   
    ACCESSOR(mode_t,                mode_t,     mode);
    ACCESSOR(unsigned_internal_t,   u0q16,      freq);
@@ -56,22 +57,22 @@ namespace lamb {
 
    //--------------------------------------------------------------------------------------
 
-   basic() : _res(u0q16::MAX) {}
+   inline constexpr basic() : _res(u0q16::MAX) {}
   
    //--------------------------------------------------------------------------------------
 
-   inline void mode(mode_t const & x) { _mode = x; }
-   inline void res (u0q16  const & x) { _res.value = min(DEFAULT_RES.value, x.value); }
-   inline void freq(u0q16  const & x) {
+   inline constexpr void mode(mode_t const & x) { _mode = x; }
+   inline constexpr void res (u0q16  const & x) { _res.value = min(DEFAULT_RES.value, x.value); }
+   inline constexpr void freq(u0q16  const & x) {
     // if (lamb_fixed_overflow) {
     //  _res -= 4;
     //  lamb_fixed_overflow = false;
     // }
    
     if constexpr(use_limits) {
-     static constexpr size_t   limits_count            = 7;
+     constexpr size_t   limits_count            = 7;
    
-     static constexpr uint16_t limits[limits_count][2] = {
+     constexpr uint16_t limits[limits_count][2] = {
       { 600,  48500             }, // calib
       { 900,  52000             }, // guessed
       { 1200, 56000             }, // calib
@@ -111,6 +112,7 @@ namespace lamb {
 
    //--------------------------------------------------------------------------------------
 
+   inline constexpr
    external_t process(external_t const & in) {
     // if constexpr(use_limits) {
     //  if (_freq.value < 100) {

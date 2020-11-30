@@ -43,7 +43,7 @@ namespace lamb {
   
   //////////////////////////////////////////////////////////////////////////////
 
-  constexpr
+  inline constexpr
   fx_chamberlin() :
    FS(48000, 0),
    F0(1000, 0),
@@ -73,7 +73,7 @@ namespace lamb {
   
   //////////////////////////////////////////////////////////////////////////////
 
-  constexpr
+  inline constexpr
   hz_type::value_type freq() {
    return F0.value; // .characteristic();
   }
@@ -88,7 +88,7 @@ namespace lamb {
   //----------------------------------------------------------------------------
 
   
-  constexpr
+  inline constexpr
   void freq(hz_type const & x) {
    F0  = x;
    F1  = F0 / FS;
@@ -97,14 +97,14 @@ namespace lamb {
 
   //////////////////////////////////////////////////////////////////////////////
   
-  constexpr
+  inline constexpr
   q0_type res() const {
    return Q0;
   }
 
   //----------------------------------------------------------------------------
 
-  constexpr
+  inline constexpr
   void res(q0_type x) {
    if (x.value == 0)
     x.value = 1;
@@ -117,14 +117,14 @@ namespace lamb {
 
   //////////////////////////////////////////////////////////////////////////////
   
-  constexpr
+  inline constexpr
   uint32_t fs() {
    return FS.value; // characteristic();
   }
 
   //----------------------------------------------------------------------------
 
-  constexpr
+  inline constexpr
   void fs(uint32_t const & x) {
    FS = hz_type(x, 0);
    freq(F0);
@@ -132,28 +132,28 @@ namespace lamb {
 
   //////////////////////////////////////////////////////////////////////////////
   
-  constexpr
+  inline constexpr
   external_type l() const {
    return externalize(L);
   }
 
   //----------------------------------------------------------------------------
   
-  constexpr
+  inline constexpr
   external_type h() const {
    return externalize(H);
   }
 
   //----------------------------------------------------------------------------
   
-  constexpr
+  inline constexpr
   external_type b() const {
    return externalize(B);
   }
 
   //----------------------------------------------------------------------------
 
-  constexpr
+  inline constexpr
   external_type n() const {
    return externalize(N);
   }
@@ -169,14 +169,14 @@ namespace lamb {
   // Z1 = L
   //----------------------------------------------------------------------------
 
-  // constexpr
+  // inline constexpr
   // external_type::value_type process(external_type::value_type I_) {
   //  return process(external_type(I_)).value;
   // }
 
   //----------------------------------------------------------------------------
 
-  constexpr
+  inline
   external_type process(external_type I_) {
    internal_type I(I_)              ;
 
