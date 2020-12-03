@@ -10,7 +10,7 @@ namespace lamb {
     class mcp23017_buttons : public mcp23017 {
     public:
       struct button_event {
-        uint8_t button_number;
+        uint8_t number;
         bool button_state;
       };
   
