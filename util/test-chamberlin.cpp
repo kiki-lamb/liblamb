@@ -1,3 +1,4 @@
+#define min(a,b) ((a)<(b)?(a):(b))
 #include "../include/lamb.h"
 
 // g++ -std=gnu++17 -DLAMB_NO_ARDUINO test-chamberlin.cpp && .\a.exe > a.csv && sigrok-cli -I csv:column_formats="*a" -i a.csv -o x.sr

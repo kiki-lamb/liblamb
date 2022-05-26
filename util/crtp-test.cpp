@@ -3,7 +3,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// g++ -DLAMB_NO_ARDUINO crtp-test.cpp && .\a.exe
+// g++ -std=gnu++17 -DLAMB_NO_ARDUINO crtp-test.cpp && .\a.exe
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -44,20 +44,20 @@ using namespace lamb;
 ////////////////////////////////////////////////////////////////////////////////
 
 int main() {
- typedef mathematized<q<15, 16>> t;
+    typedef q<15, 16, 0> t;
 
- t x(t::PI);
- t y(t::from_double(0.5));
+    t x(t::PI);
+    t y(t::from_double(0.5));
 
- printf("=> % 5.6lf \n", double(x / y));
+    printf("=> % 5.6lf \n", double(x / y));
 
 // t z({0,128});
 
- q<8,8> zz ({1, 128});
+    q<8,8> zz ({1, 128});
   
- printf("=> % 5.5lf \n", double(zz));
+    printf("=> % 5.5lf \n", double(zz));
 
- mathematized<q<8,8>> yy ({1, 128});
+    mathematized<q<8,8>> yy ({1, 128});
   
- printf("=> % 5.5lf \n", double(yy));
+    printf("=> % 5.5lf \n", double(yy));
 }
