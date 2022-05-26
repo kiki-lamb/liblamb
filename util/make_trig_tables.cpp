@@ -9,8 +9,8 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 
 // g++ -std=gnu++17 -DLAMB_NO_ARDUINO test2.cpp && .\a.exe > a.csv && sigrok-cli -I csv:column_formats="*a" -i a.csv -o x.sr
- 
-//////////////////////////////////////////////////////////////////////////////////////////
+// M1: g++-11 -std=gnu++17 make_trig_tables.cpp && .\a.exe > a.csv && sigrok-cli -I csv:column_formats="*a" -i a.csv -o x.sr 
+   //////////////////////////////////////////////////////////////////////////////////////////
 
 using namespace lamb;
 
@@ -108,7 +108,7 @@ void make_trig_tables(
  const size_t sizes[] = { 256, 512, 1024, 2048, 4096 };
  
  for (
-  size_t ix = 02
+  size_t ix = 0;
   ix < 3;
   ix++
  ) {
@@ -129,5 +129,7 @@ void make_trig_tables(
 int main() {
 // make_trig_tables<s0q7> ("s0q7");
  make_trig_tables<s0q15>("s0q15");
+#define MAKE_TRIG_TABLES(x)                                                     \
+ make_trig_tables<x>(#x);
 // make_trig_tables<s0q31>("s0q31");
 }

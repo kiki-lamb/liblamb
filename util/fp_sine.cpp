@@ -52,14 +52,16 @@ namespace math {
    //-----------------------------------------------------------------------------
    //if (! logged) printf("small one: % 8d \n", u8q8::ONE);
    //-----------------------------------------------------------------------------
-   constexpr uint8_t  q_shift   { mid_type::WHOLE          };   
+   constexpr uint8_t  q_shift   { mid_type::WHOLE          };
+   constexpr uint8_t  q_shiftp1 { q_shift + 1              };   
    constexpr mid_type pi        { mid_type::Q_PI           }; // if (! logged) printf("pi:   % 8d % 05.5lf \n", pi,        float(pi));
    constexpr mid_type one       { 1.0_mid                  }; // if (! logged) printf("one:  % 8d % 05.5lf \n", one,       float(one));
    constexpr mid_type small_one { 1.0_mid - 1              }; // if (! logged) printf("sone: % 8d % 05.5lf \n", small_one, float(small_one));
    constexpr mid_type two       { 2.0_mid                  }; // if (! logged) printf("two:  % 8d % 05.5lf \n", two,       float(two));
+   constexpr mid_type four      { 4.0_mid                  }; // if (! logged) printf("four: % 8d % 05.5lf \n", four,      float(four));
    constexpr mid_type half      { 0.5_mid                  }; // if (! logged) printf("half: % 8d % 05.5lf \n", half,      float(half));
-   constexpr mid_type B         { two     - pi / 4.0_mid   }; // if (! logged) printf("B:    % 8d % 05.5lf \n", B,         float(B));
-   constexpr mid_type C         { one     - pi / 4.0_mid   }; // if (! logged) printf("C:    % 8d % 05.5lf \n", C,         float(C));   
+   constexpr mid_type B         { two     - pi / four      }; // if (! logged) printf("B:    % 8d % 05.5lf \n", B,         float(B));
+   constexpr mid_type C         { one     - pi / four      }; // if (! logged) printf("C:    % 8d % 05.5lf \n", C,         float(C));   
    //----------------------------------------------------------------------------
    logged                       = true;
    //----------------------------------------------------------------------------
@@ -67,8 +69,8 @@ namespace math {
    mid_type           cry       { x         << q_shift     }; //printf("% 6d, ", cry);
    //----------------------------------------------------------------------------
    x                           -= half                      ; //printf("% 13d, ", x);
-   x                          <<= q_shift    + 1            ; //printf("% 13d, ", x); 
-   x                          >>= q_shift    + 1            ; //printf("% 13d, ", x); 
+   x                          <<= q_shiftp1                 ; //printf("% 13d, ", x); 
+   x                          >>= q_shiftp1                 ; //printf("% 13d, ", x); 
    x                           *= x                         ; //printf("% 13d, ", x);  
    x                          <<= 2                         ; //printf("% 13d, ", x);
    //----------------------------------------------------------------------------
@@ -120,6 +122,7 @@ int main() {
   }
 
  return 0;
+
  printf("MAX: % 05.5lf %d \n", float(max), max.value); 
  printf("MIN: % 05.5lf %d \n", float(min), min.value);
 }
